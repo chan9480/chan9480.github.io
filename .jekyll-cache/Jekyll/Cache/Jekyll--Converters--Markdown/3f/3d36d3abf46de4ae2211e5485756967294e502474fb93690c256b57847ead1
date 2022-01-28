@@ -1,0 +1,83 @@
+I"B<h2 id="선택정렬">선택정렬</h2>
+<blockquote>
+  <blockquote>
+    <p>제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬.<br />
+n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교<br />
+(비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2)<br />
+<img src="https://user-images.githubusercontent.com/84547813/145223514-1b92d47c-4204-4890-8ab3-07af49e0894b.png" alt="image" /></p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def selection_sort(li):
+    n = len(li)
+    for i in range(n):      # i번쨰가 주체
+        for j in range(i,n):# i번째 뒤로 쭉
+            if li[i] &gt; li[j]:
+                li[i], li[j] = li[j], li[i]     # 교환
+            else :
+                pass
+    return li
+</code></pre></div>    </div>
+    <h2 id="삽입정렬">삽입정렬</h2>
+    <p>순서대로 자리를 찾아서 끼워 넣어주는 정렬<br />
+n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2)<br />
+아래 사진은 31의 자리를 찾아 넣어주고있다.<br />
+<img src="https://user-images.githubusercontent.com/84547813/145224534-3f5b9130-8641-48b6-9151-53a91695617f.png" alt="image" /></p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def insertion_sort(li):
+    n=len(li)
+    if n ==0:
+        return None
+    for i in range(1,n): # 두번째부터 끝까지 수행하면 댐.
+        temp = li[i]
+        for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐.
+            if li[j] &gt; temp:
+                li[j+1] = li[j]       # j에서 temp보다 크다면 옆으로복사
+                if j==0:              # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입
+                    li[0] = temp
+            else:
+                li[j+1] = temp        # j보다 temp가 크다면 그 오른쪽에 temp넣고 break
+                break
+    return li
+</code></pre></div>    </div>
+    <h2 id="버블정렬">버블정렬</h2>
+    <p>계속해서 옆과 비교,교환을 하는 방식.<br />
+(오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번)<br />
+그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다.<br />
+<img src="https://user-images.githubusercontent.com/84547813/145225965-b9c07b7f-44b5-438e-9d6b-487b99eb5863.png" alt="image" /></p>
+  </blockquote>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def bubble_sort(li):
+    n = len(li)
+    for i in range(n):      # 0부터 n-1까지
+        for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복
+            if j==(n-1):      # indexError 방지.
+                pass
+            elif li[j] &gt; li[j+1]:
+                li[j], li[j+1] = li[j+1], li[j]     # 교환
+            else :
+                pass
+    return li   
+</code></pre></div></div>
+<h2 id="퀵정렬">퀵정렬</h2>
+<blockquote>
+  <blockquote>
+    <p>특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지.<br />
+이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn) <br />
+<img src="https://user-images.githubusercontent.com/84547813/145229539-66ac03f9-ff21-451a-b60d-262e8b4d09ca.png" alt="image" /><br />
+그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2) 
+<img src="https://user-images.githubusercontent.com/84547813/145229599-9731477a-81d1-4bda-9e28-3ca1a4e62241.png" alt="image" /></p>
+  </blockquote>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def quick_sort(li):
+    if len(li)&lt;=1:
+        return li
+    else:
+        L1, L2 = [], []
+        for x in li[1:]:
+            if x&lt;=li[0]:
+                L1.append(x)
+            else :
+                L2.append(x)
+        return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 )
+</code></pre></div></div>
+<h2 id="병합정렬">병합정렬</h2>
+:ET

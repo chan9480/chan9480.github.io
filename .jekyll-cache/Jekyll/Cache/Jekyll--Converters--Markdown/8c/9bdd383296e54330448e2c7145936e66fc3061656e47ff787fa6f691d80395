@@ -1,0 +1,89 @@
+I"/<h2 id="반성">반성</h2>
+<p>지난 6월 코드스테이츠를 시작하면서 블로그를 개설했는데 꾸준히 쓰겠다고 했는데,<br />
+꾸준히는 개뿔 이게 테스트용 첫번째 글 이후 이게 5개월만에 두번째 글을 올리게 되었다.</p>
+
+<h2 id="왜-필요성을-느꼈는가">왜 필요성을 느꼈는가</h2>
+<p>사실 대학교를 다닐때도 기록보단 필기를 하였고, 시험공부를 위한 필기였기에 그 필요성을 느끼지 못하다가<br />
+이번에 section4 딥러닝 파트를 마무리하면서 그 필요성을 느끼게 되었다.<br />
+그 전환점으로 지난 2년간 쓴 아이폰에 용기를 얻어 맥북을 구매하면서, 개발세팅을 새로하게되었는데<br />
+m1 칩셋을 사용하다보니 세팅하는게 하나하나가 쉽지 않았다.<br />
+그와 동시에 이 과정들을 기록해두지 않으면 다시 찾아봐야한다는 공포가 엄습했고<br />
+이를 계기로 맥북을 사용하여 지금까지 해온 코드스테이츠<br />
+<strong>전체적인 복습</strong> 과<br />
+<strong>완성하지 못한 section 4 프로젝트를 마무리하는 과정을 불로깅</strong> <br />
+하는게 1차 목표다.</p>
+
+<h2 id="터미널-창-띄우기">터미널 창 띄우기</h2>
+<blockquote>
+  <p>cmd + space를 눌러 spotlight에서 ‘터미널’을 검색하면 된다.</p>
+</blockquote>
+
+<h2 id="맥북-m1-세팅">맥북 m1 세팅</h2>
+<h3 id="homebrew-설치">homebrew 설치</h3>
+<blockquote>
+  <p>macOS용 패키지 관리 어플리케이션!
+https://brew.sh
+위 공식 홈페이지를 참고한다면 어렵지 않게 설치가능하다.<br />
+단, m1의 경우 ㅜㅜ finder에서 터미널 어플을 찾아 우클릭하여 ‘정보가져오기’에서 ‘rossetta로 사용하여 열기’를 꼭! 체크해야한다.<br />
+로제타는 기존의 intel 프로세서에서 돌아가는 친구들을 m1 칩셋, 즉 apple silicon에서 돌아가게 변환해주는 에뮬이라고 보면 된다.</p>
+</blockquote>
+
+<h3 id="miniforge-설치">miniforge 설치</h3>
+<blockquote>
+  <p>알아보니 아나콘다를 설치안하고 miniforge만 설치해도 되는거였다.. m1에서 conda 를 좀더 에러없게 실행하는 인스톨러이며, anaconda와 동급의 카테고리다.
+(conda의 인스톨러 종류 : 아나콘다, miniforge, miniconda) 이렇게<br />
+https://developer.apple.com/metal/tensorflow-plugin/<br />
+위에서 apple silicon 이라되어있는곳을 따라 진행하면 된다 ( 설치파일 받고 아래 코드 3줄)</p>
+
+  <p>(brew install miniforge 로 설치해주면 된다고도 하는데 tensorfolw-deps (의존성)설치에서 에러가나더라)</p>
+</blockquote>
+
+<h3 id="아나콘다-가상환경-생성-삭제-패키지-설치">아나콘다 가상환경 생성, 삭제, 패키지 설치</h3>
+<blockquote>
+  <p>생성</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda create --name 이름 python=3.8
+</code></pre></div>  </div>
+  <p>삭제</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda env remove --namve 이름
+</code></pre></div>  </div>
+</blockquote>
+
+<h3 id="git-설치">git 설치</h3>
+<blockquote>
+  <p>git에 기능이 많겠지만 본인은, github 레포와 연동하여 프로젝트들을 관리하기 위한 용도이다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    brew install git
+</code></pre></div>  </div>
+  <p>만으로 설치가 가능하다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    git --version
+</code></pre></div>  </div>
+  <p>으로 확인까지!</p>
+</blockquote>
+
+<h1 id="가상환경-세팅">가상환경 세팅</h1>
+<h3 id="m1-tensorflow-gpu사용하기">m1 tensorflow-gpu사용하기</h3>
+<blockquote>
+  <p>m1은 gpu까지 하나로 싸잡아서 만든 칩셋이라 설정방법도 다르다..
+가상환경에서</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda install -c apple tensorflow-deps
+    pip install tensorflow-macos
+    pip install tensorflow-metal
+</code></pre></div>  </div>
+  <p>로 설치해준다.
+파이썬 내에서</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    import tensorflow as tf
+    print(len(tf.config.experimental.list_physical_devices('GPU')))
+</code></pre></div>  </div>
+  <p>위 결과가 1이 나오면 사용할 수 있다.
+단, 확인을 했으면 아래와같이 tensorflow 2.0을 사용하자.(혹시모르니)</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    import tensorflow.compat.v2 as tf
+</code></pre></div>  </div>
+  <h3 id="jupyter-notebook과-pandas-설치">jupyter notebook과 pandas 설치</h3>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda install -c conda-forge -y pandas jupyter
+</code></pre></div>  </div>
+  <p>로 설치해준다. pandas 필요없다면 pandas나 jupyter만 지우면 된다.</p>
+  <h3 id="그-외-패키지-설치">그 외 패키지 설치</h3>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda install 패키지이름
+</code></pre></div>  </div>
+  <p>단,conda 명령어로 설치가 되는지 안되는지는 잘 검색해보고 쓰는게 좋다. (pip으로만 설치가 되는 패키지도 있음)</p>
+</blockquote>
+:ET
