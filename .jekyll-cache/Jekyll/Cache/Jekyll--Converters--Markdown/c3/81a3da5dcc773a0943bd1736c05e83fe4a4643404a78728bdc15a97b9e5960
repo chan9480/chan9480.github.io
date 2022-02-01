@@ -1,0 +1,15 @@
+I"3<ul class="toc__menu">
+  <li><a href="#-메모리-구조와-문자열-리터럴">🚀 메모리 구조와 문자열 리터럴</a></li>
+  <li><a href="#-char-포인터로-문자열-표현하기">🚀 char 포인터로 문자열 표현하기</a>
+    <ul>
+      <li><a href="#-char">🔥 char*</a></li>
+      <li><a href="#-const-char">🔥 const char*</a></li>
+    </ul>
+  </li>
+  <li><a href="#-char-배열로-문자열-표현하기">🚀 char 배열로 문자열 표현하기</a>
+    <ul>
+      <li><a href="#-char-">🔥 char []</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

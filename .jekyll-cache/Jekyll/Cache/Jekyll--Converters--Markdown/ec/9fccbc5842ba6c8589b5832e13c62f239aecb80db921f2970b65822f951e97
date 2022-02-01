@@ -1,0 +1,582 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-11-상속--상속의-기본">chapter 11. 상속 : 상속의 기본</h1>
+
+<blockquote>
+  <p><strong>Is-A</strong> 관계</p>
+</blockquote>
+
+<ul>
+  <li>상속받는 방법 👉 클래스 이름 <code class="language-plaintext highlighter-rouge">: 부모클래스 이름</code></li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-재사용">🔔 재사용</h2>
+
+<blockquote>
+  <p><u>공통적으로 가지는 특성과 기능</u>을 <strong>부모 클래스</strong>로 한 곳에 묶고 이를 <u>상속</u>받아 코드를 <u>재사용</u>한다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Student</code>, <code class="language-plaintext highlighter-rouge">Teacher</code>의 공통적인 특성
+    <ul>
+      <li>👉 <code class="language-plaintext highlighter-rouge">Person</code> 둘 다 <u>사람</u>이라는 데에서 나오는 공통적인 특성</li>
+      <li><code class="language-plaintext highlighter-rouge">Student</code>, <code class="language-plaintext highlighter-rouge">Teacher</code>에서 부모클래스 <code class="language-plaintext highlighter-rouge">Person</code>를 <strong>상속</strong>받으면 둘의 공통적인 <code class="language-plaintext highlighter-rouge">Person</code>타입의 특성들에 대해선 <u>코드를 또 쓸 필요가 없다.</u>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Person</code>의 코드들을 그대로 상속받기 때문이다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>📜 Person
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string&gt;
+#include &lt;iostream&gt;
+</span>
+<span class="k">class</span> <span class="nc">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+    <span class="n">Person</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">)</span>  <span class="c1">// 생성자. 디폴트 값이 있으므로 인수 없이 호출해도 된다.</span>
+        <span class="o">:</span><span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+    <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">setName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_name</span> <span class="o">=</span> <span class="n">name_in</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getName</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">doSomething</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Person!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+    <span class="c1">// 빈 클래스</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Person</code> 클래스를 상속받는다.
+        <ul>
+          <li><em>class Student : public Person</em></li>
+          <li><em>#include “Person.h”</em></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>📜 main
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Person</span> <span class="n">person</span><span class="p">;</span>
+    <span class="n">person</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="s">"사람"</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">person</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">Student</span> <span class="n">student</span><span class="p">;</span>
+    <span class="n">student</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="s">"사람"</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">student</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">student</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<blockquote>
+  <p><strong>상속</strong>으로 인하여 <code class="language-plaintext highlighter-rouge">Student</code> 클래스는 <code class="language-plaintext highlighter-rouge">Person</code>의 코드들을 다시 써 줄 필요가 없다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Student</code> 클래스는 빈 클래스임에도 불구하고 부모 클래스인 <code class="language-plaintext highlighter-rouge">Person</code>의 멤버들을 모두 물려받아 가지고 있다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Student</code>의 멤버 변수 &amp; 멤버 함수들
+        <ul>
+          <li><em><u>m_name</u></em></li>
+          <li><em>void setName(const std::string &amp; name_in)</em></li>
+          <li><em>std::string getName() const</em></li>
+          <li><em>void doSomething()</em></li>
+          <li>전부 <code class="language-plaintext highlighter-rouge">Person</code>로부터 물려 받았다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Student</code> 클래스는 빈 클래스임에도 불구하고 <code class="language-plaintext highlighter-rouge">student</code>객체의 사이즈를 <em>sizeof(student)</em> 출력하면 8니 나온다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Person</code>의 멤버 변수인 <em><u>m_name</u></em>의 크기.
+        <ul>
+          <li>물려받아 <code class="language-plaintext highlighter-rouge">student</code>의 멤버 변수가 되었음.</li>
+        </ul>
+      </li>
+      <li><strong>private</strong>한 멤버 변수도 다 상속된다. 다만 자식클래스에서 접근이 안될 뿐.
+        <ul>
+          <li><a href="#멤버-변수가-protected-일-때">밑에 문단 참고</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="using-namespace-std">using namespace std</h3>
+
+<p>부모 클래스가 있는 헤더 파일에선 <em>using namespace std</em> 을 생략하는게 좋다. 눈에 보이지 않아도 전부 자식 클래스에서 상속되기 때문에 자식 클래스에서 중복 선언할 수도 있는 등 나도 모르게 실수를 할 수 있다. 따라서 그냥 <u>헤더 파일에선 일일이 std::를 붙여 사용하자</u></p>
+
+<p><br /></p>
+
+<h2 id="-오버라이딩">🔔 오버라이딩</h2>
+
+<ul>
+  <li>📜 Person
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string&gt;
+#include &lt;iostream&gt;
+</span>
+<span class="k">class</span> <span class="nc">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+    <span class="n">Person</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">)</span>
+        <span class="o">:</span><span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+    <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">setName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_name</span> <span class="o">=</span> <span class="n">name_in</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getName</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">doSomething</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Person!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+
+    
+  <span class="kt">void</span> <span class="n">doSomething</span><span class="p">()</span>  <span class="c1">// ⭐오버라이딩⭐</span>
+  <span class="p">{</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Student!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 내용을 바꿨다.</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li>📜 main
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Person</span> <span class="n">person</span><span class="p">;</span>
+    <span class="n">Student</span> <span class="n">student</span><span class="p">;</span>
+
+    <span class="n">person</span><span class="p">.</span><span class="n">doSomething</span><span class="p">();</span>    <span class="c1">// Person! 출력</span>
+    <span class="n">student</span><span class="p">.</span><span class="n">doSomething</span><span class="p">();</span>  <span class="c1">// Studenet! 출력</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<blockquote>
+  <p><strong>오버라이딩</strong> : 부모로부터 상속받은 멤버 함수를 내용을 새롭게 다시 정의하는 것.</p>
+</blockquote>
+
+<ul>
+  <li><u>함수 프로토타입은 동일하지만 내용은 다르게 새롭게 구현함.</u></li>
+</ul>
+
+<blockquote>
+  <p>C++은 <u>포인터 혹은 참조하는 변수가 어떤 타입이냐</u>를 중요하게 따진다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Person</code>클래스에 <em>doSomething()</em> 멤버가 있으므로 <code class="language-plaintext highlighter-rouge">Student</code> 클래스에도 <em>doSomething()</em> 멤버 함수가 상속된다.</li>
+  <li>이 상태에서 <code class="language-plaintext highlighter-rouge">Student</code> 클래스 내에서 <u>동일한 함수를 재정의 한다면</u>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">student</code>객체는 <code class="language-plaintext highlighter-rouge">Student</code>타입이므로 <code class="language-plaintext highlighter-rouge">student.doSomething()</code>은 <code class="language-plaintext highlighter-rouge">Student</code>에서 <strong>재정의(오버라이딩)</strong>한 <em>doSomething()</em>이 호출된다.
+        <ul>
+          <li>C++은 <u>포인터 혹은 참조하는 변수가 어떤 타입이냐</u>에 따라 호출할 멤버를 결정한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-접근-지정자">🔔 접근 지정자</h2>
+
+<h3 id="멤버-변수가-private-일-때">멤버 변수가 private 일 때</h3>
+
+<ul>
+  <li>📜 Person
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string&gt;
+#include &lt;iostream&gt;
+</span>
+<span class="k">class</span> <span class="nc">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+    <span class="n">Person</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">)</span>
+        <span class="o">:</span><span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+    <span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">setName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_name</span> <span class="o">=</span> <span class="n">name_in</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getName</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">doSomething</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="kt">void</span> <span class="n">doSomething</span><span class="p">()</span>  
+  <span class="p">{</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// ❌에러❌</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Person</code>의 멤버 변수 <em>m_name</em>은 <strong>private</strong>인 멤버 변수이기 때문에 자식 클래스인 <code class="language-plaintext highlighter-rouge">Student</code>에 <u>상속이 되긴 하지만 자식 클래스에서 접근할 수 없다.</u></li>
+</ul>
+
+<blockquote>
+  <p>따라서 상속 받은 멤버 중 <code class="language-plaintext highlighter-rouge">private</code>한 멤버들을 접근하려면 <u>부모 클래스의 접근 함수</u>를 호출하여 간접 접근해야 한다.</p>
+</blockquote>
+
+<ul>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="kt">void</span> <span class="n">doSomething</span><span class="p">()</span>  
+  <span class="p">{</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Person</span><span class="o">::</span><span class="n">getName</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 문제 없음</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Person</code>의 <strong>private</strong> 멤버 변수 <em>m_name</em> 을 리턴 받을 수 있는 <u>상속 받은 멤버 함수 *getName()* 을 호출한다.</u>
+        <ul>
+          <li>호출시 <strong><u>Person::</u></strong> 이 <u>붙는 이유는 만약 자식이 *getName()*을 오버라이딩 한 상태라면 자식의 *getName()*이 호출되므로 이를 막기 위해!</u>
+            <ul>
+              <li><strong>private</strong> 멤버 변수 <em>m_name</em> 는 <code class="language-plaintext highlighter-rouge">Person</code>클래스 내에서만 접근할 수 있으므로 명확히 <code class="language-plaintext highlighter-rouge">Person</code>의 <em>getName()</em>을 호출해달라는 의미.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="부모-클래스의-멤버-변수는-private인게-좋다">부모 클래스의 멤버 변수는 <code class="language-plaintext highlighter-rouge">private</code>인게 좋다.</h4>
+
+<ul>
+  <li>부모의 멤버 변수들은 자식 클래스들에게 상속되기 때문에 자식 클래스에서 멤버 값을 직접 접근할 수 있게 된다. 예를 들어 <em>m_name</em> 이라고 직접 명시하여 접근하는게 가능해진다.
+    <ul>
+      <li>만약 이 멤버를 삭제하거나 수정해야하는 일이 생긴다면 자식클래스들에서 직접 명시하여 사용했던 부분들까지 전부 수정을 해주어야 하는 불상사가 생긴다.</li>
+      <li><u>따라서, 상위 클래스의 멤버 변수들은 private으로 두고, 이에 대한 접근 함수들을 상위 클래스에 함께 구현해놓는 것이 좋다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="멤버-변수가-protected-일-때">멤버 변수가 protected 일 때</h3>
+
+<p><code class="language-plaintext highlighter-rouge">protected</code>는 <u>자식클래스들에겐 멤버 접근을 허용하지만</u> 외부에선 못하게 막는 것이므로 <strong>상속</strong>에 있어선 <em>public</em> 과 같다. 자식 클래스내에선 부모로부터 상속받은 멤버를 마음껏 접근해도 됨.</p>
+
+<p><br /></p>
+
+<h2 id="-생성자">🔔 생성자</h2>
+
+<blockquote>
+  <p>자식 객체가 생성될 때, 늘 <u>부모 생성자도 같이 호출되는데, 더 먼저 호출된다.</u> 부모로부터 물려받은 멤버들을 정의하고 초기화해야 하니까!</p>
+</blockquote>
+
+<h3 id="생성자-호출-및-처리-순서">생성자 호출 및 처리 순서</h3>
+
+<ol>
+  <li>생성자의 인수를 받는 부분</li>
+  <li><u>생성자 초기화 리스트 부분</u>
+    <ul>
+      <li><strong>메모리를 할당 받는다.</strong></li>
+      <li><u>부모 생성자</u>를 호출한다. 👉 부모로부터 상속받은 멤버들을 초기화</li>
+    </ul>
+  </li>
+  <li>자신의 생성자 <code class="language-plaintext highlighter-rouge">{}</code> 중괄호 부분 처리
+    <ul>
+      <li>자신만의 멤버들을 초기화한다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<p>1️⃣ <strong>메모리 할당</strong> ( 생성자 초기화 리스트에 있는 자기 자신 멤버들은 쓰레기값만 들어있는 상태)</p>
+
+<p>2️⃣ <strong>부모 생성자 호출</strong>  (물려 받은 멤버는 <strong>할당 + 초기화</strong>까지 완료)</p>
+
+<p>3️⃣ <strong>초기화</strong>  (생성자 초기화 리스트에 있는 자기 자신 멤버들 초기화)</p>
+
+<p>4️⃣ 자신의 생성자 내부 <code class="language-plaintext highlighter-rouge">{}</code>중괄호 부분 처리</p>
+
+<p><br /></p>
+
+<h3 id="생성자-초기화-리스트에서-부모-멤버를-초기화-시킬-순-없다">생성자 초기화 리스트에서 부모 멤버를 초기화 시킬 순 없다.</h3>
+
+<ul>
+  <li>📜 Person
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string&gt;
+#include &lt;iostream&gt;
+</span>
+<span class="k">class</span> <span class="nc">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+    <span class="n">Person</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">)</span>
+        <span class="o">:</span><span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"부모 생성자 호출"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_intel</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+  <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">intel_in</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="o">:</span><span class="n">m_intel</span><span class="p">(</span><span class="n">intel_in</span><span class="p">),</span>  <span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span> <span class="c1">// 👉❌에러❌</span>
+  <span class="p">{</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"자식 생성자 호출"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li>📜 main
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Student</span> <span class="n">student</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+부모 생성자 호출
+자식 생성자 호출
+</code></pre></div></div>
+
+<ul>
+  <li><strong><em>m_name(name_in)</em></strong> 👉 Student <u>자식 클래스의 생성자 초기화 리스트에서 바로 부모의 멤버 변수 m_name을 초기화할 순 없다.</u>
+    <ul>
+      <li>이땐 <u>아직 부모 생성자가 호출되기 전이기 때문이다.</u>
+        <ul>
+          <li>아직 부모 멤버들이 메모리에 정의가 되지 않은 상태.</li>
+          <li><code class="language-plaintext highlighter-rouge">private</code>이라서가 아니라 단순히 아직 부모 생성자가 호출이 되지 않아 부모 멤버들이 메모리로서 할당이 안되 <em>m_name</em>이 무슨 변수인지 몰라서 그런 것.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong><em>Student student;</em></strong>
+    <ol>
+      <li>생성자 초기화 리스트가 처리되고</li>
+      <li>Student클래스의 부모 클래스인 Person 클래스의 생성자가 호출된다.
+        <ul>
+          <li>부모로 부터 상속받은 멤버들이 정의된다.</li>
+          <li>“부모 생성자 호출” 출력</li>
+        </ul>
+      </li>
+      <li>자신의 생성자 <code class="language-plaintext highlighter-rouge">{}</code> 중괄호 부분 처리
+        <ul>
+          <li>“자식 생성자 호출” 출력</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="해결법-1--부모의-접근-함수-호출">해결법 1 : 부모의 접근 함수 호출</h3>
+
+<ul>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_intel</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+  <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">intel_in</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="o">:</span><span class="n">m_intel</span><span class="p">(</span><span class="n">intel_in</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="n">Person</span><span class="o">::</span><span class="n">setName</span><span class="p">(</span><span class="n">name_in</span><span class="p">);</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"자식 생성자 호출"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+부모 생성자 호출
+자식 생성자 호출
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Person::setName(name_in)</strong>
+    <ul>
+      <li>중괄호 부분에서 상속받은 멤버 값들을 접근하여 설정할 수 있게 해주는 부모의 setter 멤버 함수를  호출해주면 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="해결법-2--초기화-리스트에서-부모-생성자-직접-호출">해결법 2 : 초기화 리스트에서 부모 생성자 직접 호출</h3>
+
+<ul>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_intel</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+  <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">intel_in</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="o">:</span><span class="n">m_intel</span><span class="p">(</span><span class="n">intel_in</span><span class="p">),</span> <span class="n">Person</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"자식 생성자 호출"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+부모 생성자 호출
+자식 생성자 호출
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Person(name_in)</strong>
+    <ul>
+      <li>생성자 초기화 리스트 안에서 직접 부모 생성자를 호출하여 상속받은 멤버들을 초기화 할 수 있다.</li>
+      <li><u>위임 생성자</u>를 사용하는 것.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="주의-사항--부모의-디폴트-생성자가-없을-경우">주의 사항 : 부모의 디폴트 생성자가 없을 경우</h3>
+
+<p>위의 예시 코드들에선 📜Person의 생성자 프로토타입을 <em>Person(const std::string &amp; name_in = “No Name”)</em>로 디폴트 값을 정의했기 때문에 인수를 1개 받는 생성자지만 인수가 없는 디폴트 생성자로도 역할을 할 수 있어 문제가 없었다.</p>
+
+<ul>
+  <li>📜 Student
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+#include "Person.h"
+</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_intel</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+  <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">intel_in</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"자식 생성자 호출"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>자식 객체가 생성될 때, 즉 자식 생성자가 호출될때 상속 받은 멤버들을 정의하기 위해 부모 생성자를 자동으로 호출되는데, 이 때 <strong>직접 인수 넘기는 호출을 해주는게 아니라면 컴파일러는 자동으로 <u>부모의 디폴트 생성자</u>를 호출한다.</strong> 부모 클래스에서 아예 생성자 정의가 안되있다면 컴파일러가 자동으로 디폴트 생성자를 만들어주므로 괜찮지만 매개 변수들이 있는 생성자만 있고 디폴트 생성자는 없는 상태로 정의가 되어 있다면 문제가 생긴다. 위 코드와 같이 자식 생성자에서 부모 생성자를 직접 명시해주지 않아 컴파일러가 부모의 디폴트 생성자를 호출해야 할 때, 부모 클래스에서 매개 변수들이 있는 생성자만 있고 디폴트 생성자는 없는 상태라면 에러가 난다. <em>no matching function for call to ‘Person::Person()’</em></p>
+
+<p><br /></p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

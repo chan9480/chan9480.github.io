@@ -1,0 +1,100 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-7-함수--스택과-힙">chapter 7. 함수 : 스택과 힙</h1>
+
+<h2 id="-stack-메모리-특징">🔔 Stack 메모리 특징</h2>
+
+<ol>
+  <li>빠르다</li>
+  <li>크기가 작다.
+    <ul>
+      <li>작아서 Overflow가 일어나기 쉽다.</li>
+      <li><em>int array[1000000]</em> 이런거 Overflow 일어나기 쉽고 재귀 호출도 Overflow 일어나기 쉽다.</li>
+    </ul>
+  </li>
+  <li>아래에서부터 위로 가는 방향으로 차곡 차곡 순서대로 쌓인다.</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="kt">int</span> <span class="n">g_i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">second</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">first</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+   <span class="k">return</span> <span class="n">second</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+   <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+   <span class="n">b</span> <span class="o">=</span> <span class="n">first</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85306861-0d7f1280-b4ea-11ea-98e7-1bb3e05c0914.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<p><br /></p>
+
+<h2 id="-heap-메모리-특징">🔔 Heap 메모리 특징</h2>
+
+<ol>
+  <li>Stack과 다르게 순서대로 쌓이는게 아니라서 Heap 메모리 어느 공간에 저장되게 될지 알 수 없다.</li>
+  <li>단, 크기가 크다.</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+   <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="mi">1000000</span><span class="p">];</span>
+
+   <span class="k">delete</span><span class="p">[]</span> <span class="n">ptr</span><span class="p">;</span>
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">Stack</code>메모리에 <em>ptr</em> 값이 들어온다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Heap</code>메모리에 sizeof(int) × 1000000 크기만큼의 메모리가 할당된다.
+    <ul>
+      <li>그리고 할당된 곳의 주소 값이 <code class="language-plaintext highlighter-rouge">Stack</code>메모리의 <em>ptr</em> 에 저장된다.</li>
+    </ul>
+  </li>
+  <li><em>delete[] ptr</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Heap</code>메모리에 sizeof(int) × 1000000 크기만큼의 메모리가 해제된다.</li>
+      <li><em>ptr</em>은 여전히 <code class="language-plaintext highlighter-rouge">Heap</code>메모리에 해제된 그 빈 공간을 가리키고 있으므로 <em>delete</em>한 후에 <em>ptr=nullptr</em> 해주는 습관을 들이자.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="메모리-누수">메모리 누수</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">Heap</code>메모리로부터 동적 할당 받은 공간을 delete 해주지 않은 경우 벌어지는 일</p>
+</blockquote>
+
+<p>프로그램 종료 후 <code class="language-plaintext highlighter-rouge">Stack</code>메모리의 <em>ptr</em>이 해제되어 동적 할당받은 해당 공간의 주소를 잃어버리게 된다. 주소를 잃어버려 접근 할 수 없는 <code class="language-plaintext highlighter-rouge">Heap</code>메모리 상에서 공간만 차지하는 쓰레기가 되버린다. 이와 같은 길 잃은 메모리들이 쌓이고 쌓이면 메모리 누수 문제가 발생할 수 있다. 그러니 <code class="language-plaintext highlighter-rouge">Heap</code>메모리는 다 쓴 후엔 꼭 수동으로 <em>delete</em> 코드를 넣어 해제해주어야 한다.</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

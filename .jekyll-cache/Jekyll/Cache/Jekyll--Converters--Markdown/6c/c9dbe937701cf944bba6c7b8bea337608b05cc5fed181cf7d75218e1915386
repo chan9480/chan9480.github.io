@@ -1,0 +1,23 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-19-모던-c-필수-요소들">chapter 19. 모던 C++ 필수 요소들</a></li>
+  <li><a href="#멀티-스레딩-예제-벡터-내적">멀티 스레딩 예제 (벡터 내적)</a>
+    <ul>
+      <li><a href="#-벡터-내적dot-product이란">🔔 벡터 내적(Dot Product)이란</a></li>
+      <li><a href="#-벡터-내적을-계산-하는-코드">🔔 벡터 내적을 계산 하는 코드</a>
+        <ul>
+          <li><a href="#전체-코드와-비교">전체 코드와 비교</a></li>
+          <li><a href="#main-함수">main 함수</a></li>
+          <li><a href="#방법-1️⃣-stdinner_product">방법 1️⃣ std::inner_product</a></li>
+          <li><a href="#방법-2️⃣-순진한-멀티-쓰레딩">방법 2️⃣ 순진한 멀티 쓰레딩</a></li>
+          <li><a href="#방법-3️⃣-lock-guard">방법 3️⃣ Lock guard</a></li>
+          <li><a href="#방법-4️⃣-atomic">방법 4️⃣ atomic</a></li>
+          <li><a href="#방법-5️⃣-task-based-parallelism-stdasync">방법 5️⃣ Task-based parallelism (std::async)</a></li>
+          <li><a href="#방법-6️⃣-task-based-parallelism-stdthread-stdpromise">방법 6️⃣ Task-based parallelism (std::thread, std::promise)</a></li>
+          <li><a href="#방법-7️⃣-stdtransform_reduce">방법 7️⃣ std::transform_reduce</a></li>
+        </ul>
+      </li>
+      <li><a href="#-참고">🔔 참고</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,10 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-18-입력과-출력">chapter 18. 입력과 출력</a></li>
+  <li><a href="#파일의-임의-위치-접근하기">파일의 임의 위치 접근하기</a>
+    <ul>
+      <li><a href="#-seekgsint-n">🔔 seekgs(int n)</a></li>
+      <li><a href="#-파일을-한번-열어서-읽기도-하고-쓰기도-하는-방법">🔔 파일을 한번 열어서 읽기도 하고 쓰기도 하는 방법</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

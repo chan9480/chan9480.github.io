@@ -1,0 +1,163 @@
+I"2<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-8-객체-지향의-기초--생성자-멤버-초기화-목록">chapter 8. 객체 지향의 기초 : 생성자 멤버 초기화 목록</h1>
+
+<h2 id="-생성자-멤버-초기화-목록">🔔 생성자 멤버 초기화 목록</h2>
+
+<blockquote>
+  <p>생성자 내부 <code class="language-plaintext highlighter-rouge">{}</code> <u>중괄호 처리가 시작되기 전에 초기화를 먼저 완료되는 멤버 목록</u></p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_i</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">m_d</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">m_c</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m_arr</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+
+<span class="nl">public:</span>
+    <span class="n">Something</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">m_i</span><span class="p">{</span> <span class="mi">10</span> <span class="p">},</span> <span class="n">m_d</span><span class="p">{</span> <span class="mf">3.14</span> <span class="p">},</span> <span class="n">m_c</span><span class="p">{</span> <span class="sc">'a'</span> <span class="p">},</span> <span class="n">m_arr</span><span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="p">}</span>
+    <span class="p">{</span>
+        <span class="c1">//</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>생성자 이름 바로 아래 <code class="language-plaintext highlighter-rouge">:</code> 에서, 즉 생성자 내부 바깥에서 <u>각 멤버들을 초기화</u> 할 수 있다. 뒤에 세미콜론이 붙지 않는 것에 주의할 것. <em>m_arr{ 1, 2, 3, 4, 5 }</em> 를 보면 알 수 있듯, 배열인 멤버의 원소들도 초기화가 가능하다. <code class="language-plaintext highlighter-rouge">{}</code>을 쓸 수도 있고 <code class="language-plaintext highlighter-rouge">()</code>을 쓸 수도 있는데 <code class="language-plaintext highlighter-rouge">{}</code>을 쓰면 초기화시 더 엄격하여 자동 형변환 해주지 않는다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_arr</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+
+<span class="nl">public:</span>
+    <span class="n">Something</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_arr</span><span class="p">{}</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>여담으로 배열 멤버를 초기화 할 때 <code class="language-plaintext highlighter-rouge">m_arr{}</code> 혹은 <code class="language-plaintext highlighter-rouge">m_arr()</code> 로 해주면 <u>배열의 모든 멤버가 0 (NULL)으로 초기화 된다.</u></p>
+
+<p><br /></p>
+
+<h2 id="-다른-클래스를-멤버로-가질-때">🔔 다른 클래스를 멤버로 가질 때</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ABC</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_abc</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">ABC</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">m_abc_in</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_abc</span> <span class="o">=</span> <span class="n">m_abc_in</span>
+    <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_i</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">m_d</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">m_c</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m_arr</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+    <span class="n">ABC</span> <span class="n">abc</span><span class="p">;</span>   <span class="c1">// ✨ 다른 클래스 타입의 객체를 멤버로 가질 때</span>
+
+<span class="nl">public:</span>
+    <span class="n">Something</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">m_i</span><span class="p">{</span> <span class="mi">10</span> <span class="p">},</span> <span class="n">m_d</span><span class="p">{</span> <span class="mf">3.14</span> <span class="p">},</span> <span class="n">m_c</span><span class="p">{</span> <span class="sc">'a'</span> <span class="p">},</span> <span class="n">m_arr</span><span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="p">},</span> <span class="n">abc</span><span class="p">{</span> <span class="n">m_i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">}</span><span class="c1">//✨ABC의 생성자를 불러와 ABC abc{9}; 으로 넘어가게 된다.✨</span>
+    <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Somathing 클래스가 현재 ABC 클래스 타입의 객체 <em>abc</em> 를 멤버로 가지고 있는 상태. 이를 생성자 초기화 목록에서 <em>abc{m_i - 1}</em> 로 초기화 하면 ABC 의 생성자가 호출되고 <em>m_i - 1, 즉 9</em> 값이 인수로 넘어가게 된다. ABC의 생성자가 호출됨에 따라 ABC의 멤버 변수 <em>m_abc</em> 값이 9로 대입된다.</p>
+
+<p><br /></p>
+
+<h2 id="-초기화-우선-순위-메모리-할당-처리-순서">🔔 초기화 우선 순위 (메모리 할당, 처리 순서)</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">private:</span>   <span class="cm">/* 1번 */</span>
+    <span class="kt">int</span> <span class="n">m_i</span> <span class="o">-</span> <span class="mi">100</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">m_d</span> <span class="o">=</span> <span class="mf">12.34</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">m_c</span> <span class="o">=</span> <span class="sc">'F'</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m_arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span> <span class="p">};</span>
+    <span class="n">ABC</span> <span class="n">abc</span><span class="p">{</span> <span class="mi">1024</span> <span class="p">};</span>
+
+<span class="nl">public:</span>
+    <span class="n">Something</span><span class="p">()</span>  <span class="cm">/* 2번 */</span>
+        <span class="o">:</span> <span class="n">m_i</span><span class="p">{</span> <span class="mi">10</span> <span class="p">},</span> <span class="n">m_d</span><span class="p">{</span> <span class="mf">3.14</span> <span class="p">},</span> <span class="n">m_c</span><span class="p">{</span> <span class="sc">'a'</span> <span class="p">},</span> <span class="n">m_arr</span><span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="p">},</span> <span class="n">abc</span><span class="p">{</span> <span class="n">m_i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">}</span>
+    <span class="p">{</span>    <span class="cm">/* 3번 */</span>
+        <span class="n">m_i</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+        <span class="n">m_d</span> <span class="o">=</span> <span class="mf">3.0</span><span class="n">f</span><span class="p">;</span>
+        <span class="n">m_c</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>우선순위는 <u>1번 &lt; 2번 &lt; 3번</u> 순서이다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">1번</code>은 실제 메모리에 할당하는 과정이 아닌 단지 클래스의 정의일 뿐이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">2번</code>인 생성자 초기화 리스트에서 멤버 변수들이 초기화는 객체의 메모리 할당과 동시에 진행되는데 따라서 <code class="language-plaintext highlighter-rouge">1번</code>보다 우선시 된다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">2번</code>, 즉 생성자 초기화리스트 과정까진 메모리를 할당받기만 하는 과정이라 메모리 할당만 받고 쓰레기 값만 들어있다가 <code class="language-plaintext highlighter-rouge">{}</code> 중괄호가 시작되기 직전에 그제서야 값이 할당된다.</li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">3번</code>은 객체의 메모리 할당이 완료된 후 실행된다. <code class="language-plaintext highlighter-rouge">2번</code>, <code class="language-plaintext highlighter-rouge">1번</code>에 의해 초기화된 것들을 덮어 씌운다.</p>
+  </li>
+  <li>최종적으로
+    <ul>
+      <li>m_i = 3</li>
+      <li>m_d = 3.0</li>
+      <li>m_c = ‘b’</li>
+      <li>m_arr = { 1, 2, 3, 4, 5 }</li>
+      <li>abc{ 9 }</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="상속-받은-클래스의-경우-처리-순서">상속 받은 클래스의 경우 처리 순서</h3>
+
+<ol>
+  <li>생성자의 인수를 받는 부분</li>
+  <li><u>생성자 초기화 리스트 부분</u>
+    <ul>
+      <li><u>메모리를 할당 받는다.</u></li>
+      <li><u>부모 생성자</u>를 호출한다. 👉 부모로부터 상속받은 멤버들을 초기화</li>
+    </ul>
+  </li>
+  <li>자신의 생성자 <code class="language-plaintext highlighter-rouge">{}</code> 중괄호 부분 처리
+    <ul>
+      <li>자신만의 멤버들을 초기화한다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<p>1️⃣ <strong>메모리 할당</strong> ( 생성자 초기화 리스트에 있는 자기 자신 멤버들은 쓰레기값만 들어있는 상태)</p>
+
+<p>2️⃣ <strong>부모 생성자 호출</strong>  (물려 받은 멤버는 <strong>할당 + 초기화</strong>까지 완료)</p>
+
+<p>3️⃣ <strong>초기화</strong>  (생성자 초기화 리스트에 있는 자기 자신 멤버들 초기화)</p>
+
+<p>4️⃣ 자신의 생성자 내부 <code class="language-plaintext highlighter-rouge">{}</code>중괄호 부분 처리</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

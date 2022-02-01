@@ -1,0 +1,47 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-1-sigleton-pattern">Chapter 1. Sigleton Pattern</a>
+    <ul>
+      <li><a href="#-싱글톤-패턴이란">🔔 싱글톤 패턴이란?</a>
+        <ul>
+          <li><a href="#싱글톤-단점">싱글톤 단점</a></li>
+          <li><a href="#유니티-안에서의-싱글턴-패턴-객체">유니티 안에서의 싱글턴 패턴 객체</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-1--한-scene-내에서-사용">🔔 예제 1 : 한 Scene 내에서 사용</a>
+        <ul>
+          <li><a href="#싱글톤-사용하기-전">싱글톤 사용하기 전</a>
+            <ul>
+              <li><a href="#-whendestroyplaycs">📜 WhenDestroyPlay.cs</a></li>
+              <li><a href="#-destroydelayedcs">📜 DestroyDelayed.cs</a></li>
+            </ul>
+          </li>
+          <li><a href="#싱글톤-사용">싱글톤 사용</a>
+            <ul>
+              <li><a href="#-myaudioplaycs">📜 MyAudioPlay.cs</a></li>
+              <li><a href="#gamemanager-오브젝트-만들기">GameManager 오브젝트 만들기</a></li>
+              <li><a href="#-createballcs">📜 CreateBall.cs</a></li>
+              <li><a href="#-audiomanagercs">📜 AudioManager.cs</a></li>
+            </ul>
+          </li>
+          <li><a href="#정리">정리</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-2-1-다른-scene들간의-싱글톤-사용">🔔 예제 2-1 다른 Scene들간의 싱글톤 사용</a>
+        <ul>
+          <li><a href="#dontdestroyonloadgameobject">DontDestroyOnLoad(GameObject)</a></li>
+          <li><a href="#scene-1-1-구조">“Scene 1-1” 구조</a></li>
+          <li><a href="#scene-1-2-구조">“Scene 1-2” 구조</a></li>
+          <li><a href="#실행">실행</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-2-2-현재-씬에-다른-씬을-덧대어-추가했을-때">🔔 예제 2-2 현재 씬에 다른 씬을 덧대어 추가했을 때</a>
+        <ul>
+          <li><a href="#scene-2-1-구조">“Scene 2-1” 구조</a></li>
+          <li><a href="#scene-2-2-구조">“Scene 2-2” 구조</a></li>
+          <li><a href="#실행-1">실행</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

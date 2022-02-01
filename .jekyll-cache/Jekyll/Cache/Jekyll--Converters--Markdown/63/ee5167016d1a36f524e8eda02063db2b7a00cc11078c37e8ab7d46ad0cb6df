@@ -1,0 +1,127 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-7-함수--생략-부호">chapter 7. 함수 : 생략 부호</h1>
+
+<ul>
+  <li>매개변수의 개수가 정해져 있지 않으면 좋겠을 때 사용한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">가변 인수</code>라고도 한다.</li>
+  <li>#include &lt;cstdarg&gt; 를 해주어야 사용할 수 있다.</li>
+  <li><code class="language-plaintext highlighter-rouge">pintf</code> 함수 이런 것도 <code class="language-plaintext highlighter-rouge">가변 인수</code>로 구현된 함수라서 매개변수의 개수를 아주 다양하게 호출할 수 있다.
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"%d %d"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%f = %d + %f"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>사용을 권장하지는 않는다고 한다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;cstdarg&gt; //for ellipsis
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">double</span> <span class="nf">findAverage</span><span class="p">(</span><span class="kt">int</span> <span class="n">count</span><span class="p">,</span> <span class="p">...)</span> 
+<span class="p">{</span>
+	<span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	<span class="kt">va_list</span> <span class="n">list</span><span class="p">;</span> 
+
+	<span class="n">va_start</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span> 
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">arg</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">arg</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="o">++</span><span class="n">arg</span><span class="p">)</span>
+		    <span class="n">sum</span> <span class="o">+=</span> <span class="n">va_arg</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span> 
+	<span class="n">va_end</span><span class="p">(</span><span class="n">list</span><span class="p">);</span> 
+	
+	<span class="k">return</span> <span class="n">sum</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>double findAverage(int count, <code class="language-plaintext highlighter-rouge">...</code>)</em>
+    <ul>
+      <li>가변 인수로 구현됐다.</li>
+      <li><em>int count</em> : 인수의 개수가 될 것이다. 미리 설정하여 넘겨야 하는 고정 인수.</li>
+      <li><code class="language-plaintext highlighter-rouge">...</code> : <u>명령 인수의 타입과 개수 생략</u></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">va_list list</code>
+    <ul>
+      <li>가변 인수를 읽기 위한 포인터 변수 <em>list</em></li>
+      <li><em>va_list</em>는 char * 포인터 타입이다.
+        <ul>
+          <li>인수를 문자열로 받음</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">va_start(list, count)</code>
+    <ul>
+      <li>list가 첫번째 가변인수를 읽도록 초기화 한다.</li>
+      <li>두번째 매개변수는 고정 인수로 꼭 들어가야 한다.
+        <ul>
+          <li>인수 몇개 읽어야 할지 알아야 하니까</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">va_arg(list, int)</code>
+    <ul>
+      <li>가변 인수들을 실제로 읽는 명령</li>
+      <li>어떤 타입으로 읽을 것인지
+        <ul>
+          <li>list 포인터에 문자열로 읽은 인수를 int로 변환하여 반환해준다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">va_end(list);</code>
+    <ul>
+      <li>가변 인수들을 다 읽은 후 종료</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">findAverage</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">,</span> <span class="sc">'c'</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">findAverage</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">findAverage</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>findAverage(<code class="language-plaintext highlighter-rouge">1</code>, 1, 2, 3, “Hello”, ‘c’)</em>
+    <ul>
+      <li>1 개만 읽겠다.</li>
+      <li>그러므로 두번째 인수인 1만 인수로 들어가고</li>
+      <li>나머지 2 3 “Hello” ‘c’는 무시된다.</li>
+      <li>결과 👉 1 출력</li>
+    </ul>
+  </li>
+  <li><em>findAverage(<code class="language-plaintext highlighter-rouge">3</code>, 1, 2, 3)</em>
+    <ul>
+      <li>3 개만 읽겠다.</li>
+      <li>그러므로 1 2 3 이 인수로 들어간다.</li>
+      <li>결과 👉 2 출력 (1 2 3의 평균)</li>
+    </ul>
+  </li>
+  <li><em>findAverage(10, 1, 2, 3, 4, 5)</em>
+    <ul>
+      <li>10 개만 읽겠다.</li>
+      <li>인수로 1 2 3 4 5 가 들어가고 나머지 5개는 이상한 수가 들어가게 된다.</li>
+      <li>결과 👉 이상한 수로 출력 됨</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

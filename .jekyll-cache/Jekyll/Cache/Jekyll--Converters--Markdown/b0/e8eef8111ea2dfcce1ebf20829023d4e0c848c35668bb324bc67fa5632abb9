@@ -1,0 +1,417 @@
+I"j�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="15-연습문제">1.5 연습문제</h1>
+
+<p class="notice--warning"><strong>연습 문제</strong>는 스스로 풀이했습니다. 😀     <br />
+해당 챕터 보러가기 🖐 <a href="https://ansohxxn.github.io/c++%20games/chapter1-5/">1.5 FMOD를 이용한 소리 재생</a> <br />
+연습 문제 출처 : <a href="https://blog.naver.com/atelierjpro/221413483005">홍정모 교수님 블로그</a></p>
+
+<p><br /></p>
+
+<h2 id="-q1-무한-반복-사운드를-pause--resume-해보세요">🙋 Q1. 무한 반복 사운드를 pause &amp; resume 해보세요.</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "fmod.hpp"
+#include &lt;iostream&gt;
+#include &lt;conio.h&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"FMOD cpp conext example"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">FMOD</span><span class="o">::</span><span class="n">System</span>     <span class="o">*</span><span class="n">system</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>
+	<span class="n">FMOD</span><span class="o">::</span><span class="n">Sound</span>      <span class="o">*</span><span class="n">sound</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>
+	<span class="n">FMOD</span><span class="o">::</span><span class="n">Channel</span>    <span class="o">*</span><span class="n">channel</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>
+	<span class="n">FMOD_RESULT</span>       <span class="n">result</span><span class="p">;</span>
+	<span class="kt">unsigned</span> <span class="kt">int</span>      <span class="n">version</span><span class="p">;</span>
+	<span class="kt">void</span>             <span class="o">*</span><span class="n">extradriverdata</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">FMOD</span><span class="o">::</span><span class="n">System_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">system</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">getVersion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">version</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="k">else</span> <span class="n">printf</span><span class="p">(</span><span class="s">"FMOD version %08x</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">version</span><span class="p">);</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">FMOD_INIT_NORMAL</span><span class="p">,</span> <span class="n">extradriverdata</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">createSound</span><span class="p">(</span><span class="s">"Rhapsody in Blue.mp3"</span><span class="p">,</span> <span class="n">FMOD_LOOP_NORMAL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sound</span><span class="p">);</span> 
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">playSound</span><span class="p">(</span><span class="n">sound</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">channel</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">();</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Press 0 to pause, 1 to resume, and x to exit"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		
+		<span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">getch</span><span class="p">();</span> 
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="sc">'0'</span><span class="p">)</span>
+			<span class="n">channel</span><span class="o">-&gt;</span><span class="n">setPaused</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="sc">'1'</span><span class="p">)</span>
+			<span class="n">channel</span><span class="o">-&gt;</span><span class="n">setPaused</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+			<span class="k">break</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">system</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>	
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-q2-배경-음악-튼-상태에서-스페이스바-키를-누를-때마다-다른-wav파일-재생하기">🙋 Q2. 배경 음악 튼 상태에서 스페이스바 키를 누를 때마다 다른 wav파일 재생하기</h2>
+
+<ul>
+  <li>아래 코드! 스페이스바의 아스키코드는 32
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span>      <span class="c1">// 스페이스바의 아스키코드는 32. 스페이스 바를 입력받으면 효과음 객체를 재생시킨다.</span>
+<span class="p">{</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">playSound</span><span class="p">(</span><span class="n">singing</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">channel</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "fmod.hpp"
+#include &lt;iostream&gt;
+#include &lt;conio.h&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"FMOD cpp conext example"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">FMOD</span><span class="o">::</span><span class="n">System</span>     <span class="o">*</span><span class="n">system</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>
+	<span class="n">FMOD</span><span class="o">::</span><span class="n">Sound</span>      <span class="o">*</span><span class="n">background</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>  <span class="c1">// 배경 음악                       이렇게 사운드 포인터 2개</span>
+	<span class="n">FMOD</span><span class="o">::</span><span class="n">Sound</span>      <span class="o">*</span><span class="n">singing</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>    <span class="c1">// 효과음 (짧은 wav파일)</span>
+	<span class="n">FMOD</span><span class="o">::</span><span class="n">Channel</span>    <span class="o">*</span><span class="n">channel</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>
+	<span class="n">FMOD_RESULT</span>       <span class="n">result</span><span class="p">;</span>
+	<span class="kt">unsigned</span> <span class="kt">int</span>      <span class="n">version</span><span class="p">;</span>
+	<span class="kt">void</span>             <span class="o">*</span><span class="n">extradriverdata</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">);</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">FMOD</span><span class="o">::</span><span class="n">System_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">system</span><span class="p">);</span> <span class="c1">// 시스템 객체 만들어 주고 </span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">getVersion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">version</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="k">else</span> <span class="n">printf</span><span class="p">(</span><span class="s">"FMOD version %08x</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">version</span><span class="p">);</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">FMOD_INIT_NORMAL</span><span class="p">,</span> <span class="n">extradriverdata</span><span class="p">);</span> <span class="c1">// 시스템 객체 초기화 해주고</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">createSound</span><span class="p">(</span><span class="s">"Rhapsody in Blue.mp3"</span><span class="p">,</span> <span class="n">FMOD_LOOP_NORMAL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">background</span><span class="p">);</span> <span class="c1">// 배경음악 객체 생성 -&gt; LOOP_NORMAL 무한으로 재생시킬거라</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">createSound</span><span class="p">(</span><span class="s">"singing.wav"</span><span class="p">,</span> <span class="n">FMOD_LOOP_OFF</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">singing</span><span class="p">);</span> <span class="c1">// 효과음 객체 생성 -&gt; LOOP_OFF 스페이스바 누를 때만 재생시킬거라</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">playSound</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">channel</span><span class="p">);</span>  <span class="c1">// 무한루프에 들어가기 전에 배경음악 재생 ! while문이 끝나 프로그램 종료시까지 게~속 재생하게 된다. 미리 재생을 시작.</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">();</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Press 0 to pause, 1 to resume, and x to exit"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		
+		<span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">getch</span><span class="p">();</span> <span class="c1">// i is ASCII code</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="sc">'0'</span><span class="p">)</span>
+			<span class="n">channel</span><span class="o">-&gt;</span><span class="n">setPaused</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span>      <span class="c1">// 스페이스바의 아스키코드는 32. 스페이스 바를 입력받으면 효과음 객체를 재생시킨다.</span>
+		<span class="p">{</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">playSound</span><span class="p">(</span><span class="n">singing</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">channel</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="sc">'1'</span><span class="p">)</span>
+			<span class="n">channel</span><span class="o">-&gt;</span><span class="n">setPaused</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+			<span class="k">break</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">system</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>	
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-q3-탱크-포탄-발사-사운드와-이동-소리-넣기">🙋 Q3. 탱크 포탄 발사 사운드와 이동 소리 넣기</h2>
+
+<p><a href="https://ansohxxn.github.io/c++%20games/chapter1-3-prac/#-q1-%ED%8F%AC%ED%83%84-%EC%97%AC%EB%9F%AC%EA%B0%9C-%EC%8F%98%EB%8A%94-%ED%83%B1%ED%81%AC-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0">1.3 연습문제 풀이 - Q1. 포탄 여러개 쏘는 탱크 구현하기</a> 에서 구현했던 코드를 활용하여 탱크가 <u>이동할 때</u>, <u>포탄을 쏠 때</u> 소리를 재생하도록 하였다.</p>
+
+<iframe width="720" height="404" src="https://www.youtube.com/embed/hYUbxgimsC4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h3 id="class-sound-설명">Class Sound 설명</h3>
+<ul>
+  <li>포인터 설명
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FMOD</span><span class="o">::</span><span class="n">System</span>     <span class="o">*</span><span class="n">system</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+<span class="n">FMOD</span><span class="o">::</span><span class="n">Sound</span>      <span class="o">*</span><span class="n">tankSound</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>    <span class="c1">// 탱크 움직일 때의 사운드 객체 포인터</span>
+<span class="n">FMOD</span><span class="o">::</span><span class="n">Sound</span>      <span class="o">*</span><span class="n">fireSound</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>    <span class="c1">// 발사할 때의 사운드 객체 포인터</span>
+<span class="n">FMOD</span><span class="o">::</span><span class="n">Channel</span>    <span class="o">*</span><span class="n">tankChannel</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>   <span class="c1">// 탱크 사운드를 컨트롤할 채널 포인터</span>
+<span class="n">FMOD</span><span class="o">::</span><span class="n">Channel</span>    <span class="o">*</span><span class="n">fireChannel</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>    <span class="c1">// 발사 사운드를 컨트롤할 채널 포인터</span>
+</code></pre></div>    </div>
+  </li>
+  <li>채널을 탱크채널 발사채널 2개로 따로 둔 이유
+    <ul>
+      <li>방향키 아무것도 안누를땐 탱크 사운드가 꺼져야 하지만 발사 사운드는 그대로 유지되야함.</li>
+      <li><u>즉 통제되는 시기가 서로 다르기 때문에</u> 따로 컨트롤 하기 위해 2개를 둠.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">int systemInit()</code> : 시스템 객체 생성하고 초기화하는 함수</li>
+  <li><code class="language-plaintext highlighter-rouge">int createTankSound()</code> : 탱크 사운드 객체 생성하는 함수
+    <ul>
+      <li>무한루프 X</li>
+      <li>FMOD_LOOP_OFF</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">int createFireSound()</code> : 포탄 사운드 객체 생성하는 함수
+    <ul>
+      <li>무한루프 X</li>
+      <li>FMOD_LOOP_OFF</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">int playTankSound()</code> : 탱크 사운드 재생시키는 함수</li>
+  <li><code class="language-plaintext highlighter-rouge">int fireTankSound()</code> : 발사 사운드 재생시키는 함수</li>
+</ul>
+
+<h3 id="tankexampleh">📜TankExample.h</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "fmod.hpp"
+#include "Game2D.h"
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+#include &lt;conio.h&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">MyTank</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">center</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="c1">//vec2 direction = vec2(1.0f, 0.0f, 0.0f);</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="p">{</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">center</span><span class="p">);</span>
+				<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">);</span> <span class="c1">// body</span>
+				<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">0.15</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.09</span><span class="n">f</span><span class="p">);</span> <span class="c1">// turret</span>
+				<span class="n">translate</span><span class="p">(</span><span class="mf">0.15</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.15</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// barrel</span>
+			<span class="p">}</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">MyBullet</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">center</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">vec2</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">center</span><span class="p">);</span>
+			<span class="n">drawFilledRegularConvexPolygon</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+			<span class="n">drawWiredRegularConvexPolygon</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">center</span> <span class="o">+=</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+<span class="c1">// ==================== class Sound ===========================================//</span>
+	<span class="k">class</span> <span class="nc">Sound</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">FMOD</span><span class="o">::</span><span class="n">System</span>     <span class="o">*</span><span class="n">system</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+		<span class="n">FMOD</span><span class="o">::</span><span class="n">Sound</span>      <span class="o">*</span><span class="n">tankSound</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>           
+		<span class="n">FMOD</span><span class="o">::</span><span class="n">Sound</span>      <span class="o">*</span><span class="n">fireSound</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+		<span class="n">FMOD</span><span class="o">::</span><span class="n">Channel</span>    <span class="o">*</span><span class="n">tankChannel</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+		<span class="n">FMOD</span><span class="o">::</span><span class="n">Channel</span>    <span class="o">*</span><span class="n">fireChannel</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+		<span class="n">FMOD_RESULT</span>       <span class="n">result</span><span class="p">;</span>
+		<span class="kt">unsigned</span> <span class="kt">int</span>      <span class="n">version</span><span class="p">;</span>
+		<span class="kt">void</span>             <span class="o">*</span><span class="n">extradriverdata</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+
+		<span class="kt">int</span> <span class="n">systemInit</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">FMOD</span><span class="o">::</span><span class="n">System_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">system</span><span class="p">);</span> <span class="c1">// 시스템 객체 만들어 주고 </span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+			<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">getVersion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">version</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+			<span class="k">else</span> <span class="n">printf</span><span class="p">(</span><span class="s">"FMOD version %08x</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">version</span><span class="p">);</span>
+
+			<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">FMOD_INIT_NORMAL</span><span class="p">,</span> <span class="n">extradriverdata</span><span class="p">);</span> <span class="c1">// 시스템 객체 초기화 해주고</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="kt">int</span> <span class="n">createTankSound</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">createSound</span><span class="p">(</span><span class="s">"drive.wav"</span><span class="p">,</span> <span class="n">FMOD_LOOP_OFF</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tankSound</span><span class="p">);</span> <span class="c1">// .mp3 files work!</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="kt">int</span> <span class="n">createFireSound</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">createSound</span><span class="p">(</span><span class="s">"shot.wav"</span><span class="p">,</span> <span class="n">FMOD_LOOP_OFF</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fireSound</span><span class="p">);</span> <span class="c1">// .mp3 files work!</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="kt">int</span> <span class="n">playTankSound</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">playSound</span><span class="p">(</span><span class="n">tankSound</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tankChannel</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="kt">int</span> <span class="n">playFireSound</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">system</span><span class="o">-&gt;</span><span class="n">playSound</span><span class="p">(</span><span class="n">fireSound</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fireChannel</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">FMOD_OK</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+<span class="c1">// ======================================================================================</span>
+
+	<span class="k">class</span> <span class="nc">TankExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">MyTank</span> <span class="n">tank</span><span class="p">;</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">MyBullet</span> <span class="o">*&gt;</span> <span class="n">bullets</span><span class="p">;</span>
+		<span class="n">Sound</span> <span class="n">sound</span><span class="p">;</span>
+		<span class="kt">bool</span> <span class="n">playing</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+		<span class="c1">//TODO: allow multiple bullets</span>
+		<span class="c1">//TODO: delete bullets when they go out of the screen</span>
+
+	<span class="nl">public:</span>
+		<span class="n">TankExample</span><span class="p">()</span>
+			<span class="o">:</span> <span class="n">Game2D</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">768</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="p">{}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">sound</span><span class="p">.</span><span class="n">tankSound</span> <span class="o">==</span> <span class="nb">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">sound</span><span class="p">.</span><span class="n">tankSound</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="c1">// 각 사운드 객체는 한번만 만들도록</span>
+			<span class="p">{</span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">systemInit</span><span class="p">();</span>        <span class="c1">// 시스템 먼저 생성하기. 아주 중요 ! </span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">createTankSound</span><span class="p">();</span> 
+				<span class="n">sound</span><span class="p">.</span><span class="n">createFireSound</span><span class="p">();</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_LEFT</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">sound</span><span class="p">.</span><span class="n">tankChannel</span><span class="o">-&gt;</span><span class="n">isPlaying</span><span class="p">(</span><span class="o">&amp;</span><span class="n">playing</span><span class="p">);</span>  <span class="c1">// 탱크 이동 소리 이미 재생중이면 새로 처음부터 재생 안하도록 </span>
+				<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">playing</span><span class="p">)</span>
+					<span class="n">sound</span><span class="p">.</span><span class="n">playTankSound</span><span class="p">();</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_RIGHT</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">sound</span><span class="p">.</span><span class="n">tankChannel</span><span class="o">-&gt;</span><span class="n">isPlaying</span><span class="p">(</span><span class="o">&amp;</span><span class="n">playing</span><span class="p">);</span>
+				<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">playing</span><span class="p">)</span>
+					<span class="n">sound</span><span class="p">.</span><span class="n">playTankSound</span><span class="p">();</span>
+			<span class="p">}</span>
+				
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_UP</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">sound</span><span class="p">.</span><span class="n">tankChannel</span><span class="o">-&gt;</span><span class="n">isPlaying</span><span class="p">(</span><span class="o">&amp;</span><span class="n">playing</span><span class="p">);</span>
+				<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">playing</span><span class="p">)</span>
+					<span class="n">sound</span><span class="p">.</span><span class="n">playTankSound</span><span class="p">();</span>
+			<span class="p">}</span>
+				
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_DOWN</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">-=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">sound</span><span class="p">.</span><span class="n">tankChannel</span><span class="o">-&gt;</span><span class="n">isPlaying</span><span class="p">(</span><span class="o">&amp;</span><span class="n">playing</span><span class="p">);</span>
+				<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">playing</span><span class="p">)</span>
+					<span class="n">sound</span><span class="p">.</span><span class="n">playTankSound</span><span class="p">();</span>
+			<span class="p">}</span>
+			
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_LEFT</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_RIGHT</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_UP</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_DOWN</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">tankChannel</span><span class="o">-&gt;</span><span class="n">stop</span><span class="p">();</span>  <span class="c1">// 각 방향키를 안누르고 있을땐 tank 소리 정지</span>
+			<span class="p">}</span>	
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_KEY_SPACE</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">new</span> <span class="n">MyBullet</span><span class="p">);</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">center</span> <span class="o">=</span> <span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">;</span> <span class="c1">//		</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">;</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">;</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">sound</span><span class="p">.</span><span class="n">playFireSound</span><span class="p">();</span>  <span class="c1">// 스페이스바 누르면 발사소리 재생되도록! tank와 다르게 쏠때마다 소리 새로 재생되도 자연스러움</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">bullets</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">bullets</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">getTimeStep</span><span class="p">());</span>
+					<span class="n">bullets</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+			<span class="n">tank</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">bullets</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.5</span><span class="n">f</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="k">delete</span> <span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+						<span class="n">bullets</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">bullets</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>			
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="maincpp">📜main.cpp</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "TankExample.h"
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">TankExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"Tank example"</span><span class="p">,</span> <span class="mi">1280</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

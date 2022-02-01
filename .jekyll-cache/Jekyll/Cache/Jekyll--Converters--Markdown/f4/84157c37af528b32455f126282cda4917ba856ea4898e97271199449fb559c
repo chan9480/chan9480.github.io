@@ -1,0 +1,788 @@
+I"�^<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-19-모던-c-필수-요소들">chapter 19. 모던 C++ 필수 요소들</h1>
+
+<h1 id="멀티-스레딩-예제-벡터-내적">멀티 스레딩 예제 (벡터 내적)</h1>
+
+<h2 id="-벡터-내적dot-product이란">🔔 벡터 내적(Dot Product)이란</h2>
+
+<p>\[\vec{A}\cdot\vec{B} = x_A{\cdot}x_B + y_A{\cdot}y_B \]</p>
+
+<ul>
+  <li>두 벡터의 성분끼리 곱해서 더한 스칼라 값</li>
+  <li>수학적으로는 <em>A dot B</em> 으로 표현한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">벡터 내적</code>의 원리와 개념 참고
+    <ul>
+      <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-2/">두 공의 충돌 : 벡터 내적</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-벡터-내적을-계산-하는-코드">🔔 벡터 내적을 계산 하는 코드</h2>
+
+<p>7 가지 방법으로 벡터 내적을 계산해보고 각각의 방법이 얼마나 효율적인지 실행 시간을 재볼 것이다.</p>
+
+<h3 id="전체-코드와-비교">전체 코드와 비교</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;chrono&gt;
+#include &lt;mutex&gt;	
+#include &lt;utility&gt;
+#include &lt;vector&gt;	
+#include &lt;atomic&gt;
+#include &lt;numeric&gt;		// std::inner_product
+#include &lt;random&gt;
+#include &lt;execution&gt;	// parallel execution
+#include &lt;future&gt;
+#include &lt;thread&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">dotProductNaive</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&amp;</span> <span class="n">sum</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">dotProductLock</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&amp;</span> <span class="n">sum</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="c1">//cout &lt;&lt; "Thread Start" &lt;&lt; endl;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">lock</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="p">}</span>
+	<span class="c1">//cout &lt;&lt; "Thread End" &lt;&lt; endl;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">dotProductAtomic</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="n">atomic</span><span class="o">&lt;</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">sum</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">auto</span> <span class="nf">dotProductFuture</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">const</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">numData</span> <span class="o">=</span> <span class="mi">100'000'000</span><span class="p">;</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numThread</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+	<span class="c1">// thread 개수 늘린다고 degree of multithreading이 높아지지는 않음</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec0</span><span class="p">,</span> <span class="n">vec1</span><span class="p">;</span>
+	<span class="n">vec0</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">numData</span><span class="p">);</span>
+	<span class="n">vec1</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">numData</span><span class="p">);</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">seed</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">mt19937_64</span> <span class="n">makerand</span><span class="p">(</span><span class="n">seed</span><span class="p">());</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">uniform_int_distribution</span><span class="o">&lt;&gt;</span> <span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numData</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">vec0</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="n">makerand</span><span class="p">));</span>
+		<span class="n">vec1</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="n">makerand</span><span class="p">));</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"실험 1번 - std::inner_product</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sta</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>		<span class="c1">// 시간 측정 시작</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">inner_product</span><span class="p">(</span><span class="n">vec0</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec0</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">vec1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="mi">0ull</span><span class="p">);</span>
+		<span class="c1">// 두 벡터의 개수가 같다고 가정하므로 vec1은 begin만 있어도 되며 ull은 unsigned long long의 약자</span>
+		<span class="k">const</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">sta</span><span class="p">;</span>		
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연산에 소요된 시간 = "</span> <span class="o">&lt;&lt;</span> <span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"결과값 = "</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"실험 2번 - Naive</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sta</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+		
+		<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+		<span class="n">threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+
+		<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">dotProductNaive</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span>
+				<span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">sum</span><span class="p">));</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+
+		<span class="k">const</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">sta</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연산에 소요된 시간 = "</span> <span class="o">&lt;&lt;</span> <span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"결과값 = "</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"실험 3번 - Lockguard</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sta</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+		
+		<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+		<span class="n">threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+
+		<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">dotProductLock</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span>
+				<span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">sum</span><span class="p">));</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+
+		<span class="k">const</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">sta</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연산에 소요된 시간 = "</span> <span class="o">&lt;&lt;</span> <span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"결과값 = "</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"실험 4번 - Atomic</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sta</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+		
+		<span class="n">atomic</span><span class="o">&lt;</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+		<span class="n">threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+
+		<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">dotProductAtomic</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span>
+				<span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">sum</span><span class="p">));</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+
+		<span class="k">const</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">sta</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연산에 소요된 시간 = "</span> <span class="o">&lt;&lt;</span> <span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"결과값 = "</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"실험 5번 - Future</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sta</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+
+		<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">futures</span><span class="p">;</span>
+		<span class="n">futures</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+
+		<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">futures</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">dotProductFuture</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span>
+				<span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">);</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">sum</span> <span class="o">+=</span> <span class="n">futures</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">get</span><span class="p">();</span>
+		
+		<span class="k">const</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">sta</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연산에 소요된 시간 = "</span> <span class="o">&lt;&lt;</span> <span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"결과값 = "</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="c1">// TODO : Future의 divide and conquer 방식은 thread에서도 구현해보자.</span>
+	<span class="c1">// async 대신에 thread와 promise를 사용해서 future을 사용해보자.</span>
+	
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"실험 6번 - promise</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sta</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+		
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">prom</span><span class="p">;</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">future</span><span class="p">;</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+		<span class="n">prom</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+		<span class="n">future</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+		<span class="n">threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+		
+		<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+		<span class="kt">unsigned</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">future</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prom</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">get_future</span><span class="p">();</span>
+			<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">tempSum</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;&amp;</span> <span class="n">prom</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">lock2</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+					
+					<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">numPerThread</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+						<span class="n">tempSum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">vec0</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">vec1</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+					<span class="n">prom</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">tempSum</span><span class="p">);</span>
+				<span class="p">},</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">prom</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">sum</span> <span class="o">+=</span> <span class="n">future</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">get</span><span class="p">();</span>
+
+		<span class="k">const</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">sta</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연산에 소요된 시간 = "</span> <span class="o">&lt;&lt;</span> <span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"결과값 = "</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"실험 7번 - std::transform_reduce</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+	<span class="p">{</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sta</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+		<span class="k">const</span> <span class="k">auto</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">transform_reduce</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">par</span><span class="p">,</span> <span class="n">vec0</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec0</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">vec1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="mi">0ull</span><span class="p">);</span>
+		<span class="k">const</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">sta</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연산에 소요된 시간 = "</span> <span class="o">&lt;&lt;</span> <span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"결과값 = "</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+실험 1번 - std::inner_product
+연산에 소요된 시간 = 0.068767
+결과값 = 3025113384
+
+실험 2번 - Naive
+연산에 소요된 시간 = 0.04685
+결과값 = 889569211
+
+실험 3번 - Lockguard
+연산에 소요된 시간 = 2.15617
+결과값 = 3025113384
+
+실험 4번 - Atomic
+연산에 소요된 시간 = 1.31186
+결과값 = 3025113384
+
+실험 5번 - Future
+연산에 소요된 시간 = 0.0189238
+결과값 = 3025113384
+
+실험 6번 - promise
+연산에 소요된 시간 = 0.0189238
+결과값 = 3025113384
+
+실험 7번 - std::transform_reduce
+연산에 소요된 시간 = 0.014745
+결과값 = 3025113384
+</code></pre></div></div>
+
+<ul>
+  <li>1️⃣std::inner_product <em>⭕, 빠름</em></li>
+  <li>2️⃣ 순진한 멀티 쓰레딩 <em>❌, 빠름</em>
+    <ul>
+      <li>레이스 컨디션으로 값이 부정확하게 나온다.</li>
+    </ul>
+  </li>
+  <li>3️⃣ Lock guard <em>⭕, 느림</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">lock</code>, <code class="language-plaintext highlighter-rouge">unlock</code> 과정 때문에 느리다.</li>
+    </ul>
+  </li>
+  <li>4️⃣ atomic <em>⭕, 느림</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">atomic</code>의 연산은 느린 편이다.</li>
+    </ul>
+  </li>
+  <li>5️⃣ Task-based parallelism (std::async) <em>⭕, 빠름</em></li>
+  <li>6️⃣ Task-based parallelism (std::thread, std::promise) <em>⭕, 빠름</em></li>
+  <li>7️⃣ std::transform_reduce <em>⭕, 빠름</em></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="main-함수">main 함수</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">const</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">numData</span> <span class="o">=</span> <span class="mi">100'000'000</span><span class="p">;</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numThread</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec0</span><span class="p">,</span> <span class="n">vec1</span><span class="p">;</span>
+	<span class="n">vec0</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">numData</span><span class="p">);</span>
+	<span class="n">vec1</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">numData</span><span class="p">);</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">seed</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">mt19937_64</span> <span class="n">makerand</span><span class="p">(</span><span class="n">seed</span><span class="p">());</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">uniform_int_distribution</span><span class="o">&lt;&gt;</span> <span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numData</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">vec0</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="n">makerand</span><span class="p">));</span>
+		<span class="n">vec1</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="n">makerand</span><span class="p">));</span>
+	<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">mtx</code>
+    <ul>
+      <li>mutex 객체로 전역 변수로 선언 되었다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">numData</code>
+    <ul>
+      <li>벡터 크기</li>
+      <li>1억개 !</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">numThread</code>
+    <ul>
+      <li>스레드 개수를 4 개로 지정했다.</li>
+      <li>cf) 스레드를 많이 쓴다고 멀티스레딩 효율이 높아지는건 아니다</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">vec0</code>, <code class="language-plaintext highlighter-rouge">vec1</code>
+    <ul>
+      <li>두 벡터 컨테이너</li>
+      <li>각각 reserve 함수를 통해 <code class="language-plaintext highlighter-rouge">numData</code> (1억) 크기를 가진 벡터로 만들었다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">seed</code>
+    <ul>
+      <li>랜덤넘버 생성 시드</li>
+    </ul>
+  </li>
+  <li>std::mt19937_64 makerand(seed());
+    <ul>
+      <li>랜덤 넘버 생성기</li>
+    </ul>
+  </li>
+  <li>std::uniform_int_distribution&lt;&gt; range(1, 10);
+    <ul>
+      <li>1~10 범위 중 랜덤 넘버</li>
+    </ul>
+  </li>
+  <li>for문
+    <ul>
+      <li>벡터 크기안 1억번 만큼 for문을 돌며 <strong>두 벡터에 각각 1~10 중 랜덤한 숫자를 원소로 삽입한다.</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="방법-1️⃣-stdinner_product">방법 1️⃣ std::inner_product</h3>
+
+<blockquote>
+  <p>#include &lt;numeric&gt;</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::inner_product</code>은 두 벡터의 내적값을 리턴해주는 함수다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">const</span> <span class="k">auto</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">inner_product</span><span class="p">(</span><span class="n">vec0</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec0</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">vec1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="mi">0ull</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sum</code>에 벡터 내적의 결과를 담음</li>
+  <li><code class="language-plaintext highlighter-rouge">vec1</code>은 <code class="language-plaintext highlighter-rouge">end()</code> 없이 <code class="language-plaintext highlighter-rouge">begin()</code> 만 있어도 된다.
+    <ul>
+      <li>벡터 내적을 구할 땐 두 벡터의 성분 개수가 같다고 가정하므로.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">0ull</code>
+    <ul>
+      <li>0을 unsigned long long 으로 표기
+        <ul>
+          <li>마치 16진수면 0x라 하는것과 같음</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">sum</code>이 unsigned long long int 타입이 되게끔.
+        <ul>
+          <li>그냥 0이라고 하면 sum은 unsigned long long int 가 아닌 그냥 int가 됨.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="방법-2️⃣-순진한-멀티-쓰레딩">방법 2️⃣ 순진한 멀티 쓰레딩</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">dotProductNaive</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&amp;</span> <span class="n">sum</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">...</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+<span class="n">threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+	<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">dotProductNaive</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span> <span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">sum</span><span class="p">));</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+	<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">threads</code>
+    <ul>
+      <li>스레드들을 담는 vector</li>
+      <li>벡터의 사이즈를 <code class="language-plaintext highlighter-rouge">numThread</code>, 즉 4 개 만큼 늘렸다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">numPerThread</code>
+    <ul>
+      <li>1 개의 스레드 당 작업할 데이터 개수</li>
+      <li>모든 스레드의 작업 수가 모두 같다고 가정. (나머지가 0인 경우를 가정)
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">numData</code> 값이 1 억이니 한 스레드 당 2500 만개씩의 데이터를 병렬 처리 하는 셈이다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>첫번째 for문 👉 4 번 돈다.
+    <ul>
+      <li>스레드 마다 벡터 내적을 구하는 작업을 부여
+        <ul>
+          <li>하나의 스레드마다 2500만개(<code class="language-plaintext highlighter-rouge">numPerThread</code>)의 데이터의 벡터 내적을 구하고 결과를 <code class="language-plaintext highlighter-rouge">sum</code>에 담는다.
+            <ul>
+              <li>첫번째 인수는 함수 <code class="language-plaintext highlighter-rouge">doProductNaive</code>. 나머지 인자들은 함수에 필요한 인자들.
+                <ul>
+                  <li>시작 범위 t * numPerThread, 끝 범위 (t + 1) * numPerThread</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>두번째 for문
+    <ul>
+      <li>벡터의 스레드들이 작업이 끝나기를 대기</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>이 방법은 <strong>레이스 컨디션</strong>이 발생하기 때문에 벡터 내적의 결과가 부정확하게 나온다.</p>
+</blockquote>
+
+<ul>
+  <li>모든 스레드가 <code class="language-plaintext highlighter-rouge">sum</code> 메모리를 공유하기 때문에 발생한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="방법-3️⃣-lock-guard">방법 3️⃣ Lock guard</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">dotProductLock</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&amp;</span> <span class="n">sum</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">lock</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">...</span>
+
+		<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+		<span class="n">threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+
+		<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">dotProductLock</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span> <span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">sum</span><span class="p">));</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">sum</code>값을 가지고 연산을 하고 그 결과를 <code class="language-plaintext highlighter-rouge">sum</code>에 덮어 씌우는 과정을 한 스레드가 작업 중일땐 다른 스레드가 접근하지 못하도록 lock 하는 방법으로 레이스 컨디션을 해결할 수 있다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="nf">lock</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>  <span class="c1">// scoped_lock 은 unlock 이 필요 없다. C++ 17 부터 가능</span>
+<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이제 벡터 내적의 값은 정확하게 나오지만 굉장히 느리다. 무려 2 초를 넘긴다 !
+    <ul>
+      <li>lock 을 1 억번 걸어주어야 하고 한 스레드가 작업을 하고 있을 땐 다른 스레드들이 기다려야 하기 때문에..</li>
+      <li>너무 느려서 멀티 스레딩 하는 보람이 없다.
+        <ul>
+          <li>물론 경우에 따라 다르긴 하지만 이 경우엔 그렇다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">scoped_lock</code>을 for문 바깥에다 놓으면 빨라지지만 이건 비동기 작업이 아니라 그냥 동기적으로 순차적으로 실행되는거나 마찬가지다. 병렬 처리가 아님.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="방법-4️⃣-atomic">방법 4️⃣ atomic</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kt">void</span> <span class="nf">dotProductAtomic</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="n">atomic</span><span class="o">&lt;</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">sum</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">...</span>
+
+		<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">dotProductLock</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span> <span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">sum</span><span class="p">));</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">threads</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+</code></pre></div></div>
+
+<ul>
+  <li>벡터 내적 결과를 담을 <code class="language-plaintext highlighter-rouge">sum</code>을 <code class="language-plaintext highlighter-rouge">atomic&lt;unsigned long long&gt;</code> 타입으로 받고 있다.
+    <ul>
+      <li>메모리 값을 CPU로 가져오고, CPU에서 연산을 하고, 다시 연산 결과를 메모리에 덮어 씌우는 이 3 단계의 과정을 하나로 묶어준다.</li>
+      <li>이 3단계의 과정 도중엔 다른 스레드가 접근하지 못하도록!</li>
+    </ul>
+  </li>
+  <li>결과는 정확하나 Lock Guard 처럼 느리다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">atomic</code> 연산이 일반 연산보다 느리기 때문에.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="방법-5️⃣-task-based-parallelism-stdasync">방법 5️⃣ Task-based parallelism (std::async)</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="nf">dotProductFuture</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span>
+	<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">v0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+	<span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">...</span>
+
+		<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">futures</span><span class="p">;</span>
+		<span class="n">futures</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+
+		<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">futures</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">dotProductFuture</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec0</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">vec1</span><span class="p">),</span> <span class="n">t</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">numPerThread</span><span class="p">);</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">sum</span> <span class="o">+=</span> <span class="n">futures</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">get</span><span class="p">();</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">futures</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::future</code> 객체들이 들어있는 벡터</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">std::async</code>을 통해 <code class="language-plaintext highlighter-rouge">doProductFuture</code> 연산 결과를 <code class="language-plaintext highlighter-rouge">futures[t]</code> 원소에 받는다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">doProductFuture</code> 함수
+        <ul>
+          <li>위 예제들과 다르게 <code class="language-plaintext highlighter-rouge">sum</code>이 <code class="language-plaintext highlighter-rouge">doProductFuture</code>의 인자로 들어가지 않는다.</li>
+          <li>위 예제의 다른 함수들과 다르게 <code class="language-plaintext highlighter-rouge">void</code>가 아닌 리턴 타입이 있는 함수로 설정했다다. 이를 <code class="language-plaintext highlighter-rouge">async</code>에서 받아 <code class="language-plaintext highlighter-rouge">future</code>객체에 리턴할 수 있도록! 로컬 <code class="language-plaintext highlighter-rouge">sum</code>을 리턴한다.
+            <ul>
+              <li>스레드는 연산 결과를 직접 받지 못하기 때문에 void 함수와 더불어 또 조작할 변수도 레퍼런스로 함께 넘겨 주었어야 했음</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">futures[t]</code>에 연산 결과를 받기 전까진 <code class="language-plaintext highlighter-rouge">futures[t].get</code> 출력이 실행되지 않는다.
+    <ul>
+      <li><em>sum += futures[t].get();</em>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">thread</code>는 레퍼런스로 sum을 넘겨서 함수 내부에서 <code class="language-plaintext highlighter-rouge">+=</code> 했으니 최종적으로 또 취합할 일이 없었다. 대신 <code class="language-plaintext highlighter-rouge">join</code>으로 각 스레드가 일이 끝나길 기다리는 과정이 필요했음
+            <ul>
+              <li>thread는 다루는 sum이 global 한 변수였기 때문에 이를 레퍼런스로 넘겼다.</li>
+              <li>그러니 스레드들이 sum을 동시에 건드려 레이스 컨디션이 일어날 우려가 있었음</li>
+            </ul>
+          </li>
+          <li><code class="language-plaintext highlighter-rouge">async</code>은 로컬 sum을 리턴하기 때문에 futures.get() 을 통해 리턴 받은 값을 <code class="language-plaintext highlighter-rouge">sum +=</code> 취합해주어야 한다.
+            <ul>
+              <li><strong>로컬 sum이기에</strong> <u>함수 실행마다 각각 다른 별개의 sum이니까 서로 영향을 줄 일이 없다. 즉 레이스 컨디션이 일어날 일이 없음!</u></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>오히려 Naive 하게 멀티 스레딩 했던 2️⃣ 방법보다 연산이 더 빨랐다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="방법-6️⃣-task-based-parallelism-stdthread-stdpromise">방법 6️⃣ Task-based parallelism (std::thread, std::promise)</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">prom</span><span class="p">;</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">future</span><span class="p">;</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+		<span class="n">prom</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+		<span class="n">future</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+		<span class="n">threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numThread</span><span class="p">);</span>
+		
+		<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="nf">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+		<span class="kt">unsigned</span> <span class="n">numPerThread</span> <span class="o">=</span> <span class="n">numData</span> <span class="o">/</span> <span class="n">numThread</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">future</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prom</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">get_future</span><span class="p">();</span>  <span class="c1">// prom 에서 future 가져와 저장</span>
+			<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">tempSum</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+			<span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;&amp;</span> <span class="n">prom</span><span class="p">)</span>
+			<span class="p">{</span>
+					<span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">lock2</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+					
+					<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">numPerThread</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+						<span class="n">tempSum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">vec0</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">vec1</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+
+					<span class="n">prom</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">tempSum</span><span class="p">);</span>
+
+			<span class="p">},</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">prom</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+
+			<span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">join</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">numThread</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span>
+			<span class="n">sum</span> <span class="o">+=</span> <span class="n">future</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">get</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>5️⃣와 같다. 다만 <code class="language-plaintext highlighter-rouge">async</code>을 <code class="language-plaintext highlighter-rouge">thread</code>로 바꾸고 <code class="language-plaintext highlighter-rouge">promise</code>로 <code class="language-plaintext highlighter-rouge">future</code>에 연산 결과를 받도록 설정한 것 뿐!</p>
+
+<ul>
+  <li>vector 3개 필요
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">prom</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">future</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">threads</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>첫 번째 for 문
+    <ul>
+      <li>future 객체에 약속한 promise들을 넘기기로 약속한다.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">future[i] = prom[i].get_future();</code></li>
+        </ul>
+      </li>
+      <li>아래와 같은 기능을 하는 람다함수를 스레드에게 부여하고 매개 변수인 <code class="language-plaintext highlighter-rouge">prom</code>이 <code class="language-plaintext highlighter-rouge">prom[i]</code>을 R-value로서 참조하기 때문에 이 연산 결과를 <code class="language-plaintext highlighter-rouge">future</code>로 저장하게 한다.
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="nf">lock2</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+					
+    <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">numPerThread</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">tempSum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">vec0</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">vec1</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="n">prom</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">tempSum</span><span class="p">);</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>두 번째 for 문
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">futures[t]</code>에 연산 결과를 받기 전까진 <code class="language-plaintext highlighter-rouge">futures[t].get</code> 출력이 실행되지 않는다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="방법-7️⃣-stdtransform_reduce">방법 7️⃣ std::transform_reduce</h3>
+
+<blockquote>
+  <p>#include &lt;numeric&gt;</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="k">auto</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">transform_reduce</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">execution</span><span class="o">::</span><span class="n">par</span><span class="p">,</span> <span class="n">vec0</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec0</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">vec1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="mi">0ull</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::transform_reduce</code>
+    <ul>
+      <li>병렬 처리를 지원해주는 C++ 표준 함수이다.</li>
+      <li><code class="language-plaintext highlighter-rouge">inner_product</code>의 발전형으로 병렬 처리로 벡터 내적을 계산한다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">inner_product</code>보다 인수가 하나 더 필요하다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::execution::par</code>
+        <ul>
+          <li>병렬처리로 돌려달라.</li>
+          <li>마치 스레드를 사용하는 것 처럼</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">std::execution::seq</code>
+        <ul>
+          <li>병렬처리 말고 순차적으로, 동기적으로 돌려달라.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-참고">🔔 참고</h2>
+
+<ul>
+  <li><a href="https://blog.naver.com/leeinje66/221580959555">코드는 이 블로그를 참고하였다.</a></li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

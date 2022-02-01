@@ -15,5 +15,7 @@
 {% endif %}
 
 {%- for post in entries -%}
-  {% include entry.html %}
+  {%- unless post.hidden -%}
+    {% include archive-single.html %}
+  {%- endunless -%}
 {%- endfor -%}

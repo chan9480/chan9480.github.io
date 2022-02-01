@@ -1,0 +1,21 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-17-stdstring-문자열-클래스">chapter 17. std::string 문자열 클래스</a></li>
+  <li><a href="#문자-접근하기와-배열로의-변환">문자 접근하기와 배열로의 변환</a>
+    <ul>
+      <li><a href="#-문자-접근하기">🔔 문자 접근하기</a>
+        <ul>
+          <li><a href="#-연산자로-접근하기">[] 연산자로 접근하기</a></li>
+          <li><a href="#ati과-i의-차이점">at(i)과 [i]의 차이점</a></li>
+        </ul>
+      </li>
+      <li><a href="#-c언어-스타일-문자열배열로-바꾸기">🔔 C언어 스타일 문자열(배열)로 바꾸기</a>
+        <ul>
+          <li><a href="#c_str-함수-사용하기">c_str() 함수 사용하기</a></li>
+          <li><a href="#data-함수-사용하기">data() 함수 사용하기</a></li>
+          <li><a href="#copy-함수-사용하기">copy() 함수 사용하기</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

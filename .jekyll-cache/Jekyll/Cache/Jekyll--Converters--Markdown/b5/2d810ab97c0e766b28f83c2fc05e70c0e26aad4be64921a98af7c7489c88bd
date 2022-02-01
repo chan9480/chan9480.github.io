@@ -1,0 +1,660 @@
+I"�<p class="notice--warning">인프런에 있는 이재환님의 강의 <strong>게임 디자인 패턴 with Unity</strong> 를 듣고 정리한 필기입니다. 😀</p>
+
+<h1 id="chapter-3-strategy-pattern">Chapter 3. Strategy Pattern</h1>
+
+<h2 id="-strategy-pattern이란">🔔 Strategy Pattern이란?</h2>
+
+<blockquote>
+  <p><u>인터페이스 &amp; 다형성</u>과 관련있다.</p>
+</blockquote>
+
+<ul>
+  <li>여러 알고리즘을 하나의 추상적인 접근점(<code class="language-plaintext highlighter-rouge">인터페이스</code>)을 만들어 접근점에서 알고리즘이 서로 교환 가능하도록 하는 패턴
+    <ul>
+      <li><strong>동일 목적 알고리즘의 선택 적용</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="인터페이스">인터페이스</h3>
+<ul>
+  <li>기능에 대한 선언
+    <ul>
+      <li><u>구현과의 분리</u>
+        <ul>
+          <li>기능들을 구현하진 않고 프로토타입만 명시한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>여러가지 기능을 사용하기 위한 단일 통로</li>
+  <li>예시
+    <ul>
+      <li>워드 문서에서 프린터, 폰트 사용
+        <ul>
+          <li>‘프린트’ 버튼만 누르면 어떤 종류의 프린터든간에 알아서 각자에 맞게 프린트함</li>
+          <li>똑같은 문장을 써도 폰트에 따라 모양은 다르게 나타남</li>
+        </ul>
+      </li>
+      <li>정수 배열에 대해 사용하는 정렬 알고리즘</li>
+      <li>게임 캐릭터의 무기 사용</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>인터페이스에 무기에 대한 추상적인 기능 이름들만 명시해주면 각 무기들은 이 인터페이스를 상속받아 각자 무기 특성에 맞게 알아서 기능들을 구현하면 된다.</p>
+</blockquote>
+
+<blockquote>
+  <p>또한 부모인 인터페이스 이름 하나로 한방에 그 아래 자식들을 관리할 수 있다. <code class="language-plaintext highlighter-rouge">다형성</code></p>
+</blockquote>
+
+<h4 id="인터페이스-클래스-구현-in-c">인터페이스 클래스 구현 in C#</h4>
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="err">뫄뫄</span> <span class="err">{</span>
+    <span class="nc">void</span> <span class="nf">func</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>클래스 이름 앞엔 대문자 <code class="language-plaintext highlighter-rouge">I</code>를 붙여주어야 한다.</li>
+  <li>멤버 변수를 가질 수 없다.</li>
+  <li>멤버 함수들은 전부 프로토타입만 명시해주며 구현하지 않는다.
+    <ul>
+      <li>자식 클래스들은 인터페이스에 있는 모든 함수들은 무조건 다 오버라이딩 해야 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-예제-1--텍스트로-무기-교체">🔔 예제 1 : 텍스트로 무기 교체</h2>
+
+<blockquote>
+  <p>무기를 교체할때마다 콘솔창에 출력</p>
+</blockquote>
+
+<h3 id="구조">구조</h3>
+
+<ul>
+  <li>📜IWeapon.cs  <strong>인터페이스</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Shoot()</code></li>
+      <li>📜Arrow.cs  <strong>상속</strong>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Shoot()</code> 오버라이딩</li>
+        </ul>
+      </li>
+      <li>📜Bullet.cs <strong>상속</strong>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Shoot()</code> 오버라이딩</li>
+        </ul>
+      </li>
+      <li>📜Missile.cs  <strong>상속</strong>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Shoot()</code> 오버라이딩</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>📜MyWeapon.cs
+    <ul>
+      <li><strong><em>private <u>IWeapon</u> weapon</em></strong></li>
+      <li><code class="language-plaintext highlighter-rouge">SetWeapon</code> 무기를 교체하고</li>
+      <li><code class="language-plaintext highlighter-rouge">weapon.Shoot();</code> 발사
+        <ul>
+          <li><u>다형성</u>
+            <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IWeapon</span> <span class="n">weapon</span> <span class="p">=</span> <span class="n">Arrow</span> <span class="n">arrow</span><span class="p">;</span>
+<span class="n">IWeapon</span> <span class="n">weapon</span> <span class="p">=</span> <span class="n">Bullet</span> <span class="n">bullet</span><span class="p">;</span>
+<span class="n">IWeapon</span> <span class="n">weapon</span> <span class="p">=</span> <span class="n">Missile</span> <span class="n">missile</span><span class="p">;</span>
+</code></pre></div>            </div>
+            <ul>
+              <li>👉 📜MyWeapon 입장에선 여러 무기들에 대한 정보를 알지 못하지만 <u>IWeapon</u>타입으로 받은 무기는 각자 무기 타입에 따라 각자 오버라이딩 한대로 다른 내용의 <code class="language-plaintext highlighter-rouge">Shoot()</code>을 실행한다.</li>
+              <li>👉 📜MyWeapon 입장에선 그저 <code class="language-plaintext highlighter-rouge">Shoot()</code>만 실행해도 각자 무기에 따라 알아서 다른 내용으로 실행되는 셈.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>📜WeaponManager.cs
+    <ul>
+      <li>무기 교체</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="iweaponcs">📜IWeapon.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">IWeapon</span><span class="p">{</span>
+	<span class="k">void</span> <span class="nf">Shoot</span><span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span><span class="p">);</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrowcs">📜Arrow.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Arrow</span> <span class="p">:</span> <span class="n">IWeapon</span> <span class="p">{</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Shoot</span> <span class="p">()</span> <span class="p">{</span>
+		<span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span> <span class="p">(</span><span class="s">"화살 공격"</span><span class="p">);</span>
+	<span class="p">}</span> 
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="bulletcs">📜Bullet.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Bullet</span> <span class="p">:</span> <span class="n">IWeapon</span> <span class="p">{</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Shoot</span> <span class="p">()</span> <span class="p">{</span>
+		<span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span> <span class="p">(</span><span class="s">"총알 공격"</span><span class="p">);</span>
+	<span class="p">}</span> 
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="missilecs">📜Missile.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Missile</span> <span class="p">:</span> <span class="n">IWeapon</span> <span class="p">{</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Shoot</span> <span class="p">()</span> <span class="p">{</span>
+		<span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span> <span class="p">(</span><span class="s">"미사일 공격"</span><span class="p">);</span>
+	<span class="p">}</span> 
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="myweaponcs">📜MyWeapon.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MyWeapon</span> <span class="p">{</span>
+
+	<span class="c1">// 접근점</span>
+	<span class="k">private</span> <span class="n">IWeapon</span> <span class="n">weapon</span><span class="p">;</span>
+
+	<span class="c1">// 무기 교환 가능하게...</span>
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">setWeapon</span> <span class="p">(</span><span class="n">IWeapon</span> <span class="n">weapon</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">this</span><span class="p">.</span><span class="n">weapon</span> <span class="p">=</span> <span class="n">weapon</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Shoot</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">// Function Delegage</span>
+		<span class="n">weapon</span><span class="p">.</span><span class="nf">Shoot</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="weaponmanagercs">📜WeaponManager.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">WeaponManager</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="n">MyWeapon</span> <span class="n">myweapon</span><span class="p">;</span>
+
+	<span class="k">void</span> <span class="nf">Start</span><span class="p">(){</span>
+
+		<span class="n">myweapon</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyWeapon</span> <span class="p">();</span>
+
+		<span class="n">myweapon</span><span class="p">.</span><span class="nf">setWeapon</span><span class="p">(</span><span class="k">new</span> <span class="nf">Bullet</span><span class="p">());</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">ChangeBullet</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">myweapon</span><span class="p">.</span><span class="nf">setWeapon</span><span class="p">(</span><span class="k">new</span> <span class="nf">Bullet</span><span class="p">());</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">ChangeMissile</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">myweapon</span><span class="p">.</span><span class="nf">setWeapon</span><span class="p">(</span><span class="k">new</span> <span class="nf">Missile</span><span class="p">());</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">ChangeArrow</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">myweapon</span><span class="p">.</span><span class="nf">setWeapon</span><span class="p">(</span><span class="k">new</span> <span class="nf">Arrow</span><span class="p">());</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Fire</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">myweapon</span><span class="p">.</span><span class="nf">Shoot</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-예제-2--직접-무기-교체">🔔 예제 2 : 직접 무기 교체</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/87109863-ae1e5200-c2a0-11ea-96e3-f3213b17f9d4.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/87109942-dc039680-c2a0-11ea-93f8-232a3f1ecadb.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<ul>
+  <li>가운데 있는 오브젝트는 총알 or 화살 or 미사일을 쏘는 오브젝트인 <code class="language-plaintext highlighter-rouge">BattleShip</code>오브젝트다.</li>
+  <li>총알 or 화살 or 미사일 버튼을 누르고 Fire 버튼을 누르면 발사한다.
+    <ul>
+      <li>총알 or 화살 or 미사일 버튼을 누를때마다 <code class="language-plaintext highlighter-rouge">BattleShip</code><u>오브젝트에 붙어있는 C# 스크립트 컴포넌트가 바뀐다.</u></li>
+    </ul>
+  </li>
+  <li>총알 or 화살 or 미사일은 실시간으로 게임 도중 <u>프리팹을 복사아여 오브젝트로 생성</u>된다.
+    <ul>
+      <li><strong>Instantiate</strong>
+        <ul>
+          <li>오브젝트의 사본을 실시간으로 게임 도움에 생성한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="구조-1">구조</h3>
+
+<ul>
+  <li>📜IWeapon.cs  <strong>인터페이스</strong>
+    <ul>
+      <li><em>Shoot(GameObject obj)</em></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Arrow</code> 프리팹
+    <ul>
+      <li>📜Arrow.cs  <strong>상속</strong>
+        <ul>
+          <li><em>Shoot(GameObject obj)</em> 오버라이딩</li>
+        </ul>
+      </li>
+      <li>📜BulletMove.cs
+        <ul>
+          <li>총알 이동</li>
+          <li>update 함수</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Bullet</code> 프리팹
+    <ul>
+      <li>📜Bullet.cs <strong>상속</strong>
+        <ul>
+          <li><em>Shoot(GameObject obj)</em> 오버라이딩</li>
+        </ul>
+      </li>
+      <li>📜BulletMove.cs
+        <ul>
+          <li>총알 이동</li>
+          <li>update 함수</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Missile</code> 프리팹
+    <ul>
+      <li>📜Missile.cs  <strong>상속</strong>
+        <ul>
+          <li><em>Shoot(GameObject obj)</em> 오버라이딩</li>
+        </ul>
+      </li>
+      <li>📜BulletMove.cs
+        <ul>
+          <li>총알 이동</li>
+          <li>update 함수</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트
+    <ul>
+      <li>📜WeaponManager.cs
+        <ul>
+          <li>무기 교체</li>
+          <li>슬롯에 각각 <code class="language-plaintext highlighter-rouge">Arrow</code> 프리팹, <code class="language-plaintext highlighter-rouge">Bullet</code> 프리팹, <code class="language-plaintext highlighter-rouge">Missile</code> 프리팹 연결</li>
+        </ul>
+      </li>
+      <li>게임이 실행되면
+        <ul>
+          <li>버튼에 따라 📜Arrow.cs, 📜Bullet.cs, 📜Missile.cs 중 하나씩 붙는다.</li>
+          <li>게임 시작시엔 📜Bullet.cs가 기본적으로 붙어있다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="iweaponcs-1">📜IWeapon.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">IWeapon</span><span class="p">{</span>
+	<span class="k">void</span> <span class="nf">Shoot</span><span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span><span class="p">);</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrowcs-1">📜Arrow.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Arrow</span> <span class="p">:</span> <span class="n">MonoBehaviour</span><span class="p">,</span> <span class="n">IWeapon</span> <span class="p">{</span>
+
+	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="p">}</span>
+	
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Shoot</span><span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+		<span class="n">Vector3</span> <span class="n">initialPosition</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Vector3</span> <span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+        <span class="n">GameObject</span> <span class="n">bullet</span> <span class="p">=</span> <span class="nf">Instantiate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">as</span> <span class="n">GameObject</span><span class="p">;</span>
+        <span class="n">bullet</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">initialPosition</span><span class="p">;</span>
+	<span class="p">}</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Arrow</code> 프리팹에 붙는다.</li>
+  <li>게임 실행 중 Arrow 버튼을 누르면 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 붙는다.</li>
+  <li><strong>public void Shoot(GameObject obj)</strong>
+    <ul>
+      <li>인터페이스 오버라이딩</li>
+      <li>인수로 들어온 프리팹 <code class="language-plaintext highlighter-rouge">obj</code>를 Instantiate 하여 GameObject 타입으로 생성한다.
+        <ul>
+          <li>이 <code class="language-plaintext highlighter-rouge">obj</code>는 날아갈 화살이 된다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">obj</code>의 초기 위치를 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트의 위치로 설정</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="bulletcs-1">📜Bullet.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Bullet</span> <span class="p">:</span> <span class="n">MonoBehaviour</span><span class="p">,</span> <span class="n">IWeapon</span> <span class="p">{</span>
+
+	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="p">}</span>
+	
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Shoot</span><span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+		<span class="n">Vector3</span> <span class="n">initialPosition</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Vector3</span> <span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+        <span class="n">GameObject</span> <span class="n">bullet</span> <span class="p">=</span> <span class="nf">Instantiate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">as</span> <span class="n">GameObject</span><span class="p">;</span>
+        <span class="n">bullet</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">initialPosition</span><span class="p">;</span>
+	<span class="p">}</span> 
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Bullet</code> 프리팹에 붙는다.</li>
+  <li>게임 실행 중 Bullet 버튼을 누르면 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 붙는다.</li>
+  <li><strong>public void Shoot(GameObject obj)</strong>
+    <ul>
+      <li>인터페이스 오버라이딩</li>
+      <li>인수로 들어온 프리팹 <code class="language-plaintext highlighter-rouge">obj</code>를 Instantiate 하여 GameObject 타입으로 생성한다.
+        <ul>
+          <li>이 <code class="language-plaintext highlighter-rouge">obj</code>는 날아갈 총알이 된다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">obj</code>의 초기 위치를 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트의 위치로 설정</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="missilecs-1">📜Missile.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Missile</span> <span class="p">:</span> <span class="n">MonoBehaviour</span><span class="p">,</span> <span class="n">IWeapon</span> <span class="p">{</span>
+
+	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="p">}</span>
+	
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Shoot</span><span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">Vector3</span> <span class="n">initialPosition</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Vector3</span> <span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+        <span class="n">GameObject</span> <span class="n">bullet</span> <span class="p">=</span> <span class="nf">Instantiate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">as</span> <span class="n">GameObject</span><span class="p">;</span>
+        <span class="n">bullet</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">initialPosition</span><span class="p">;</span>
+	<span class="p">}</span> 
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Missile</code> 프리팹에 붙는다.</li>
+  <li>게임 실행 중 Missile 버튼을 누르면 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 붙는다.</li>
+  <li><strong>public void Shoot(GameObject obj)</strong>
+    <ul>
+      <li>인터페이스 오버라이딩</li>
+      <li>인수로 들어온 프리팹 <code class="language-plaintext highlighter-rouge">obj</code>를 Instantiate 하여 GameObject 타입으로 생성한다.
+        <ul>
+          <li>이 <code class="language-plaintext highlighter-rouge">obj</code>는 날아갈 미사일이 된다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">obj</code>의 초기 위치를 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트의 위치로 설정</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="bulletmovecs">📜BulletMove.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">BulletMove</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> 
+<span class="p">{</span>
+	<span class="kt">float</span> <span class="n">Speed</span> <span class="p">=</span> <span class="m">10.0f</span><span class="p">;</span>
+
+	<span class="k">void</span> <span class="nf">Update</span> <span class="p">()</span> 
+	<span class="p">{</span>
+		<span class="k">this</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="nf">Translate</span><span class="p">(</span><span class="n">Vector3</span><span class="p">.</span><span class="n">up</span> <span class="p">*</span> <span class="n">Speed</span> <span class="p">*</span> <span class="n">Time</span><span class="p">.</span><span class="n">deltaTime</span><span class="p">);</span>
+		
+		<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="p">&gt;</span> <span class="m">10.0f</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="nf">Destroy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Arrow</code>, <code class="language-plaintext highlighter-rouge">Bullet</code>, <code class="language-plaintext highlighter-rouge">Missile</code>에 붙는다.</li>
+  <li>update 함수
+    <ul>
+      <li>시간, 속도에 따라 총알을 계속해서 이동시킴</li>
+      <li>y 방향으로 위로 이동시킴 Vector3.<strong>up</strong> * Speed * Time.deltaTime</li>
+      <li>y방향으로 10을 벗어나면 스스로를 파괴</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="weaponmanagercs-1">📜WeaponManager.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">enum</span> <span class="n">WeaponType</span> <span class="p">{</span>
+	<span class="n">Bullet</span><span class="p">,</span>
+	<span class="n">Missile</span><span class="p">,</span>
+	<span class="n">Arrow</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">WeaponManager</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+    <span class="k">public</span> <span class="n">GameObject</span> <span class="n">_arrow</span><span class="p">;</span>
+    <span class="k">public</span> <span class="n">GameObject</span> <span class="n">_bullet</span><span class="p">;</span>
+    <span class="k">public</span> <span class="n">GameObject</span> <span class="n">_missile</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="n">GameObject</span> <span class="n">myWeapon</span><span class="p">;</span>
+
+    <span class="c1">// 접근점</span>
+    <span class="k">private</span> <span class="n">IWeapon</span> <span class="n">weapon</span><span class="p">;</span>
+
+	<span class="k">private</span> <span class="k">void</span> <span class="nf">setWeaponType</span> <span class="p">(</span><span class="n">WeaponType</span> <span class="n">weaponType</span><span class="p">)</span> <span class="p">{</span>
+
+		<span class="n">Component</span> <span class="n">c</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">IWeapon</span><span class="p">&gt;()</span> <span class="k">as</span> <span class="n">Component</span><span class="p">;</span>  <span class="c1">// 현재 게임 오브젝트의 IWeapon 타입의 컴포넌트를 가져온다.</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>   
+			<span class="nf">Destroy</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+		<span class="p">}</span>
+
+        <span class="k">switch</span> <span class="p">(</span><span class="n">weaponType</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="n">WeaponType</span><span class="p">.</span><span class="n">Bullet</span><span class="p">:</span>
+                <span class="n">weapon</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">Bullet</span><span class="p">&gt;();</span>
+                <span class="n">myWeapon</span> <span class="p">=</span> <span class="n">_bullet</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="n">WeaponType</span><span class="p">.</span><span class="n">Missile</span><span class="p">:</span>
+                <span class="n">weapon</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">Missile</span><span class="p">&gt;();</span>
+                <span class="n">myWeapon</span> <span class="p">=</span> <span class="n">_missile</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="n">WeaponType</span><span class="p">.</span><span class="n">Arrow</span><span class="p">:</span>
+                <span class="n">weapon</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">Arrow</span><span class="p">&gt;();</span>
+                <span class="n">myWeapon</span> <span class="p">=</span> <span class="n">_arrow</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">default</span><span class="p">:</span>
+                <span class="n">weapon</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">Bullet</span><span class="p">&gt;();</span>
+                <span class="n">myWeapon</span> <span class="p">=</span> <span class="n">_bullet</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">Start</span><span class="p">(){</span>
+		<span class="nf">setWeaponType</span><span class="p">(</span><span class="n">WeaponType</span><span class="p">.</span><span class="n">Bullet</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">ChangeBullet</span> <span class="p">()</span> <span class="p">{</span>
+		<span class="nf">setWeaponType</span><span class="p">(</span><span class="n">WeaponType</span><span class="p">.</span><span class="n">Bullet</span><span class="p">);</span>			
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">ChangeMissile</span> <span class="p">()</span> <span class="p">{</span>
+		<span class="nf">setWeaponType</span><span class="p">(</span><span class="n">WeaponType</span><span class="p">.</span><span class="n">Missile</span><span class="p">);</span>			
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">ChangeArrow</span> <span class="p">()</span> <span class="p">{</span>
+		<span class="nf">setWeaponType</span><span class="p">(</span><span class="n">WeaponType</span><span class="p">.</span><span class="n">Arrow</span><span class="p">);</span>			
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Fire</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">weapon</span><span class="p">.</span><span class="nf">Shoot</span><span class="p">(</span><span class="n">myWeapon</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 붙는다.
+    <ul>
+      <li><em>_arrow, _missile, bullet</em> 에 각 프리팹을 드래그 앤 드롭하여 넣어준다.</li>
+    </ul>
+  </li>
+  <li><strong>private void setWeaponType (WeaponType weaponType)</strong>
+    <ul>
+      <li><em>Component c = gameObject.GetComponent&lt;IWeapon&gt;() as Component;</em>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 현재 붙어있는 <em>IWeapon</em> 타입의 컴포넌트를 <u>컴포넌트 타입</u>으로 형변환하여 리턴한다. (최상위 부모타입인 Component로)</li>
+          <li>현재 미사일 모드였었다면 미사일(📜Missile)이 리턴될 것이고 이를 컴포넌트로 추상화하여 형변환해 리턴</li>
+        </ul>
+      </li>
+      <li><em>if (c != null) Destroy(c)</em>
+        <ul>
+          <li>게임을 처음 싲작한 경우엔 c 가 null로 나올테니 이땐 파괴 안해도 되지만</li>
+          <li>c가 null이 아니라는건 이미 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 붙어있었던 무기가 있었다는거다. 원래 무기를 파괴해주기.
+            <ul>
+              <li>미사일모드였었는데 화살 버튼을 눌렀다면 기존 <code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 붙어있었던 미사일 컴포넌트를 실시간으로 삭제함</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>switch문</strong>
+    <ul>
+      <li>인수로 총알, 화살, 미사일 enum을 받았을때 각각 처리
+        <ol>
+          <li><strong>weapon</strong> = gameObject.AddComponent&lt;Arrow&gt;();</li>
+        </ol>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">BattleShip</code> 오브젝트에 📜Arrow.cs 를 붙여준다.</li>
+          <li>인터페이스이자 부모타입인 <strong>weapon</strong>으로 이를 참조하게 되었다.
+    2. <strong>myWeapon</strong> = _arrow;</li>
+          <li>화살 프리팹을 <strong>myWeapon</strong>이 참조하게끔</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>각 Change 무기 교체 함수들은 위 setWeaponType 함수를 호출한다.</li>
+  <li><strong>Fire()</strong>
+    <ul>
+      <li><strong>weapon.Shoot(myWeapon);</strong>
+        <ul>
+          <li>
+            <blockquote>
+              <p>bullet의 종류가 화살이던 미사일이던 총알이던 간에 알 필요없이 그냥 <em>weapon</em> 하나로 퉁쳐서 무기에 따라 다른 내용으로 오버라이딩 된 Shoot 멤버 함수를 호출할 수 있다. <code class="language-plaintext highlighter-rouge">다형성</code></p>
+            </blockquote>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

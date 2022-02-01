@@ -1,0 +1,16 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-8-객체-지향의-기초--객체-지향-프로그래밍과-클래스">chapter 8. 객체 지향의 기초 : 객체 지향 프로그래밍과 클래스</a>
+    <ul>
+      <li><a href="#-클래스와-객체">🔔 클래스와 객체</a>
+        <ul>
+          <li><a href="#클래스-class">클래스 (Class)</a></li>
+          <li><a href="#객체-object">객체 (Object)</a></li>
+        </ul>
+      </li>
+      <li><a href="#-클래스를-사용하는-이유">🔔 클래스를 사용하는 이유</a></li>
+      <li><a href="#-클래스와-구조체의-차이점">🔔 클래스와 구조체의 차이점</a></li>
+      <li><a href="#-java-와-다른점">🔔 Java 와 다른점</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,15 @@
+I"a<ul class="toc__menu">
+  <li><a href="#난수를-생성하는-원리">난수를 생성하는 원리</a></li>
+  <li><a href="#라이브러리를-사용하여-난수-생성하기">라이브러리를 사용하여 난수 생성하기</a>
+    <ul>
+      <li><a href="#csdlib">&lt;csdlib&gt;</a></li>
+      <li><a href="#ctime">&lt;ctime&gt;</a></li>
+    </ul>
+  </li>
+  <li><a href="#특정한-정수-범위-사이의-난수-생성하기">특정한 정수 범위 사이의 난수 생성하기</a>
+    <ul>
+      <li><a href="#random-라이브러리">&lt;random&gt; 라이브러리</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

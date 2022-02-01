@@ -1,0 +1,149 @@
+I"q'<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-13-템플릿--포인터에-대한-템플릿-특수화">chapter 13. 템플릿 : 포인터에 대한 템플릿 특수화</h1>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">특수화</code> : 템플릿에서 특정 타입에 대해서 다른 실행 처리를 하고 싶을 때 그 타입에 대해서만 특수화.</p>
+</blockquote>
+
+<h2 id="-포인터에-대한-템플릿-특수화-x">🔔 포인터에 대한 템플릿 특수화 X</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">T</span> <span class="n">m_value</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">A</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_value</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="p">{}</span>
+  
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a_int</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+    <span class="n">a_int</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">456</span><span class="p">;</span>
+    
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span> <span class="n">a_int_ptr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temp</span><span class="p">);</span>
+    <span class="n">a_int_ptr</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    
+    <span class="kt">double</span> <span class="n">temp_d</span> <span class="o">=</span> <span class="mf">3.141592</span><span class="p">;</span>
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">*&gt;</span> <span class="n">a_double_ptr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temp_d</span><span class="p">);</span>
+    <span class="n">a_double_ptr</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+123
+0117FD68
+0117FD4C
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">A&lt;int*&gt;</code>, <code class="language-plaintext highlighter-rouge">A&lt;double*&gt;</code> 👉 포인터 데이터 타입에 대한 <u>구체화</u>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">0117FD68</code> 이런식으로 주소값 그대로를 출력하는데 <u>포인터로 구체화 됐을 때는 특수하게 간접 참조 값을 출력하게 하고 싶을 때</u></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-모든-포인터-타입에-대한-특수화">🔔 모든 포인터 타입에 대한 ‘특수화’</h2>
+
+<blockquote>
+  <p>포인터 타입들로 구체화 됐을 때만 다르게 동작하도록 특수화 하자!</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 템플릿 👈👈👈</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">T</span> <span class="n">m_value</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">A</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_value</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="p">{}</span>
+  
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// 포인터 타입에 대해서만 특수화 👈👈👈</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">A</span><span class="o">&lt;</span><span class="n">T</span><span class="o">*&gt;</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">m_value</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">A</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span> <span class="n">input</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_value</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="p">{}</span>
+  
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a_int</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+    <span class="n">a_int</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">456</span><span class="p">;</span>
+    
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span> <span class="n">a_int_ptr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temp</span><span class="p">);</span>
+    <span class="n">a_int_ptr</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    
+    <span class="kt">double</span> <span class="n">temp_d</span> <span class="o">=</span> <span class="mf">3.141592</span><span class="p">;</span>
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">*&gt;</span> <span class="n">a_double_ptr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temp_d</span><span class="p">);</span>
+    <span class="n">a_double_ptr</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+123
+456
+3.145192
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">T*</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">int*</code>, <code class="language-plaintext highlighter-rouge">float*</code>, <code class="language-plaintext highlighter-rouge">char*</code> 등등 모든 포인터 타입에 대한 특수화</li>
+      <li>따라서 <code class="language-plaintext highlighter-rouge">T</code>를 생략하면 안되기 때문에 <code class="language-plaintext highlighter-rouge">template&lt;&gt;</code>가 아닌 원래대로 <code class="language-plaintext highlighter-rouge">template&lt;typename T&gt;</code>까지 명시해주어야 한다.</li>
+    </ul>
+  </li>
+  <li>포인터값 즉 주소가 아닌 그 주소가 참조하는 간접참조 값이 출력되는 것을 알 수 있다. 포인터 타입에 대한 특수화를 했기 때문에!</li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+
+:ET

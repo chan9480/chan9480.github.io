@@ -1,0 +1,252 @@
+I"ZF<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-12-가상-함수들--다형성의-기본-개념">chapter 12. 가상 함수들 : 다형성의 기본 개념</h1>
+
+<h2 id="-다형성-활용하기-전">🔔 다형성 활용하기 전</h2>
+
+<blockquote>
+  <p>부모 타입의 포인터 딱 하나로 여러 자식들의 멤버를 호출할 수 있는 것</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Animal</span>
+<span class="p">{</span>
+<span class="nl">protected:</span>
+	<span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Animal</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+<span class="nl">public:</span>
+	<span class="n">string</span> <span class="n">getName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_name</span><span class="p">;</span> <span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">speak</span><span class="p">()</span> <span class="k">const</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="s">" ??? "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Cat</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Animal</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="n">Cat</span><span class="p">(</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">Animal</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+	<span class="kt">void</span> <span class="n">speak</span><span class="p">()</span> <span class="k">const</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="s">"Meow "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Dog</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Animal</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="n">Dog</span><span class="p">(</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">Animal</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+	<span class="kt">void</span> <span class="n">speak</span><span class="p">()</span> <span class="k">const</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="s">"Woof "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li>부모 클래스 : <strong>Animal</strong>
+    <ul>
+      <li>자식 클래스 1 : <strong>Dog</strong></li>
+      <li>자식 클래스 2 : <strong>Cat</strong></li>
+    </ul>
+  </li>
+  <li><strong>Animal</strong>은 <em>void speark() const</em> 멤버 함수를 가지고 있는데
+    <ul>
+      <li><strong>Dog</strong>, <strong>Cat</strong> 은 각각 <em>speak()</em> 함수를 <u>재정의(오버라이딩)</u>한 상태다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Animal</span> <span class="n">animal</span><span class="p">(</span><span class="s">"my animal"</span><span class="p">);</span>
+	<span class="n">Cat</span> <span class="n">cat</span><span class="p">(</span><span class="s">"my cat"</span><span class="p">);</span>
+	<span class="n">Dog</span> <span class="n">dog</span><span class="p">(</span><span class="s">"my dog"</span><span class="p">);</span>
+
+	<span class="n">animal</span><span class="p">.</span><span class="n">speak</span><span class="p">();</span>  <span class="c1">// "my animal ???" 출력</span>
+	<span class="n">cat</span><span class="p">.</span><span class="n">speak</span><span class="p">();</span>     <span class="c1">// "my cat Meow" 출력</span>
+	<span class="n">dog</span><span class="p">.</span><span class="n">speak</span><span class="p">();</span>     <span class="c1">// "my dog Woof" 출력</span>
+	
+	<span class="n">Animal</span> <span class="o">*</span><span class="n">ptr_animal1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">cat</span><span class="p">;</span>
+	<span class="n">Animal</span> <span class="o">*</span><span class="n">ptr_animal2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">dog</span><span class="p">;</span>
+
+	<span class="n">ptr_animal1</span><span class="o">-&gt;</span><span class="n">speak</span><span class="p">();</span>  <span class="c1">// "my cat ???" 출력</span>
+	<span class="n">ptr_animal2</span><span class="o">-&gt;</span><span class="n">speak</span><span class="p">();</span>  <span class="c1">// "my dog ???" 출력</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>C++은 <u>참조하는 대상의 타입이 아닌</u> 멤버를 <u>호출하는 변수(포인터 혹은 객체변수)의 타입에 따라</u> 그 타입에 맞는 멤버를 호출한다.</strong></p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">animal</span><span class="p">.</span><span class="n">speak</span><span class="p">();</span>  <span class="c1">// "my animal ???" 출력</span>
+	<span class="n">cat</span><span class="p">.</span><span class="n">speak</span><span class="p">();</span>     <span class="c1">// "my cat Meow" 출력</span>
+	<span class="n">dog</span><span class="p">.</span><span class="n">speak</span><span class="p">();</span>     <span class="c1">// "my dog Woof" 출력</span>
+</code></pre></div></div>
+<ul>
+  <li><u>animal</u>.speak() 👉 <strong>Animal</strong>의 <em>speak()</em> 멤버 함수 호출</li>
+  <li><u>cat</u>.speak() 👉 <strong>Cat</strong>의 <em>speak()</em> 멤버 함수 호출</li>
+  <li><u>dog</u>.speak() 👉 <strong>Dog</strong>의 <em>speak()</em> 멤버 함수 호출</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Animal</span> <span class="o">*</span><span class="n">ptr_animal1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">cat</span><span class="p">;</span>
+	<span class="n">Animal</span> <span class="o">*</span><span class="n">ptr_animal2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">dog</span><span class="p">;</span>
+
+	<span class="n">ptr_animal1</span><span class="o">-&gt;</span><span class="n">speak</span><span class="p">();</span>  <span class="c1">// "my cat ???" 출력</span>
+	<span class="n">ptr_animal2</span><span class="o">-&gt;</span><span class="n">speak</span><span class="p">();</span>  <span class="c1">// "my dog ???" 출력</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>ptr_animal1</strong>과 <strong>ptr_animal2</strong>은 <code class="language-plaintext highlighter-rouge">Animal</code>타입이다.</li>
+  <li><strong>ptr_animal1</strong>은 <strong>Cat</strong>타입 객체의 주소를 담고 있지만 <u>ptr_animal1 자체는 Animal 타입이다.</u>
+    <ul>
+      <li><strong>Cat</strong>타입 객체의 주소를 담고 있음에도 불구하고 C++은 포인터 변수, 호출하는 변수의 타입을 더 중요시 하기 때문에
+        <ul>
+          <li><em><u>ptr_animal1</u>-&gt;speak();</em> 👉 <strong>Animal</strong>의 <em>speak()</em> 멤버 함수 호출</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>ptr_animal2</strong>은 <strong>Dog</strong>타입 객체의 주소를 담고 있지만 <u>ptr_animal2 자체는 Animal 타입이다.</u>
+    <ul>
+      <li><strong>Dog</strong>타입 객체의 주소를 담고 있음에도 불구하고 C++은 포인터 변수, 호출하는 변수의 타입을 더 중요시 하기 때문에
+        <ul>
+          <li><em><u>ptr_animal2</u>-&gt;speak();</em> 👉 <strong>Animal</strong>의 <em>speak()</em> 멤버 함수 호출</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-다형성을-사용하는-이유">🔔 다형성을 사용하는 이유</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cat</span><span class="p">.</span><span class="n">speak</span><span class="p">()</span>
+<span class="n">dog</span><span class="p">.</span><span class="n">speak</span><span class="p">()</span>
+<span class="n">rabbit</span><span class="p">.</span><span class="n">speak</span><span class="p">()</span>
+<span class="n">pig</span><span class="p">.</span><span class="n">speak</span><span class="p">()</span>
+<span class="n">cow</span><span class="p">.</span><span class="n">speak</span><span class="p">()</span>
+<span class="n">lion</span><span class="p">.</span><span class="n">speak</span><span class="p">()</span>
+<span class="p">...</span>
+</code></pre></div></div>
+<ul>
+  <li><strong>Animal</strong>의 자식의 종류가 위와같이 여러가지라면 다형성을 사용하지 않을시 자식마다 일일이 <u>자식타입의 변수로 멤버 함수를 호출해주어야 하는 번거로움이 따른다.</u></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Animal</span> <span class="o">*</span> <span class="n">animals</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&amp;</span><span class="n">cat</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dog</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pig</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lion</span> <span class="p">};</span> 
+
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">animals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">speak</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+my cat ???
+my dog ???
+my pig ???
+my lion ???
+</code></pre></div></div>
+
+<ul>
+  <li>모든 자식들은 <strong>Animal</strong>을 상속 받았기 때문에 <em>speak()</em>를 공통적으로 가지고 있는 상태이므로</li>
+  <li>위와 같이 부모 타입의 포인터 컨테이너에 여러가지 자식들을 넣어준 후 for문을 돌려 <em>animals[i]-&gt;speak()</em> <strong><u>딱 한 문장으로 각각 본인이 오버라이딩 한 *speak()*를 호출하게 할 순 없을까?.</u></strong></li>
+  <li>이걸 가능하게 하려면 <em>speak()</em> 함수를 <strong>Animal</strong> 클래스에서 <strong><u>가상 함수</u></strong>로 지정해놔야 한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="virtual-가상-함수"><code class="language-plaintext highlighter-rouge">virtual</code> 가상 함수</h3>
+
+<blockquote>
+  <p><u>부모 타입 포인터</u>로 자식 객체를 가리킬시 <u>자식이 오버라이딩 한 것을 호출하게 하고 싶은 멤버 함수</u>를 <code class="language-plaintext highlighter-rouge">virtual</code> <strong>가상 함수</strong>로 지정하면 된다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Animal</span>
+<span class="p">{</span>
+<span class="nl">protected:</span>
+	<span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Animal</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+<span class="nl">public:</span>
+	<span class="n">string</span> <span class="n">getName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_name</span><span class="p">;</span> <span class="p">}</span>
+
+	<span class="k">virtual</span> <span class="kt">void</span> <span class="n">speak</span><span class="p">()</span> <span class="k">const</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="s">" ??? "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">virtual</span> <span class="kt">void</span> <span class="n">speak</span><span class="p">()</span> <span class="k">const</span>
+</code></pre></div></div>
+
+<ul>
+  <li>멤버 함수 맨 앞에 <code class="language-plaintext highlighter-rouge">virtual</code>을 붙여주면 <u>가상 함수</u>로 선언된다.
+    <ul>
+      <li>👉 부모 타입의 포인터로 호출하더라도 <strong><u>자식 클래스가 오버라이딩 한 함수를 호출하게끔 한다.</u></strong>
+        <ul>
+          <li>이 때문에 자식 클래스에서 가상 함수를 오버라이딩 하기를 권장한다.
+            <ul>
+              <li>(필수 사항은 아니다. 오버라이딩이 필수 사항인건 <strong>순수 가상함수</strong>)</li>
+            </ul>
+          </li>
+          <li>자식 클래스에서 오버라이딩 되있지 않으면 부모가 정의해놓은 부모타입의 가상 함수가 호출된다.
+            <ul>
+              <li>자식 클래스에서 오버라이딩 하지 않으면 <em>cout « m_name « ” ??? “ « endl;</em> 를 실행할 것.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Animal</span> <span class="o">*</span> <span class="n">animals</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&amp;</span><span class="n">cat</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dog</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pig</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lion</span> <span class="p">};</span> 
+
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">animals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">speak</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+my cat 냐옹
+my dog 멍멍
+my pig 꿀꿀
+my lion 어흥
+</code></pre></div></div>
+
+<p><strong>Animal</strong> 부모클래스의 <em>speak()</em> 함수를 <u>가상 함수</u>로 지정하니 부모 타입의 포인터 한줄로 호출했음에도 불구하고 참조하는 자식 객체 타입에 따라 <u>각각 자식들이 오버라이딩한 speak 함수를 호출하고 있는 것을 볼 수 있다.</u></p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

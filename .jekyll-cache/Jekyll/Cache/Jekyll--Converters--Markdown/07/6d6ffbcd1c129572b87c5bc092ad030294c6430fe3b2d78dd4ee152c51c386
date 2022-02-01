@@ -1,0 +1,270 @@
+I"�Q<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-15-의미론적-이동과-스마트-포인터">chapter 15. 의미론적 이동과 스마트 포인터</h1>
+
+<h1 id="156-스마트-포인터2️⃣-stdshared_ptr">15.6 스마트 포인터2️⃣ std::shared_ptr</h1>
+
+<blockquote>
+  <p>#include &lt;memory&gt;</p>
+</blockquote>
+
+<h2 id="-참고">🚀 참고</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/104432242-2822f100-55cc-11eb-9b1b-3c99c30a6324.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/104432498-6d472300-55cc-11eb-8edd-f759e59c0370.png" alt="image" /></p>
+
+<p>내가 쓴 답변이다. <a href="https://jungwoong.tistory.com/49?category=1102341">이 블로그</a> 이 이 답변을 작성하는데에 도움 되었다. <code class="language-plaintext highlighter-rouge">std::shared_ptr</code>에 대해 더 자세한 것은 링크 된 블로그에서 참고하기.</p>
+
+<p><br /></p>
+
+<h2 id="-stdshared_ptr">🔔 std::shared_ptr</h2>
+
+<blockquote>
+  <p>객체에 대한 소유권을 나눠 주고 공유 한다.</p>
+</blockquote>
+
+<ul>
+  <li>소유한 객체를 자동으로 <code class="language-plaintext highlighter-rouge">delete</code>해주는 스마트 포인터다.</li>
+  <li>unique_ptr과 달리 ✨<u>여러 shared_ptr이 한 객체에 대해 동시에 공유(shared)할 수 있도록 한다.</u>✨
+    <ul>
+      <li>unique_ptr은 소유권을 엄격히 관리할 때 사용</li>
+      <li><strong>shared_ptr</strong>은 소유권을 느슨하게 관리할 때 사용
+        <ul>
+          <li>소유권을 여러 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 가 동시에 가질 수 있기 때문에 그 중 한 포인터로 <code class="language-plaintext highlighter-rouge">delete</code>되더라도 그 객체는 소멸되지 않는다. 소유권만 박탈될 뿐이다. 그 객체를 소유한 포인터가 하나 밖에 없을 때만 <code class="language-plaintext highlighter-rouge">delete</code>된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>또한 <code class="language-plaintext highlighter-rouge">shared_ptr</code>은 <u>자신이 가리키고 있는 객체가 몇 군데서 공유되고 있는지 내부적으로 항상 세고 있다.</u></li>
+</ul>
+
+<h3 id="소유권-분배가-제대로-이루어-졌을-때">소유권 분배가 제대로 이루어 졌을 때</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Resource</span> <span class="o">*</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Resource</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+
+    <span class="n">ptr1</span> <span class="o">-&gt;</span> <span class="n">print</span><span class="p">();</span>
+
+    <span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr2</span><span class="p">(</span><span class="n">ptr1</span><span class="p">);</span>
+
+		<span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Going out of the block"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">ptr1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Going out of the block"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+Resource length constructed
+1 1 1
+5 5 5
+Going out of the block
+5 5 5
+Going out of the block
+Resource destroyed
+</code></pre></div></div>
+
+<ul>
+  <li>Resource 클래스 코드는 이전 포스트에 있습니다.</li>
+  <li><img src="https://user-images.githubusercontent.com/42318591/89752826-d05df680-db10-11ea-8231-fbe38b45c436.png" alt="image" width="90%" height="90%" class="align-center" />
+    <ul>
+      <li><strong>소유권 분배</strong> 👉 std::shared_ptr&lt;Resource&gt; <code class="language-plaintext highlighter-rouge">ptr2(ptr1)</code>;
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr2</span><span class="p">(</span><span class="n">ptr1</span><span class="p">);</span>
+</code></pre></div>        </div>
+        <ul>
+          <li>👉<strong><em>std::shared_ptr&lt;Resource&gt; <code class="language-plaintext highlighter-rouge">ptr2(ptr1)</code>;</em></strong></li>
+          <li><u>ptr1이 가리키고 있던 Resource 객체의 소유권을 ptr2에게도 분배한다.</u></li>
+          <li><code class="language-plaintext highlighter-rouge">ptr1</code>와 <code class="language-plaintext highlighter-rouge">ptr2</code>이 동일한 객체를 가리키게 된다. 동시에 소유권을 가진다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">ptr2(ptr1)</code> 👉 ⭐<u>ptr1에게도 소유권이 있다는 것을 ptr2 가 알고 있다.</u>
+        <ul>
+          <li>따라서 <code class="language-plaintext highlighter-rouge">ptr2</code>이 블록 밖을 벗어나서 <em>delete</em> 되더라도 <u>여전히 ptr1과 함께 소유했던 그 res 객체는 사라지지 않는다.</u></li>
+          <li><code class="language-plaintext highlighter-rouge">ptr1</code>과 <code class="language-plaintext highlighter-rouge">ptr2</code>이 <em>unique_ptr</em> 이었으면 <code class="language-plaintext highlighter-rouge">ptr2</code>이 사라짐과 동시에 <code class="language-plaintext highlighter-rouge">res</code>객체도 delete 되었을 것이다.</li>
+          <li>객체의 유일한 소유권자가 사라질 때 그제서야 delete 된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="소유권-분배가-제대로-이루어지지-않았을-때">소유권 분배가 제대로 이루어지지 않았을 때</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Resource</span> <span class="o">*</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Resource</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+
+	<span class="n">ptr1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr2</span><span class="p">(</span><span class="n">res</span><span class="p">);</span> 
+
+		<span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Going out of the block"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">ptr1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>  <span class="c1">// 📢 런타임 에러 발생!! </span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Going out of the block"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+Resource length constructed
+1 1 1
+5 5 5
+Going out of the block
+Resource destroyed
+</code></pre></div></div>
+
+<ul>
+  <li><img src="https://user-images.githubusercontent.com/42318591/89754486-1453fa00-db17-11ea-99d3-3b4aa9a2bb83.png" alt="image" width="90%" height="90%" class="align-center" />
+    <ul>
+      <li><strong>소유권 분배가 제대로 이루어지지 않는다.</strong> 👉 std::shared_ptr&lt;Resource&gt; <code class="language-plaintext highlighter-rouge">ptr2(res)</code>;
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr2</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</code></pre></div>        </div>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">ptr1</code>과 <code class="language-plaintext highlighter-rouge">ptr2</code>이 <code class="language-plaintext highlighter-rouge">res</code>라는 동일한 객체를 가리키고 소유하고 있지만 ⭐<code class="language-plaintext highlighter-rouge">ptr1</code>, <code class="language-plaintext highlighter-rouge">ptr2</code>가 <u>둘 다  res에 대한 소유권이 있는 상태라는 것을 서로 알 수가 없다.</u>
+            <ul>
+              <li>따라서 <code class="language-plaintext highlighter-rouge">ptr2</code>이 블록 밖을 나오면서 <em>delete</em> 되면 <code class="language-plaintext highlighter-rouge">res</code>객체까지도 해제되기 때문에 <code class="language-plaintext highlighter-rouge">ptr1-&gt;print();</code>에서 런타임 에러가 발생한다. 없어진 객체에 접근하려고 하는 거니까!</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr1</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr2</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+
+<span class="k">auto</span> <span class="n">ptr2</span> <span class="o">=</span> <span class="n">ptr1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>shared_ptr 포인터 선언시 객체에 대해 정의할 것이라면
+    <ul>
+      <li>👉 <code class="language-plaintext highlighter-rouge">ptr2 = ptr1</code> 이런 복사 방식을 통하여 <u>ptr1, ptr2 둘 다 동일한 객체에 대한 소유권을 공유하고 있음을 서로에게 알려주어야 한다.</u>
+        <ul>
+          <li><strong>ptr1 과 ptr2 는 각각 다른 제어 블록을 참조하는 상태</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-stdshared_ptr-관련-함수들">🔔 std::shared_ptr 관련 함수들</h2>
+
+<h3 id="stdmake_shared-함수">std::make_shared 함수</h3>
+
+<blockquote>
+  <p>위와 같은 상황 때문에 make_shared 함수를 통하여 <u>shared_ptr을 안전하게 생성할 수 있다.</u></p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr2</span> <span class="o">=</span> <span class="n">ptr1</span> <span class="c1">// ✨소유권을 공유하고 있음을 알려주어야 함.</span>
+
+<span class="c1">// auto를 써주면 더 간단! 위와 같은 코드.</span>
+<span class="k">auto</span> <span class="n">ptr1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>       
+<span class="k">auto</span> <span class="n">ptr2</span> <span class="o">=</span> <span class="n">ptr1</span><span class="p">;</span> 
+</code></pre></div></div>
+
+<ul>
+  <li><em>Resource * res = new Resource(3);</em> 과정이 필요 없다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">make_shared</code> 함수를 통하여 객체 생성을 하기 때문에!</li>
+    </ul>
+  </li>
+  <li><strong><em>ptr1 = std::make_shared&lt;Resource&gt;(3);</em></strong>
+    <ul>
+      <li>1️⃣ <u>Resource 객체를 생성함과 동시에</u> 2️⃣ 이를 소유하는 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 스마트 포인터를 <u>리턴</u>한다.</li>
+    </ul>
+  </li>
+  <li>make_shared 함수를 통해 객체 생성과 동시에 이를 소유하는 <code class="language-plaintext highlighter-rouge">shared_ptr</code> 스마트 포인터를 생성하는 것을 권장한다.</li>
+  <li><strong>ptr1 과 ptr2 는 같은 제어 블록을 참조하는 상태</strong></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="use_count-reset-함수">use_count(), reset() 함수</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">ptr1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"현재 소유자 수 : "</span> <span class="o">&lt;&lt;</span> <span class="n">ptr1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1 출력</span>
+
+<span class="k">auto</span> <span class="n">ptr2</span> <span class="o">=</span> <span class="n">ptr1</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"현재 소유자 수 : "</span> <span class="o">&lt;&lt;</span> <span class="n">ptr1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 2 출력</span>
+
+<span class="n">ptr2</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"현재 소유자 수 : "</span> <span class="o">&lt;&lt;</span> <span class="n">ptr1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1 출력</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">use_count()</code> : 어떤 객체를 소유하고 있는 shared_ptr 포인터들이 현재 총 몇 개인지 리턴해준다.</p>
+</blockquote>
+
+<ul>
+  <li>여러 shared_ptr 포인터들이 하나의 객체를 나눠서 소유하고 있기 때문에 소유권을 가진 포인터가 아무것도 없을 때만, 즉 <code class="language-plaintext highlighter-rouge">use_count()</code> 결과가 0 일때만 객체가 delete 될 수 있도록 <u>늘 소유권을 가진 shared_ptr 포인터가 총 몇개인지 세고 있다.</u></li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">reset()</code> : 해당 shared_ptr 포인터의 객체에 대한 소유권을 박탈한다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="-shared_ptr의-문제점">🔔 shared_ptr의 문제점</h2>
+
+<ol>
+  <li>순환 참조
+    <ul>
+      <li>보통 그룹 객체와 소속 객체 사이에서 발생하는 순홤 참조.</li>
+      <li>서로가 서로를 참조하는 순환 참조가 가능한데 이런 상황에선 메모리 해제가 제대로 되지 않는다.</li>
+    </ul>
+  </li>
+  <li>멀티 쓰레드 안정성
+    <ul>
+      <li>다수의 쓰레드에서 같은 객체를 참조하는 경우가 있을 수 있다. 이때 읽기는 안전하지만 쓰기는 안전하지 않다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><a href="https://blog.koriel.kr/cpp11-smart-pointer/">koriel님 블로그를 참고했습니다</a></p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

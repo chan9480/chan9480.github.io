@@ -1,0 +1,120 @@
+I"O<p class="notice--warning">블렌더 매뉴얼, 문서 <a href="https://docs.blender.org/manual/en/latest/index.html">https://docs.blender.org/manual/en/latest/index.html</a></p>
+
+<h2 id="단축키">단축키</h2>
+
+<ul>
+  <li>단축키
+    <ul>
+      <li>점, 선, 면 👉 단축키 123</li>
+      <li><code class="language-plaintext highlighter-rouge">Tab</code> 👉 Object Mode, Edit Mode 왔다 갔다</li>
+      <li><code class="language-plaintext highlighter-rouge">G</code> 👉 점 or 선 or 면을 선택한 후 <u>이동</u>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Alt + G</code> 위치 값 (0, 0, 0) 원점으로 되돌리기</li>
+          <li><code class="language-plaintext highlighter-rouge">G + X</code> X 축으로만 이동</li>
+          <li><code class="language-plaintext highlighter-rouge">G + Y</code> Y 축으로만 이동</li>
+          <li><code class="language-plaintext highlighter-rouge">G + Z</code> Z 축으로만 이동</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">E</code> 👉 점 or 선 or 면을 선택한 후 <u>돌출</u></li>
+      <li><code class="language-plaintext highlighter-rouge">R</code> 👉 점 or 선 or 면을 선택한 후 <u>회전</u>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">R + X</code> X 축으로만 회전</li>
+          <li><code class="language-plaintext highlighter-rouge">R + Y</code> Y 축으로만 회전</li>
+          <li><code class="language-plaintext highlighter-rouge">R + Z</code> Z 축으로만 회전</li>
+          <li><code class="language-plaintext highlighter-rouge">Alt + R</code> 회전 값 (0, 0, 0) 원점으로 되돌리기</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">S</code> 👉 점 or 선 or 면을 선택한 후 <u>크기 조절</u></li>
+      <li><code class="language-plaintext highlighter-rouge">A</code> 👉 점 or 선 or 면을 선택한 후 <u>전체 선택</u></li>
+      <li><code class="language-plaintext highlighter-rouge">Shift + A</code> 👉 큐브, 구 같은 메시 만들기</li>
+      <li><code class="language-plaintext highlighter-rouge">M</code> 👉 Marge 점 or 선 or 면을 선택한 후 <u>합치기</u>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Alt</code>를 누르고 선택하면 실제로 합쳐진다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Ctrl + A</code> 👉 Apply
+        <ul>
+          <li>포지션이나 로테이션을 클릭하면 이 오브젝트의 현재 위치, 회전값이 초기값이 된다.</li>
+          <li>즉 현재 위치와 회전값이 원점으로 적용되는 된다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">N</code> 👉 Trnasform 창</li>
+      <li><code class="language-plaintext highlighter-rouge">I</code> 👉 새로운 점 or 선 or 면이 생긴다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="모드">모드</h2>
+
+<ul>
+  <li>모드
+    <ul>
+      <li><strong>Object Mode</strong> 일반</li>
+      <li><strong>Edit Mode</strong> 오브젝트의 점, 선, 면을 수정할 수 있다.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Tab</code> 키로 두 Mode를 왔다 갔다 수 있다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="3d-커서">3D 커서</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/91634069-6dcd8b80-ea28-11ea-9ea9-4da09db340f6.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<ul>
+  <li>위치는 <code class="language-plaintext highlighter-rouge">Shift + 우클</code>로 변경할 수 있다.</li>
+  <li>어떤 메시나 오브젝트를 추가할 때 이 3D 커서의 위치에 추가가 된다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Shift + S</code>를 누르면 3D 커서를 어디로 옮길지 선택할 수 있는 메뉴가 나온다.
+    <ul>
+      <li>예를 들어 현재 어떤 점을 선택한 후 cursor to selected 하면 그 곳으로 3d 커서가 옮겨진다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="origin">Origin</h2>
+<ul>
+  <li>물체의 트랜스폼(좌표) 기준 점은 Origin이다. (유니티에서 pivot 같은)</li>
+  <li>물체의 점, 선, 면도 트랜스폼 값을 가지는데, 물체의 Origin을 기준으로 한 좌표이다.</li>
+  <li>물체의 Origin을 3D 커서가 있는 위치로 옮길 수 있다.
+    <ul>
+      <li>Origin 위치 변경하기
+        <ul>
+          <li>Object Mode 에서 우클 - Set Origin - Origin to 3d cursor</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>A 물체를 B 물체에 붙이려면
+    <ol>
+      <li>B 에 붙이려는(B에 닿는 부분) A 의 점 or 선 or 면 쪽으로 3D 커서를 먼저 옮긴 후
+        <ul>
+          <li>Origin으로 설정할 점을 선택한 후</li>
+          <li><code class="language-plaintext highlighter-rouge">Shift + S</code> cursor to selected</li>
+        </ul>
+      </li>
+      <li>변경한 3D 커서 위치로 origin을 옮긴다.
+        <ul>
+          <li>Object Mode 에서 우클 - Set Origin - Origin to 3d cursor</li>
+          <li>이 곳이 이제 Origin이자 A 의 트랜스폼 원점이 된다.</li>
+        </ul>
+      </li>
+      <li>상단에 자석 모양을 클릭하고 딱 붙이려는 것 (점 or 선 or 면)을 선택하고 <code class="language-plaintext highlighter-rouge">G</code>를 사용해 붙여준다.
+        <ul>
+          <li><img src="https://user-images.githubusercontent.com/42318591/91636959-a593fd80-ea3f-11ea-9baf-4172924baace.png" alt="image" width="50%" height="50%" class="align-center" /></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

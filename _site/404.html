@@ -1,304 +1,361 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
-    Basically Basic Jekyll Theme 1.4.5
-    Copyright 2017-2018 Michael Rose - mademistakes.com | @mmistakes
-    Free for personal and commercial use under the MIT license
-    https://github.com/mmistakes/jekyll-theme-basically-basic/blob/master/LICENSE
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
-<html lang="kr-KR" class="no-js">
+<html lang="ko" class="no-js">
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Page Not Found -  평생 공부 블로그 : Today I Learned‍ 🌙</title>
+<meta name="description" content="Page not found. Your pixels are in another canvas. ">
+
+
+  <meta name="author" content="공부하는 식빵맘 👱‍♀️">
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content=" 평생 공부 블로그 : Today I Learned‍ 🌙">
+<meta property="og:title" content="Page Not Found">
+<meta property="og:url" content="http://localhost:4000/404.html">
+
+
+  <meta property="og:description" content="Page not found. Your pixels are in another canvas. ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+
+
+
 
   
-    
-    <!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Page not found | Data is Power</title>
-<meta name="generator" content="Jekyll v4.2.1" />
-<meta property="og:title" content="Page not found" />
-<meta name="author" content="박찬우" />
-<meta property="og:locale" content="kr_KR" />
-<link rel="canonical" href="http://localhost:4000/404.html" />
-<meta property="og:url" content="http://localhost:4000/404.html" />
-<meta property="og:site_name" content="Data is Power" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Page not found" />
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/404.html">
+
+
+
+
 <script type="application/ld+json">
-{"url":"http://localhost:4000/404.html","author":{"@type":"Person","name":"박찬우"},"@type":"WebPage","headline":"Page not found","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-  
-
-  <script>
-    /* Cut the mustard */
-    if ( 'querySelector' in document && 'addEventListener' in window ) {
-      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
-    }
-  </script>
-
-  <link rel="stylesheet" href="/assets/stylesheets/main.css">
-  
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,600,600i">
-  
-
-  
+  {
+    "@context": "https://schema.org",
     
-    <link rel="alternate" type="application/atom+xml" title="Data is Power" href="/atom.xml">
-  
-</head>
+      "@type": "Person",
+      "name": "식빵맘💛",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
 
 
-  <body class="layout--page page-not-found">
 
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" 평생 공부 블로그 : Today I Learned‍ 🌙 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
     <nav class="skip-links">
   <h2 class="screen-reader-text">Skip links</h2>
   <ul>
-    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
     <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
     <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
   </ul>
 </nav>
 
-
-    <div class="sidebar-toggle-wrapper">
-      
-        <button class="search-toggle" type="button">
-          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
-            <title>Search</title>
-            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
-          </svg>
-        </button>
-      
-
-      <button class="toggle navicon-button larr" type="button">
-        <span class="toggle-inner">
-          <span class="sidebar-toggle-label visually-hidden">Menu</span>
-          <span class="navicon"></span>
-        </span>
-      </button>
-    </div>
-
-    <div id="sidebar" class="sidebar">
-      <div class="inner">
-        <nav id="primary-nav" class="site-nav" itemscope itemtype="http://schema.org/SiteNavigationElement" aria-label="Main navigation">
-  <ul id="menu-main-navigation" class="menu">
-    <!-- Home link -->
-    <li class="menu-item">
-      <a href="/" itemprop="url">
-        <span itemprop="name">Home</span>
-      </a>
-    </li>
-
-    <!-- site.pages links -->
-    
-    
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
 
     
-      
-      
-        <li class="menu-item">
-          <a href="/posts/" itemprop="url">
-            <span itemprop="name">Post Archive</span>
-          </a>
-        </li>
-      
-    
-      
-      
-        <li class="menu-item">
-          <a href="/cv/" itemprop="url">
-            <span itemprop="name">introduce</span>
-          </a>
-        </li>
-      
-    
-      
-      
-        <li class="menu-item">
-          <a href="/recipes/" itemprop="url">
-            <span itemprop="name">Projects</span>
-          </a>
-        </li>
-      
-    
-  </ul>
-</nav>
 
-        <ul class="contact-list">
-  
-    <li>
-      <a href="mailto:chan9480@hanyang.ac.kr">
-        <span class="icon icon--email"><svg xmlns="http://www.w3.org/2000/svg" viewBox="313.1 3.7 16 16"><path d="M318.5 8.9c0-.2.2-.4.4-.4h4.5c.2 0 .4.2.4.4s-.2.4-.4.4h-4.5c-.3 0-.4-.2-.4-.4zm.4 2.1h4.5c.2 0 .4-.2.4-.4s-.2-.4-.4-.4h-4.5c-.2 0-.4.2-.4.4s.1.4.4.4zm3.5 1.2c0-.2-.2-.4-.4-.4h-3.1c-.2 0-.4.2-.4.4s.2.4.4.4h3.1c.2.1.4-.1.4-.4zm-1.5-8.4l-1.7 1.4c-.2.1-.2.4 0 .6s.4.2.6 0l1.4-1.2 1.4 1.2c.2.1.4.1.6 0s.1-.4 0-.6l-1.7-1.4c-.3-.1-.5-.1-.6 0zm7.8 6.2c.1.1.1.2.1.3v7.9c0 .8-.7 1.5-1.5 1.5h-12.5c-.8 0-1.5-.7-1.5-1.5v-7.9c0-.1.1-.2.1-.3l1.6-1.3c.2-.1.4-.1.6 0s.1.4 0 .6l-1.2 1 1.8 1.3v-4c0-.6.5-1.1 1.1-1.1h7.5c.6 0 1.1.5 1.1 1.1v4l1.8-1.3-1.2-1c-.2-.1-.2-.4 0-.6s.4-.2.6 0l1.6 1.3zm-11.6 2.2l4 2.8 4-2.8V7.6c0-.1-.1-.2-.2-.2h-7.5c-.1 0-.2.1-.2.2v4.6zm10.9-1l-4.7 3.4 3.4 2.6c.2.1.2.4.1.6-.1.2-.4.2-.6.1l-3.6-2.8-1.2.8c-.1.1-.3.1-.5 0l-1.2-.8-3.6 2.8c-.2.1-.4.1-.6-.1-.1-.2-.1-.4.1-.6l3.4-2.6-4.7-3.4v7.1c0 .4.3.6.6.6h12.5c.4 0 .6-.3.6-.6v-7.1z"/></svg></span>
-        <span class="label">Email</span>
-      </a>
-    </li>
-  
-
-  
-    <li><a href="https://github.com/chan9480">
-  <span class="icon icon--github"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"><path d="M8 0C3.58 0 0 3.582 0 8c0 3.535 2.292 6.533 5.47 7.59.4.075.547-.172.547-.385 0-.19-.007-.693-.01-1.36-2.226.483-2.695-1.073-2.695-1.073-.364-.924-.89-1.17-.89-1.17-.725-.496.056-.486.056-.486.803.056 1.225.824 1.225.824.714 1.223 1.873.87 2.33.665.072-.517.278-.87.507-1.07-1.777-.2-3.644-.888-3.644-3.953 0-.873.31-1.587.823-2.147-.09-.202-.36-1.015.07-2.117 0 0 .67-.215 2.2.82.64-.178 1.32-.266 2-.27.68.004 1.36.092 2 .27 1.52-1.035 2.19-.82 2.19-.82.43 1.102.16 1.915.08 2.117.51.56.82 1.274.82 2.147 0 3.073-1.87 3.75-3.65 3.947.28.24.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.14.46.55.38C13.71 14.53 16 11.53 16 8c0-4.418-3.582-8-8-8"/></svg></span>
-  <span class="label">GitHub</span>
-</a>
-</li>
-  
-
-  
-
-  <li>
-    
-      <a href="/atom.xml" title="Atom Feed">
-        <span class="icon icon--rss"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"><path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194 11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0 13.806c0-1.21.983-2.195 2.194-2.195zM10.606 16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"/></svg></span>
-        <span class="label">Subscribe</span>
-      </a>
-    
-  </li>
-</ul>
-
-      </div>
-    </div>
-
-    <div class="canvas">
-      <div class="wrapper">
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
         
-
-<header id="masthead">
-  <div class="inner">
-    <div class="title-area">
-      
-        <p class="site-title">
-          <a href="/">
-            
-            <span>Data is Power</span>
-          </a>
-        </p>
-      
+        <a class="site-title" href="/">
+           평생 공부 블로그 : Today I Learned‍ 🌙
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
     </div>
   </div>
-</header>
-
-        <div class="initial-content">
-          <header class="intro">
-  
-
-  <div class="inner">
-    <div class="intro-text">
-      <h1 id="page-title" class="intro-title">Page not found
-</h1>
-      
-
-      
-
-      
-
-      
-    </div>
-  </div>
-</header>
-
-
-<main id="main" class="page-content" aria-label="Content">
-  <div class="inner">
-    <article class="entry-wrap">
-      <div class="entry-content">
-        <p>Sorry, but the page you were trying to view has moved or does not exist.</p>
-
-      </div>
-    </article>
-  </div>
-</main>
-
-        </div>
-
-        <div class="search-content">
-          <div class="inner">
-  <label class="visually-hidden" for="search">Site Search</label>
-        <input type="text" id="search" class="search-input" aria-describedby="results-count" tabindex="-1" placeholder="Enter your search term..." />
-        <div id="results" class="results"></div>
 </div>
 
-        </div>
-      </div>
-    </div>
 
-    <footer id="footer" class="site-footer">
-  <div class="inner">
-    <div class="copyright">
+    <div class="initial-content">
       
-        <p>&copy; 2022 Data is Power.</p>
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
       
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        <li class="current">Page Not Found</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Page Not Found">
+    <meta itemprop="description" content="Page not found. Your pixels are in another canvas.">
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Page Not Found
+</h1>
+          
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>요청하신 페이지를 찾을 수 없습니다.😥</p>
+
+<script>
+  var GOOG_FIXURL_LANG = 'en';
+  var GOOG_FIXURL_SITE = 'http://localhost:4000'
+</script>
+
+<script src="https://linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js">
+</script>
+
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;"></span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+-->
+
+
+
+
+
+
+  <a href="#" class="pagination_prev_next--pager disabled-first-child">첫 번째 글입니다</a>
+  <a href="#" class="pagination_prev_next--pager disabled-last-child ">가장 최근 글입니다</a>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        
+      </footer>
     </div>
-  </div>
-</footer>
 
     
 
-<script async src="/assets/javascripts/main.js"></script>
+  </article>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="http://localhost:4000/assets/javascripts/lunr/lunr.min.js"></script>
-  <script src="http://localhost:4000/assets/javascripts/lunr/lunr.store.js"></script>
-  <script>
-    var idx = lunr(function () {
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
       
-      // the, the normal lunr index initialization
-      this.field('title')
-      this.field('excerpt')
-      this.field('categories')
-      this.field('tags')
-      this.ref('id')
+        
+          <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
 
-      this.pipeline.remove(lunr.trimmer)
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
 
-      // add documents to index
-      for (var item in store) {
-        this.add({
-          title: store[item].title,
-          excerpt: store[item].excerpt,
-          categories: store[item].categories,
-          tags: store[item].tags,
-          id: item
-        })
-      }
-    });
+<div class="page__footer-copyright">&copy; 2022 식빵맘💛. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
-    $(document).ready(function () {
-      $('input#search').on('keyup', function () {
-        var resultdiv = $('#results');
-        var query = $(this).val().toLowerCase();
-        var result =
-          idx.query(function (q) {
-            query.split(lunr.tokenizer.separator).forEach(function (term) {
-              q.term(term, { boost: 100 })
-              if (query.lastIndexOf(" ") != query.length - 1) {
-                q.term(term, { usePipeline: false, wildcard: lunr.Query.wildcard.TRAILING, boost: 10 })
-              }
-              if (term != "") {
-                q.term(term, { usePipeline: false, editDistance: 1, boost: 1 })
-              }
-            })
-          });
-        resultdiv.empty();
-        resultdiv.prepend('<p id="results-count" class="results-found">' + result.length + ' Result(s) found</p>');
-        for (var item in result) {
-          var ref = result[item].ref;
-          var searchitem =
-            '<article class="entry">' +
-              '<h3 class="entry-title">' +
-                '<a href="' + store[ref].url + '">' + store[ref].title + '</a>' +
-              '</h3>' +
-              '<div class="entry-excerpt">' +
-                '<p>' + store[ref].excerpt.split(" ").splice(0, 20).join(" ") + '...</p>' +
-              '</div>' +
-            '</article>';
-          resultdiv.append(searchitem);
-        }
-      });
-    });
-  </script>
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+
 
 
 
   </body>
-
 </html>

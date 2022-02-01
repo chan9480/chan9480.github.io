@@ -1,0 +1,16 @@
+I"{<ul class="toc__menu">
+  <li><a href="#15-연습문제">1.5 연습문제</a>
+    <ul>
+      <li><a href="#-q1-무한-반복-사운드를-pause--resume-해보세요">🙋 Q1. 무한 반복 사운드를 pause &amp; resume 해보세요.</a></li>
+      <li><a href="#-q2-배경-음악-튼-상태에서-스페이스바-키를-누를-때마다-다른-wav파일-재생하기">🙋 Q2. 배경 음악 튼 상태에서 스페이스바 키를 누를 때마다 다른 wav파일 재생하기</a></li>
+      <li><a href="#-q3-탱크-포탄-발사-사운드와-이동-소리-넣기">🙋 Q3. 탱크 포탄 발사 사운드와 이동 소리 넣기</a>
+        <ul>
+          <li><a href="#class-sound-설명">Class Sound 설명</a></li>
+          <li><a href="#tankexampleh">📜TankExample.h</a></li>
+          <li><a href="#maincpp">📜main.cpp</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

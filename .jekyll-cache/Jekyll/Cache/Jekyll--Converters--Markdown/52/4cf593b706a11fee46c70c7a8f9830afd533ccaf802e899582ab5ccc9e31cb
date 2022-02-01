@@ -1,0 +1,417 @@
+I"a�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다. 😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-1-기본-기능-구현">Chapter 1. 기본 기능 구현</h1>
+<h1 id="12-기본적인-그리기---이동-회전-애니메이션">1.2 기본적인 그리기 - 이동, 회전, 애니메이션</h1>
+<p>이번 실습 에서는 Game2D 클래스에서 <code class="language-plaintext highlighter-rouge">draw_grid</code> 값을 true 로 바꾸는 것을 권장!</p>
+
+<p><br /></p>
+
+<h2 id="원점에-검은-점-그리기">원점에 검은 점 그리기</h2>
+<h3 id="drawfunctionh">DrawFunction.h</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">vec2</span> <span class="o">=</span> <span class="n">Vector2</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="vector2h">vector2.h</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+	<span class="k">class</span> <span class="nc">Vector2</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+			<span class="k">union</span> <span class="p">{</span>
+				<span class="k">struct</span> <span class="p">{</span> <span class="n">T</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span> <span class="p">};</span>
+				<span class="k">struct</span> <span class="p">{</span> <span class="n">T</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">;</span> <span class="p">};</span>
+				<span class="n">T</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+			<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="maincpp">main.cpp</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">point</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 점의 위치 지정 (원점)</span>
+			<span class="n">drawPoint</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">black</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="mf">5.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 점 그리기 5.0f 크기로</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+
+	<span class="n">jm</span><span class="o">::</span><span class="n">RotatingStarExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1280</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="nb">false</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="선-그리기">선 그리기</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84530136-942f3500-ad1d-11ea-8842-fb7727051466.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p0</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 시작점 (vector2 생성자로 구현)</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p1</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span><span class="c1">//  끝점</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span> 
+			<span class="c1">// 첫번재점 레드, 두번째점 블루 -&gt; 빨강에서 시작해서 끝으로 갈수록 블루인 선이 됨</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="삼각형-그리기">삼각형 그리기</h2>
+<p>삼각형은 선이 3개 !</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84530309-e2dccf00-ad1d-11ea-88b1-8ed1e86a81be.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p0</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p1</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p2</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p0</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="평행이동-방법-1-각-좌표-파라미터에-값을-더해주기">평행이동 방법 1. 각 좌표 파라미터에 값을 더해주기</h2>
+<p>각 좌표 파라미터에 이동시킬 만큼 실수 값을 더해주면 된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84530374-03a52480-ad1e-11ea-8470-e652684e82e5.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">;</span>  <span class="c1">// dy도 추가해서 y좌표에 더해주면 y 방향 평행이동도 가능</span>
+
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p0</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p1</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p2</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p0</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="평행이동-방법-2-좌표-자체를-넘겨주기--translate함수-사용">평행이동 방법 2. 좌표 자체를 넘겨주기 + translate함수 사용</h2>
+<ul>
+  <li>각 파라미터에 적용시키는건 번거로우니까 <u>좌표 자체인 vec2객체를 넘겨주기</u></li>
+  <li><code class="language-plaintext highlighter-rouge">translate 함수</code> : <u>누적</u> 해서 좌표 현재위치를 변경시킨다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84530801-7b734f00-ad1e-11ea-877e-82a5334a4b7e.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span> 
+            <span class="c1">// 점의 시작 위치가 (0.1f, 0.0f) 가 되어 이 아래에 작성한 모든 도형들이 (0.1f, 0.0f) 위치에서 그려지게 된다.</span>
+
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p0</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span> <span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p1</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span> <span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p2</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span> <span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span> <span class="c1">// vec2 p1을 넘겨줌</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span> <span class="c1">// vec2 p2을 넘겨줌</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p0</span><span class="p">);</span> <span class="c1">// vec2 p0을 넘겨줌</span>
+
+			<span class="c1">// 이 아래 3개의 선은 이제 (0.2f, 0.0f) 위치에서 그려진다. (translate은 누적되니까 한번 더 translate을 해주니 (0.2f, 0.0f)가 됨)</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span> 
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p0</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<h2 id="평행이동-방법-3-좌표-자체를-넘겨주기--begintransformation-endtransformation-사용">평행이동 방법 3. 좌표 자체를 넘겨주기 + beginTransformation, endTransformation 사용</h2>
+
+<ul>
+  <li>어느 일정 부분안에서만 누적되게 하고 싶을 때.</li>
+  <li><code class="language-plaintext highlighter-rouge">beginTransformation()</code> 과 <code class="language-plaintext highlighter-rouge">endTransformation()</code> 의 사이에서 이루어진 변환들이 이 범위를 벗어나면 초기화된다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84531044-e7ee4e00-ad1e-11ea-90dd-8f98ac384edf.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span> <span class="c1">// 여기서부터</span>
+
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// (0.1f,0.0f)에 그려지는 아래 3개의 실선</span>
+
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p0</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span> <span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p1</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span> <span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">p2</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span> <span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p0</span><span class="p">);</span>
+
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>   <span class="c1">// (0.2f,0.0f) 에 그려지는 아래 3개의 실선</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p0</span><span class="p">);</span>
+
+			<span class="n">endTransformation</span><span class="p">();</span>  <span class="c1">// 여기까지만 누적이 적용된다 !  이제 여기를 벗어나면 다시 원점인 (0.0f,0.0f) 으로 돌아감</span>
+
+			<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// (-0.1f, 0.0f) 에 그려지는 아래 3개의 실선</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">p0</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="박스-그리기">박스 그리기</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84531394-824e9180-ad1f-11ea-81f2-d7dde4905698.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="회전--원점-회전">회전 : 원점 회전</h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rotate</code>함수는 <u>원점에 대해서 회전한다.</u></li>
+  <li>회전 하는 중심이 원점 기준임.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84531564-bd50c500-ad1f-11ea-9382-2a359328d863.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="mf">30.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// (0.0f, 0.0f) 현재 위치인 원점에 대해서 30도 회전</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="회전--그래픽스는-내부적으로-역순으로-실행된다-">회전 : 그래픽스는 내부적으로 역순으로 실행된다. ⭐</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84531793-14569a00-ad20-11ea-92db-1ba0f781aeea.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+			
+			<span class="c1">// 파란색 상자는 그냥 rotate만 적용된 것</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// 빨간 상자는 translate 후에 rotate까지 함께 적용된 것</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// translate이 코드 상 rotate보다 먼저 등장</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="mf">30.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// rotate이 translate 코드에서 아랫줄에 위치.</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li>사진에서 <u>빨간 상자 주목 !</u> 코드 상으로는 translate을 먼저 한 후에 rotate을 하므로 이동 후 원점에 대해서 회전하는 그림이 나와햐 하는데 실제로 실행해보면 rotate을 먼저 하고 난 후에 translate 평행이동 한 그림이 나온다.
+    <ul>
+      <li>컴퓨터 크래픽스 API는 <strong><u>내부적으로 코드의 역순으로 실행</u></strong>되기 때문. 코드상 <code class="language-plaintext highlighter-rouge">평행이동 → 회전</code>이여도 내부적으론 <strong>역순으로</strong> <code class="language-plaintext highlighter-rouge">회전 → 평행이동</code>으로 실행된다.</li>
+    </ul>
+  </li>
+  <li>단 <u>draw, 그림을 그리는건 코드 순서 그대로 그려진다!</u>
+    <ul>
+      <li><strong><em>이동, 회전, scale 같은 것들만</em></strong> <u>코드의 역순으로</u> 진행되는 것.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84532313-fe95a480-ad20-11ea-92f5-8075b6834f59.png" alt="image" width="40%" height="40%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+			
+<span class="c1">// 블루 박스는 코드 상으론 **평행이동-&gt;회전** 순     : 그러나 실제론 **회전 -&gt; 평행이동** 순으로 실행됨*</span>
+<span class="n">beginTransformation</span><span class="p">();</span>
+<span class="n">translate</span><span class="p">(</span><span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+<span class="n">rotate</span><span class="p">(</span><span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>
+<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+<span class="n">endTransformation</span><span class="p">();</span>
+
+<span class="c1">// 블루 박스는 코드 상으론 **회전 -&gt; 평행이동** 순     : 그러나 실제론 **평행이동-&gt;회전** 순으로 실행됨*</span>
+<span class="n">beginTransformation</span><span class="p">();</span>
+<span class="n">rotate</span><span class="p">(</span><span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>
+<span class="n">translate</span><span class="p">(</span><span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+<span class="n">endTransformation</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="원점이-아닌-점에-대해서-회전하고-싶을-때">원점이 아닌 점에 대해서 회전하고 싶을 때</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. 원점이 아닌 점이 원점에 위치할 수 있도록 물체를 통째로 들어서 옮기기
+2. 원점에 위치한 상태에서 원점에 대해서 회전 시키고
+3. 다시 원래 자리로 되돌려 놓기
+</code></pre></div></div>
+
+<p>1 . 원점이 아닌 점이 원점에 위치할 수 있도록 물체를 통째로 들어서 옮기기</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84532739-b6c34d00-ad21-11ea-92bb-5c11a0307f06.png" alt="image" width="30%" height="30%" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">setLineWidth</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">);</span>
+<span class="k">const</span> <span class="n">vec2</span> <span class="nf">center_of_rotation</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// 이 점에 대해서 회전시키고 싶어.</span>
+
+<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="n">center_of_rotation</span><span class="p">);</span>  <span class="c1">// ⭐ 실행순서 3. (+0.25f, 0.0f)만큼 이동시킨다. 원점으로 이동시키기 위해.</span>
+<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 실행순서 1.</span>
+<span class="n">drawPoint</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">black</span><span class="p">,</span> <span class="n">center_of_rotation</span><span class="p">,</span> <span class="mf">10.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 실행순서 2. 회전 중점으로 하고 싶은 점을 시각적으로 보기 위해 그 점을 그림.</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>2 . 원점에 위치한 상태에서 원점에 대해서 회전 시키고</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84532912-17eb2080-ad22-11ea-8dde-890f9caee7a0.png" alt="image" width="30%" height="30%" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">setLineWidth</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="n">vec2</span> <span class="nf">center_of_rotation</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+
+<span class="n">rotate</span><span class="p">(</span><span class="mf">45.0</span><span class="n">f</span><span class="p">);</span>   <span class="c1">// ⭐ 실행순서 4.  </span>
+<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="n">center_of_rotation</span><span class="p">);</span>  <span class="c1">// 실행순서 3.</span>
+<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 실행순서 1. </span>
+<span class="n">drawPoint</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">black</span><span class="p">,</span> <span class="n">center_of_rotation</span><span class="p">,</span> <span class="mf">10.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 실행순서 2.</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>3 . 다시 원래 자리로 돌려놓기</p>
+<ul>
+  <li>이제 (0.25f, 0.0f) 좌표에 대해서 45도 회전하는 그림이 나오게 됐다.</li>
+  <li>draw는 코드 순서대로 실행되나 코드상으로는 rotate가 translate보다 먼저 나왔음에도 불구하고 translate이 먼저 실행되고 rotate이 그 다음에 실행된다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84533283-c4c59d80-ad22-11ea-82c1-9f901ce3b987.png" alt="image" width="30%" height="30%" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">setLineWidth</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="n">vec2</span> <span class="nf">center_of_rotation</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+
+<span class="n">translate</span><span class="p">(</span><span class="n">center_of_rotation</span><span class="p">);</span> <span class="c1">// ⭐ 실행순서 5. 다시 원래 자리로 돌려 놓기. </span>
+<span class="n">rotate</span><span class="p">(</span><span class="mf">45.0</span><span class="n">f</span><span class="p">);</span>   <span class="c1">// 실행순서 4.  </span>
+<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="n">center_of_rotation</span><span class="p">);</span>  <span class="c1">// 실행순서 3. </span>
+<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 실행순서 1. </span>
+<span class="n">drawPoint</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">black</span><span class="p">,</span> <span class="n">center_of_rotation</span><span class="p">,</span> <span class="mf">10.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 실행순서 2.</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="크기-바꾸기-scale">크기 바꾸기 scale</h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">scale(a, b)</code> : x 방향으로 <u>a 배</u>, y 방향으로 <u>b 배</u>로 크기를 바꿈</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84533682-9a281480-ad23-11ea-9b5d-381bd5f8df71.png" alt="image" width="30%" height="30%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">setLineWidth</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">);</span>
+
+			<span class="n">scale</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// x방향으로 2배, y방향으로 1/4배 </span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="err">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="rotation--scale--translate-함께-쓰기">rotation &amp; scale &amp; translate 함께 쓰기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">setLineWidth</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">);</span>
+
+			<span class="n">rotate</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">90.0</span><span class="n">f</span><span class="p">);</span>   <span class="c1">// scale -&gt; rotate 으로 역순으로 실행되게 된다.</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+			<span class="n">time</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">getTimeStep</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">setLineWidth</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">);</span>
+
+			<span class="n">scale</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>    <span class="c1">//  rotate 먼저 하고 그 다음에 scale 하기 때문에 결과가 다르다.</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">90.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawWiredBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+			<span class="n">time</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">getTimeStep</span><span class="p">();</span>
+		<span class="err">}</span>
+</code></pre></div></div>
+
+<p><u>rotate 두번 하면 마치 자전과 동시에 공전 하는 느낌으로 회전한다.</u></p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

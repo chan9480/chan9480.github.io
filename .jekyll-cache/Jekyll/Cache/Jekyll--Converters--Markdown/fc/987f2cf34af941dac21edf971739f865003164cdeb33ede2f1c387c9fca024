@@ -1,0 +1,26 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-4-simple-factory-pattern">Chapter 4. Simple Factory Pattern</a>
+    <ul>
+      <li><a href="#-factory-pattern">🔔 Factory Pattern</a></li>
+      <li><a href="#-예제-1">🔔 예제 1</a>
+        <ul>
+          <li><a href="#구조">구조</a></li>
+          <li><a href="#unitcs">📜Unit.cs</a></li>
+          <li><a href="#factorycs">📜Factory.cs</a></li>
+          <li><a href="#factoryusecs">📜FactoryUse.cs</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-2">🔔 예제 2</a>
+        <ul>
+          <li><a href="#구조-1">구조</a></li>
+          <li><a href="#unitcs-1">📜Unit.cs</a></li>
+          <li><a href="#marinecs">📜Marine.cs</a></li>
+          <li><a href="#firebatcs">📜Firebat.cs</a></li>
+          <li><a href="#factorycs-1">📜Factory.cs</a></li>
+          <li><a href="#factoryusecs-1">📜FactoryUse.cs</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

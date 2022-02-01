@@ -1,0 +1,230 @@
+I"C@<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-8-객체-지향의-기초--친구-함수와-클래스">chapter 8. 객체 지향의 기초 : 친구 함수와 클래스</h1>
+
+<h2 id="-friend">🔔 <code class="language-plaintext highlighter-rouge">friend</code></h2>
+
+<blockquote>
+  <p><strong>클래스에서</strong> 어떤 함수나 다른 클래스를 <code class="language-plaintext highlighter-rouge">friend</code>, 즉 친구로 지정하면 <u>자신의 private 멤버들에도 자유롭게 접근할 수 있게 허락해준다.</u></p>
+</blockquote>
+
+<ul>
+  <li>함수를 친구로 지정하는 방법
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">firned</code> + 해당 함수의 프로토타입
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">friend</span> <span class="kt">int</span> <span class="nf">getInt</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">);</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>클래스를 친구로 지정하는 방법
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">firned class</code> + 클래스이름
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">friend</span> <span class="k">class</span> <span class="nc">Something</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>프로토타입 말고 바디까지 붙여도 되긴 하는데 친구로 지정하는 그 시점에선 친구의 내부 변수들을 모를 수도 있기 때문에 대체로 프로토타입만 지정한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-일반-함수를-친구로-삼는-경우">🔔 일반 함수를 친구로 삼는 경우</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+
+
+<span class="kt">void</span> <span class="nf">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 👈💥에러!💥</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A 클래스의 멤버 변수 <em>m_value</em> 은 <code class="language-plaintext highlighter-rouge">private</code>이기 때문에 <em>void doSomething(A &amp;a)</em> 같은 A 클래스 바깥의 일반 함수에서는 접근할 수 없다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">friend</span> <span class="kt">void</span> <span class="n">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">);</span>  <span class="c1">// 친구로 지정</span>
+<span class="p">};</span>
+
+
+<span class="kt">void</span> <span class="nf">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 👈 정상 동작.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>A 클래스 내부에서 <em><code class="language-plaintext highlighter-rouge">friend</code> void doSomething(A&amp; a);</em> 이렇게 doSomething 함수를 친구로 지정해주면
+    <ul>
+      <li>이제 doSomething 함수 내에서 <u>A 클래스의 private 멤버들에 접근할 수 있다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="전방-선언">전방 선언</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">friend</span> <span class="kt">void</span> <span class="n">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>  <span class="c1">// 👈 💥에러 !!💥</span>
+<span class="p">};</span>
+
+
+<span class="k">class</span> <span class="nc">B</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">friend</span> <span class="kt">void</span> <span class="n">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>  
+<span class="p">};</span>
+
+
+<span class="kt">void</span> <span class="nf">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A 클래스와 B 클래스에서 <em>void doSomething(A&amp; a, B&amp; b)</em> 함수를 친구로 삼으려 한다.</li>
+  <li><em>void doSomething(A&amp; a, <u>B&amp; b</u>)</em>은 B 타입 객체의 참조를 매개변수로 한다.</li>
+  <li><strong>A 클래스 입장에선 아직 B 클래스가 선언되기 전이기 때문에 doSomething의 매개변수인 B &amp; b 를 보고 B 가 누군지 몰라 에러가 난다.</strong></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">B</span><span class="p">;</span>   <span class="c1">// 👈👈 forward declaration</span>
+
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">friend</span> <span class="kt">void</span> <span class="n">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>   <span class="c1">// 정상 작동</span>
+<span class="p">};</span>
+
+
+<span class="k">class</span> <span class="nc">B</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">friend</span> <span class="kt">void</span> <span class="n">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>  
+<span class="p">};</span>
+
+
+<span class="kt">void</span> <span class="nf">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>이처럼 A 클래스의 선언 위에 <code class="language-plaintext highlighter-rouge">class B;</code> 해주면 미리 프로토타입만 <strong>전방 선언</strong>하여 컴파일러에게 B 클래스라는 것이 있다는 것을 A 클래스 선언 전에 미리 알려줄 수 있다. 따라서 이제 A 클래스의 입장에선 <em>B&amp; b</em> 매개변수를 봐도 B 라는 클래스가 있다는 것을 알기 때문에 문제가 사라진다.</p>
+
+<p><br /></p>
+
+<h2 id="-클래스를-친구로-삼는-경우">🔔 클래스를 친구로 삼는 경우</h2>
+
+<p>A 라는 클래스에서 B 라는 클래스를 통째로 친구 삼으면 <u>B 클래스의 모든 멤버 함수에서 A 의 private 멤버들에도 자유롭게 접근할 수 있게 된다.</u></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">friend</span> <span class="k">class</span> <span class="nc">B</span><span class="p">;</span>   <span class="c1">// B 클래스를 친구로 삼음</span>
+<span class="p">};</span>
+
+
+<span class="k">class</span> <span class="nc">B</span>   <span class="c1">// A 클래스의 모든 private 멤버들을 접근할 수 있다. </span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">func_1</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span>   
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">func_2</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span>   
+    <span class="p">{</span>
+        <span class="n">a</span><span class="p">.</span><span class="n">m_value</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+<ul>
+  <li>B의 모든 멤버 함수 내에서 A 클래스의 <code class="language-plaintext highlighter-rouge">private</code> 멤버 변수인 <em>m_value</em>를 자유롭게 사용할 수 있게 되었다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-다른-클래스의-특정-멤버-함수만-친구로-삼고-싶을-때">🔔 다른 클래스의 특정 멤버 함수만 친구로 삼고 싶을 때</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">friend</span> <span class="kt">void</span> <span class="n">B</span><span class="o">::</span><span class="n">doSomething</span><span class="p">(</span><span class="n">A</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>A 클래스에서 B 클래스의 멤버 함수 doSomething(A &amp;a) 만 친구로 삼는다면 B 의 멤버 함수 doSomething(A &amp;a) 에서만 A 클래스의 private한 멤버 변수들에 접근할 수 있다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span><span class="p">;</span>   <span class="c1">// B에서 A를 알아야 하므로 전방 선언</span>
+
+<span class="k">class</span> <span class="nc">B</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="kt">void</span> <span class="n">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">);</span>  <span class="c1">// 친구로 삼으려는 B의 멤버 함수</span>
+
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">A</span> 
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+	<span class="k">friend</span> <span class="kt">void</span> <span class="n">B</span><span class="o">::</span><span class="n">doSomething</span><span class="p">(</span><span class="n">A</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>  <span class="c1">// 👈 B의 특정 멤버 함수를 친구로 선언</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="n">B</span><span class="o">::</span><span class="n">doSomething</span><span class="p">(</span><span class="n">A</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">A</span> <span class="n">a</span><span class="p">;</span>
+	<span class="n">B</span> <span class="n">b</span><span class="p">;</span>
+	<span class="n">b</span><span class="p">.</span><span class="n">doSomething</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

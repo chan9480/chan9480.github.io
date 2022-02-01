@@ -1,0 +1,36 @@
+I"�<ul class="toc__menu">
+  <li><a href="#-함수">🔔 함수</a>
+    <ul>
+      <li><a href="#substr">substr</a></li>
+      <li><a href="#find">find</a></li>
+      <li><a href="#stoi-stol-stoll">stoi, stol, stoll</a></li>
+      <li><a href="#to_string">to_string</a></li>
+      <li><a href="#getline">getline</a>
+        <ul>
+          <li><a href="#stdcin-과의-차이">std::cin 과의 차이</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#front-back">front, back</a></li>
+  <li><a href="#-연산자">+ 연산자</a></li>
+  <li><a href="#append">append</a></li>
+  <li><a href="#push_back">push_back</a></li>
+  <li><a href="#insert">insert</a></li>
+  <li><a href="#swap">swap</a></li>
+  <li><a href="#max_size">max_size</a></li>
+  <li><a href="#c언어-스타일-문자열배열로-바꾸기">C언어 스타일 문자열(배열)로 바꾸기</a>
+    <ul>
+      <li><a href="#c_str-함수-사용하기">c_str() 함수 사용하기</a></li>
+      <li><a href="#data-함수-사용하기">data() 함수 사용하기</a></li>
+      <li><a href="#copy-함수-사용하기">copy() 함수 사용하기</a></li>
+    </ul>
+  </li>
+  <li><a href="#-string-과-char">🔔 string 과 char</a>
+    <ul>
+      <li><a href="#string-에-char-붙이기">string 에 char 붙이기</a></li>
+      <li><a href="#char를-string으로-변환하기">char를 string으로 변환하기</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

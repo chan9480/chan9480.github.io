@@ -1,0 +1,488 @@
+I"�J<!-- 공백이 포함되어 있는 카테고리 이름의 경우 site.categories['a b c'] 이런식으로! -->
+
+<hr />
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter14/">Chapter 14. 명령 패턴(Command Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.12.11
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter13/">Chapter 13. 어댑터 패턴(Adapter Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.12.10
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter12/">Chapter 12. 옵저버 패턴(Observer Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.12.08
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter11/">Chapter 11. 상태 패턴(State Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.09.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter10/">Chapter 10. 빌더 패턴(Builder Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.28
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter9/">Chapter 9. 오브젝트풀 패턴(ObjectPool Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.27
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter8/">Chapter 8. 경량 패턴(Flyweight Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.16
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter7/">Chapter 7. 원형 패턴(Prototype Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.16
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#c-sharp" class="page__taxonomy-item-tag" rel="tag">C Sharp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter6/">Chapter 6. 추상 팩토리 패턴(Abstract Factory Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter5/">Chapter 5. 팩토리 메서드 패턴(Factory Method Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.10
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter4/">Chapter 4. 심플 팩토리 패턴(Simple Factory Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.10
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter3/">Chapter 3. 전략 패턴(Strategy Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.09
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter2/">Chapter 2. 싱글톤 패턴(Sigleton Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.09
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter1/">Chapter 1. 컴포넌트 패턴(Component Pattern)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.09
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/design%20pattern/chapter0/">Chapter 0. 게임 디자인 패턴의 시작 : 클래스, 다형성</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.07.08
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+                    
+                    
+                    <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+:ET

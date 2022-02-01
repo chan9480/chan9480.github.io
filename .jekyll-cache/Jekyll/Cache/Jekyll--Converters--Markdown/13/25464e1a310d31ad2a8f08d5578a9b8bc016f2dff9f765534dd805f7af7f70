@@ -1,0 +1,299 @@
+I"�q<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="14-연습문제">1.4 연습문제</h1>
+
+<p class="notice--warning"><strong>연습 문제</strong>는 스스로 풀이했습니다. 😀     <br />
+해당 챕터 보러가기 🖐 <a href="https://ansohxxn.github.io/c++%20games/chapter1-4/">1.4 마우스 입력 다루기</a> <br />
+연습 문제 출처 : <a href="https://blog.naver.com/atelierjpro/221413483005">홍정모 교수님 블로그</a></p>
+
+<p><br /></p>
+
+<h2 id="-q1-마우스-커서-위치에-회전하는-별-구현하기">🙋 Q1. 마우스 커서 위치에 회전하는 별 구현하기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">MouseExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">getCursorPos</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">mouse_pos</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">90.0</span><span class="n">f</span><span class="p">);</span>    <span class="c1">// translate 이동 전 회전 먼저 시키기. 원점에 대해서, 즉 제자리에서 돌게끔.</span>
+			<span class="n">drawFilledStar</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.13</span><span class="n">f</span><span class="p">);</span>
+
+			<span class="n">time</span> <span class="o">+=</span> <span class="n">getTimeStep</span><span class="p">();</span> <span class="c1">// 계속해서 회전하게끔 시간 업뎃</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">MouseExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="nb">false</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-q2-커서가-원-안에-들어갔을-경우-색깔-바꾸기">🙋 Q2. 커서가 원 안에 들어갔을 경우 색깔 바꾸기</h2>
+
+<ul>
+  <li>파란 원을 한 개 그리고 마우스 커서가 그 원 안에 들어갔을 경우에 빨간색으로 바꿔보세요.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">MouseExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">float</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">;</span>                <span class="c1">// 원의 반지름은 0.1f 로 설정</span>
+		<span class="n">vec2</span> <span class="n">circlePos</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// 원의 고정 위치</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">getCursorPos</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>       <span class="c1">// 마우스 현재 위치</span>
+
+			<span class="n">translate</span><span class="p">(</span><span class="n">circlePos</span><span class="p">);</span>  <span class="c1">// 아래 if 문이 거짓일땐 파란원만, 아래 if 문이 참일 땐 빨간원 파란원 둘다 translate 될 것.</span>
+			<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">radius</span><span class="p">);</span>         <span class="c1">// 1. 파란 원을 그린다.</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">mouse_pos</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">circlePos</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">radius</span> <span class="o">&amp;&amp;</span> <span class="n">mouse_pos</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">circlePos</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">radius</span> 
+					<span class="o">&amp;&amp;</span> <span class="n">mouse_pos</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="n">circlePos</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">radius</span> <span class="o">&amp;&amp;</span> <span class="n">mouse_pos</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="n">circlePos</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">radius</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">radius</span><span class="p">);</span>       <span class="c1">// 원 안에 마우스 커서가 들어 가는게 참일 땐 2. 빨간 원을 그린다.</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">MouseExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="nb">false</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-q3-원하는-방향으로-마우스를-조작하여-포탄-날리기">🙋 Q3. 원하는 방향으로 마우스를 조작하여 포탄 날리기</h2>
+
+<ul>
+  <li>2D 배틀 그라운드처럼 화면 가운데의 물체를 커서 방향으로 회전시켜 보세요.</li>
+  <li>2D 배틀 그라운드처럼 마우스 버튼을 누르면 커서 방향으로 총알을 발사해보세요.</li>
+</ul>
+
+<iframe width="816" height="458" src="https://www.youtube.com/embed/8eOtOcQf50c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h3 id="코드">코드</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include &lt;vector&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">Bullet</span> <span class="c1">// 총알 클래스</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">mousePosSave</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>       
+		<span class="n">vec2</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">vec2</span> <span class="n">distanceFromStart</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">vec2</span> <span class="n">start</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.45</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">distanceFromStart</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">start</span><span class="p">);</span> 
+			<span class="n">drawFilledRegularConvexPolygon</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+			<span class="n">drawWiredRegularConvexPolygon</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">distanceFromStart</span> <span class="o">+=</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">MouseExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">Bullet</span> <span class="o">*&gt;</span> <span class="n">bullets</span><span class="p">;</span>
+		<span class="n">vec2</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">getCursorPos</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>   <span class="c1">// 마우스 현재 위치</span>
+			
+			<span class="cm">/* 발사대 모양 만들고 좌클시 총알 객체 만들기 */</span>
+
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">mouse_pos</span><span class="p">.</span><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">rotate</span><span class="p">(</span><span class="mi">180</span> <span class="o">/</span> <span class="mf">3.141592</span><span class="n">f</span> <span class="o">*</span> <span class="n">atan2f</span><span class="p">(</span><span class="n">mouse_pos</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">mouse_pos</span><span class="p">.</span><span class="n">x</span><span class="p">));</span>  <span class="c1">// 4. 파란 상자만 마우스 현재 위치 방향으로 회전</span>
+				<span class="n">temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">mouse_pos</span><span class="p">.</span><span class="n">x</span><span class="p">;</span> <span class="c1">// 이때의 마우스 위치 temp에 저장. 나중에 총알 객체 생성되면 그때 쓰려고.</span>
+				<span class="n">temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">mouse_pos</span><span class="p">.</span><span class="n">y</span><span class="p">;</span> 
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isMouseButtonPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_MOUSE_BUTTON_1</span><span class="p">))</span>    <span class="c1">// 좌클 누르면 총알 객체 생성, mousePos에 temp 옮겨주기.</span>
+			<span class="p">{</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">new</span> <span class="n">Bullet</span><span class="p">);</span>		
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">mousePosSave</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">temp</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.2</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>                     <span class="c1">// 3. 파란상자만 tranlate 된다. (노란원은 begin~end 밖이라 해당 x)</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">);</span>  <span class="c1">//  1. 파란 상자가 먼저 그려진다.</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+			
+            <span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>	   <span class="c1">// 2. 노란 원이 그려진다.</span>
+
+			<span class="cm">/* 총알들 그리기 */</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">empty</span><span class="p">(</span><span class="n">bullets</span><span class="p">))</span>    <span class="c1">// bullet 벡터가 비어있지 않을 때, 즉 포인터가 동적 공간을 할당 중이어야만 접근하기.</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">beginTransformation</span><span class="p">();</span> <span class="c1">// begin end 꼭 해주기. 누적되지 않게.</span>
+					<span class="n">rotate</span><span class="p">(</span><span class="mi">180</span> <span class="o">/</span> <span class="mf">3.141592</span><span class="n">f</span><span class="o">*</span><span class="n">atan2f</span><span class="p">(</span><span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mousePosSave</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mousePosSave</span><span class="p">.</span><span class="n">x</span><span class="p">));</span> <span class="c1">// 총알 회전</span>
+					<span class="n">bullets</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">getTimeStep</span><span class="p">());</span>
+					<span class="n">bullets</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>   <span class="c1">// 총알을 start+distaceFromStart</span>
+					<span class="n">endTransformation</span><span class="p">();</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+			<span class="cm">/* 화면 벗어난 총알들 delete */</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">empty</span><span class="p">(</span><span class="n">bullets</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">vec2</span> <span class="n">v</span><span class="p">;</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">v</span> <span class="o">=</span> <span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">distanceFromStart</span> <span class="o">+</span> <span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">;</span>   <span class="c1">// 그림상에서 x축 두번째 분홍 점</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.5</span><span class="n">f</span> <span class="o">||</span> <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.5</span><span class="n">f</span> <span class="o">||</span> <span class="n">v</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mf">1.5</span><span class="n">f</span> <span class="o">||</span> <span class="n">v</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.5</span><span class="n">f</span><span class="p">)</span> <span class="c1">// 화면을 벗어나면 </span>
+					<span class="p">{</span>
+						<span class="k">delete</span> <span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+						<span class="n">bullets</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">bullets</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+					<span class="p">}</span>
+					<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>  <span class="c1">// 이렇게 해놔서 화면 출력창에 벡터사이즈가 늘고 줄고하는거 볼 수 있게 함</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">MouseExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="nb">false</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="구조-설명">구조 설명</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84586933-32beb180-ae56-11ea-834d-2258aa37e9a6.png" alt="image" /></p>
+
+<h4 id="class-bullet">class Bullet</h4>
+<ul>
+  <li>총알들을 찍어낼 총알 클래스 (포탄)</li>
+  <li><code class="language-plaintext highlighter-rouge">vec2 mousePosSave</code>
+    <ul>
+      <li>마우스의 현재 위치를 ‘저장’ -&gt; 마우스 현재 위치로 파란 상자를 회전시킬 때는 bullet 객체는 아직 생성되지 않은 상태라 (마우스 좌클릭시에만 생성) 미리 저장.</li>
+      <li>총알도 생성시에 파란상자와 같은 각도로 회전해야 하기 때문에 파란 상자가 회전하는 기준이였던 그 찰나의 마우스 현재 위치를 미리 저장해놔야 한다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">vec2 velocity = vec2(2.0f, 0.0f);</code>
+    <ul>
+      <li>총알이 날아가는 속도.</li>
+      <li>velocity 좌표 값은 코드 내에서 변경 안되고 고정 됨.</li>
+      <li>3.0f으로 하면 더 빨라진다. 값 수정 가능.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">vec2 distanceFromStart</code>
+    <ul>
+      <li>start 좌표로부터 <code class="language-plaintext highlighter-rouge">velocity * dt</code>가 더해진 좌표.</li>
+      <li>즉 총알은 계속 날아가면서 시간의 흐름에 따라 distanceFromStart 좌표에서 그려진다.</li>
+      <li>시간의 흐름에 따라 계속 증가한다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">vec2 start = vec2(0.45f, 0.0f);</code>
+    <ul>
+      <li>파란 상자의 오른쪽 끝 위치에 대충 맞춤.</li>
+      <li>start 좌표 값은 코드 내에서 변경 안되고 고정 됨.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">void draw()</code>
+    <ul>
+      <li>총알을 그림 (x축에)</li>
+      <li>원점에 총알을 그린 후 start 좌표에 이동시켜 놓음.</li>
+      <li>뒤 이어 distanceFromStart 에 이동시킴</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">void update(const float&amp; dt)</code>
+    <ul>
+      <li>distanceFromStart 좌표를 업뎃 시킴 (고정 속도에 프레임 곱)
+        <ul>
+          <li>시간의 흐름에 따라 원점으로부터 점점 더 멀어지게 됨</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="class-mouseexample">class MouseExample</h4>
+<ul>
+  <li>Game2D를 상속하며 update를 가지고 있는 게임 실행 클래스. update 안에서 객체를 생성한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">vector&lt;Bullet *&gt; bullets</code>
+    <ul>
+      <li>총알 객체 포인터들을 담는 벡터.</li>
+      <li>총알 여러개를 그려야하기 떄문에 벡터, 화면 벗어나면 없애고 가비지 방지 위해 동적 할당 메모리를 담은 포인터.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">vec2 temp</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">temp</code>는 <u>MouseExample</u>꺼고 <code class="language-plaintext highlighter-rouge">mousePosSave</code>는 <u>Bullet</u>꺼.
+        <ul>
+          <li>총알이 날아가는 모션을 그릴 때 회전해야하므로 회전 각을 구할 땐 mouse_Pos가 필요할데 Bullet 객체는 아직 여기 존재하지 않으니 Bullet 생성되때 이때의 mouse_Pos 값을 옮겨주기위해 임시 저장용으로 temp를 사용했다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="각도-구하기-atan2-vs-atan1">각도 구하기, atan2 vs atan1</h5>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84587024-a52f9180-ae56-11ea-907a-474cbffb1b6d.png" alt="image" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rotate(180 / 3.141592f*atan2f(mouse_pos.y, mouse_pos.x));</code></li>
+  <li>각도(세타) = arctan(y / x)</li>
+  <li><code class="language-plaintext highlighter-rouge">라디안</code> 에서 <code class="language-plaintext highlighter-rouge">도</code>로 변환하기 : <u>degree(도) = ( 180 / π ) * radian (라디안)</u></li>
+  <li>atan 과 atan2는 아크 탄젠트 값을 구해주는 함수인데
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">atan</code>은 0~360도 범위를 리턴하고 매개변수를 y/x 한개만 필요로 하며</li>
+      <li><code class="language-plaintext highlighter-rouge">atan2</code>는 -180~180도 범위로 매개변수를 y, x 두개 받는다.</li>
+      <li><code class="language-plaintext highlighter-rouge">atan</code>은 1분면과 3사분면을, 2사분면과 4사분면을 동일하게 생각하고 구분하지 못해 잘못된 결과 값을 리턴할 수 있다. 따라서 <code class="language-plaintext highlighter-rouge">atan2</code> 사용을 추천한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

@@ -1,0 +1,9 @@
+I"�<ul class="toc__menu">
+  <li><a href="#-일일이-콘솔창에-입력하는-것은-너무-귀찮다">🚀 일일이 콘솔창에 입력하는 것은 너무 귀찮다</a>
+    <ul>
+      <li><a href="#1️⃣-같은-프로젝트-폴더에-inputtxt-텍스트-파일을-만든다">1️⃣ 같은 프로젝트 폴더에 input.txt 텍스트 파일을 만든다.</a></li>
+      <li><a href="#2️⃣-freopeninputtxt-r-stdin">2️⃣ freopen(“input.txt”, “r”, stdin);</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

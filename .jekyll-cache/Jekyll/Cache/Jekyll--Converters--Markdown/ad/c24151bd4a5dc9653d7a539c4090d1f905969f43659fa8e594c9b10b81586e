@@ -1,0 +1,69 @@
+I"a<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h2 id="정적-배열">정적 배열</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+</code></pre></div></div>
+<p>반드시 배열의 크기가 프로그램이 실행되기 전에 미리 컴파일 타임에 정해져야 한다. 프로그램 실행 전에 미리 공간을 할당 받기 때문!</p>
+<ul>
+  <li>배열의 크기를 리터럴 상수가 아닌 변수로 넣고 싶으면 <code class="language-plaintext highlighter-rouge">const</code>가 붙은 변수, 즉 상수여야 한다.</li>
+  <li>정적 배열은 주소를 바꾸는 것이 불가능하다.
+    <ul>
+      <li>array의 배열 이름은 array를 주소를 담고 있는 상태. 다른 배열의 주소를 담게끔 값을 바꿀 수 없다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="동적-배열">동적 배열</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">length</span><span class="p">;</span>
+	<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">length</span><span class="p">;</span>  <span class="c1">// 실행 중에 입력으로 결정된 크기</span>
+
+	<span class="kt">int</span><span class="o">*</span> <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">length</span><span class="p">];</span> <span class="c1">// 동적할당 </span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="c1">// 원소 대입</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="p">(</span><span class="n">array</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">;</span> <span class="c1">// array[i] 로 해도 괜춘</span>
+
+	<span class="k">delete</span> <span class="p">[]</span> <span class="n">array</span><span class="p">;</span> <span class="c1">// 메모리 해제 잊지말기</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">int* array = new int[length];</code></p>
+
+<ul>
+  <li>배열의 크기가 될 length 값은 실행 중 입력으로 결정되므로 이를 크기로 하는 정적 배열 생성은 불가능한 상황.</li>
+  <li>동적으로 <code class="language-plaintext highlighter-rouge">int * length</code> 메모리 크기의 배열을 할당받아 이의 주소를 array에 저장. 현재 원소들은 쓰레기값.
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">*</span> <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">length</span><span class="p">]();</span>
+</code></pre></div>    </div>
+    <p>이렇게 뒤에 <code class="language-plaintext highlighter-rouge">()</code>나 <code class="language-plaintext highlighter-rouge">{}</code>를 붙여주면 원소가 0으로 초기화가된 동적 배열을 할당 받을 수 있다.</p>
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">*</span> <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">length</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</code></pre></div>    </div>
+    <p>이렇게도 초기화 가능한데 단 이 경우엔 메모리에 요청한 length와 초기화된 원소의 개수가 동일해야 한다.</p>
+    <ul>
+      <li>정적 할당시에는 <code class="language-plaintext highlighter-rouge">[]</code>를 채우지 않아도 초기화된 원소의 개수를 보면 크기를 알 수 있으므로 괜찮았는데 동적 할당시에는 <code class="language-plaintext highlighter-rouge">[]</code> 배열의 크기를 반드시 지정해주어야 한다. 초기화와 상관 없이.</li>
+    </ul>
+  </li>
+  <li>array는 다른 메모리 영역을 가리킬 수 있다. 즉 정적 배열과 다르게 주소를 바꾸는 것이 가능하다.</li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

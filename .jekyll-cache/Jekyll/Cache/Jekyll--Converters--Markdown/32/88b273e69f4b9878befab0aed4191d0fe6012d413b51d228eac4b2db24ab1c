@@ -1,0 +1,491 @@
+I"m�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-9-연산자-오버로딩--대입-연산자-오버로딩-깊은-복사-얕은-복사">chapter 9. 연산자 오버로딩 : 대입 연산자 오버로딩, 깊은 복사, 얕은 복사</h1>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">얕은 복사</code>
+    <ul>
+      <li>포인터 값인 <strong>주소만 복사</strong>하여 넘겨주는 것</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">깊은 복사</code>
+    <ul>
+      <li>주소를 복사하여 넘겨주지 않고 <u>나만의 새로운 메모리를 할당받아 확보</u>한 뒤 <strong>그 공간에 내용물만 복사</strong>해 오는 것</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="-얕은-복사">🔔 얕은 복사</h2>
+
+<h3 id="디폴트-복사-생성자">디폴트 복사 생성자</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// MyString 클래스</span>
+
+<span class="n">MyString</span><span class="p">(</span><span class="k">const</span> <span class="o">&amp;</span> <span class="n">MyString</span> <span class="n">other</span><span class="p">)</span>  <span class="c1">// 디폴트 복사 생성자</span>
+<span class="p">{</span>
+    <span class="n">m_data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">;</span>
+    <span class="n">m_length</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_length</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>복사 생성자를 <u>프로그래머가 정의해주지 않아도 모든 클래스는 기본적인 복사 생성자를 가지고 있다.</u>
+    <ul>
+      <li>프로그래머가 복사 생성자를 정의하지 않으면 디폴트 복사 생성자가 호출된다.</li>
+    </ul>
+  </li>
+  <li>디폴트 복사 생성자는 생략되어 <u>프로그래머 눈엔 보이진 않지만 위와 같은 형태의 코드로 구성</u>되어 있다.
+    <ul>
+      <li>인수로 들어온 <strong><u>같은 타입의 다른 객체</u>의 모든 멤버 값들을 복사하여 자신의 멤버 값으로 초기화</strong> 한다.
+        <ul>
+          <li><em>MyString(const &amp; MyString other)</em></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;cassert&gt;
+#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">MyString</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="kt">char</span> <span class="o">*</span><span class="n">m_data</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span> 
+	<span class="kt">int</span> <span class="n">m_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	<span class="n">MyString</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">source</span> <span class="o">=</span> <span class="s">""</span><span class="p">)</span> 
+	<span class="p">{</span>
+		<span class="n">assert</span><span class="p">(</span><span class="n">source</span><span class="p">);</span>  <span class="c1">// 문자열 인수로 꼭 받아야 함!</span>
+
+		<span class="n">m_length</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">strlen</span><span class="p">(</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> 
+		<span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">m_length</span><span class="p">];</span> 
+	
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> 
+			<span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+		<span class="n">m_data</span><span class="p">[</span><span class="n">m_length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span> 
+	<span class="p">}</span>
+
+	<span class="o">~</span><span class="n">MyString</span><span class="p">()</span>  
+	<span class="p">{</span>
+		<span class="k">delete</span> <span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">MyClass 클래스</code>
+    <ul>
+      <li><em>멤버 변수</em>
+        <ul>
+          <li><em>char *</em> <strong><em><u>m_data</u></em></strong>
+            <ul>
+              <li>문자열을 동적 할당받아 그 주소를 저장할 포인터
+                <blockquote>
+                  <p>이 멤버 포인터를 얕은 복사 방식으로 복사하는 과정에서 문제가 생긴다.</p>
+                </blockquote>
+              </li>
+            </ul>
+          </li>
+          <li><em>int m_length</em>
+            <ul>
+              <li>문자열 길이를 저장할 것</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>생성자</em>
+        <ul>
+          <li><em>MyString(const char *source = “”)</em></li>
+          <li>이 생성자의 역할은 문자열 1개를 인수로 받아 두 멤버 <em>m_data</em>, <em>m_length</em>를 초기화 한다.
+            <ul>
+              <li><em>cf) <code class="language-plaintext highlighter-rouge">char *</code>타입의 포인터를 문자열 리터럴로 초기화 할 순 없지만 <code class="language-plaintext highlighter-rouge">const char *</code> 타입의 포인터를 문자열 리터럴로 초기화 하는 것은 가능하다!</em> <a href="https://ansohxxn.github.io/cpp/chapter6-9/">참고 포스트</a></li>
+            </ul>
+          </li>
+          <li><em>m_data</em> 초기화
+            <ul>
+              <li>m_length 만큼의 길이를 가진 동적 배열을 할당 받아 주소를 저장한다.</li>
+              <li>for문 돌려서 인수로 받은 문자열의 한 글자, 한 글자를 복사해준다.</li>
+              <li>마지막 원소는 <code class="language-plaintext highlighter-rouge">\0</code></li>
+            </ul>
+          </li>
+          <li><em>m_length</em> 초기화
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">\0</code>도 끝에 붙는 것을 생각해야 하므로 인수로 들어온 문자열 길이의 + 1</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>소멸자</em>
+        <ul>
+          <li>멤버 포인터 <em>m_data</em>가 가리키는 동적 메모리를 해제시켜준다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="얕은-복사-사용시-문제점">얕은 복사 사용시 문제점</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">MyString</span> <span class="n">hello</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="p">{</span>
+		<span class="n">MyString</span> <span class="n">copy</span> <span class="o">=</span> <span class="n">hello</span><span class="p">;</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">copy</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">copy</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+014CFB00
+Hello
+014CFB00
+Hello
+硼硼硼硼硼硼硼硼핥퀪?  
+</code></pre></div></div>
+<ul>
+  <li><em>MyString <code class="language-plaintext highlighter-rouge">hello</code>(“Hello”);</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">hello</code>객체의 <em>m_data</em> 는 힙메모리 주소값으로 초기화 되고</li>
+      <li><code class="language-plaintext highlighter-rouge">hello</code>객체의 <em>m_length</em>는 6의 값으로 초기화 된다.</li>
+    </ul>
+  </li>
+  <li><em>cout « (int*)hello.m_data « endl;</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">hello</code>객체의 <em>m_data</em> 값(주소값) 출력</li>
+      <li><em>(int*)</em>를 붙이는 이유
+        <ul>
+          <li>std::cout은 문자열 포인터 (char *)타입이 들어올 경우 포인터가 아닌 문자열 내용을 출력하게끔 ostream 클래스 안에 오버로딩 되어 있기 때문에 <strong>주소값을 출력해주기 위해 int* 로 형변환</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>cout « hello.m_data « endl;</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">hello</code>객체의 <em>*m_data</em> 문자열로 출력</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">{}</code> 지역 범위
+    <ul>
+      <li><strong><em><u>MyString copy = hello</u></em></strong>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">copy</code> 객체가 생성될 때 <code class="language-plaintext highlighter-rouge">hello</code>객체를 복사하므로 <u>디폴트 복사 생성자</u>가 호출된다.
+            <ul>
+              <li>현재 <code class="language-plaintext highlighter-rouge">Mystring 클래스</code> 안에서 복사생성자를 정의하지 않았기 때문에 디폴트 복사 생성자가 호출 됨
+                <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 디폴트 복사 생성자는 다음과 같이 동작함</span>
+<span class="n">MyString</span><span class="p">(</span><span class="k">const</span> <span class="o">&amp;</span> <span class="n">MyString</span> <span class="n">other</span><span class="p">)</span>  
+<span class="p">{</span>
+    <span class="n">m_data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">;</span>     <span class="c1">// ⭐얕은 복사⭐</span>
+    <span class="n">m_length</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_length</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>                </div>
+                <blockquote>
+                  <p>디폴트 복사 생성자에서 <strong><em>m_data = other.m_data;</em></strong> 즉, <u>주소가 복사</u> 되면서 <strong><code class="language-plaintext highlighter-rouge">copy</code> 객체의 <em>m_data</em> 포인터와 <code class="language-plaintext highlighter-rouge">hello</code> 객체의 <em>m_data</em> 포인터는 동일한 메모리를 가리키게 된다.</strong> 이러한 과정을 <code class="language-plaintext highlighter-rouge">얕은 복사</code>라고 한다. 두 주소값 출력 결과도 둘 다 “014CFB00”로 같은 것을 볼 수 있다.</p>
+                </blockquote>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>cout « (int*)copy.m_data « endl;</em>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">copy</code>객체의 <em>m_data</em> 값(주소값) 출력</li>
+        </ul>
+      </li>
+      <li><em>cout « copy.m_data « endl;</em>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">copy</code>객체의 <em>m_data</em> 문자열로 출력</li>
+        </ul>
+      </li>
+      <li><u>스코프가 끝나면서</u> <strong><code class="language-plaintext highlighter-rouge">copy</code> 객체가 소멸된다</strong>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">copy</code>의 소멸자가 호출 된다.
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">copy</code>의 <em>m_data</em> 가 가리키는 동적 메모리가 해제된다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>cout « hello.m_data « endl;</em>
+    <ul>
+      <li><strong>이상한 값이 출력된다!</strong>
+        <blockquote>
+          <p><code class="language-plaintext highlighter-rouge">얕은 복사</code>의 과정으로 인해 <code class="language-plaintext highlighter-rouge">copy</code> 객체의 <em>m_data</em> 포인터와 <code class="language-plaintext highlighter-rouge">hello</code> 객체의 <em>m_data</em> 포인터가 동일한 동적 메모리 공간을 가리키고 있던 상태에서, <code class="language-plaintext highlighter-rouge">copy</code> <u>객체가 소멸되며 호출한 소멸자에서 *m_data* 도 해제시켰기 때문!</u> 없어져 텅 빈 공간에 접근해 출력하려고 하니 이상한 값들이 출력되는 것이다.</p>
+        </blockquote>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-깊은-복사-구현하기">🔔 깊은 복사 구현하기</h2>
+
+<h3 id="깊은-복사와-얕은-복사의-차이">깊은 복사와 얕은 복사의 차이</h3>
+
+<ul>
+  <li><strong><u>다른 객체의 멤버 값들을 내 멤버로 복사해올 때</u></strong>
+    <ul>
+      <li><u>동적 메모리를 가리키는 포인터 멤버</u>를 가지고 있는 클래스의 경우</li>
+      <li><code class="language-plaintext highlighter-rouge">얕은 복사</code>를 사용하여 주소를 복사하여 넘기게 되면
+        <ul>
+          <li>복사 후 두 객체의 포인터 멤버가 동일한 공간을 가리키게 된다.</li>
+          <li>따라서 한 객체의 포인터 멤버가 <code class="language-plaintext highlighter-rouge">delete</code>로 해제해도 다른 객체의 포인터 멤버는 아직 그 공간을 가리키고 있는게 되기 때문에 문제가 생긴다.</li>
+        </ul>
+      </li>
+      <li>주소는 복사하지 않고 <strong><u>새로운 공간을 할당하여 포인터 멤버가 가리키는 공간의 내용물만 복사해온다면</u></strong>
+        <ul>
+          <li>두 객체의 포인터 멤버가 다른 공간을 가리키는 것이 되니 한 객체의 포인터 멤버가 해제되어도 다른 객체에 전혀 문제가 가지 않는다.</li>
+          <li>이러한 복사 방법을 <code class="language-plaintext highlighter-rouge">깊은 복사</code>라고 한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="복사-생성자와-대입-연산자-오버로딩의-차이">복사 생성자와 대입 연산자 오버로딩의 차이</h3>
+
+<p><u>복사 생성자</u>, <code class="language-plaintext highlighter-rouge">=</code><u>대입 연산자</u> 둘 다 복사할 수 있다는 점에서 기능은 비슷하다.</p>
+
+<ol>
+  <li>복사 생성자
+    <ul>
+      <li>생성자이므로 <u>객체가 생성되는 과정에서</u> 대입이 있는 경우 호출 된다.</li>
+    </ul>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">MyString</span> <span class="nf">str1</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+
+ <span class="n">MyString</span> <span class="nf">str2</span><span class="p">(</span><span class="n">str1</span><span class="p">);</span>  <span class="c1">// ⭐복사 생성자 호출</span>
+ <span class="n">Mystring</span> <span class="n">str3</span> <span class="o">=</span> <span class="n">str1</span><span class="p">;</span> <span class="c1">// ⭐복사 생성자 호출</span>
+</code></pre></div>    </div>
+  </li>
+  <li>오버로딩 된 대입 연산자 <code class="language-plaintext highlighter-rouge">=</code>
+    <ul>
+      <li>단순히 <u>이미 존재하는 객체끼리의 대입시 호출</u>된다.</li>
+    </ul>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">MyString</span> <span class="nf">str1</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+ <span class="n">MyString</span> <span class="n">str2</span><span class="p">;</span>  
+
+ <span class="n">str2</span> <span class="o">=</span> <span class="n">str1</span><span class="p">;</span>  <span class="c1">// ⭐ 대입 연산자 오버로딩 호출</span>
+</code></pre></div>    </div>
+    <ul>
+      <li><u>자기 자신을 대입</u>하는 것도 가능하므로 이 경우에 대한 처리가 필요하다.</li>
+      <li>자기 자신의 <u>기존 동적 메모리를 비워주는 과정이 필요</u>하다.
+        <ul>
+          <li>자기 자신에게 다른 객체를 복사하여 덮어 씌우는것이니까.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="깊은-복사-구현하기">깊은 복사 구현하기</h3>
+
+<h4 id="복사-생성자">복사 생성자</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MyString</span><span class="p">(</span><span class="k">const</span> <span class="n">MyString</span> <span class="o">&amp;</span><span class="n">source</span><span class="p">)</span> 
+<span class="p">{</span>
+	<span class="n">m_length</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">m_length</span><span class="p">;</span> 
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_data</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> 
+	<span class="p">{</span>
+		<span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">m_length</span><span class="p">];</span>  
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+			<span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+		<span class="n">m_data</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>	
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>if (source.m_data != nullptr)</em>
+    <ul>
+      <li>복사 대상이 되는 객체의 <em>m_data</em>가 nullptr이 아닌 경우에만 <code class="language-plaintext highlighter-rouge">깊은 복사</code> 진행.
+        <ul>
+          <li>포인터가 가리키는 곳을 참조해야 하므로 nullptr이 아닌지 꼭 체크해 주어야 한다.</li>
+          <li>nullptr이라면 똑같이 나의 <em>m_data</em> 값도 nullptr로!</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">깊은 복사</code>
+        <ol>
+          <li>새로운 공간 할당
+            <ul>
+              <li><em>m_data = new char[m_length];</em></li>
+            </ul>
+          </li>
+          <li>복사 대상이 되는 객체의 <em>m_data</em>가 가리키는 내용물들 (동적 배열 원소들) 복사해오기
+            <ul>
+              <li>for문 돌려서 일일이 복사</li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">MyString</span> <span class="n">hello</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="p">{</span>
+		<span class="n">MyString</span> <span class="n">copy</span> <span class="o">=</span> <span class="n">hello</span><span class="p">;</span>  <span class="c1">// ⭐복사 생성자 호출⭐</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">copy</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">copy</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+013DF918
+Hello
+013DFAD8
+Hello
+Hello
+</code></pre></div></div>
+
+<ul>
+  <li>출력 결과 <code class="language-plaintext highlighter-rouge">hello</code>객체의 <em>m_data</em> 값과 <code class="language-plaintext highlighter-rouge">copy</code>객체의 <em>m_data</em> 값이 서로 다른 것을 알 수 있다.</li>
+  <li>출력 결과 <code class="language-plaintext highlighter-rouge">copy</code>객체가 해제 되고도 <code class="language-plaintext highlighter-rouge">hello</code> 객체에 영향 없이 <em>m_data</em> 내용물에 잘 접근할 수 있는 것을 볼 수 있다.</li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">copy</code> 객체가 <code class="language-plaintext highlighter-rouge">hello</code> 객체로부터 멤버 값들을 복사 받을때 새로운 공간을 할당해서 내용물들을 옮긴거라 두 객체의 <em>m_data</em> 은 아예 다른 공간을 가리키고 있기 때문이다. 즉, <code class="language-plaintext highlighter-rouge">깊은 복사</code>를 했기 때문!</p>
+</blockquote>
+
+<p><br /></p>
+
+<h4 id="대입-연산자-오버로딩">대입 연산자 오버로딩</h4>
+
+<blockquote>
+  <p>📢 주의사항 : <code class="language-plaintext highlighter-rouge">=</code> 대입 연산자 오버로딩은 <u>멤버 함수로만 구현이 가능하다.</u>이유는 모르겠지만😱 전역 함수로 구현하는 것은 막혀있다.</p>
+</blockquote>
+
+<ul>
+  <li><strong>멤버 함수</strong>로 구현되기 때문에 <code class="language-plaintext highlighter-rouge">=</code>를 기준으로 왼쪽 피연산자 객체가 멤버 함수를 호출하는 자기 자신이 되며, 오른쪽 피 연산자 객체가 인수가 된다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MyString</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="n">MyString</span> <span class="o">&amp;</span> <span class="n">source</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">source</span><span class="p">)</span>   <span class="c1">// 자기 자신을 대입하는 경우</span>
+		<span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+	<span class="k">delete</span><span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span>   <span class="c1">// 자신의 기존 내용물 비워주기 </span>
+
+    <span class="cm">/* 아래 과정은 복사생성자 깊은 복사 구현과 같다 */</span>
+
+	<span class="n">m_length</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">m_length</span><span class="p">;</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_data</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">m_length</span><span class="p">];</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+			<span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="p">}</span>
+    <span class="k">else</span>
+        <span class="n">m_data</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>자기 자신을 대입하는 경우엔 자기 자신을 리턴한다.</li>
+  <li>자신의 기존 내용물을 비워준다.
+    <ul>
+      <li>자신의 <em>m_data</em> 가 가리키는 메모리를 해제시켜준다.</li>
+      <li>새로운 공간을 할당 받을거라서!</li>
+    </ul>
+  </li>
+  <li>깊은 복사
+    <ul>
+      <li>이 부분은 복사생성자와 동일하다.</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">MyString</span> <span class="n">hello</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="p">{</span>
+        <span class="n">Mystring</span> <span class="n">copy</span><span class="p">;</span>
+		<span class="n">copy</span> <span class="o">=</span> <span class="n">hello</span><span class="p">;</span>  <span class="c1">// ⭐오버로딩 한 대입 연산자 호출⭐</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">copy</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">copy</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">m_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+013DF918
+Hello
+013DFAD8
+Hello
+Hello
+</code></pre></div></div>
+
+<ul>
+  <li>출력 결과 <code class="language-plaintext highlighter-rouge">hello</code>객체의 <em>m_data</em> 값과 <code class="language-plaintext highlighter-rouge">copy</code>객체의 <em>m_data</em> 값이 서로 다른 것을 알 수 있다.</li>
+  <li>출력 결과 <code class="language-plaintext highlighter-rouge">copy</code>객체가 해제 되고도 <code class="language-plaintext highlighter-rouge">hello</code> 객체에 영향 없이 <em>m_data</em> 내용물에 잘 접근할 수 있는 것을 볼 수 있다.</li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">copy</code> 객체가 <code class="language-plaintext highlighter-rouge">hello</code> 객체로부터 멤버 값들을 복사 받을때 새로운 공간을 할당해서 내용물들을 옮긴거라 두 객체의 <em>m_data</em> 은 아예 다른 공간을 가리키고 있기 때문이다. 즉, <code class="language-plaintext highlighter-rouge">깊은 복사</code>를 했기 때문!</p>
+</blockquote>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

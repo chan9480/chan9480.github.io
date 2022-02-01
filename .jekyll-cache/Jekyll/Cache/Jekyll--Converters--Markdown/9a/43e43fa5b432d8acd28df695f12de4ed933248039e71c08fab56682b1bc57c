@@ -1,0 +1,561 @@
+I"Z�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-19-모던-c-필수-요소들">chapter 19. 모던 C++ 필수 요소들</h1>
+
+<h1 id="stdthread와-멀티쓰레딩의-기초">std::thread와 멀티쓰레딩의 기초</h1>
+
+<ul>
+  <li>C++ 11 에 도입 되었다.</li>
+  <li>현대 컴퓨터들은 거의 다 멀티 코어 CPU를 가진다.</li>
+  <li>프로그래머는 멀티 코어를 활용할 수 있는 능력이 필요하다.</li>
+</ul>
+
+<h2 id="-멀티-쓰레딩의-개념과-원리">🔔 멀티 쓰레딩의 개념과 원리</h2>
+
+<h3 id="process">Process</h3>
+
+<blockquote>
+  <p>OS가 우리가 작성할 프로그램을 실행시킬 때 관리를 하는 단위</p>
+</blockquote>
+
+<ul>
+  <li><u>하나의 프로세스가 여러개의 쓰레드를 관리할 수 있다.</u></li>
+</ul>
+
+<h4 id="multi-processing">Multi Processing</h4>
+
+<blockquote>
+  <p>여러개의 CPU가 동시에 여러개의 프로세스를 수행함</p>
+</blockquote>
+
+<p>코어가 하나만 존재할 경우엔 하나의 일밖에 처리를 못한다. 여러 프로세서(CPU) 상에서 여러 프로세스가 동시에 병렬 처리로 실행되는 것을 <strong>Multi Processing</strong> 이라고 한다. 예를 들어 듀얼 코어 이런 것들!</p>
+
+<h5 id="내-cpu는-코어가-몇-개인지-확인해보기">내 CPU는 코어가 몇 개인지 확인해보기</h5>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92468719-8f8bf700-f20e-11ea-901d-234d571c470f.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<blockquote>
+  <p>작업 관리자(Ctrl + Alt + Delete) - 성능</p>
+</blockquote>
+
+<ul>
+  <li><strong>코어</strong>
+    <ul>
+      <li>내 CPU 의 물리적 코어 개수, 난 2개</li>
+    </ul>
+  </li>
+  <li><strong>논리 프로세스</strong>
+    <ul>
+      <li>난 4개</li>
+      <li>물리적인 코어의 개수의 약 2배다.</li>
+      <li>프로세서가 4개인것처럼 일을 하게끔 하고 있기 때문</li>
+    </ul>
+  </li>
+  <li><strong>이용률</strong>
+    <ul>
+      <li>CPU 논리 프로세서들을 고려한  현재 사용중인 CPU 비율</li>
+    </ul>
+  </li>
+  <li><strong>프로세스 개수 &lt; 스레드 개수</strong> 인 것을 확인할 수 있는데 <u>하나의 프로세스가 여러개의 스레드를 사용하는 경우가 많기 때문이다.</u></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="multi-threading">Multi Threading</h3>
+
+<blockquote>
+  <p><strong>하나의 프로그램이 여러개의 Thread로 구성되어있는 형태</strong></p>
+</blockquote>
+
+<ul>
+  <li>하나의 프로그램이 여러 서브 프로그램으로 구성되어 있는 형태</li>
+  <li>마치 여러 Thread 들이 동시에 실행되는 것처럼 번갈아 가며 동작한다.
+    <ul>
+      <li><u>하나의 프로세서(CPU)에서 여러 프로세서가 동시에 실행되는 것 같은 효과</u>를 낸다.</li>
+      <li>여러개의 스레드들이 하나의 메모리를 공유한다.
+        <ul>
+          <li>위험하기도 하고 편하기도 하다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92465503-9feda300-f209-11ea-90d3-9d47bd957525.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<blockquote>
+  <p>위 그림은 여러개의 스레드로 이루어진 하나의 프로세스의 실행 과정을 나타낸다.</p>
+</blockquote>
+
+<ul>
+  <li><strong>Main Thread</strong>
+    <ul>
+      <li><u>main 함수의 시작</u>이 실행되는 스레드
+        <ul>
+          <li>따라서 가장 먼저 실행 됨</li>
+        </ul>
+      </li>
+      <li><u>부가적인 스레드들을 순차적으로 실행시킨다</u></li>
+    </ul>
+  </li>
+  <li>각각 스레드들은 각자 맡은 작업들을 독립적으로, 병렬적으로 수행한다.
+    <ul>
+      <li>Main Thread 가 <code class="language-plaintext highlighter-rouge">작업 1</code> 을 <strong>Thread 0</strong> 에게 맡긴다.</li>
+      <li>Main Thread 가 <code class="language-plaintext highlighter-rouge">작업 2</code> 을 <strong>Thread 1</strong> 에게 맡긴다.</li>
+      <li>Main Thread 가 <code class="language-plaintext highlighter-rouge">작업 3</code> 을 <strong>Thread 2</strong> 에게 맡긴다.</li>
+    </ul>
+  </li>
+  <li>각각 스레드들이 각자 맡은 작업들을 끝낼 때 까지 <strong>Main Thread</strong>가 <code class="language-plaintext highlighter-rouge">wait</code> 기다린다.
+    <ul>
+      <li>각 스레드들의 작업들이 다 끝났다면 Main Thread는 스레드들에게 맡길 필요까진 없는 가벼운 추가작업을 마친 후 종료한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-thread-생성하기">🔔 Thread 생성하기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">hardware_concurrency</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([]</span> <span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+	<span class="c1">//while (true);</span>
+	<span class="p">});</span>
+	<span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>		<span class="c1">// t1이 끝날 때까지 기다린다.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+4
+17952
+16024
+</code></pre></div></div>
+
+<blockquote>
+  <p>#include &lt;thread&gt;</p>
+</blockquote>
+
+<ul>
+  <li>논리 프로세서
+    <ul>
+      <li>std::<code class="language-plaintext highlighter-rouge">thread</code>::<u>hardware_concurrency()</u>
+        <ul>
+          <li>내 컴퓨터의 논리프로세서가 몇개인지를 리턴한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>스레드를 생성하고 할 일 부여하기
+    <ul>
+      <li><strong>std::thread t1</strong>
+        <ul>
+          <li>블라블라 일을 수행하는 <code class="language-plaintext highlighter-rouge">t1</code> 스레드.</li>
+        </ul>
+      </li>
+      <li><strong>std::thread(블라블라)</strong>
+        <ul>
+          <li>스레드의 할일(함수)을 <code class="language-plaintext highlighter-rouge">std::thread()</code>에 <code class="language-plaintext highlighter-rouge">()</code>안에 인수로 넣어주면 된다.</li>
+          <li>스레드에게 할일을  <u>함수 포인터</u>, <u>std::function</u>, <u>람다 함수</u> 를 통해 알려줄 수 있다.
+            <ul>
+              <li>함수에 필요한 인수도 같이 넘겨줄 수 있다.
+                <ul>
+                  <li><em>std::thread t1 = std::thread(func, 123, 456)</em> 이런식으로.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">t1</code>에게 <code class="language-plaintext highlighter-rouge">[] { cout &lt;&lt; std::this_thread::get_id() &lt;&lt; '\n';}</code> 를 수행하는 작업을 부여 한다. (람다 함수)
+        <ul>
+          <li>이 스레드는 자신의 id 를 출력하는 일을 함</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>스레드의 id
+    <ul>
+      <li>std::<code class="language-plaintext highlighter-rouge">this_thread</code>::<u>get_id()</u>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">this_thread</code> 👉 이 일을 수행하는 지금 스레드</li>
+          <li>이것을 실행시킨 스레드의 id를 리턴한다.</li>
+        </ul>
+      </li>
+      <li>출력 결과를 통해 main 함수에서 실행한 Main Thread의 id 는 17952 인 것을 확인할 수 있고, <code class="language-plaintext highlighter-rouge">t1</code> 스레드의 id 는 16024 인 것을 확인할 수 있다. 두 스레드가 별개의 스레드!</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">join</code> 함수
+    <ul>
+      <li>
+        <blockquote>
+          <p><code class="language-plaintext highlighter-rouge">t1.join()</code> 👉 <code class="language-plaintext highlighter-rouge">t1</code>스레드가 다 끝날 때 까지 Main Thread가 기다려준다.</p>
+        </blockquote>
+        <ul>
+          <li>만약 <code class="language-plaintext highlighter-rouge">t1.join()</code>도 없고 아래 코드와 같이 <code class="language-plaintext highlighter-rouge">t1</code>이 하는 작업에 무한 루프 작업이 있는 상태였다면 <code class="language-plaintext highlighter-rouge">t1</code> 스레드와 Main 스레드가 서로 의사 소통이 되지 않아 <code class="language-plaintext highlighter-rouge">t1</code>이 무한 반복에 있는 도중에 Main 스레드가 종료되어 버릴 수 있다.</li>
+          <li><code class="language-plaintext highlighter-rouge">t1.join()</code>으로 Main 스레드에게 <code class="language-plaintext highlighter-rouge">t1</code>이 끝날 때까지 기다려야 한다는 것을 알려주면 Main 스레드가 <code class="language-plaintext highlighter-rouge">t1</code> 스레드가 맡은 작업이 다 끝날 때까지 기다려준다.
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([]</span> <span class="p">{</span> 
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span> 
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">);</span> 
+<span class="p">});</span>
+<span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>		<span class="c1">// t1이 끝날 때까지 기다린다.</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-여러개의-thread-생성하기">🔔 여러개의 Thread 생성하기</h2>
+
+<h3 id="생길-수-있는-문제">생길 수 있는 문제</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([]</span> <span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+     <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+	<span class="p">});</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([]</span> <span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+     <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+	<span class="p">});</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t3</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([]</span> <span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+     <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+	<span class="p">});</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t4</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([]</span> <span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+     <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+	<span class="p">});</span>
+
+	<span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+	<span class="c1">//t2.join();</span>
+	<span class="c1">//t3.join();</span>
+	<span class="c1">//t4.join();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+11212
+463276042468
+
+9376
+
+
+</code></pre></div></div>
+
+<blockquote>
+  <p>스레드는 현재 <code class="language-plaintext highlighter-rouge">t1</code>, <code class="language-plaintext highlighter-rouge">t2</code>, <code class="language-plaintext highlighter-rouge">t3</code>, <code class="language-plaintext highlighter-rouge">t4</code> 이렇게 4 개이고 다 무한 루프 작업을 해서 프로그램이 끝나지 않는다.</p>
+</blockquote>
+
+<ul>
+  <li>넷 다 무한루프 작업을 하므로 <code class="language-plaintext highlighter-rouge">join</code>은 <code class="language-plaintext highlighter-rouge">t1.join()</code> 하나만 있어도 무방함
+    <ul>
+      <li>메인 스레드가 <code class="language-plaintext highlighter-rouge">t1</code> 스레드가 끝나기를 기다림</li>
+    </ul>
+  </li>
+  <li><strong>스레드 id 가 463276042468 이렇게 이상하게 나온 이유</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">t1</code>, <code class="language-plaintext highlighter-rouge">t2</code>, <code class="language-plaintext highlighter-rouge">t3</code>, <code class="language-plaintext highlighter-rouge">t4</code> 스레드가 <u>각각 병렬로 동시에 실행되기 때문에(멀티스레딩) id가 중구난방으로 섞여 출력됨</u>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">cout</code>이 감당을 못함 ✨ 막 섞여서 출력 됨..</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="해결-시도-1--vector에-스레드-넣기-">해결 시도 1 : vector에 스레드 넣기 ❌</h3>
+
+<blockquote>
+  <p>위와 같이 스레드를 여러개 만들어 <u>vector에 넣어 작업한다면?</u></p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">const</span> <span class="kt">int</span> <span class="n">num_pro</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">hardware_concurrency</span><span class="p">();</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span> <span class="n">my_threads</span><span class="p">;</span>
+	<span class="n">my_threads</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">num_pro</span><span class="p">);</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">my_threads</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="n">e</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([](){</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+				<span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">){}</span>
+          <span class="p">});</span>
+  <span class="p">}</span>
+		
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">my_threads</span><span class="p">)</span>
+		<span class="n">e</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">num_pro</code>
+    <ul>
+      <li>내 컴퓨터의 논리프로세서 개수
+        <ul>
+          <li><em>hardware_concurrency()</em> 의 리턴 값</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>vector&lt;std::thread&gt; <code class="language-plaintext highlighter-rouge">my_threads</code>
+    <ul>
+      <li>스레드들을 담을 벡터</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">my_threads.resize(num_pro)</code>
+    <ul>
+      <li>벡터 사이즈를 논리프로세서 개수와 일치시킴. 아직 할일이 부여 되지 않은 스레드들이 <code class="language-plaintext highlighter-rouge">num_pro</code>개만큼 vector에 자리 잡게 됨.
+        <ul>
+          <li><strong>우리가 실행시킬 스레드와 하드웨어 논리프로세서 개수와 일치시키는 것이 일반적이다</strong>
+            <ul>
+              <li>그러나 작성하는 프로그램 성질에 따라 일치 하지 않도록 설정할 수도 있음</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>첫번째 for문
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">my_threads</code> 벡터의 스레드들에게 <u>차례대로 할일을 부여하고 실행시킴</u>
+        <ul>
+          <li>스레드 본인의 id 를 출력하고 무한 루프를 돌리는 작업을 수행 하는 일</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>두번째 for 문
+    <ul>
+      <li>각각의 스레드들을 기다림</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92473228-63c03f80-f215-11ea-9458-efd64cac378a.png" alt="image" width="90%" height="90%" class="align-center" /></p>
+
+<ul>
+  <li>스레드들을 벡터에 넣어두고 for문을 통해 차례 차례 실행시켰음에도 불구하고 여전히 문제가 해결되지 않았다.
+    <ul>
+      <li>중구난방으로 스레드 id가 출력되는 것을 볼 수 있다. 여러 id 가 섞여 출력되고 빈칸들도 보인다.</li>
+      <li>심지어 스레드를 논리 프로세서 개수만큼 돌리니 CPU 사용량이 100%가 나온다!</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="해결-시도-2--sleep_for-함수를-통해-스레드를-잠시-쉬게-하기-">해결 시도 2 : sleep_for 함수를 통해 스레드를 잠시 쉬게 하기 ❌</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;		// semaphore는 없음
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">auto</span> <span class="n">work_func</span> <span class="o">=</span> <span class="p">[](</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+			
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" is working "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+	<span class="n">work_func</span><span class="p">(</span><span class="s">"JackJack"</span><span class="p">);</span>
+	<span class="n">work_func</span><span class="p">(</span><span class="s">"Dash"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92473562-c1548c00-f215-11ea-9999-5471f43c1a95.png" alt="image" width="90%" height="90%" class="align-center" /></p>
+
+<blockquote>
+  <p>해결 된 듯 보이지만 사실 이건 멀티 스레딩이 아니다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">work_func</code> 포인터를 통해 사용 가능한 이 람다 함수</li>
+  <li><strong><em>sleep_for</em></strong> 함수 <code class="language-plaintext highlighter-rouge">this_thread::sleep_for(chrono::milliseconds(100))</code>
+    <ul>
+      <li><u>지금 이 스레드(this_thread)를 100 밀리 세컨즈 시간동안만 쉬게 한다.</u></li>
+    </ul>
+  </li>
+  <li>스레드 id 들이 이전처럼 중구난방이 아닌 각각의 스레드마다 제대로 잘 출력되는 것을 볼 수 있다!
+    <ul>
+      <li>그러나 모든 스레드 id가 14308로 동일한 것을 볼 수 있다. 동일한 스레드.
+        <ul>
+          <li>14308 스레드가 <code class="language-plaintext highlighter-rouge">work_func("JackJack")</code>을 실행시키고 i = 0 에서 쉬는 동안 <code class="language-plaintext highlighter-rouge">work_func("Dash")</code> i = 0 실행. 다시 <code class="language-plaintext highlighter-rouge">work_func("Dash")</code> 작업을 쉬는동안 <code class="language-plaintext highlighter-rouge">work_func("JackJack")</code> 의 출력을 실행하고 i = 1 … 이런식!</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><u>이건 멀티 스레딩이 아니며 비효율적이다</u>
+    <ul>
+      <li>멀티스레딩은 한번에 여러 스레드가 각자의 작업들이 동시에 실행되는 것!</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">auto</span> <span class="n">work_func</span> <span class="o">=</span> <span class="p">[](</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+			
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" is working "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">work_func</span><span class="p">,</span> <span class="s">"JackJack"</span><span class="p">);</span>
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">work_func</span><span class="p">,</span> <span class="s">"Dash"</span><span class="p">);</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92481227-00d4a580-f221-11ea-88e0-20dfde31de9f.png" alt="image" width="90%" height="90%" class="align-center" /></p>
+
+<blockquote>
+  <p>멀티 스레드로 실행</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">work_func("JackJack")</code>만을 담당하는 스레드와 <code class="language-plaintext highlighter-rouge">work_func("Dash")</code>만을 담당하는 스레드 이렇게 따로두고 메인 스레드가 두 스레드가 작업을 끝내기를 기다린다.
+    <ul>
+      <li>두 스레드의 id가 다름</li>
+    </ul>
+  </li>
+  <li>출력 결과를 보면 두 스레드 작업이 동시에 일을 실행하는 것을 볼 수 있다.
+    <ul>
+      <li><u>출력 결과가 살짝 섞여 있다</u>
+        <ul>
+          <li>👉 출력만큼은 번갈아 가며 출력하게끔 하고 싶을 때 해결책 <code class="language-plaintext highlighter-rouge">mutex</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="해결책--mutex-">해결책 : <code class="language-plaintext highlighter-rouge">mutex</code> ⭕</h3>
+
+<blockquote>
+  <p>#include &lt;mutex&gt;</p>
+</blockquote>
+
+<ul>
+  <li><strong>mutal exclusion</strong> 의 약자. 상호 배제.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;  // ✨✨
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+    
+	<span class="k">auto</span> <span class="n">work_func</span> <span class="o">=</span> <span class="p">[](</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+			
+            <span class="n">mtx</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+			<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" is working "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="n">mtx</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">work_func</span><span class="p">,</span> <span class="s">"JackJack"</span><span class="p">);</span>
+	<span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">work_func</span><span class="p">,</span> <span class="s">"Dash"</span><span class="p">);</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92484449-a76e7580-f224-11ea-99d6-4265a227fde8.png" alt="image" width="90%" height="90%" class="align-center" /></p>
+
+<ul>
+  <li>이제 출력이 뒤죽박죽 되지 않고 스레드 작업마다 깔끔하게 본인 것이 완전히 출력되는 것을 볼 수 있다.</li>
+  <li><code class="language-plaintext highlighter-rouge">mtx.lock()</code>과 <code class="language-plaintext highlighter-rouge">mtx.unlock()</code> 안에 있는 처리는 A 스레드가 이미 작업중이라면 B 스레드가 이 작업을 처리하지 못하도록 막아준다. <u>이 부분만큼은 하나의 스레드만 사용할 수 있게끔 잠그는 역할</u>
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+  
+<span class="n">mtx</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" is working "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="n">mtx</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>mtx.lock()</strong>
+    <ul>
+      <li>이 부분은 한 스레드만 사용할 수 있게끔 잠금
+        <ul>
+          <li>다른 스레드가 이 출력 부분을 작업중이면 또 다른 스레드가 못 건들도록 잠금</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>mtx.unlock()</strong>
+    <ul>
+      <li>잠금을 풀어줌</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">unlock</code> 까먹으면 큰일 난다! 영원히 <code class="language-plaintext highlighter-rouge">lock</code>한 코드에 다른 스레드가 접근할 수 없게 되니까.</p>
+</blockquote>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

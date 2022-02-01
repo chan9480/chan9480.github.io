@@ -1,0 +1,32 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-19-모던-c-필수-요소들">chapter 19. 모던 C++ 필수 요소들</a></li>
+  <li><a href="#작업-기반-비동기-프로그래밍-async-future-promise">작업 기반 비동기 프로그래밍 async, future, promise</a>
+    <ul>
+      <li><a href="#-동기-vs-비동기">🔔 동기 Vs. 비동기</a>
+        <ul>
+          <li><a href="#동기적-실행">동기적 실행</a></li>
+          <li><a href="#비동기적-실행">비동기적 실행</a></li>
+        </ul>
+      </li>
+      <li><a href="#-스레드-기반-비동기적-실행-vs-작업-기반-비동기적-실행">🔔 스레드 기반 비동기적 실행 Vs. 작업 기반 비동기적 실행</a>
+        <ul>
+          <li><a href="#멀티-스레딩">멀티 스레딩</a></li>
+          <li><a href="#작업-기반-stdasync-stdfuture">작업 기반 std::async, std::future</a></li>
+        </ul>
+      </li>
+      <li><a href="#-stdpromise">🔔 std::promise</a></li>
+      <li><a href="#-stdthread-vs-stdasync-비교">🔔 std::thread Vs. std::async 비교</a>
+        <ul>
+          <li><a href="#async">async</a>
+            <ul>
+              <li><a href="#future-를-안-받는-async-의-경우">future 를 안 받는 async 의 경우</a></li>
+            </ul>
+          </li>
+          <li><a href="#thread">thread</a></li>
+        </ul>
+      </li>
+      <li><a href="#-참고">🔔 참고</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

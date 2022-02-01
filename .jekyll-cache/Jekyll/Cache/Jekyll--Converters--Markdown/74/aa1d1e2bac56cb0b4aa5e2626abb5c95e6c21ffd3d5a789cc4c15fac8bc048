@@ -1,0 +1,21 @@
+I":<ul class="toc__menu">
+  <li><a href="#chapter-1-기본-기능-구현">Chapter 1. 기본 기능 구현</a></li>
+  <li><a href="#14-마우스-입력-다루기">1.4 마우스 입력 다루기</a>
+    <ul>
+      <li><a href="#마우스의-현재-위치-리턴하기--getcursorpos">마우스의 현재 위치 리턴하기 : getCursorPos</a>
+        <ul>
+          <li><a href="#윈도우-좌표계--getcursorposfalse">윈도우 좌표계 : getCursorPos(false)</a></li>
+          <li><a href="#화면-좌표계--getcursorpostrue">화면 좌표계 : getCursorPos(true)</a></li>
+          <li><a href="#getcursorposbool의-화면좌표계와-윈도우좌표계-변환-원리">getCursorPos(bool)의 화면좌표계와 윈도우좌표계 변환 원리</a></li>
+        </ul>
+      </li>
+      <li><a href="#마우스-현재-커서-위치에-그림-그리기">마우스 현재 커서 위치에 그림 그리기</a>
+        <ul>
+          <li><a href="#노란-동그라미가-마우스-커서를-따라다니게끔-해보자">노란 동그라미가 마우스 커서를 따라다니게끔 해보자</a></li>
+          <li><a href="#마우스-좌클시-노란-원-우클시-빨간-원이-그려지게-해보자">마우스 좌클시 노란 원, 우클시 빨간 원이 그려지게 해보자.</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

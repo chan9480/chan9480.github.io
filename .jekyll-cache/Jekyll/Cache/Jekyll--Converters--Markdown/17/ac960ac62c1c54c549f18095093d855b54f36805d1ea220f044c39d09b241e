@@ -1,0 +1,858 @@
+I"��<p class="notice--warning">최흥배님의 책 <strong>Boost.Asio를 사용한 네트워크 프로그래밍</strong> 을 공부하고 정리한 필기입니다. 😀</p>
+
+<h1 id="chapter-2-동기-io-방식의-tcpip-echo-서버-클라이언트-프로그램-만들기">Chapter 2. 동기 I/O 방식의 TCP/IP Echo 서버, 클라이언트 프로그램 만들기</h1>
+
+<blockquote>
+  <p><strong>동기 방식</strong> 👉 요청 후 답변을 받을 때까지 더 이상 진행하지 않고 기다리는 방식. 요청한 답변을 받아야만 다음 단계를 진행한다.</p>
+</blockquote>
+
+<blockquote>
+  <p>아래 코드를 이해한 후 외울 것을 추천!!!</p>
+</blockquote>
+
+<ul>
+  <li>서버, 클라이언트 아예 각각 별개의 프로젝트로 만들어야 한다.</li>
+  <li>실행시 서버를 먼저 실행해야 한다.
+    <ul>
+      <li>서버가 먼저 실행된 후 클라이언트의 접속을 기다린다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="-서버">🔔 서버</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;boost/asio.hpp&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">char</span> <span class="n">SERVER_IP</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"127.0.0.1"</span><span class="p">;</span>  <span class="c1">// 서버에선 사실 필요 없다.</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">PORT_NUMBER</span> <span class="o">=</span> <span class="mi">3100</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span> <span class="n">io_service</span><span class="p">;</span>
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="n">endpoint</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">v4</span><span class="p">(),</span> <span class="n">PORT_NUMBER</span><span class="p">);</span>
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">acceptor</span> <span class="n">acceptor</span><span class="p">(</span><span class="n">io_service</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">);</span>
+
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">socket</span> <span class="n">socket</span><span class="p">(</span><span class="n">io_service</span><span class="p">);</span>
+	<span class="n">acceptor</span><span class="p">.</span><span class="n">accept</span><span class="p">(</span><span class="n">socket</span><span class="p">);</span>
+	
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"클라이언트 접속"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(;;)</span>
+	<span class="p">{</span>
+		<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+		<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">error</span><span class="p">;</span>
+		<span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">socket</span><span class="p">.</span><span class="n">read_some</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">error</span><span class="p">);</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">error</span> <span class="o">==</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">eof</span><span class="p">)</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"클라이언트와 연결이 끊어졌습니다"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">else</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"error No: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" error Message: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">message</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"클라이언트에서 받은 메세지: "</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="kt">char</span> <span class="n">szMessage</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="p">};</span>
+		<span class="n">sprintf_s</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="mi">128</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"Re:%s"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+		<span class="kt">int</span> <span class="n">nMsgLen</span> <span class="o">=</span> <span class="n">strnlen_s</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="mi">128</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+		<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">ignored_error</span><span class="p">;</span>
+		<span class="n">socket</span><span class="p">.</span><span class="n">write_some</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="n">nMsgLen</span><span class="p">),</span> <span class="n">ignored_error</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="n">getchar</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="1️⃣-클라이언트의-접속을-준비하기">1️⃣ 클라이언트의 접속을 준비하기</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">boost::asio::io_service</code> io_service;</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">io_service</code>
+    <ul>
+      <li><strong>Boost.Asio의 핵심</strong>으로 커널에서 발생한 I/O 이벤트를 <em>디스패치</em> 해준다.
+        <ul>
+          <li><em>디스 패치</em> 👉 멀티 태스킹 환경에서 우선 순위가 높은 작업이 수행될 수 있도록 자원을 할당하는 것</li>
+        </ul>
+      </li>
+      <li>네트워크 상의 <u>접속 받기(accept), 접속 하기(connect), 데이터 받기(receitve), 데이터 보내기(send) 등등 I/O 이벤트를 알 수 있다.</u></li>
+      <li>그래서 <code class="language-plaintext highlighter-rouge">socket</code>과 같은 객체를 생성할 때 <code class="language-plaintext highlighter-rouge">io_service</code>를 인자로 넘겨주어야 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">boost::asio::tcp::endpoint</code> endpoint(boost::asio::ip::tcp::v4(), PORT_NUMBER);</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">endpoint</code>
+    <ul>
+      <li>네트워크 주소를 설정한다. <u>이 주소로 클라이언트가 접속한다.</u></li>
+      <li>서버는 <strong>IP 주소 체계</strong> (IPv4 or IPv6)와 <strong>포트 번호</strong>를 사용한다. 이 둘을 인수로 넘긴다.
+        <ul>
+          <li>클라이언트와 서버는 <code class="language-plaintext highlighter-rouge">endpoint</code> 설정 방식이 다름.</li>
+          <li><code class="language-plaintext highlighter-rouge">v4()</code> 여기선 IPv4 주소 체계를 사용했다.</li>
+          <li>서버 스스로 자신의 주소(ip)를 알고 있기 때문에 서버 시작을 준비하는 아래 과정에선 ip다루는 부분 없다.
+            <ul>
+              <li>char 배열 <code class="language-plaintext highlighter-rouge">SERVER_IP</code>를 사용하지 않음.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">boost::asio::ip::tcp::acceptor</code> acceptor(io_service, endpoint)</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">acceptor</code>
+    <ul>
+      <li><u>클라이언트 접속을 받아들이는 역할</u>
+        <ul>
+          <li>그러니 <code class="language-plaintext highlighter-rouge">io_service</code>를 인수로 넘겨주어야 함!</li>
+          <li><code class="language-plaintext highlighter-rouge">endpoint</code>에 접속이 됐는지를 알기 위해 <code class="language-plaintext highlighter-rouge">endpoint</code>도 넘기기</li>
+        </ul>
+      </li>
+      <li>인수 👉 <code class="language-plaintext highlighter-rouge">io_service</code>, <code class="language-plaintext highlighter-rouge">endpoint</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="2️⃣-클라이언트의-접속-받기">2️⃣ 클라이언트의 접속 받기</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">boost::asio::ip::tcp::socket</code> socket(io_service)</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">socket</code>
+    <ul>
+      <li><u>접속한 클라이언트에 할당</u>할 소켓을 만든다.</li>
+      <li>만든 <code class="language-plaintext highlighter-rouge">socket</code>을 통해 클라이언트가 보낸 메세지를 주고 받는다.
+        <ul>
+          <li>메세지를 주고 받기 위하려면 <code class="language-plaintext highlighter-rouge">io_service</code>가 필요하므로 인수로 넘겨주기</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>acceptor.accept(socket);</p>
+</blockquote>
+
+<ul>
+  <li>클라이언트의 접속을 받아들인다.
+    <ul>
+      <li>접속한 클라이언트에 할당될 <code class="language-plaintext highlighter-rouge">socket</code>을 appect 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="3️⃣-클라이언트가-보낸-메세지-받기--read_some">3️⃣ 클라이언트가 보낸 메세지 받기 👉 read_some</h3>
+
+<blockquote>
+  <p>접속한 클라이언트가 있다면 서버를 무한 루프 <code class="language-plaintext highlighter-rouge">for(;;;)</code>로 돌린다.</p>
+</blockquote>
+
+<ul>
+  <li>클라이언트와 메세지 주고 받는 것을 무한 루프로 돌림.</li>
+  <li>클라이언트와 연결이 끊어지거나 에러가 발생할 때만 무한 루프를 빠져나와 서버를 종료시킬 수 있다.</li>
+</ul>
+
+<blockquote>
+  <p>char buf[128] = { 0 };</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">buf</code>
+    <ul>
+      <li><u>클라이언트가 보낸 메세지를 담을 버퍼</u></li>
+      <li>char 배열 타입으로 설정했다.
+        <ul>
+          <li>string이나 vector로도 가능하다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">boost::system::error_code</code> error</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">error_code</code>
+    <ul>
+      <li>시스템에서 발생하는 에러 코드를 wrapping한 클래스</li>
+      <li>에러가 발생하면 에러 코드와 에러 메세지를 얻을 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>size_t <code class="language-plaintext highlighter-rouge">len</code> = socket.<u>read_some</u>(boost::asio::buffer(buf), error)</p>
+</blockquote>
+
+<ul>
+  <li><u>클라이언트가 보낸 데이터(메세지) 받기</u>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">socket</code>의 <strong>read_some</strong> 함수
+        <ul>
+          <li>클라이언트가 보낸 메세지를 <code class="language-plaintext highlighter-rouge">boost::asio::buffer</code> 타입으로 <code class="language-plaintext highlighter-rouge">buf</code>에 받는다.</li>
+          <li>에러 코드가 발생할 것을 대비하여 <code class="language-plaintext highlighter-rouge">error</code>도 넘긴다. 만약 클라이언트의 메세지를 받는데 실패한다면 <code class="language-plaintext highlighter-rouge">error</code>에 에러코드가 담길 것이다.</li>
+          <li>성공적으로 클라이언트가 보낸 데이터를 받으면 <u>받은 데이터 크기를 리턴한다.</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><u>동기 방식이므로 데이터를 다 받을 때까지 대기 상태에 들어간다.</u></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">error</span> <span class="o">==</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">eof</span><span class="p">)</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"클라이언트와 연결이 끊어졌습니다"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">else</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"error No: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" error Message: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">message</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>클라이언트에서 보낸 데이터를 받으면 <u>에러가 발생했는지를 조사</u>해야 한다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">error</code>가 null이 아니라는 것은 <strong>read_some</strong> 함수로 클라이언트의 메세지를 받을 때 문제가 발생하여 인수로 넘겼던 <code class="language-plaintext highlighter-rouge">error</code>에 에러 코드가 담겼다는 뜻</li>
+    </ul>
+  </li>
+  <li>에러 코드가 <code class="language-plaintext highlighter-rouge">boost::asio::error::eof</code> 라면 클라이언트의 접속이 끊어졌다는 뜻</li>
+  <li>그런건 아니지만 에러 코드가 존재한다면 <code class="language-plaintext highlighter-rouge">error.value()</code>와 <code class="language-plaintext highlighter-rouge">error.message()</code>를 통해 에러 값과 에러 메세지를 출력한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">break</code>
+    <ul>
+      <li>👉 이렇게 클라이언트의 메세지를 받는 과정 (<strong>read_some</strong>) 에서 문제가 발생하여 <code class="language-plaintext highlighter-rouge">error != null</code> 이라면 무한루프 <code class="language-plaintext highlighter-rouge">for(;;)</code>를 빠져나와 서버를 종료한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="4️⃣-클라이언트에게-메세지-보내기--write_some">4️⃣ 클라이언트에게 메세지 보내기 👉 write_some</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"클라이언트에서 받은 메세지: "</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="kt">char</span> <span class="n">szMessage</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="p">};</span>
+		<span class="n">sprintf_s</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="mi">128</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"Re:%s"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+		<span class="kt">int</span> <span class="n">nMsgLen</span> <span class="o">=</span> <span class="n">strnlen_s</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="mi">128</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+		<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">ignored_error</span><span class="p">;</span>
+		<span class="n">socket</span><span class="p">.</span><span class="n">write_some</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="n">nMsgLen</span><span class="p">),</span> <span class="n">ignored_error</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>클라이언트로부터 받은 메세지는 <code class="language-plaintext highlighter-rouge">buf</code>에 담겨 있다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&amp;buf[0]</code>은 <code class="language-plaintext highlighter-rouge">buf</code>나 마찬가지다. 첫 원소의 주소는 곧 배열의 주소! (=배열 이름)</li>
+  <li><code class="language-plaintext highlighter-rouge">szMessage</code>
+    <ul>
+      <li>클라이언트에게 보낼 메세지를 담을 버퍼</li>
+      <li>char 배열이기는 하지만 마찬가지로 string이나 vector도 사용 가능하다.</li>
+      <li>Echo 채팅 서버를 만들 것이므로 클라이언트로부터 받은 메세지를 그대로 돌려 보내주자.
+        <ul>
+          <li>“Re: “ 와 함께 클라이언트로부터 받은 메세지를 그대로 보내줄 것임.</li>
+          <li>sprintf 함수를 통해 <code class="language-plaintext highlighter-rouge">szMessage</code>에 클라이언트에게 보낼 메세지를 담았다.
+            <ul>
+              <li>“Re: 블라블라”</li>
+              <li>마지막 글자는 char 배열 특성상 ‘\0’이어야 해서 127글자만.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">nMsgLen</code>
+    <ul>
+      <li>클라이언트에게 보낼 메세지의 길이</li>
+    </ul>
+  </li>
+  <li><strong>write_some</strong> 함수를 통해 클라이언트에게 메세지 <code class="language-plaintext highlighter-rouge">szMessage</code>를 보낸다.
+    <ul>
+      <li>클라이언트에게 보낼 메세지인 <code class="language-plaintext highlighter-rouge">szMessage</code>을 <code class="language-plaintext highlighter-rouge">boost::asio::buffer</code> 타입으로 보낸다.</li>
+      <li>단, 받을 때와 다르게 <u>보낼 때는 보낼 데이터의 양을 미리 지정해주어야</u> 한다.
+        <ul>
+          <li>따라서 <code class="language-plaintext highlighter-rouge">nMsgLen</code>도 인수로 넘겨야 하며 <code class="language-plaintext highlighter-rouge">szMessage</code>의 모든 데이터를 보내지 않고 <code class="language-plaintext highlighter-rouge">nMshLen</code> 길이만큼만 보낸다.</li>
+        </ul>
+      </li>
+      <li>마찬가지로 이 과정에서 에러가 발생한다면 <code class="language-plaintext highlighter-rouge">ignored_error</code>에 에러 코드가 담길 것이다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-클라이언트">🔔 클라이언트</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;boost/asio.hpp&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">char</span> <span class="n">SERVER_IP</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"127.0.0.1"</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">PORT_NUMBER</span> <span class="o">=</span> <span class="mi">3100</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span> <span class="n">io_service</span><span class="p">;</span>
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="n">endpoint</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">address</span><span class="o">::</span><span class="n">from_string</span><span class="p">(</span><span class="n">SERVER_IP</span><span class="p">),</span> <span class="n">PORT_NUMBER</span><span class="p">);</span>
+
+	<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">connect_error</span><span class="p">;</span>
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">socket</span> <span class="n">socket</span><span class="p">(</span><span class="n">io_service</span><span class="p">);</span>
+	<span class="n">socket</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">connect_error</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">connect_error</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연결 실패. error No: "</span> <span class="o">&lt;&lt;</span> <span class="n">connect_error</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" , Message: "</span> <span class="o">&lt;&lt;</span> <span class="n">connect_error</span><span class="p">.</span><span class="n">message</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">getchar</span><span class="p">();</span>
+		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"서버에 연결 성공!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="kt">char</span> <span class="n">szMessage</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="p">};</span>
+		<span class="n">sprintf_s</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="mi">128</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"%d - Send Message"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+		<span class="kt">int</span> <span class="n">nMsgLen</span> <span class="o">=</span> <span class="n">strnlen_s</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="mi">128</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+		<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">ignored_error</span><span class="p">;</span>
+		<span class="n">socket</span><span class="p">.</span><span class="n">write_some</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">szMessage</span><span class="p">,</span> <span class="n">nMsgLen</span><span class="p">),</span> <span class="n">ignored_error</span><span class="p">);</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"서버에 보낸 메세지 : "</span> <span class="o">&lt;&lt;</span> <span class="n">szMessage</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+		<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+		<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">error</span><span class="p">;</span>
+		<span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">socket</span><span class="p">.</span><span class="n">read_some</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">error</span><span class="p">);</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">error</span> <span class="o">==</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">eof</span><span class="p">)</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"서버와 연결이 끊어졌습니다"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">else</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"error No: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" error Message: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">message</span><span class="p">().</span><span class="n">c_str</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"서버로부터 받은 메세지 : "</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="n">is_open</span><span class="p">())</span>
+		<span class="n">socket</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+	<span class="n">getchar</span><span class="p">();</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>서버랑 메세지 주고 받는 것을 7 번만 하고 서버랑 연결 끊을거라서 7 번 도는 for문 예제 !</li>
+</ul>
+
+<h3 id="1️⃣-서버에-접속하기">1️⃣ 서버에 접속하기</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">boost::asio::tcp::endpoint</code> endpoint(boost::asio::ip::address::from_string(SERVER_IP), PORT_NUMBER);</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">endpoint</code>
+    <ul>
+      <li>네트워크 주소를 설정한다. <u>접속할 서버의 IP 주소를 지정한다.</u></li>
+      <li><u>서버에서의 endpoint 설정과는 조금 다르다</u>
+        <ul>
+          <li>서버의 <code class="language-plaintext highlighter-rouge">endpoint</code> 설정과 비교 👉 서버는 <strong>Ipv4 주소 체계</strong>를 인수로 넘기고 있다. 클라이언트는 <strong>서버 주소</strong>를 인수로 넘김
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="nf">endpoint</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">v4</span><span class="p">(),</span> <span class="n">PORT_NUMBER</span><span class="p">);</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li><strong>boost::asio::ip::address::from_string</strong> 클래스를 사용하여 문자열로 된 서버 IP 주소를 Boost.Asio에서 사용하는 IP 주소로 변환해주어야 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">connect_error</span><span class="p">;</span>
+	<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">socket</span> <span class="nf">socket</span><span class="p">(</span><span class="n">io_service</span><span class="p">);</span>
+	<span class="n">socket</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">connect_error</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">connect_error</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"연결 실패. error No: "</span> <span class="o">&lt;&lt;</span> <span class="n">connect_error</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" , Message: "</span> <span class="o">&lt;&lt;</span> <span class="n">connect_error</span><span class="p">.</span><span class="n">message</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">getchar</span><span class="p">();</span>
+		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"서버에 연결 성공!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>socket.connect(endpoint, connect_error);</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">socket</code>에 클라이언트인 자기 자신을 할당하기
+    <ul>
+      <li><strong>connect</strong> 함수를 사용하여 서버(<code class="language-plaintext highlighter-rouge">endpoint</code>에 서버 주소와 포트 넘버를 지정했었다.)에 접속을 시도한다.
+        <ul>
+          <li>실패하면 <code class="language-plaintext highlighter-rouge">connect_error</code>에 에러 코드가 담긴다.</li>
+          <li>동기 방식이므로 접속이 성공하거나 실패할 때까지 대기 상태가 된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="2️⃣-서버에게-메세지-보내기--write_some">2️⃣ 서버에게 메세지 보내기 👉 write_some</h3>
+
+<pre><code class="language-CPP">		char szMessage[128] = { 0, };
+		sprintf_s(szMessage, 128 - 1, "%d - Send Message", i);
+		int nMsgLen = strnlen_s(szMessage, 128 - 1);
+
+		boost::system::error_code ignored_error;
+		socket.write_some(boost::asio::buffer(szMessage, nMsgLen), ignored_error);
+
+		cout &lt;&lt; "서버에 보낸 메세지 : " &lt;&lt; szMessage &lt;&lt; endl;
+</code></pre>
+
+<p><br /></p>
+
+<h3 id="3️⃣-서버가-보낸-메세지-받기--read_some">3️⃣ 서버가 보낸 메세지 받기 👉 read_some</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+		<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">error</span><span class="p">;</span>
+		<span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">socket</span><span class="p">.</span><span class="n">read_some</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">error</span><span class="p">);</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">error</span> <span class="o">==</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">eof</span><span class="p">)</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"서버와 연결이 끊어졌습니다"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">else</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"error No: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" error Message: "</span> <span class="o">&lt;&lt;</span> <span class="n">error</span><span class="p">.</span><span class="n">message</span><span class="p">().</span><span class="n">c_str</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>read_some</strong> 과정에서 <code class="language-plaintext highlighter-rouge">error</code> 체크</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="4️⃣-서버랑-접속-끊기">4️⃣ 서버랑 접속 끊기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">if</span> <span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="n">is_open</span><span class="p">())</span>  <span class="c1">// 네트워크 연결 상태일 때</span>
+		<span class="n">socket</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>  <span class="c1">// 서버와의 연결을 끊는다. </span>
+</code></pre></div></div>
+
+<ul>
+  <li>for문을 7 번 돌면서 서버랑 메세지를 7 번 주고 받은 후 for문을 빠져나오면 이제 서버랑 접속을 끊어야 한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">socket.is_open()</code>
+    <ul>
+      <li>네트워크에 연결된 상태라면 true를 리턴하고 연결되지 않은 상태라면 false를 리턴한다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">socket.close()</code>
+    <ul>
+      <li><u>서버와의 연결을 끊는다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-전반적인-흐름--서버-클라이언트">🔔 전반적인 흐름 : 서버-클라이언트</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/91835247-1af01000-ec84-11ea-8be3-b3ce91f8abf2.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"><strong>서버</strong></th>
+      <th style="text-align: center"><strong>클라이언트</strong></th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">1️⃣ <code class="language-plaintext highlighter-rouge">io_service</code> 생성 <br /> boost::asio::io_service <code class="language-plaintext highlighter-rouge">io_service</code>;</td>
+      <td style="text-align: center"> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2️⃣ 접속 받을 준비 <br /> boost::asio::ip::tcp::endpoint <code class="language-plaintext highlighter-rouge">endpoint</code>(..) <br /> boost::asio::ip::tcp::acceptor <code class="language-plaintext highlighter-rouge">acceptor</code>(..)</td>
+      <td style="text-align: center"> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">3️⃣ <code class="language-plaintext highlighter-rouge">io_service</code> 생성 <br /> boost::asio::io_service <code class="language-plaintext highlighter-rouge">io_service</code>;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">4️⃣ 서버에 접속하기 <br /> boost::asio::ip::tcp::endpoint <code class="language-plaintext highlighter-rouge">endpoint</code>(..) <br /> boost::asio::ip::tcp::socket <code class="language-plaintext highlighter-rouge">socket</code>(io_service); <br /> <code class="language-plaintext highlighter-rouge">socket.connect</code>(endpoint, connect_error);</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">5️⃣ 클라이언트의 접속 받아들이기 <br /> boost::asio::ip::tcp::socket <code class="language-plaintext highlighter-rouge">socket</code>(io_service); <br /> <code class="language-plaintext highlighter-rouge">acceptor.accept</code>(socket);</td>
+      <td style="text-align: center"> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">6️⃣ 서버에게 메세지 보내기 <br /> socket.write_some(…)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">7️⃣ 클라이언트로부터 메세지 받기 <br /> socket.read_some(…)</td>
+      <td style="text-align: center"> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">8️⃣ 클라이언트에게 메세지 보내기 <br /> socket.write_some(…)</td>
+      <td style="text-align: center"> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">9️⃣ 서버로부터 메세지 받기 <br /> socket.read_some(…)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">1️⃣0️⃣ 서버와 접속 끊기 <br /> socket.close()</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1️⃣1️⃣ 클라이언트로부터 메세지 받기 <br /> socket.read_some(…) <br /> 클라이언트로부터의 메세지를 받는 과정에서 <br /> <u>클라이언트와 접속이 끊겨 `error`에 에러코드가 담기고 무한루프를 break 하여 서버도 종료된다</u></td>
+      <td style="text-align: center"> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="-관련-boostasio-api">🔔 관련 Boost.Asio API</h2>
+
+<h3 id="endpoint-클래스">endpoint 클래스</h3>
+
+<blockquote>
+  <p>boost::asio::ip::tcp::<u>endpoint</u></p>
+</blockquote>
+
+<ul>
+  <li>프로그램에서 사용할 <u>네트워크 주소</u>를 설정한다.</li>
+  <li>생성자 종류
+    <ul>
+      <li>1️⃣ 인수 없는
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="nf">endpoint</span><span class="p">();</span>
+</code></pre></div>        </div>
+      </li>
+      <li>2️⃣ 인수 2 개 👉 주소 체계(프로토콜) + 포트 번호
+        <ul>
+          <li>서버가 이 생성자를 사용했다. 서버는 스스로 자신의 IP 주소를 알고있기 때문에 IP 주소는 인수로 넘길 필요 없이 주소 체계만 지정해주면 된다.
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="nf">endpoint</span><span class="p">(</span><span class="n">tcp</span><span class="o">::</span><span class="n">v4</span><span class="p">(),</span> <span class="mi">14567</span><span class="p">);</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>3️⃣ 인수 2 개 👉 서버 주소 + 포트 번호
+        <ul>
+          <li>클라이언트가 이 생성자를 사용했다. 접속할 서버 주소가 필요하다.
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="nf">endpoint</span><span class="p">(</span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">address</span><span class="o">::</span><span class="n">from_sttring</span><span class="p">(</span><span class="s">"127.0.0.1"</span><span class="p">),</span> <span class="mi">14567</span><span class="p">);</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>4️⃣ 인수 1 개 👉 다른 endpoint 로 복사 생성
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="nf">endpoint_2</span><span class="p">(</span><span class="n">endpoint</span><span class="p">);</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="acceptor-클래스">acceptor 클래스</h3>
+
+<blockquote>
+  <p>boost::asio::ip::tcp::<u>acceptor</u></p>
+</blockquote>
+
+<ul>
+  <li><u>클라이언트의 접속을 받아들이기</u> 위한 클래스</li>
+  <li>생성자 버전은 5 가지가 있는데 책 참고
+    <ul>
+      <li>접속을 받아들일 주소와 만약 다른 프로그램에서 이미 사용중인 주소라면 재설정할 수 있도록 인수를 넘길 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="accept-함수">accept 함수</h4>
+
+<blockquote>
+  <p>acceptor.accept(socket)</p>
+</blockquote>
+
+<ul>
+  <li><u>클라이언트의 연결 요청을 받아들인다</u>
+    <ul>
+      <li>연결 요청이 있을 때까지 대기한다.</li>
+    </ul>
+  </li>
+  <li>인수로 클라이언트가 할당 되어 있는 소켓을 넘긴다. 에러코드를 넘겨줄 수도 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="socket-클래스">socket 클래스</h3>
+
+<blockquote>
+  <p>boost::asio::ip::tcp::<u>socket</u></p>
+</blockquote>
+
+<h4 id="connect-함수">connect 함수</h4>
+
+<blockquote>
+  <p>socket.connect(endpoint)</p>
+</blockquote>
+
+<ul>
+  <li><u>서버와의 접속 요청</u>
+    <ul>
+      <li>접속 될 때까지 더 진행하지 않고 기다린다.</li>
+    </ul>
+  </li>
+  <li>서버 주소인 <code class="language-plaintext highlighter-rouge">endpoint</code>를 인수로 넘긴다. 에러 코드를 넘겨줄 수도 있다.</li>
+</ul>
+
+<h4 id="read_some-함수">read_some 함수</h4>
+
+<blockquote>
+  <p>socket.read_some(buffer, errorcode)</p>
+</blockquote>
+
+<ul>
+  <li><u>연결된 곳에서 보내는 데이터를 받으며</u> 이를 buffer에 담는다.</li>
+  <li>데이터를 받을 때까지 대기한다.</li>
+  <li>에러코드를 넘겨줄 수도 있다.
+    <ul>
+      <li>연결이 끊어졌다면 에러코드는 <code class="language-plaintext highlighter-rouge">boost::asio::error::eof</code> 이다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="write_some-함수">write_some 함수</h4>
+
+<blockquote>
+  <p>socket.write_some(buffer, errorcode)</p>
+</blockquote>
+
+<ul>
+  <li><u>연결된 곳에 데이터를 보내며</u> 이를 buffer로 보낸다.</li>
+  <li>데이터를 다 보낼 때까지 대기한다.</li>
+  <li>에러코드를 넘겨줄 수도 있다.</li>
+</ul>
+
+<h4 id="close-함수">close 함수</h4>
+
+<blockquote>
+  <p>socket.close() 혹은 socket.close(ec)</p>
+</blockquote>
+
+<ul>
+  <li><u>연결된 곳과의 접속을 끊는다</u></li>
+  <li>인수를 아무것도 넘기지 않은 경우 에러가 발생하면 예외가 발생한다.</li>
+  <li>에러코드를 인수로 넘겨진 경우 에러가 발생하면 이곳에 어떤 에러인지에 대한 내용이 담긴다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-다른-코드와-비교">🔔 다른 코드와 비교</h2>
+
+<blockquote>
+  <p><a href="https://ansohxxn.github.io/cpp%20network/tcpip/">따라서 배우는 C++ 강의에서 필기한 코드</a>이다.</p>
+</blockquote>
+
+<ul>
+  <li>try-catch 문을 사용하며 연결 에러는 <code class="language-plaintext highlighter-rouge">accept</code>에서 받고 있다. 이 <code class="language-plaintext highlighter-rouge">accept</code> 과정도 무한 루프 안에서 이루어짐.</li>
+  <li>⭐ 이 코드에서는 <code class="language-plaintext highlighter-rouge">socket</code> 객체를 사용하지 않는다. 대신 <u>소켓 위에 iostream을 구현한</u> <code class="language-plaintext highlighter-rouge">boost::asio::ip::tcp::iostream</code>을 사용한다.
+    <ul>
+      <li>Boost.Asio 에서 오버로딩된 <code class="language-plaintext highlighter-rouge">iostream</code>이다.</li>
+      <li>boost::asio::ip::tcp::<code class="language-plaintext highlighter-rouge">iostream</code> <strong>stream</strong>;
+        <ul>
+          <li>위 코드와 비교) boost::asio::ip::tcp::socket socket(io_service);</li>
+        </ul>
+      </li>
+      <li>클라이언트 접속 받기
+        <ul>
+          <li>acceptor.accept(*stream.rdbuf(), ec);
+            <ul>
+              <li>위 코드와 비교) acceptor.accept(socket);</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>메세지 받기
+        <ul>
+          <li>socket.<strong>read_some</strong>(boost::asio::buffer(buf), error);
+            <ul>
+              <li>위 코드와 비교) <strong>std::getline</strong>(stream, line);</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>메세지 보내기
+        <ul>
+          <li>socket.<strong>write_some</strong>(boost::asio::buffer(szMessage, nMsgLen), ignored_error);
+            <ul>
+              <li>위 코드와 비교) <strong>std::cout</strong> « line « std::endl;</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="서버">서버</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;	
+#include &lt;vector&gt;
+#include &lt;utility&gt;
+#include &lt;boost/asio.hpp&gt;
+</span>
+<span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span> <span class="n">io_service</span><span class="p">;</span>
+
+		<span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="n">endpoint</span><span class="p">(</span><span class="n">tcp</span><span class="o">::</span><span class="n">v4</span><span class="p">(),</span> <span class="mi">13</span><span class="p">);</span>			<span class="c1">// 통신을 하는 양 끝점 endpoint. 13은 port # 임의의 숫자 가능</span>
+		<span class="n">tcp</span><span class="o">::</span><span class="n">acceptor</span> <span class="n">acceptor</span><span class="p">(</span><span class="n">io_service</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">);</span>	<span class="c1">// endpoint에서 io_service를 accept할 acceptor를 생성</span>
+
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Server started"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(;;)</span>	<span class="c1">// 무한 루프</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">message_to_send</span> <span class="o">=</span> <span class="s">"Hello From Server"</span><span class="p">;</span>
+
+			<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">iostream</span> <span class="n">stream</span><span class="p">;</span>	<span class="c1">// 일반 iostream이 아니라 오버로드된 tcp::iostream이다.</span>
+
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"check 1"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>	<span class="c1">// 네트워킹에서도 cout을 쓸 수 있다.</span>
+
+			<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">ec</span><span class="p">;</span>
+			<span class="n">acceptor</span><span class="p">.</span><span class="n">accept</span><span class="p">(</span><span class="o">*</span><span class="n">stream</span><span class="p">.</span><span class="n">rdbuf</span><span class="p">(),</span> <span class="n">ec</span><span class="p">);</span>	<span class="c1">// 클라이언트 접속을 받아들인다.</span>
+
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"check 2"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ec</span><span class="p">)</span>	<span class="c1">//TODO: How to take care of multiple clients? Multi-threading?</span>
+			<span class="p">{</span>	<span class="c1">// 클라이언트가 제대로 접속이 됐다면,</span>
+
+				<span class="c1">// receive message from client </span>
+				<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">line</span><span class="p">;</span>
+				<span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>			<span class="c1">// 입출력 스트림에서 클라이언트로부터 메세지를 받는다.</span>
+				<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">line</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>		<span class="c1">// 클라이언트 입장에서는 여기서 데이터를 보내야 서버가 받는다.</span>
+
+				<span class="c1">// send message to client</span>
+				<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="n">message_to_send</span><span class="p">;</span>
+				<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>				<span class="c1">// 클라이언트 입장에서는 여기서 데이터를 읽어야 서버가 보낸다.</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>						<span class="c1">// 예외 발생시</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="클라이언트">클라이언트</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;	
+#include &lt;boost/asio.hpp&gt;
+</span>
+<span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Usage : Client &lt;host&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+			<span class="k">return</span> <span class="n">EXIT_FAILURE</span><span class="p">;</span>
+		<span class="p">}</span>
+		
+		<span class="n">tcp</span><span class="o">::</span><span class="n">iostream</span> <span class="n">stream</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="mi">13</span><span class="p">)));</span> <span class="c1">// port num = 13</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">stream</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"No address. Unable to connect: "</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">.</span><span class="n">error</span><span class="p">().</span><span class="n">message</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+			<span class="k">return</span> <span class="n">EXIT_FAILURE</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="c1">// send message to server</span>
+		<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello from client"</span><span class="p">;</span>
+		<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="c1">// receive message from server</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">line</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">line</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">catch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

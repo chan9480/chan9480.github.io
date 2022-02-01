@@ -1,0 +1,168 @@
+I"�$<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-11-상속--derived-class-들의-생성-순서">chapter 11. 상속 : Derived Class 들의 생성 순서</h1>
+
+<ul>
+  <li>Derived Class : 자식 클래스</li>
+</ul>
+
+<h2 id="-부모로부터-상속-받은건-온전히-자기-자신의-것이다">🔔 부모로부터 상속 받은건 온전히 자기 자신의 것이다.</h2>
+
+<ul>
+  <li>부모로부터 상속 받은 멤버들은 자기 자신의 멤버들이 되기 때문에 <code class="language-plaintext highlighter-rouge">this-&gt;</code>로 참조하여도 무방하다.
+    <ul>
+      <li>부모 클래스로부터 <em>m_i</em> 멤버 변수를 물려 받은 아래 4개는 다 같은 의미다.</li>
+      <li>자기 자신의 멤버 변수 중 하나인 <em>m_i</em> 멤버 변수를 나타내는 말이다.
+        <ul>
+          <li><em>m_i</em></li>
+          <li><em>this -&gt; m_i</em></li>
+          <li><em>Mother::m_i = 1024</em></li>
+          <li><em>this -&gt; Mother::m_i = 1024</em>
+            <ul>
+              <li>다만 <code class="language-plaintext highlighter-rouge">Mother::</code>이 <u>멤버 함수 앞에 붙으면</u> 오버라이딩 된 자식 함수 말고 온전히 부모에서 정의함 그 멤버 함수를 의미한다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Mother</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">m_i</span><span class="p">;</span>    
+<span class="p">};</span>
+
+
+<span class="k">class</span> <span class="nc">Child</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Mother</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Child</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">this</span> <span class="o">-&gt;</span> <span class="n">m_i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="k">this</span> <span class="o">-&gt;</span> <span class="n">Mother</span><span class="o">::</span><span class="n">m_i</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-부모-생성자는-자식-생성자보다-무조건-먼저-호출된다">🔔 부모 생성자는 자식 생성자보다 무조건 먼저 호출된다.</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Mother</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">m_i</span><span class="p">;</span> 
+
+    <span class="n">Mother</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">m_i</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Mother construction"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+    <span class="p">}</span>   
+<span class="p">};</span>
+
+
+<span class="k">class</span> <span class="nc">Child</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Mother</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">double</span> <span class="n">m_d</span><span class="p">;</span>
+
+    <span class="n">Child</span><span class="p">()</span>
+        <span class="o">:</span> <span class="n">m_d</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Child construction"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Child</span> <span class="n">c</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+Mother construction
+Child construction
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Child c</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Child</code> 타입의 객체 <code class="language-plaintext highlighter-rouge">c</code>를 생성시
+        <ul>
+          <li>위와 같이 자식 생성자에서 <strong>부모의 생성자 호출을 직접 명시해주는 부분이 없다면</strong> 컴파일러가 <u>부모의 디폴트 생성자</u>를 호출한다.
+            <ul>
+              <li>부모 클래스에 생성자가 아예 정의가 되어 있지 않다면
+                <ul>
+                  <li>컴파일러가 빈 내용의 디폴트 부모 생성자를 만들어 호출한다.</li>
+                </ul>
+              </li>
+              <li>부모 클래스에 생성자가 정의가 되있긴 한데 디폴트 생성자는 없다면
+                <ul>
+                  <li>에러 발생</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><strong>부모의 생성자 호출을 직접 명시해주는 부분이 있다면</strong> 인수에 맞게 오버로딩되어 해당 생성자를 호출한다.</li>
+          <li>이후 자식 생성자의 중괄호 부분을 처리한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>A (할머니) 👉 B(엄마) 👉 C(자식)  순으로 상속이 된다면 <code class="language-plaintext highlighter-rouge">C c;</code> C타입의 객체를 만들 때  <u>A 생성자 👉 B 생성자 👉 C 생성자</u> 순으로 호출된다. 가장 부모, 조상인 클래스의 생성자가 먼저 호출된다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="-초기화-리스트에서의-순서">🔔 초기화 리스트에서의 순서</h2>
+
+<blockquote>
+  <p>부모 생성자를 먼저 호출하여 <u>부모 멤버의 초기화부터 먼저 한다.</u></p>
+</blockquote>
+
+<p>단순히 <strong>메모리를 할당</strong>하는 것과 <strong>초기화</strong>하는 것 구분하기! 메모리 할당만 하면 쓰레기값 들어있고 초기화를 하면 할당 받은 메모리 공간에 원하는 값이 들어간다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Child</span><span class="p">()</span>
+    <span class="o">:</span> <span class="n">m_d</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">Mother</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+<span class="p">{}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>부모 생성자를 자식 생성자의 초기화 리스트에서 직접 호출할 때</p>
+</blockquote>
+
+<p>메모리 할당은 m_d(1.0)이 먼저 되나 초기화는 되지 않는다. m_d에는 메모리를 할당 받아 <u>쓰레기값만 들어있는 상태에서 Mother(1024)이 호출된다.</u> 부모 생성자에서 m_i 값을 메모리 할당 받고 초기화까지 완료한 상태로 돌아와 그제서야 쓰레기 값이 든 m_d에 1.0이라는 값을 초기화한다. <u>메모리는 자식이 먼저 할당받을 수도 있지만 초기화에서만큼은 무조건 부모 멤버들이 먼저 초기화가 된다.</u></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Child</span><span class="p">()</span>
+    <span class="o">:</span> <span class="n">m_d</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="p">{}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>부모 생성자를 자식 생성자의 초기화 리스트에서 호출하지 않을 때</p>
+</blockquote>
+
+<p>이 경우에도 <em>m_d(1.0)</em>를 먼저 메모리 할당 받긴 하지만 1.0으로는 아직 할당되지 않아 <u>쓰레기 값만 들어있는 상태에서 부모 디폴트 생성자 Monter()을 먼저 실행한다.</u> 부모 생성자 호출이 끝난 후 돌아와 그제서야 1.0 값을 할당한다.</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

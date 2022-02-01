@@ -1,0 +1,42 @@
+I"�<ul class="toc__menu">
+  <li><a href="#비트끼리의-연산-bitwise-operators">비트끼리의 연산 Bitwise Operators</a>
+    <ul>
+      <li><a href="#shift연산자--">shift연산자 &gt;&gt; &lt;&lt;</a>
+        <ul>
+          <li><a href="#--left-shift">&lt;&lt; : left shift</a></li>
+          <li><a href="#--right-shift">&gt;&gt; : right shift</a></li>
+        </ul>
+      </li>
+      <li><a href="#보수-연산자-">보수 연산자 ~</a></li>
+      <li><a href="#비트-논리연산자---">비트 논리연산자 &amp; | ^</a></li>
+    </ul>
+  </li>
+  <li><a href="#비트플래그-비트마스크-사용-방법">비트플래그, 비트마스크 사용 방법</a>
+    <ul>
+      <li><a href="#비트플래그">비트플래그</a>
+        <ul>
+          <li><a href="#비트플래그를-사용하는-이유">비트플래그를 사용하는 이유</a></li>
+          <li><a href="#아이템을-얻었을-때-">아이템을 얻었을 때. |=</a></li>
+          <li><a href="#아이템을-잃었을-때--">아이템을 잃었을 때. &amp;= ~</a></li>
+          <li><a href="#해당-아이템-소유-상태를-확인하고-싶을-땐-">해당 아이템 소유 상태를 확인하고 싶을 땐 &amp;</a></li>
+          <li><a href="#해당-아이템-유무-상태를-뒤바꿔주려면-xor--">해당 아이템 유무 상태를 뒤바꿔주려면 XOR ^ =</a></li>
+        </ul>
+      </li>
+      <li><a href="#비트-마스크">비트 마스크</a>
+        <ul>
+          <li><a href="#비트-플래그를-이용해-blue-값-추출하기">비트 플래그를 이용해 blue 값 추출하기</a></li>
+          <li><a href="#비트-플래그를-이용해-green-값-추출하기">비트 플래그를 이용해 green 값 추출하기</a></li>
+        </ul>
+      </li>
+      <li><a href="#연습문제">연습문제</a>
+        <ul>
+          <li><a href="#1-기사를-보았을-때">1. 기사를 보았을 때</a></li>
+          <li><a href="#2-기사-좋아요-눌렀을-때">2. 기사 좋아요 눌렀을 때</a></li>
+          <li><a href="#3-기사-좋아요를-다시-눌렀을-때">3. 기사 좋아요를 다시 눌렀을 때</a></li>
+          <li><a href="#4-본-기사만-삭제할-때">4. 본 기사만 삭제할 때</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

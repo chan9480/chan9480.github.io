@@ -1,0 +1,520 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-15-의미론적-이동과-스마트-포인터">chapter 15. 의미론적 이동과 스마트 포인터</h1>
+
+<h1 id="155-스마트-포인터1️⃣-stdunique_ptr">15.5 스마트 포인터1️⃣ std::unique_ptr</h1>
+
+<h2 id="-스마트-포인터란">🔔 스마트 포인터란?</h2>
+
+<blockquote>
+  <p>#include &lt;memory.h&gt; 해주어야 사용 가능하다.</p>
+</blockquote>
+
+<ul>
+  <li><strong>스마트 포인터</strong>
+    <ul>
+      <li>👉 포인터가 참조하고 있는 동적 메모리를 <u>자동으로 delete 시켜준다.</u> scope를 벗어나면 알아서 소멸자를 호출해주기 때문!
+        <ul>
+          <li>모든 스마트 포인터는 공통적으로 이 특징을 가짐.</li>
+          <li>프로그래머가 직접 <code class="language-plaintext highlighter-rouge">delete</code>를 명시해줄 필요가 없다.
+            <ul>
+              <li>메모리 누수를 방지해준다.
+                <ul>
+                  <li>if-else문에 만나거나 예외를 만나 throw 되는 등등 일찍 return 되어 <code class="language-plaintext highlighter-rouge">delete</code>문을 만나지 못하는 경우를 방지함</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">-&gt;</code>, <code class="language-plaintext highlighter-rouge">*</code> 연산도 오버로딩 되어 있기 때문에 일반 포인터처럼 사용이 가능하다.</li>
+    </ul>
+  </li>
+  <li>스마트 포인터의 종류
+    <ol>
+      <li><strong>unique_ptr</strong></li>
+      <li>shared_ptr</li>
+      <li>weak_ptr</li>
+    </ol>
+  </li>
+  <li>선언할 때 일반 포인터처럼 <code class="language-plaintext highlighter-rouge">*</code>을 붙이지 않는다.
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Resource</span> <span class="o">*</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Resource</span><span class="p">(</span><span class="mi">1000000</span><span class="p">);</span>  <span class="c1">// 일반 포인터 선언과 정의</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">(</span><span class="k">new</span> <span class="nf">Resource</span><span class="p">(</span><span class="mi">1000000</span><span class="p">));</span> <span class="c1">// 스마트 포인터 선언과 정의</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-unique_ptr">🔔 unique_ptr</h2>
+
+<ul>
+  <li>특정 객체에 <u>유일한 소유권</u>(<em>unique</em>)을 부여하는 포인터 객체
+    <ul>
+      <li>포인터가 가리키고 있는 데이터의 소유권이 한 곳에만 속할 경우 사용하는 스마트 포인터.</li>
+      <li>이 객체를 잘 보관하고 막아주겠다는 성격이 강함</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;memory&gt;  // ⭐⭐
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Resource</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="kt">int</span> <span class="o">*</span> <span class="n">m_data</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+	<span class="kt">unsigned</span> <span class="n">m_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Resource</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource constructed"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">Resource</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">length</span><span class="p">)</span> 
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource length constructed"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="k">this</span><span class="o">-&gt;</span><span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+		<span class="k">this</span><span class="o">-&gt;</span><span class="n">m_length</span> <span class="o">=</span> <span class="n">length</span><span class="p">;</span>
+	<span class="p">}</span>
+	
+	<span class="n">Resource</span><span class="p">(</span><span class="k">const</span> <span class="n">Resource</span> <span class="o">&amp;</span><span class="n">res</span><span class="p">)</span> <span class="c1">// 복사 생성자 </span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource copy constructed"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+		<span class="n">Resource</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">m_length</span><span class="p">);</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  <span class="c1">// 깊은 복사</span>
+			<span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="p">}</span>
+	
+	<span class="o">~</span><span class="n">Resource</span><span class="p">()</span>  <span class="c1">// 소멸자</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource destroyed"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+	
+	<span class="n">Resource</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span> <span class="p">(</span><span class="n">Resource</span> <span class="o">&amp;</span> <span class="n">res</span><span class="p">)</span>  <span class="c1">// 대입 연산자 오버로딩</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource copy assignment"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">res</span> <span class="o">==</span> <span class="k">this</span><span class="p">)</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> 
+
+		<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">m_data</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span> 
+
+		<span class="n">m_length</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">m_length</span><span class="p">;</span> 
+
+		<span class="n">m_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">m_length</span><span class="p">];</span> 
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> 
+			<span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="c1">//  깊은 복사</span>
+
+		<span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+	<span class="p">}</span>
+	
+	<span class="kt">void</span> <span class="n">print</span><span class="p">()</span>  <span class="c1">// Resource의 동적 배열 m_data의 모든 원소값을 출력한다.</span>
+	<span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+				<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">setAll</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">)</span> <span class="c1">// Resource의 동적 배열 m_data 의 모든 원소값을 v 값으로 설정한다.</span>
+	<span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+				<span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">upi</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">);</span>  <span class="c1">// ⭐int 인스턴스를 가리키는 스마트 포인터 upi</span>
+	
+		<span class="k">auto</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Resource</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res1</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">// ⭐Resource 타입의 인스턴스를 가리키는 스마트 포인터 res1</span>
+
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// 모든 원소를 5 로 설정</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>  <span class="c1">// 모든 원소 출력</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+Resource length constructed
+5 5 5 5 5
+Resource destroyed
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="unique_ptr의-함수들">unique_ptr의 함수들</h3>
+
+<h4 id="make_unique-함수">make_unique 함수</h4>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">std::make_unique</code> 함수 👉 <u>unique_ptr 인스턴스를 안전하게 생성할 수 있다.</u></p>
+</blockquote>
+
+<ol>
+  <li>전달 받은 인수를 사용하여 지정된 타입의 객체를 생성</li>
+  <li>생성된 객체를 가리키는 <code class="language-plaintext highlighter-rouge">unique_ptr</code> 을 <u>리턴</u>받을 수 있다.
+    <ul>
+      <li><em>std::unique_ptr&lt;Resource&gt; res1 = new Resource(5)</em> 는 리턴 없이 단순히 <code class="language-plaintext highlighter-rouge">unique_ptr</code>를 선언하는 것이 되는 반면에 <code class="language-plaintext highlighter-rouge">std::make_unique</code> 함수를 사용하면 <code class="language-plaintext highlighter-rouge">unique_ptr</code>를 리턴 받을 수 있다.</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">upi</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">);</span>
+	
+		<span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+        <span class="c1">// std::unique_ptr&lt;Resource&gt; res1 = new Resource(5);  </span>
+
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">printf</span><span class="p">();</span>
+
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">auto res1 = std::make_unique&lt;Resource&gt;(5)</code>
+    <ol>
+      <li>new Resource(5) 하여 생성자를 호출하고 객체를 생성한 후</li>
+      <li>이 객체를 가리키는 unique_ptr를 리턴하여 <code class="language-plaintext highlighter-rouge">res1</code>에 복사된다. 👉 <strong>얕은 복사</strong></li>
+    </ol>
+  </li>
+</ul>
+
+<h4 id="get-함수">get 함수</h4>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">get()</code> unique_ptr 자체에서 가지고 있는 함수로 <u>일반 포인터를 리턴시킨다.</u></p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">doSomething2</span><span class="p">(</span><span class="n">Resource</span> <span class="o">*</span> <span class="n">res</span><span class="p">)</span>  <span class="c1">// 일반포인터</span>
+<span class="p">{</span>
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="n">doSomething2</span><span class="p">(</span><span class="n">res1</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">res1.get()</code>
+    <ul>
+      <li>unique_ptr인 <code class="language-plaintext highlighter-rouge">res1</code>을 일반 포인터로서 리턴하여 doSomething2 함수에게 인수로 넘기고 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="stdunique_ptr의-특징">std::unique_ptr의 특징</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// res1, res2는 unique_ptr 타입의 스마트 포인터</span>
+
+<span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res2</span><span class="p">;</span>
+
+<span class="n">res2</span> <span class="o">=</span> <span class="n">res1</span><span class="p">;</span> <span class="c1">// ❌오류! unique_ptr은 복사를 못한다.</span>
+<span class="n">res2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">res1</span><span class="p">);</span> <span class="c1">// ⭕</span>
+</code></pre></div></div>
+
+<ul>
+  <li><u>복사를 못 한다.</u> Copy Semantics는 안됨. 컴파일 오류 남!
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">unique_ptr</code>은 ✨<strong>한 객체의 소유권은 오로지 한 곳에서만 가질 수 있기 때문에</strong> <code class="language-plaintext highlighter-rouge">res2 = res1</code> 이렇게 포인터끼리 단순히 복사를 하면 <code class="language-plaintext highlighter-rouge">res2</code>와 <code class="language-plaintext highlighter-rouge">res1</code> 두 곳에서 동일한 인스턴스에 대해 소유권을 가지게 되기 때문에!</li>
+    </ul>
+  </li>
+  <li><u>이동만 할 수 있다.</u> Move Semantics만 사용 가능.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">res2 = std::move(res1)</code>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">res1</code>이 R-value로 바뀐다.</li>
+          <li><code class="language-plaintext highlighter-rouge">res1</code>은 소유권이 박탈 되어 이제 아무 객체도 가리키지 않는 nullptr이 되고</li>
+          <li><code class="language-plaintext highlighter-rouge">res2</code>은 <code class="language-plaintext highlighter-rouge">res1</code>이 소유하고 있던 객체의 소유권을 물려 받게 된다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">res1</code>은 소유권이 박탈되고 그 소유권이 <code class="language-plaintext highlighter-rouge">res2</code>로 이전되므로 <strong>한 객체의 소유권이 오로지 한 곳에서만 가질 수 있다는 unique_ptr의 성질이 보장된다.</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>이처럼 <code class="language-plaintext highlighter-rouge">unique_ptr</code>은 서로의 단순 복사를 막아 어떤 객체에 대한 소유권을 오로지 하나의 <code class="language-plaintext highlighter-rouge">unique_ptr</code>에서만 가리킬 수 있도록 보장해준다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="nf">doSomething</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="k">new</span> <span class="n">Resource</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+    <span class="c1">// return std::make_unique&lt;Resource&gt;(5);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="p">{</span>
+		
+        <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="c1">// auto res1 = doSomething(); </span>
+
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+	
+		<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res2</span><span class="p">;</span> <span class="c1">// unique_ptr인 res2는 선언만 됐고 아직 가리키고 있는 객체는 없으므로 nullptr인 상태</span>
+
+        <span class="c1">// std::boolalpha : 0, 1 대신 true, false 출력. null이면 false출력.</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>  
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// true 출력</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// false 출력</span>
+
+		<span class="n">res2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">res1</span><span class="p">);</span>
+
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// false 출력. res1은 소유권을 잃어 nullptr이 됨</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// true 출력. res2에게로 소유권이 이전됨</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">res1</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">res2</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span> <span class="n">res2</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+Resource length constructed
+5 5 5 5 5
+true
+false
+false
+true
+5 5 5 5 5
+</code></pre></div></div>
+
+<ul>
+  <li>함수 리턴 값은 R-value이니까 <code class="language-plaintext highlighter-rouge">unique_ptr</code>를 리턴하는 <code class="language-plaintext highlighter-rouge">doSomething()</code>은 <code class="language-plaintext highlighter-rouge">unique_ptr</code>를 R-value로서 리턴하는 것이나 마찬가지.
+    <ul>
+      <li><em>auto res1 = doSomething();</em>
+        <ul>
+          <li>임시 객체 리턴의 소유권이 <code class="language-plaintext highlighter-rouge">res1</code>로 이전</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>auto res1 = std::make_unique&lt;Resource&gt;(5);</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">res1</code>은 현재 Resource 객체를 가리키고 있는 중</li>
+    </ul>
+  </li>
+  <li><em>std::unique_ptr&lt;Resource&gt; res2;</em>
+    <ul>
+      <li>unique_ptr인 <code class="language-plaintext highlighter-rouge">res2</code>는 <u>선언만 됐고 아직 가리키고 있는 객체는 없으므로</u> nullptr인 상태
+        <ul>
+          <li>정의까지 하려면 <em>std::unique_ptr&lt;Resource&gt; res2 = new Resource(5);</em> 가 됐었어야 함</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>res2 = std::move(res1);</em>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">res1</code>이 가리키던 객체의 소유권이 <code class="language-plaintext highlighter-rouge">res2</code>에게로 이전 되었기 때문에 <code class="language-plaintext highlighter-rouge">res1</code>은 소유권이 박탈 되어 nullptr이 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Resource</span> <span class="o">*</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Resource</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res1</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res2</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>   <span class="c1">// ❌에러</span>
+
+<span class="k">delete</span> <span class="n">res</span><span class="p">;</span>  <span class="c1">// ❌불상사 발생 가능성 </span>
+</code></pre></div></div>
+
+<ul>
+  <li>일반 포인터 <code class="language-plaintext highlighter-rouge">res</code>가 가리키고 있는 객체를 unique_ptr인 <code class="language-plaintext highlighter-rouge">res1</code>과 <code class="language-plaintext highlighter-rouge">res2</code>가 동시에 소유하려고 하니 오류가 발생한다.
+    <ul>
+      <li>unique_ptr은 한 객체에 대한 소유권이 한 포인터에만 있어야하니까 이와 같은 상황도 방지해주는 것!</li>
+    </ul>
+  </li>
+  <li>스마트 포인터인 unique_ptr은 scope를 벗어나면 알아서 자동으로 <code class="language-plaintext highlighter-rouge">delete</code>되기 때문에 이렇게 프로그래머가 <code class="language-plaintext highlighter-rouge">delete</code>을 명시해주는게 컴파일 오류가 되는건 아니지만 큰 문제가 생길 수 있다. 이미 <code class="language-plaintext highlighter-rouge">delete</code>되었는데 또 <code class="language-plaintext highlighter-rouge">delete</code>하려는 시도가 될 수 있어서!</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="unique_ptr을-함수-파라미터로-넘겨주는-경우">unique_ptr을 함수 파라미터로 넘겨주는 경우</h3>
+
+<blockquote>
+  <p>void doSomething2(std::unique_ptr&lt;Resource&gt; <code class="language-plaintext highlighter-rouge">&amp;</code> res) 👉 unique_ptr을 함수 파라미터로 넘겨 받을 때 <u>레퍼런스로 받을 것을 권장한다.</u></p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">doSomething2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">res</span><span class="p">)</span>  <span class="c1">// ✨ unique_ptr 를 인수로 받을 땐 레퍼런스로 받기를 권장함</span>
+<span class="p">{</span>                                                  
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> 
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span>
+<span class="p">{</span>
+	<span class="p">{</span>
+		<span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+		<span class="n">doSomething2</span><span class="p">(</span><span class="n">res1</span><span class="p">);</span> <span class="c1">// ✨ unique_ptr인 res1을 매개변수 res가 참조하게 된다.</span>
+
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">unique_ptr reference</code> 가 아닌 그냥 <code class="language-plaintext highlighter-rouge">unique_ptr</code>로 받으면 컴파일 오류가 난다.</p>
+</blockquote>
+
+<ul>
+  <li>unique_ptr 은 가리키는 객체에 대해 소유권이 유일 해야 해서 <u>'복사'를 금지하기 때문이다.</u>
+    <ul>
+      <li>두 unique_ptr이 한 객체에 대한 소유권을 동시에 가지 우려가 있기 때문</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">doSomething2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">)</span>  <span class="c1">// 레퍼런스가 아닌 그냥 unique_ptr으로 받으려고 하고 있다.</span>
+<span class="p">{</span>                                                   
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>  
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span>
+<span class="p">{</span>
+	<span class="p">{</span>
+		<span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+		<span class="n">doSomething2</span><span class="p">(</span><span class="n">res1</span><span class="p">);</span>  <span class="c1">// ❌컴파일 오류 발생. res = res1 복사를 금지하기 때문에.</span>
+
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>unique_ptr 을 인수로 받을 때 레퍼런스로 받지 않고 일반 unique_ptr로 받을거라면 인수를 <code class="language-plaintext highlighter-rouge">std::move</code>로 넘겨 소유권을 이전+박탈 하여 받아보자.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">doSomething2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">)</span>  <span class="c1">// 레퍼런스가 아닌 그냥 unique_ptr으로 받으려고 하고 있다.</span>
+<span class="p">{</span>                                                   
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>  
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span>
+<span class="p">{</span>
+	<span class="p">{</span>
+		<span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// true 출력</span>
+
+		<span class="n">doSomething2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">res1</span><span class="p">));</span>  <span class="c1">// std::move 로 res1의 소유권을 res로 이전한다. 그러나 res1의 소유권은 박탈되어 nullptr이 되버린다는 문제가 생김</span>
+		
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// false 출력. res1가 nullptr이 되어 버림</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">res = std::move(res1)</code>이 되는 것이나 마찬가지.
+    <ul>
+      <li>객체의 소유권이 <code class="language-plaintext highlighter-rouge">res1</code>에서 <code class="language-plaintext highlighter-rouge">res</code>로 옮겨가는 것이니 유일한 소유권이 보장되어 문제 없다.</li>
+      <li>그러나 이렇게 되면 <code class="language-plaintext highlighter-rouge">res1</code>의 소유권이 박탈되어 nullptr이 된다는 문제가 생긴다.
+        <ul>
+          <li>또한 <code class="language-plaintext highlighter-rouge">res</code>가 함수의 매개변수이기 때문에 함수가 끝나면 해당 객체가 <code class="language-plaintext highlighter-rouge">delete</code>되어버린다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">res1</code>이 원래 소유했던 객체를 잃고 싶지 않다면 그 객체의 소유권을 이전 받은 <code class="language-plaintext highlighter-rouge">res2</code>가 함수가 종료되어 <code class="language-plaintext highlighter-rouge">delete</code>되기 전에 <code class="language-plaintext highlighter-rouge">res1</code>에게 다시 그 객체를 리턴해주면 된다!</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="nf">doSomething2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">)</span> <span class="c1">// 레퍼런스가 아닌 그냥 unique_ptr으로 받으려고 하고 있다.</span>
+<span class="p">{</span>                                                   
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>  
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="n">res</span><span class="p">;</span>  <span class="c1">// ✨객체를 다시 리턴한다.</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="n">main</span>
+<span class="p">{</span>
+	<span class="p">{</span>
+		<span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+		<span class="n">res1</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// true 출력</span>
+
+		<span class="n">res1</span> <span class="o">=</span> <span class="n">doSomething2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">res1</span><span class="p">));</span>  <span class="c1">// res1의 소유권이 박탈되나 소유권이 박탈된 그 객체를 다시 리턴받으므로써 문제 없게 된다!</span>
+		
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// true 출력</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">res1</code>가 <code class="language-plaintext highlighter-rouge">res</code>에게 소유권을 넘겨주어 소유권이 박탈되었지만 <code class="language-plaintext highlighter-rouge">res1</code>가 함수가 끝날 무렵에 다시 그 객체를 <code class="language-plaintext highlighter-rouge">res1</code>에게 리턴해주어 문제가 해결된다!</li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">get()</code>함수를 사용하여 일반 포인터로 잠시 변환하여 넘길 수도 있다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">doSomething2</span><span class="p">(</span><span class="n">Resource</span> <span class="o">*</span> <span class="n">res</span><span class="p">)</span>  <span class="c1">// 일반포인터</span>
+<span class="p">{</span>
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">setAll</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+	<span class="n">res</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Resource</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="n">doSomething2</span><span class="p">(</span><span class="n">res1</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">res1.get()</code>
+    <ul>
+      <li>unique_ptr인 <code class="language-plaintext highlighter-rouge">res1</code>을 unique_ptr이 아닌 일반 포인터로서 넘기고 있기 때문에 <code class="language-plaintext highlighter-rouge">res</code>와 <code class="language-plaintext highlighter-rouge">res1</code>은 같은 객체를 가리키게 되더라도 문제가 없다.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

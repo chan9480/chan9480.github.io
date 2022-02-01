@@ -1,0 +1,340 @@
+I"�P<p class="notice--warning">인프런에 있는 이재환님의 강의 <strong>게임 디자인 패턴 with Unity</strong> 를 듣고 정리한 필기입니다. 😀</p>
+
+<h1 id="chapter-13-adapter-pattern">Chapter 13. Adapter Pattern</h1>
+
+<h2 id="-개념">🔔 개념</h2>
+
+<blockquote>
+  <p>이미 제공되어 있는 것과 필요한 것의 차이를 없애주는 디자인 패턴</p>
+</blockquote>
+
+<ul>
+  <li>한 클래스의 인터페이스를 클라이언트에서 시용하고자 하는 다른 인터페이스로 변환한다.</li>
+  <li>어댑터를 이용하면 인터페이스 호환성 문제 때문에 같이 쓸 수 없는 클래스들을 연결해서 쓸 수 있다.</li>
+</ul>
+
+<blockquote>
+  <p>Adapter 패턴은 Wrapper 패턴으로 불리기도 한다.</p>
+</blockquote>
+
+<p>일반 상품을 예쁜 포장지로 싸서 선물용 상품으로 만드는 것처럼, 무엇인가를 한번 포장해서 다른 용도로 사용할 수 있게 교환해주는 것이 wrapper이며 adapter 이다.</p>
+
+<p><br /></p>
+
+<h3 id="adapter-패턴의-종류">Adapter 패턴의 종류</h3>
+
+<ol>
+  <li>클래스에 의한 Adapter 패턴 (상속을 사용한 Adapter)</li>
+  <li>인스턴스에 의한 Adapter 패턴 (위임을 사용한 Adapter)</li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="adapter-를-사용하는-경우">Adapter 를 사용하는 경우</h3>
+
+<ul>
+  <li>이미 존재하고 있는, 버그 적은 클래스를 부품으로서 재사용</li>
+  <li><strong>Adapter 패턴은 기존의 클래스를 개조해서 필요한 클래스를 만든다.</strong>
+    <ul>
+      <li>이 패턴으로 필요한 메소드를 빠르게 만들 수 있다.</li>
+      <li>만약 버그가 발생해도 기존의 클래스에는 버그가 없으므로 Adapter 역할의 클래스를 중점적으로 조사하면 되고, 프로그램 검사도 상당히 쉬워진다.</li>
+    </ul>
+  </li>
+  <li><strong>이미 만들어진 클래스를 새로운 인터페이스에 맞게 개조시킬때는 당연히 Adapter 패턴을 사용해야 한다.</strong>
+    <ul>
+      <li>Adapter 패턴은 기존의 클래스를 전혀 수정하지 않고 목적한 인터페이스에 맞추려는 것이다.</li>
+      <li>또한 Adapter 패턴에서는 기존 클래스의 소스 프로그램이 반드시 필요한 것은 아니다. 기존 클래스의 사양(Interface)만 알면 새로운 클래스를 만들 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>밑에 예제들을 보면 이해가 될 것이다.</strong></p>
+
+<p><br /></p>
+
+<h2 id="-예제-1">🔔 예제 1</h2>
+
+<h3 id="duck">📜Duck</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 오리 인터페이스</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">Duck</span>
+<span class="p">{</span>
+    <span class="k">void</span> <span class="nf">quack</span><span class="p">();</span>  <span class="c1">// 꽥 울기</span>
+    <span class="k">void</span> <span class="nf">fly</span><span class="p">();</span>    <span class="c1">// 날기</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="mallardduck">📜MallardDuck</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 청둥오리</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MallardDuck</span> <span class="p">:</span> <span class="n">Duck</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">quack</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"오리 : 울기(꽥꽥)"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">fly</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"오리 : 날기"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="turkey">📜Turkey</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 칠면조 인터페이스</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">Turkey</span>
+<span class="p">{</span>
+    <span class="k">void</span> <span class="nf">gobble</span><span class="p">();</span>  <span class="c1">// 울기</span>
+    <span class="k">void</span> <span class="nf">fly</span><span class="p">();</span>  <span class="c1">// 날기</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="wildturkey">📜WildTurkey</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="c1">// 야생칠면조</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">WildTurkey</span> <span class="p">:</span> <span class="n">Turkey</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">gobble</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"칠면조 : 울기(고르륵고르륵)"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">fly</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"칠면조 : 날기"</span><span class="p">);</span>
+
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="turkeyadapter-">📜TurkeyAdapter ⭐⭐</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Duck 객체가 모자라서 Turkey 객체를 대신 사용해야 하는 상황</span>
+<span class="c1">// 인터페이스가 다르기 때문에 Turkey객체를 바로 사용할 수는 없다.</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">TurkeyAdapter</span> <span class="p">:</span> <span class="n">Duck</span>
+<span class="p">{</span>
+    <span class="n">Turkey</span> <span class="n">turkey</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">TurkeyAdapter</span><span class="p">(</span><span class="n">Turkey</span> <span class="n">turkey</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">turkey</span> <span class="p">=</span> <span class="n">turkey</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">quack</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">turkey</span><span class="p">.</span><span class="nf">gobble</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">fly</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">turkey</span><span class="p">.</span><span class="nf">fly</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<blockquote>
+  <p>Turkey 를 Duck 으로 바꿔주는 어댑터</p>
+</blockquote>
+
+<ul>
+  <li><u>Turkey 객체로 Duck 의 인터페이스를 사용하기 위하여</u>
+    <ul>
+      <li>Duck 인터페이스 상속</li>
+      <li>Duck 인터페이스 함수들을 오버라이딩 하되, 함수들 안에서 <code class="language-plaintext highlighter-rouge">turkey.gobble()</code>, <code class="language-plaintext highlighter-rouge">turkey.fly()</code> 이렇게 Turkey 의 함수들을 호출해주면 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="client">📜Client</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Client</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+
+        <span class="n">MallardDuck</span> <span class="n">duck</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MallardDuck</span><span class="p">();</span>
+        <span class="n">WildTurkey</span> <span class="n">turkey</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WildTurkey</span><span class="p">();</span>
+        <span class="n">Duck</span> <span class="n">turkeyAdapter</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TurkeyAdapter</span><span class="p">(</span><span class="n">turkey</span><span class="p">);</span>
+
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"오리 사용..."</span><span class="p">);</span>
+        <span class="nf">testDuck</span><span class="p">(</span><span class="n">duck</span><span class="p">);</span>
+
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"오리 부족. 칠면조로 대체..."</span><span class="p">);</span>
+        <span class="nf">testDuck</span><span class="p">(</span><span class="n">turkeyAdapter</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">testDuck</span><span class="p">(</span><span class="n">Duck</span> <span class="n">duck</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 동일한 방법으로 사용</span>
+        <span class="n">duck</span><span class="p">.</span><span class="nf">quack</span><span class="p">();</span>
+        <span class="n">duck</span><span class="p">.</span><span class="nf">fly</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Duck turkeyAdapter = new TurkeyAdapter(turkey);</code>
+    <ul>
+      <li>칠면조 어댑터는 <code class="language-plaintext highlighter-rouge">Duck</code> 타입</li>
+      <li>즉, 칠면조 객체로 오리의 인터페이스를 사용할 것</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">testDuck(turkeyAdapter);</code>이렇게 사용이 가능</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-예제-2">🔔 예제 2</h2>
+
+<p>현재 PayX 결제 시스템을 사용하고 있는데, PayY 결제 시스템으로 변경하고 싶은 상황. <u>현재까지 PayX 를 사용한 수많은 클래스와 데이터들을 변경하고 싶지 않고, 현재 서비스 되고 있는 많은 부분을 변경하는 것은 위험하다.</u> PayX는 안정적인 상태로 쓰고 있었는데 PayY로 갑자기 변경해서 전부 다 변경해버리면 버그나 다른 위험이 발생할 수도 있다.</p>
+
+<h3 id="payx">📜PayX</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// PayX 회사로부터 받은 인터페이스</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">PayX</span> <span class="p">{</span>
+
+	<span class="kt">string</span> <span class="nf">getCreditCardNum</span><span class="p">();</span>
+
+	<span class="k">void</span> <span class="nf">setCreditCardNum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">creditCardNum</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="payy">📜PayY</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// PayY 회사로부터 받은 인터페이스</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">PayY</span> <span class="p">{</span>
+
+	<span class="kt">string</span> <span class="nf">getCustomerCardNum</span><span class="p">();</span>
+
+	<span class="k">void</span> <span class="nf">setCustomerCardNum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">customerCardNum</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>갈아 타고 싶은 PayY 결제시스템의 인터페이스. <u>PayX 와 사용하는 함수가 다르다.</u></p>
+
+<p><br /></p>
+
+<h3 id="payimpl">📜PayImpl</h3>
+
+<h4 id="수정-전">수정 전</h4>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 우리 회사에서 PayX 인터페이스 구현</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">PayImpl</span> <span class="p">:</span> <span class="n">PayX</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">creditCardNum</span><span class="p">;</span>
+
+ 	<span class="k">public</span> <span class="kt">string</span> <span class="nf">getCreditCardNum</span> <span class="p">()</span> <span class="p">{</span>
+ 		<span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span> <span class="p">(</span><span class="s">"PayX (Get)"</span><span class="p">);</span>
+ 		<span class="k">return</span> <span class="n">creditCardNum</span><span class="p">;</span>
+ 	<span class="p">}</span>
+
+ 	<span class="k">public</span> <span class="k">void</span> <span class="nf">setCreditCardNum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">creditCardNum</span><span class="p">)</span> <span class="p">{</span>
+ 		<span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span> <span class="p">(</span><span class="s">"PayX (Set)"</span><span class="p">);</span>
+ 		<span class="k">this</span><span class="p">.</span><span class="n">creditCardNum</span> <span class="p">=</span> <span class="n">creditCardNum</span><span class="p">;</span>
+ 	<span class="p">}</span>
+ <span class="p">}</span>
+</code></pre></div></div>
+
+<p>원래 이렇게 PayX 인터페이스를 오버라이딩해여 PayX 를 사용하고 있는 상태였었다.</p>
+
+<h4 id="수정-후-어댑터-패턴-사용하여-갈아타기--다중-상속">수정 후. 어댑터 패턴 사용하여 갈아타기 : 다중 상속</h4>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 우리 회사에서 PayY 인터페이스 구현</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">PayImpl</span> <span class="p">:</span> <span class="n">PayY</span><span class="p">,</span> <span class="n">PayX</span> <span class="p">{</span>
+
+    <span class="c1">// for PayY</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">customerCardNum</span><span class="p">;</span>
+
+	<span class="k">public</span> <span class="kt">string</span> <span class="nf">getCustomerCardNum</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span> <span class="p">(</span><span class="s">"PayY (Get)"</span><span class="p">);</span>
+		<span class="k">return</span> <span class="n">customerCardNum</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">setCustomerCardNum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">customerCardNum</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span> <span class="p">(</span><span class="s">"PayY (Set)"</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="n">customerCardNum</span> <span class="p">=</span> <span class="n">customerCardNum</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="c1">// ------------------------------------------------------</span>
+
+	<span class="c1">// for PayX Method</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">getCreditCardNum</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">getCustomerCardNum</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">setCreditCardNum</span><span class="p">(</span><span class="kt">string</span> <span class="n">creditCardNum</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nf">setCustomerCardNum</span><span class="p">(</span><span class="n">creditCardNum</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>PayY 인터페이스 오버라이딩시 아예 PayX 와 PayX 를 둘 다 다중상속 해서 둘 다 오버라이딩한다. 그리고 <u>PayX 의 함수 오버라이딩시 내용을 PayY의 함수를 호출하도록 함수의 내용을 바꿔주면 된다.</u></p>
+
+<ul>
+  <li>PayX의 getCreditCardNum()함수를 호출하면 PayY의 getCustomerCardNum()함수를 호출하도록</li>
+  <li>PayX의 setCreditCardNum()함수를 호출하면 PayY의 setCustomerCardNum()함수를 호출하도록</li>
+</ul>
+
+<p><strong>이 📜PayImpl 가 바로 어댑터가 된다.</strong></p>
+
+<p><br /></p>
+
+<h3 id="mypay">📜MyPay</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MyPay</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+
+        <span class="c1">// for PayX : 원래 이렇게 사용중 ...</span>
+
+        <span class="n">PayImpl</span> <span class="n">myPay</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PayImpl</span><span class="p">();</span>
+        <span class="n">myPay</span><span class="p">.</span><span class="nf">setCreditCardNum</span><span class="p">(</span><span class="s">"12345"</span><span class="p">);</span>
+        <span class="kt">string</span> <span class="n">myCardNum</span> <span class="p">=</span> <span class="n">myPay</span><span class="p">.</span><span class="nf">getCreditCardNum</span><span class="p">();</span>
+        <span class="c1">// Debug.Log("PayX : " + myCardNum);</span>
+
+        <span class="c1">// for PayY : PayX 와 같은 메서드명을 사용</span>
+        <span class="c1">//            그러므로 코드를 바꿀 필요가 없다.</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"PayY : "</span> <span class="p">+</span> <span class="n">myCardNum</span><span class="p">);</span>
+    <span class="p">}</span>
+	
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><u>코드는 바꿀 필요가 전혀 없다.(변화로 인해 위험할 일이 없다)</u> 그러나 내부적으로 setCreditCardNum 는 곧 PayY의 setCustomerCardNum 함수를 부르도록 📜PayImpl 스크립트만 수정했을 뿐이다.</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

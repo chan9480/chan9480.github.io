@@ -1,0 +1,426 @@
+I"�m<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<p><a href="https://en.cppreference.com/w/cpp/header">Cpp Reference</a></p>
+
+<p><a href="https://ko.wikipedia.org/wiki/%ED%91%9C%EC%A4%80_%ED%85%9C%ED%94%8C%EB%A6%BF_%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC#%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88">위키 백과 표준 템플릿 라이브러리</a></p>
+
+<h1 id="반복자">반복자</h1>
+
+<ul>
+  <li>컨테이너에 저장되있는 원소들을 공통적인 방법으로 <u>하나씩 접근할 수 있게 해줌.</u>
+    <ul>
+      <li>모든 컨테이너들이 다 같은 방법으로 반복자 사용 가능.</li>
+    </ul>
+  </li>
+  <li>각 타입에 <code class="language-plaintext highlighter-rouge">::iterator</code>  또는 <code class="language-plaintext highlighter-rouge">::const_iterator</code> 를 뒤에 붙여주면 사용이 가능하다.
+    <ul>
+      <li>vector 컨테이너의 반복자 itr
+        <ul>
+          <li>vector&lt;int&gt;<strong>::iterator itr</strong>;</li>
+        </ul>
+      </li>
+      <li>vector 컨테이너의 const한 반복자 citr
+        <ul>
+          <li>vector&lt;int&gt;<strong>::const_iterator citr</strong>;</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>포인터</strong>와 비슷하게 사용한다.
+    <ul>
+      <li>간접 참조 가능
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">itr = v.begin() + 2</code> 에서 <code class="language-plaintext highlighter-rouge">*itr</code> 간접 참조를 하면 세번째 원소 값이 리턴된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>iterator 와 const_iterator 의 차이
+    <ul>
+      <li>const_iterator 는 반복자가 가리키는 원소의 값을 변경하지 못한다.
+        <ul>
+          <li>반복자 값이 변경되지 못하는게 아니고 반복자가 가리키는 원소의 값이 변경될 수 없는 것!</li>
+        </ul>
+      </li>
+      <li>일반 반복자는 포인터와 비슷하고 const 반복자는 const 포인터와 비슷하다. (간접참조로 값을 변경하지 못하는)</li>
+    </ul>
+  </li>
+  <li>초기화 하는 방법
+    <ul>
+      <li>itr = container.begin()
+        <ul>
+          <li>컨테이너이름.begin() 하면 첫번째 원소의 iterator를 리턴</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="반복자의-종류">반복자의 종류</h2>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">db</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">set</code> 컨테이너는 자동으로 정렬이 된다는 것에 착안하여 처음에는 이렇게 Value를 <code class="language-plaintext highlighter-rouge">vector</code>가 아닌 <code class="language-plaintext highlighter-rouge">set</code>으로 했었다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">score</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">score</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">stoi</span><span class="p">(</span><span class="n">condition</span><span class="p">[</span><span class="mi">4</span><span class="p">]));</span>
+<span class="n">answer</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">score</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="n">itr</span><span class="p">);</span> <span class="c1">// ❌❌ 에러 발생! </span>
+</code></pre></div></div>
+
+<p>근데 <code class="language-plaintext highlighter-rouge">set</code>의 반복자끼리를 사칙연산 하려고 하니 자꾸 불가능하다고 에러가 뜨는 것이였다. <code class="language-plaintext highlighter-rouge">vector</code> 반복자는 잘만 되던데 뭐지 싶었다. (근데 set이 만약에 반복자 연산에 문제 없었다 하더라도 <code class="language-plaintext highlighter-rouge">info</code> for문 안에서 매번 자동 정렬이 된단 소리니까 set을 사용하면 시간초과가 될 수도 있었을 것 같다.)</p>
+
+<blockquote>
+  <p>반복자도 종류가 있다. 산술 연산이 가능한건 “임의 접근 반복자”를 가지는 <code class="language-plaintext highlighter-rouge">vector</code>, <code class="language-plaintext highlighter-rouge">deque</code> 밖에 없다.</p>
+</blockquote>
+
+<p>STL 의 모든 컨테이너 혹은 함수들은 아래와 같은 종류의 반복자들을 지원하는데, 아래 반복자들 중 어느 것들까지 지원을 하느냐에 따라 사용할 수 있는 연산, 함수들이 달라진다.</p>
+
+<p><u>컨테이너마다 지원하는 반복자의 종류가 다르다.</u></p>
+
+<h3 id="반복자의-종류-1">반복자의 종류</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/107746693-9a1c6080-6d59-11eb-8bb0-2f01f9e1c72d.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/107748063-cfc24900-6d5b-11eb-9233-79039c73a3bd.png" alt="image" /></p>
+
+<ul>
+  <li>출처
+    <ul>
+      <li><a href="https://en.cppreference.com/w/cpp/iterator">cppreference</a></li>
+      <li><a href="http://www.cplusplus.com/reference/iterator/">cplusplus</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="1️⃣-입력-반복자input">1️⃣ 입력 반복자(Input)</h4>
+
+<ul>
+  <li>Read 및 접근 만 가능.</li>
+  <li>Write 불가능</li>
+  <li>증감은 <code class="language-plaintext highlighter-rouge">++</code> 연산만 가능.</li>
+  <li>비교는 <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code> 연산만 가능.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 접근 ⭕</span>
+<span class="err">뫄뫄</span> <span class="o">=</span> <span class="o">*</span><span class="n">itr</span><span class="p">;</span>  <span class="c1">// 읽기 가능 ⭕ (간접 참조처럼 * 연산자)</span>
+<span class="n">itr</span><span class="o">++</span><span class="p">;</span> <span class="c1">// ++ 연산 가능 ⭕</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">itr1</span> <span class="o">==</span> <span class="n">itr2</span><span class="p">);</span> <span class="c1">// ⭕</span>
+<span class="o">*</span><span class="n">itr</span> <span class="o">=</span> <span class="err">뫄뫄</span><span class="p">;</span>  <span class="c1">// 쓰기 불가능 ❌ (간접 참조 수정 불가)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="2️⃣-출력-반복자output">2️⃣ 출력 반복자(Output)</h4>
+
+<ul>
+  <li>Write 만 가능.</li>
+  <li>Read 및 접근 불가능</li>
+  <li><code class="language-plaintext highlighter-rouge">++</code> 연산만 가능. (<code class="language-plaintext highlighter-rouge">itr++</code>)</li>
+  <li>비교 연산자 불가능</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 접근 불가능 ❌</span>
+<span class="err">뫄뫄</span> <span class="o">=</span> <span class="o">*</span><span class="n">itr</span><span class="p">;</span>  <span class="c1">// 읽기 불가능 ❌</span>
+<span class="n">itr</span><span class="o">++</span><span class="p">;</span> <span class="c1">// ++ 연산 가능 ⭕</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">itr1</span> <span class="o">==</span> <span class="n">itr2</span><span class="p">);</span> <span class="c1">// 비교 연산 불가능 ❌</span>
+<span class="o">*</span><span class="n">itr</span> <span class="o">=</span> <span class="err">뫄뫄</span><span class="p">;</span>  <span class="c1">// 쓰기 가능 ⭕ </span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="3️⃣-순방향-반복자forward">3️⃣ 순방향 반복자(Forward)</h4>
+
+<ul>
+  <li>읽기 쓰기 접근 다된다.</li>
+  <li>산술 연산 👉 <code class="language-plaintext highlighter-rouge">++</code>만 가능</li>
+  <li>비교 연산 👉 <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>만 가능</li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="4️⃣-양방향-반복자bidirectional">4️⃣ 양방향 반복자(Bidirectional)</h4>
+
+<ul>
+  <li>읽기 쓰기 접근 다된다.</li>
+  <li>산술 연산 👉 <code class="language-plaintext highlighter-rouge">++</code>, <code class="language-plaintext highlighter-rouge">--</code> 가능</li>
+  <li>비교 연산 👉 <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>만 가능</li>
+</ul>
+
+<p><u>list, set, map 은 이 반복자를 지원한다.</u> <strong>(그래서 set 의 반복자끼리 뺄셈을 하려 했을 때 불가능했던 것이다.)</strong></p>
+
+<p>이 양방향 반복자를 지원하지 않는 컨테이너는 알고리즘 헤더의 <em>reverse()</em> 함수를 사용할 수 없다. <em>reverse</em> 함수는 이 양방향 반복자를 사용하기 때문이다. <strong>이처럼 함수, 연산에 따라 사용할 수 있는 반복자가 정해져있다는 것을 꼭 알아두자!</strong></p>
+
+<p><br /></p>
+
+<h4 id="3️⃣-임의접근-반복자random-access">3️⃣ 임의접근 반복자(Random Access))</h4>
+
+<ul>
+  <li>읽기 쓰기 접근 다된다.</li>
+  <li>산술 연산 👉 <code class="language-plaintext highlighter-rouge">++</code>, <code class="language-plaintext highlighter-rouge">--</code>, ✨<code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">-</code>, <code class="language-plaintext highlighter-rouge">+=</code>, <code class="language-plaintext highlighter-rouge">-=</code> 가능✨</li>
+  <li>비교 연산 👉 <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>, ✨<code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">&gt;=</code>, <code class="language-plaintext highlighter-rouge">&lt;=</code> 가능✨</li>
+  <li><u>첨자 연산자 사용 가능</u> 👉 <code class="language-plaintext highlighter-rouge">[]</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">itr[n]</code>은 곧 <code class="language-plaintext highlighter-rouge">*(itr + n)</code>과도 같다.
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">itr</span><span class="p">;</span>
+<span class="n">itr</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>  <span class="c1">// itr 에서 4 칸 더 간 곳의 반복자! </span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><u>vector, deque 는 이 반복자를 지원한다.</u> 그래서 반복자끼리 사칙연산을 해야한다면 <code class="language-plaintext highlighter-rouge">vector</code>를 사용해야 한다.</p>
+
+<p><br /></p>
+
+<h2 id="vector에서의-사용-예시">vector에서의 사용 예시</h2>
+
+<h3 id="예시-1">예시 1</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">itr = container.begin();</code>
+    <ul>
+      <li>첫번째 주소를 받아</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">while (itr != container.end())</code>
+    <ul>
+      <li>반복자가 끝까지 다 돌때까지.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">*itr</code>
+    <ul>
+      <li>반복자가 가리키는 원소를 이용한 후 (간접참조같이)</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">++itr</code>  다음 반복자.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">container</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">container</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">itr</span><span class="p">;</span>
+	<span class="n">itr</span> <span class="o">=</span> <span class="n">container</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+	
+	<span class="k">while</span> <span class="p">(</span><span class="n">itr</span> <span class="o">!=</span> <span class="n">container</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">itr</span> <span class="o">&lt;&lt;</span> <span class="s">"  "</span><span class="p">;</span>
+		<span class="o">++</span><span class="n">itr</span><span class="p">;</span>
+	<span class="p">}</span>	
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="예시-2">예시 2</h3>
+
+<ul>
+  <li>for문 사용</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">container</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">container</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">itr</span><span class="p">;</span>
+	
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">container</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">itr</span> <span class="o">!=</span> <span class="n">container</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">itr</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">itr</span> <span class="o">&lt;&lt;</span> <span class="s">"  "</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="예시-3">예시 3</h3>
+
+<ul>
+  <li>for-each 문 이용</li>
+  <li><code class="language-plaintext highlighter-rouge">for (auto&amp; itr : container)</code></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">container</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">container</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">itr</span><span class="p">;</span>
+	
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">itr</span> <span class="o">:</span> <span class="n">container</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span> <span class="o">&lt;&lt;</span> <span class="s">"  "</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="list에서의-사용-예시">list에서의 사용 예시</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">list&lt;int&gt; container</code>;
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">push_back</code> 사용</li>
+    </ul>
+  </li>
+  <li><u>벡터와 동일한 반복자 문법.</u></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">container</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">container</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">itr</span><span class="p">;</span>
+	
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">itr</span> <span class="o">:</span> <span class="n">container</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span> <span class="o">&lt;&lt;</span> <span class="s">"  "</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="set에서의-사용-예시">set에서의 사용 예시</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">set&lt;int&gt; container;</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">insert</code> 사용</li>
+    </ul>
+  </li>
+  <li>벡터와 동일한 반복자 문법.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">container</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">container</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">itr</span><span class="p">;</span>
+	
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">itr</span> <span class="o">:</span> <span class="n">container</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span> <span class="o">&lt;&lt;</span> <span class="s">"  "</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="map에서의-사용-예시">map에서의 사용 예시</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">map&lt;int, char&gt; container;</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">insert</code> 사용
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">make_pair</code> 이용하여 key와 value 를 함께 <code class="language-plaintext highlighter-rouge">insert</code> 해주기</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>itr → first : <em>Key</em></li>
+  <li>itr → second : <em>Value</em></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">&gt;</span> <span class="n">container</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">container</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="kt">char</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">65</span><span class="p">)));</span>
+
+	<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">itr</span><span class="p">;</span>
+	
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">itr</span> <span class="o">:</span> <span class="n">container</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">"  "</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+0 A
+1 B
+2 C
+3 D
+4 E
+5 F
+6 G 
+7 H
+8 I
+9 J
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

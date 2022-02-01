@@ -1,0 +1,60 @@
+I"i<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="23-연습문제">2.3 연습문제</h1>
+
+<p class="notice--warning"><strong>연습 문제</strong>는 스스로 풀이했습니다. 😀     <br />
+해당 챕터 보러가기 🖐 <a href="https://ansohxxn.github.io/c++%20games/chapter2-3/">2.3 다형성으로 유연하게</a> <br />
+연습 문제 출처 : <a href="https://blog.naver.com/atelierjpro/221413483005">홍정모 교수님 블로그</a></p>
+
+<p><br /></p>
+
+<h2 id="-q1-마우스-좌클-우클에-따라-다른-모양-그리기">🙋 Q1. 마우스 좌클, 우클에 따라 다른 모양 그리기</h2>
+<ul>
+  <li>좌클시 커서 위치에 삼각형 그리고</li>
+  <li>우클시 커서 위치에 원을 그려보자.</li>
+</ul>
+
+<iframe width="851" height="477" src="https://www.youtube.com/embed/lX4-a24gQAQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">getCursorPos</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isMouseButtonPressed</span><span class="p">(</span><span class="n">GLFW_MOUSE_BUTTON_1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">true</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">objs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GeometricObject</span><span class="o">::</span><span class="n">makeTriangle</span><span class="p">(</span>
+					<span class="n">rndColor</span><span class="p">(</span><span class="n">rnd</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)),</span>
+					<span class="n">mouse_pos</span><span class="p">,</span>
+					<span class="n">rnd</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.01</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">)));</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isMouseButtonPressed</span><span class="p">(</span><span class="n">GLFW_MOUSE_BUTTON_2</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">objs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GeometricObject</span><span class="o">::</span><span class="n">makeCircle</span><span class="p">(</span>
+					<span class="n">rndColor</span><span class="p">(</span><span class="n">rnd</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)),</span>
+					<span class="n">mouse_pos</span><span class="p">,</span>
+					<span class="n">rnd</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.01</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">)));</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">objs</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="n">obj</span> <span class="o">:</span> <span class="n">objs</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">obj</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="err">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

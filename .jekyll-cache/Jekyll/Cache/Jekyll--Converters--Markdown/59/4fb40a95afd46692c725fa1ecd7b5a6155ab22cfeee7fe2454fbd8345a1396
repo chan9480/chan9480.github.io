@@ -1,0 +1,54 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h2 id="포인터와-참조의-멤버-선택">포인터와 참조의 멤버 선택</h2>
+
+<h3 id="포인터-혹은-참조로-구조체클래스-멤버에-접근할-수-있다">포인터 혹은 참조로 구조체/클래스 멤버에 접근할 수 있다.</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include&lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+
+<span class="k">struct</span> <span class="nc">Person</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">weight</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Person</span> <span class="n">person</span><span class="p">;</span>
+	<span class="n">person</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+    <span class="cm">/* 참조로 멤버에 접근 */</span>
+    <span class="n">Person</span> <span class="o">&amp;</span><span class="n">ref</span> <span class="o">=</span> <span class="n">person</span><span class="p">;</span>  <span class="c1">// 구조체 참조 변수</span>
+	<span class="n">ref</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">15</span><span class="p">;</span>
+
+    <span class="cm">/* 포인터로 멤버에 접근 */</span>
+	<span class="n">Person</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">person</span><span class="p">;</span> <span class="c1">// 포인터 참조 변수</span>
+	<span class="n">ptr</span><span class="o">-&gt;</span><span class="n">age</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>  <span class="c1">// 포인터로 멤버에 간접참조로 접근할땐 -&gt; 화살표를 사용한다.</span>
+	<span class="p">(</span><span class="o">*</span><span class="n">ptr</span><span class="p">).</span><span class="n">age</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> <span class="c1">// . 가 * 보다 우선순위가 높기 때문에 간접참조를 하기 위해선 *를 괄호로 감싸우어야 한다.</span>
+
+	<span class="n">Person</span> <span class="o">&amp;</span><span class="n">ref2</span> <span class="o">=</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span> <span class="c1">// ptr이 가리키고 있는 것은 person이니 Person &amp;ref2 = person이나 마찬가지.</span>
+	<span class="n">ref2</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">45</span><span class="p">;</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">person</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">ref2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

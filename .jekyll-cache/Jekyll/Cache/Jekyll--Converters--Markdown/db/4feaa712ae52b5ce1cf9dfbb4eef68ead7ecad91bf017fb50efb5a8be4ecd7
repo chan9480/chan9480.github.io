@@ -1,0 +1,11 @@
+I"K<ul class="toc__menu">
+  <li><a href="#-c의-입출력-함수scanf-printf와-c의-입출력-함수cin-count">🚀 C의 입출력 함수(scanf, printf)와 C++의 입출력 함수(cin, count)</a></li>
+  <li><a href="#-cin-cout-의-입출력-속도-높이기">🚀 cin, cout 의 입출력 속도 높이기</a>
+    <ul>
+      <li><a href="#-iossync_with_stdiofalse">🔥 ios::sync_with_stdio(false);</a></li>
+      <li><a href="#-cintienull-couttienull">🔥 cin.tie(NULL); cout.tie(NULL);</a></li>
+    </ul>
+  </li>
+  <li><a href="#-참고-및-출처">🚀 참고 및 출처</a></li>
+</ul>
+:ET

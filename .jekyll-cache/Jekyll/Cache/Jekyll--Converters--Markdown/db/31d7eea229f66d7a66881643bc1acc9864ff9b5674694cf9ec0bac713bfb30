@@ -1,0 +1,74 @@
+I" <ul class="toc__menu">
+  <li><a href="#chapter-2-객체-지향으로-가는-길--상속">Chapter 2. 객체 지향으로 가는 길 : 상속</a>
+    <ul>
+      <li><a href="#-상속">🔔 상속</a>
+        <ul>
+          <li><a href="#단순-코드-반복">단순 코드 반복</a>
+            <ul>
+              <li><a href="#-main">📜 main</a></li>
+            </ul>
+          </li>
+          <li><a href="#클래스로-깔끔하게-묶기">클래스로 깔끔하게 묶기</a>
+            <ul>
+              <li><a href="#triangleh">📜Triangle.h</a></li>
+              <li><a href="#circleh">📜Circle.h</a></li>
+              <li><a href="#-main-1">📜 main</a></li>
+            </ul>
+          </li>
+          <li><a href="#좀-더-일반화-해보기">좀 더 일반화 해보기</a>
+            <ul>
+              <li><a href="#triangleh-1">📜Triangle.h</a></li>
+              <li><a href="#circleh-1">📜Circle.h</a></li>
+              <li><a href="#-main-2">📜 main</a></li>
+            </ul>
+          </li>
+          <li><a href="#상속--circle클래스와-triangle클래스의-공통된-요소들을-묶어-부모-클래스로-만들기">상속 : Circle클래스와 Triangle클래스의 공통된 요소들을 묶어 부모 클래스로 만들기</a>
+            <ul>
+              <li><a href="#geometricobjecth">📜GeometricObject.h</a></li>
+              <li><a href="#triangleh-2">📜Triangle.h</a></li>
+              <li><a href="#circleh-2">📜Circle.h</a></li>
+            </ul>
+          </li>
+          <li><a href="#부모클래스에-초기화-하는-함수를-만들어-깔끔하게-초기화-해보자">부모클래스에 초기화 하는 함수를 만들어 깔끔하게 초기화 해보자.</a>
+            <ul>
+              <li><a href="#geometricobjecth-1">📜GeometricObject.h</a></li>
+              <li><a href="#-main-3">📜 main</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#-가상함수와-오버라이딩">🔔 가상함수와 오버라이딩</a>
+        <ul>
+          <li><a href="#동일한-기능을-가지는-두-함수의-공통된-요소-묶기">동일한 기능을 가지는 두 함수의 공통된 요소 묶기</a>
+            <ul>
+              <li><a href="#circle-클래스의-draw-함수">📜Circle 클래스의 draw() 함수</a></li>
+              <li><a href="#triangle-클래스의-draw-함수">📜Triangle 클래스의 draw() 함수</a></li>
+              <li><a href="#circle의-draw와-triangle의-draw의-공통된-부분과-고유한-부분">Circle의 draw()와 Triangle의 draw()의 공통된 부분과 고유한 부분</a></li>
+            </ul>
+          </li>
+          <li><a href="#오버라이딩">오버라이딩</a></li>
+          <li><a href="#가상-함수">가상 함수</a></li>
+          <li><a href="#java와-c의-차이점">Java와 C++의 차이점</a></li>
+          <li><a href="#geometricobjecth-2">📜GeometricObject.h</a></li>
+          <li><a href="#circleh-3">📜Circle.h</a></li>
+          <li><a href="#triangleh-3">📜Triangle.h</a></li>
+          <li><a href="#안전-장치--override-키워드">안전 장치 : override 키워드</a></li>
+        </ul>
+      </li>
+      <li><a href="#-공통된-부분들에서-본인만의-다른-변수가-더-필요할-때">🔔 공통된 부분들에서 본인만의 다른 변수가 더 필요할 때</a>
+        <ul>
+          <li><a href="#geometricobjecth-3">📜GeometricObject.h</a></li>
+          <li><a href="#circleh-triangleh">📜Circle.h, 📜Triangle.h</a></li>
+          <li><a href="#boxh">📜Box.h</a></li>
+          <li><a href="#main">📜main</a></li>
+        </ul>
+      </li>
+      <li><a href="#-순수-가상-함수">🔔 순수 가상 함수</a>
+        <ul>
+          <li><a href="#문법">문법</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

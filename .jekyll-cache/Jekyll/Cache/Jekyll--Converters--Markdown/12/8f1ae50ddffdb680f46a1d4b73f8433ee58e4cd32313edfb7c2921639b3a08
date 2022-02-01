@@ -1,0 +1,57 @@
+I":<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<ul>
+  <li>중괄호 <code class="language-plaintext highlighter-rouge">{ }</code> 가 기본 scope 범위</li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">같은 범위</code> 내에서 동일한 이름의 변수는 중복되서 선언될 수 없다.</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// eroor !!</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li>함수는 이름 + 파라미터 + 리턴타입 까지 같아야지만 동일한 함수이다.
+        <ul>
+          <li>함수 또한 같은 범위 내에 동일한 함수가 또 선언되면 안됨</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">int</span> <span class="n">apple</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>  <span class="c1">// 이 apple 과 </span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">apple</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  <span class="p">{</span>
+  	<span class="n">apple</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 이 apple은 동일한 apple이다. </span>
+  	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">apple</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1출력</span>
+  <span class="p">}</span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">apple</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1 출력</span>
+</code></pre></div>    </div>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">int</span> <span class="n">apple</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>  <span class="c1">// 이 apple 과 </span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">apple</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  <span class="p">{</span>
+  	<span class="kt">int</span> <span class="n">apple</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 이 apple은 다른 apple이다. 중괄호 안에서만 살 수 있는 apple</span>
+  	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">apple</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1출력</span>
+  <span class="p">}</span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">apple</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 5 출력</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li>같은 이름일 때 해당 중괄호 범위 안에선 바깥에서 선언된 apple 보다</li>
+      <li><code class="language-plaintext highlighter-rouge">지역변수</code>로 선언된 apple이 더 우선시 된다.</li>
+      <li>중괄호를 벗어나면 지역변수 apple은 수명을 다해 사라진다.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

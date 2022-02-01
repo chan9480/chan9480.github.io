@@ -1,0 +1,49 @@
+I"h	<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-20-중급-프로그래머들의-상식">chapter 20. 중급 프로그래머들의 상식</h1>
+
+<h2 id="vepkg">vepkg</h2>
+
+<blockquote>
+  <p>외부의 여러 라이브러리 설치를 도와준다</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="vcpkg-설치-방법">vcpkg 설치 방법</h2>
+
+<p>vcpkg Github 저장소로 가서 quick start를 보고 따라서 설치하면 된다.</p>
+
+<p><br /></p>
+
+<h2 id="vcpkg를-사용하여-외부-라이브러리-설치하는-방법">vcpkg를 사용하여 외부 라이브러리 설치하는 방법</h2>
+
+<ol>
+  <li>cmd를 키고 vcpkg 폴더로 이동 한다.</li>
+  <li>예를들어 OpenGL 라이브러리를 설치한다면
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">vcpkg install opengl:x64-windows</code> 👉 64비트로 opengl 라이브러리를 설치한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">vcpkg search</code> 👉 vcpkg로 설치 할 수 있는 모든 라이브러리 목록 확인</li>
+      <li><code class="language-plaintext highlighter-rouge">vcpkg list</code> 👉 로컬에 설치된 외부 라이브러리들 확인 가능</li>
+    </ul>
+  </li>
+  <li>매번 vcpkg.exe 폴더로 이동할 필요없이 <code class="language-plaintext highlighter-rouge">시스템 환경 변수 편집</code> 에서 Path 시스템 변수 값에 vcpkg.exe 폴더의 위치를 넣어주면 어디서든 <code class="language-plaintext highlighter-rouge">vcpkg</code> 명령어를 사용할 수 있다.
+    <ul>
+      <li>원하는 위치에서 vcpkg 를 명령어 실행 후 그 자리에 라이브러리 설치 가능</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀
+린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

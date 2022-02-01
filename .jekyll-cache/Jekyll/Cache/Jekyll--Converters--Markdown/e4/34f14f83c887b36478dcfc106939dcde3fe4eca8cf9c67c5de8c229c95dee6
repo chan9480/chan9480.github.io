@@ -1,0 +1,105 @@
+I"�$<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-7-함수--assert-단언하기">chapter 7. 함수 : <code class="language-plaintext highlighter-rouge">assert</code> 단언하기</h1>
+
+<ul>
+  <li><u>디버그 모드</u>에서 디버깅시 <u>뭐 때문에 에러가 났는지</u>를 알 수 있는 유용한 키워드다.</li>
+  <li>#include &lt;cassert&gt; 를 해주어야 사용이 가능하다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-assert">🔔 <code class="language-plaintext highlighter-rouge">assert</code></h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">assert(조건)</code> : 이 조건식이 false 라면 <u>런타임 에러</u>가 나도록 한다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;cassert&gt; 
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+	<span class="n">assert</span><span class="p">(</span><span class="n">number</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>위 코드는 <code class="language-plaintext highlighter-rouge">Release</code>모드에선 아무런 문제가 없는 코드다.</li>
+  <li>그러나 <code class="language-plaintext highlighter-rouge">Debug</code>모드에선 에러를 발생한다.
+    <ul>
+      <li><em>assert(number == 4)</em> : number 값이 4가 아닌 5이기 때문이다.</li>
+      <li>프로그래머가 직접 number값이 4가 맞는지 찍어보지 않더라도 number값이 4가 아니면 에러를 발생시켜주므로 디버깅시 편하다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">printValue</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">5</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">my_array</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">ix</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">ix</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">ix</span> <span class="o">&lt;=</span> <span class="n">my_array</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_array</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">5</span><span class="o">&gt;</span> <span class="n">my_array</span><span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="p">};</span>
+
+	<span class="n">printValue</span><span class="p">(</span><span class="n">my_array</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>디버그 모드로 실행했을 때 <em>ix &gt;= 0</em> 조건과 <em>ix &lt;= my_array.size() - 1</em> 조건에 위반되는 경우 <u>런타임 에러</u>를 발생시킨다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Assertion failed: ix &lt;= my_array.size() - 1, line 9
+</code></pre></div></div>
+<p>이런 식으로 정확히 어디에서 문제 발생했는지 찍어준다.</p>
+
+<p><br /></p>
+
+<h2 id="-static_assert">🔔 <code class="language-plaintext highlighter-rouge">static_assert</code></h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">static_assert(조건)</code> : 이 조건식이 false 라면 <u>컴파일 에러</u>가 나도록 한다. 바로 빨간 줄이 그어져 알 수 있도록 !</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">static_assert</code>에 들어가는 조건은 <u>컴파일 타임에 결정될 수 있는 조건만 넣을 수 있다.</u></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span>   <span class="c1">// 문제 없음</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 컴파일 오류 발생! 빨간 줄 그어짐</span>
+</code></pre></div></div>
+<p>일반 변수 <em>x</em>에 4라는 값은 메모리가 실행 후 런타임시에 할당된다. 따라서 <em>x == 4</em>라는 조건식이 참인지는 컴파일 타임 때 결정되는 경우가 아니므로 그냥 <code class="language-plaintext highlighter-rouge">assert</code>에는 넣을 수 있지만 <code class="language-plaintext highlighter-rouge">static_assert</code> 조건 안에는 넣을 수 없다. <u>컴파일 때 참인지 따질 수 있는 조건식이 아니기 때문.</u></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span>   <span class="c1">// 문제 없음</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 문제 없음</span>
+</code></pre></div></div>
+<p>변수 <em>x</em>는 컴파일 때 이미 값이 4로 정해져 있는 <code class="language-plaintext highlighter-rouge">const</code>변수이기 때문에 이렇게 <code class="language-plaintext highlighter-rouge">static_assert</code>의 조건식으로 사용이 가능하다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">4</span><span class="p">);</span>  
+<span class="k">static_assert</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s">"x should be 4"</span><span class="p">);</span> <span class="c1">// 컴파일 오류 발생! 빨간 줄 그어짐</span>
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">static_assert</code>는 실행시 <em>“x should be 4”</em> 이렇게 에러 메세지를 띄우게 할 수 있다. 조건식 <em>(x == 4)</em>는 false이므로 컴파일 오류가 발생한다.</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

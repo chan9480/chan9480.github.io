@@ -1,0 +1,24 @@
+I"H<ul class="toc__menu">
+  <li><a href="#14-연습문제">1.4 연습문제</a>
+    <ul>
+      <li><a href="#-q1-마우스-커서-위치에-회전하는-별-구현하기">🙋 Q1. 마우스 커서 위치에 회전하는 별 구현하기</a></li>
+      <li><a href="#-q2-커서가-원-안에-들어갔을-경우-색깔-바꾸기">🙋 Q2. 커서가 원 안에 들어갔을 경우 색깔 바꾸기</a></li>
+      <li><a href="#-q3-원하는-방향으로-마우스를-조작하여-포탄-날리기">🙋 Q3. 원하는 방향으로 마우스를 조작하여 포탄 날리기</a>
+        <ul>
+          <li><a href="#코드">코드</a></li>
+          <li><a href="#구조-설명">구조 설명</a>
+            <ul>
+              <li><a href="#class-bullet">class Bullet</a></li>
+              <li><a href="#class-mouseexample">class MouseExample</a>
+                <ul>
+                  <li><a href="#각도-구하기-atan2-vs-atan1">각도 구하기, atan2 vs atan1</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

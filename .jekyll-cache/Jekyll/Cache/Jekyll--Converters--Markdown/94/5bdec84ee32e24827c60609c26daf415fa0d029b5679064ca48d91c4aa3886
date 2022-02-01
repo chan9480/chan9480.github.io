@@ -1,0 +1,340 @@
+I"�U<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-8-객체-지향의-기초--static-정적-멤버-변수">chapter 8. 객체 지향의 기초 : static 정적 멤버 변수</h1>
+
+<p><a href="https://ansohxxn.github.io/cpp/chapter4-2/#%EC%A0%95%EC%A0%81%EB%B3%80%EC%88%98-static">정적 변수 포스팅 참고</a></p>
+
+<h2 id="-static-멤버-변수란">🔔 static 멤버 변수란?</h2>
+
+<blockquote>
+  <p>모든 객체가 한 메모리를 <strong>공유</strong>하는 멤버 변수. 객체 별로 각각 할당되는 멤버가 아니라 모든 객체가 공유하는 멤버다.</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85965116-ba7bf280-b9f6-11ea-83c9-6bc892dbc1d6.png" alt="image" width="60%" height="60%" class="align-center" /></p>
+
+<ul>
+  <li><strong>모든 객체가 공유하는 멤버</strong> 변수이기 때문에
+    <ul>
+      <li><u>메모리는 프로그램 시작때부터 차지하고 있으며 메모리에 내내 값이 유지된다.</u>
+        <ul>
+          <li>객체 생성 전에도 메모리 존재
+            <ul>
+              <li>따라서 객체 생성 전에 반드시 미리 초기화를 해주어야 한다.</li>
+            </ul>
+          </li>
+          <li>객체와는 독립적으로 존재한다.</li>
+        </ul>
+      </li>
+      <li>객체 이름으로도 접근이 가능하지만 <u>클래스 이름으로도 접근이 가능하다.</u>
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">s_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div>        </div>
+      </li>
+      <li><em>s_value</em>가 <code class="language-plaintext highlighter-rouge">static</code>멤버 변수라면 객체1의 <em>s_value</em> 와 객체2의 <em>&amp;s_value</em> 는 <u>주소가 동일하다.</u></li>
+    </ul>
+  </li>
+  <li>어떤 특정 타입의 모든 객체들의 수 라던지 모든 객체들이 알고 있고 공유할 수 있어야 하는 멤버 변수를 <code class="language-plaintext highlighter-rouge">static</code>으로 쓴다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-static-멤버-변수의-정의">🔔 static 멤버 변수의 정의</h2>
+
+<h3 id="선언과-정의의-구분">선언과 정의의 구분</h3>
+
+<ul>
+  <li>이건 단순 <code class="language-plaintext highlighter-rouge">선언</code>이다.
+    <ul>
+      <li>컴파일러에게 변수의 정보만을 주며</li>
+      <li><u>실제 메모리를 사용하지는 않음</u></li>
+      <li>아래 코드는 단순히 static멤버 변수 <em>m_value</em>의 존재를 컴파일러에게 알려주는 것일 뿐이다.
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="k">static</span> <span class="kt">int</span> <span class="n">m_value</span><span class="p">;</span>  <span class="c1">// 선언. 메모리를 차지 하지 않는다.</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>이건 <code class="language-plaintext highlighter-rouge">정의</code>이다.
+    <ul>
+      <li><u>실제 메모리가 할당된다</u></li>
+      <li><code class="language-plaintext highlighter-rouge">초기화</code> 하는 것도 정의해주는 과정이다.
+        <ul>
+          <li>메모리에 값을 넣으니까.</li>
+        </ul>
+      </li>
+      <li>아래 코드는 static멤버 변수 <em>m_value</em> 의 메모리를 할당해주고 값을 1을 넣어주는 과정이다.
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 정의. 전역 범위의 메모리를 할당 받는다.</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">static</code> 멤버 변수는 모든 객체가 공유해야 하므로 프로그램 전체 영역에서 메모리 유지가 되야 한다. 따라서 <u>반드시 전역 범위에서 정의 및 초기화를 해주어야 한다.</u></p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="반드시-전역-범위에서-초기화-해야-한다">반드시 전역 범위에서 초기화 해야 한다.</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><u>전역 범위</u>에서 <code class="language-plaintext highlighter-rouge">자료형이름 클래스이름::static변수이름 = 초기화할값</code> 형식으로 초기화 해준다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 에러 💥 여기서 초기화 불가능</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">static</code> 멤버 변수를 저렇게 클래스 내에서 초기화 하면 객체를 생성할 때마다 <code class="language-plaintext highlighter-rouge">static</code>멤버 변수 값이 계속 해서 덮어 씌워질 것이다. 왜냐면 모든 객체들이 이 멤버를 공유하기 때문이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">static</code>멤버 변수는 클래스 내에서 <u>선언만 가능하고 정의는 불가능</u></li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">static</code>멤버 변수는 모든 객체들이 접근해야 하므로 프로그램 시작부터 끝까지 유지되어야 하기 때문에 <strong><u>전역 범위</u> 에서만 정의(초기화)할 수 있다.</strong></p>
+</blockquote>
+
+<ul>
+  <li>따라서 <code class="language-plaintext highlighter-rouge">static</code> 멤버 변수는 <u>main 함수는 물론이고 생성자 안에서도 초기화 할 수 없다.</u>
+    <ul>
+      <li>생성자도 static여야 static 멤버 변수를 초기화시킬 수 있는데 C++에서는 static 생성자를 지원하지 않는다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="k">static</span> <span class="kt">int</span> <span class="n">m_value</span><span class="p">;</span> <span class="c1">// 선언. .</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 👈👈 전역 범위에서 초기화</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// int Something::m_value = 1;  👈👈 에러!!! 전역 범위에서만 가능. </span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 1 출력 👈👈 객체 생성 전에도 사용 가능</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 0x601070 출력 👈👈 객체 생성 전에도 사용 가능</span>
+
+    <span class="n">Something</span> <span class="n">st1</span><span class="p">;</span>
+    <span class="n">Something</span> <span class="n">st2</span><span class="p">;</span>
+
+    <span class="n">st1</span><span class="p">.</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">st1</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 2 출력 </span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">st1</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 0x601070 출력</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">st2</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 2 출력</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">st2</span><span class="p">.</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 0x601070 출력</span>
+
+    <span class="n">st2</span><span class="p">.</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1024 출력</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>&amp;st1.m_value</em>, <em>&amp;st2.m_value</em>, <em>&amp;Something::m_value</em> <u>전부 주소가 동일하다</u>
+    <ul>
+      <li>따라서 <em>st1.m_value</em> 값을 바꾸면 <em>st2.m_value</em>, <em>Something::m_value</em> 값들도 동시에 똑같이 바뀐다.</li>
+      <li>모든 객체는 <code class="language-plaintext highlighter-rouge">static</code>변수의 메모리를 공유하기 때문</li>
+    </ul>
+  </li>
+  <li><em>int Something::m_value = 1;</em>
+    <ul>
+      <li>이렇게 <u>전역 범위에서 초기화를 반드시 해주어야 한다.</u>
+        <ul>
+          <li>반드시 <strong>전역 범위</strong>내에서 정의 해주어야 하기 때문에 main 함수 내에서 <em>int Something::m_value = 1;</em> 해줄 수 없다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="정의-및-초기화는-헤더-파일-내에서는-불가능하다">정의 및 초기화는 헤더 파일 내에서는 불가능하다.</h3>
+
+<blockquote>
+  <p>헤더 파일과 <strong>.cpp</strong> 파일로 분리할 때, <code class="language-plaintext highlighter-rouge">static</code> 멤버 변수는 <u>반드시 .cpp파일에서 초기화 해준다.</u></p>
+</blockquote>
+
+<ul>
+  <li>static 멤버 변수의 초기화는 헤더파일에선 불가능하다.
+    <ul>
+      <li>여러 곳에서 헤더 파일을 include할 때 마다 static 멤버 변수를 여러번 정의 및 초기화 하는게 될테니까</li>
+    </ul>
+  </li>
+</ul>
+
+<p>📜<strong>Something.h</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="k">static</span> <span class="kt">int</span> <span class="n">m_value</span><span class="p">;</span> <span class="c1">// 클래스 내에선 초기화 불가능</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 💥에러!💥 헤더 파일 내에선 초기화 불가능</span>
+</code></pre></div></div>
+
+<p>📜<strong>Something.cpp</strong></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-static-const-멤버-변수">🔔 static const 멤버 변수</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">m_value</span><span class="p">;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">static const</code>멤버 변수는 <u>클래스 내에서 초기화 하는 것이 가능</u>하다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">const</code>이므로 <u>값을 변경하는 것이 불가능</u>하기 때문에 그 모습 그대로를 모든 객체가 공유하기 때문에
+    <ul>
+      <li>한번 초기화 한 이후론 값을 변경하는 것이 불가능하다.</li>
+    </ul>
+  </li>
+  <li>이 같은 경우는 클래스 내부에서 초기화가 가능하다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">const</code>는 값이 컴파일 타임에 결정되기 때문에</li>
+    </ul>
+  </li>
+  <li>따라서 헤더파일 내에서도 초기화가 가능하다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">m_value</span><span class="p">;</span> <span class="c1">// 가능! 🙆‍♀️</span>
+<span class="p">};</span>
+
+<span class="c1">// int Something::m_value = 1;  👈 const라 클래스 밖에서 기존 값 변경이 불가능</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Something</span> <span class="n">st</span><span class="p">;</span>
+
+    <span class="n">st</span><span class="p">.</span><span class="n">m_value</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>  <span class="c1">// 👈 💥에러💥 const라서 값 변경 불가</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-private인-static-멤버-변수-초기화">🔔 private인 static 멤버 변수 초기화</h2>
+
+<p><code class="language-plaintext highlighter-rouge">private</code>한 멤버 변수면 클래스 내에서만 접근이 가능하고 외부에서는 접근이 불가능하기 때문에 초기화는 어떻게 할까 의문이 들었지만, <code class="language-plaintext highlighter-rouge">static</code>멤버는 클래스 내부에선 초기화가 불가능하므로 <code class="language-plaintext highlighter-rouge">private</code>하더라도 <u>클래스 외부에서 정의가 가능하다.</u></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>  <span class="c1">// ⭐⭐⭐</span>
+	<span class="k">static</span> <span class="kt">int</span> <span class="n">s_value</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">A</span><span class="o">::</span><span class="n">s_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>    <span class="c1">// 👈 private이더라도 전역범위에서 정의 및 초기화 가능</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">A</span> <span class="n">a</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">s_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">A</span><span class="o">::</span><span class="n">s_value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 👈 💥에러!💥 private이므로 s_value 에접근이 불가능하다.</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-static-멤버-변수를-클래스-내부에서-초기화-하는-방법">🔔 static 멤버 변수를 클래스 내부에서 초기화 하는 방법</h2>
+
+<p><code class="language-plaintext highlighter-rouge">inner-class</code>를 사용하여 클래스 안에 클래스를 하나 더 만들고 그 클래스의 생성자 안에서 초기화를 하는 방법이 있다. 이때 클래스에서 클래스의 클래스 객체를 static 멤버 변수로 선언해주어야 한다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="k">class</span> <span class="nc">_init</span> <span class="c1">// inner class</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">_init</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">s_value</span> <span class="o">=</span> <span class="mi">9876</span><span class="p">;</span> <span class="c1">// s_value 접근 가능.</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+<span class="nl">private:</span>
+	<span class="k">static</span> <span class="kt">int</span> <span class="n">s_value</span><span class="p">;</span> 
+	<span class="k">static</span> <span class="n">_init</span> <span class="n">s_initializer</span><span class="p">;</span> 
+<span class="p">};</span>
+<span class="c1">// int Something::s_value = 1234; </span>
+<span class="n">Something</span><span class="o">::</span><span class="n">_init</span> <span class="n">Something</span><span class="o">::</span><span class="n">s_initializer</span><span class="p">;</span> 
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">static</code> 멤버 변수인 <em>s_value</em>를 <em>Something</em> <u>클래스 내에서 간접적으로 초기화 하는 방법</u>
+    <ol>
+      <li><em>Something</em> 클래스 내에 <em>_init</em> 클래스를 만들어준다.</li>
+      <li><em>_init</em> 클래스의 생성자에서 <code class="language-plaintext highlighter-rouge">static</code> 멤버 변수인 <em>s_value</em>를 초기화 해준다.
+        <ul>
+          <li>이렇게 간접적으로 클래스 내부에서 초기화하게 됨.</li>
+        </ul>
+      </li>
+      <li><em>Something</em> 클래스의 <code class="language-plaintext highlighter-rouge">static</code> 멤버 변수로 <em>_init</em> 타입의 <em>s_initializer</em>를 추가해준다.</li>
+      <li>클래스 외부인 전역 범위에서 <em>Something::_init Something::s_initializer;</em> 로 <code class="language-plaintext highlighter-rouge">static</code> 멤버 변수인 <em>s_initializer</em>를 <u>정의 해준다.</u>
+        <ul>
+          <li>데이터 타입은 <em>Something::_init</em></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

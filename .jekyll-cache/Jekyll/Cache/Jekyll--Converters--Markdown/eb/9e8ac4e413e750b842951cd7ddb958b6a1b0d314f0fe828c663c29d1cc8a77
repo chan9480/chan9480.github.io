@@ -1,0 +1,14 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-17-stdstring-문자열-클래스">chapter 17. std::string 문자열 클래스</a></li>
+  <li><a href="#stdstring의-길이와-용량">std::string의 길이와 용량</a>
+    <ul>
+      <li><a href="#-길이-size">🔔 길이 (size)</a>
+        <ul>
+          <li><a href="#empty">empty()</a></li>
+        </ul>
+      </li>
+      <li><a href="#-용량-capacity">🔔 용량 (capacity)</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

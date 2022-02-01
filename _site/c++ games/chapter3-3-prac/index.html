@@ -1,0 +1,2209 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>[C++] 3.3 연습 문제 풀이 -  평생 공부 블로그 : Today I Learned‍ 🌙</title>
+<meta name="description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀  🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기  🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기! ">
+
+
+  <meta name="author" content="공부하는 식빵맘 👱‍♀️">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content=" 평생 공부 블로그 : Today I Learned‍ 🌙">
+<meta property="og:title" content="[C++] 3.3 연습 문제 풀이">
+<meta property="og:url" content="http://localhost:4000/c++%20games/chapter3-3-prac/">
+
+
+  <meta property="og:description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀  🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기  🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기! ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2020-06-19T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2020-06-19T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/c++%20games/chapter3-3-prac/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "식빵맘💛",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" 평생 공부 블로그 : Today I Learned‍ 🌙 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+           평생 공부 블로그 : Today I Learned‍ 🌙
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#c++-games" itemprop="item"><span itemprop="name">C++ games</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">[C++] 3.3 연습 문제 풀이</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="https://user-images.githubusercontent.com/42318591/108615416-2e1bb580-7447-11eb-8a54-6338e53ce625.png" alt="공부하는 식빵맘 👱‍♀️" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">공부하는 식빵맘 👱‍♀️</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:bboddak@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">303</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">C/C++/C#</span>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp" class="">C ++ (164)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/stl" class="">C++ STL & 표준 (13)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                        <li><a href="/categories/cpp-games" class="">C++ 연습 문제 패키지 (33)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp-network" class="">C++ Boost.Asio 네트워크 (4)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/c" class="">C (2)</a></li>
+                    
+                
+            </ul>
+        <span class="nav__sub-title">UE4</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-1" class="">언리얼 블루프린트 강의 1 (40)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-3" class="">언리얼 블루프린트 강의 2 (5)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/udemy-ue4-1" class="">언리얼 C++ 강의 1 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-2" class="">언리얼 C++ 책 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-docs" class="">내 언리얼 문서 (12)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4error" class="">에러 메모 (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">etc</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/design-pattern" class="">디자인 패턴 (15)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/blender" class="">Blender (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/git" class="">Git & Github (6)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/vs" class="">비주얼 스튜디오 (1)</a></li>
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[C++] 3.3 연습 문제 풀이">
+    <meta itemprop="description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀 🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기 🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!">
+    <meta itemprop="datePublished" content="2020-06-19T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2020-06-19T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">[C++] 3.3 연습 문제 풀이
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2020-06-19T00:00:00+09:00">2020.06.19</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-06-19">2020.06.19</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#c-games" class="page__taxonomy-item-category" rel="tag">C++ games</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#graphics" class="page__taxonomy-item-tag" rel="tag">Graphics</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#math" class="page__taxonomy-item-tag" rel="tag">Math</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#opengl" class="page__taxonomy-item-tag" rel="tag">OpenGL</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#physics" class="page__taxonomy-item-tag" rel="tag">Physics</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#32-연습문제">3.2 연습문제</a>
+    <ul>
+      <li><a href="#-q1-스프링과-물체-하나-더-추가해보기">🙋 Q1. 스프링과 물체 하나 더 추가해보기</a>
+        <ul>
+          <li><a href="#전체-코드">전체 코드</a></li>
+          <li><a href="#rb0--rb1-속도-업데이트-가속도">🟡rb0 👉🏻 🔵rb1 속도 업데이트 (가속도)</a></li>
+          <li><a href="#rb1--rb2-속도-업데이트-가속도">🔵rb1 👉🏻 🔵rb2 속도 업데이트 (가속도)</a></li>
+        </ul>
+      </li>
+      <li><a href="#-q2-바둑판처럼-스프링을-촘촘하게-연결해보기">🙋 Q2. 바둑판처럼 스프링을 촘촘하게 연결해보기.</a>
+        <ul>
+          <li><a href="#아이디어">아이디어</a></li>
+          <li><a href="#전체-코드-1">전체 코드</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="32-연습문제">3.2 연습문제</h1>
+
+<p class="notice--warning"><strong>연습 문제</strong>는 스스로 풀이했습니다. 😀     <br />
+해당 챕터 보러가기 🖐 <a href="https://ansohxxn.github.io/c++%20games/chapter3-3/">3.3 질량-용수철 시스템</a> <br />
+연습 문제 출처 : <a href="https://blog.naver.com/atelierjpro/221413483005">홍정모 교수님 블로그</a></p>
+
+<p><br /></p>
+
+<h2 id="-q1-스프링과-물체-하나-더-추가해보기">🙋 Q1. 스프링과 물체 하나 더 추가해보기</h2>
+
+<blockquote>
+  <p>🟡<em>rb0</em>은 고정이며 🔵<em>rb1</em>,🔵<em>rb1</em> 질점이 2개 있는 형태</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85251341-1218dc00-b494-11ea-9243-84b01896a85b.png" alt="image" width="30%" height="40%" class="align-center" /></p>
+
+<h3 id="전체-코드">전체 코드</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "Examples/PrimitivesGallery.h"
+#include "RandomNumberGenerator.h"
+#include "RigidCircle.h"
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">Example</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">RigidCircle</span> <span class="n">rb0</span><span class="p">,</span> <span class="n">rb1</span><span class="p">,</span> <span class="n">rb2</span><span class="p">;</span>
+
+		<span class="n">Example</span><span class="p">()</span>
+			<span class="o">:</span> <span class="n">Game2D</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">reset</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="c1">// Initial position and velocity</span>
+			<span class="n">rb0</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rb0</span><span class="p">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rb0</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">Colors</span><span class="o">::</span><span class="n">hotpink</span><span class="p">;</span>
+			<span class="n">rb0</span><span class="p">.</span><span class="n">radius</span> <span class="o">=</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">;</span>
+			<span class="n">rb0</span><span class="p">.</span><span class="n">mass</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="n">rb1</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rb1</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">;</span>
+			<span class="n">rb1</span><span class="p">.</span><span class="n">radius</span> <span class="o">=</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">;</span>
+			<span class="n">rb1</span><span class="p">.</span><span class="n">mass</span> <span class="o">=</span> <span class="n">rb0</span><span class="p">.</span><span class="n">mass</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">radius</span> <span class="o">/</span> <span class="n">rb0</span><span class="p">.</span><span class="n">radius</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+
+			<span class="n">rb2</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.8</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rb2</span><span class="p">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rb2</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">;</span>
+			<span class="n">rb2</span><span class="p">.</span><span class="n">radius</span> <span class="o">=</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">;</span>
+			<span class="n">rb2</span><span class="p">.</span><span class="n">mass</span> <span class="o">=</span> <span class="n">rb0</span><span class="p">.</span><span class="n">mass</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">radius</span> <span class="o">/</span> <span class="n">rb0</span><span class="p">.</span><span class="n">radius</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">drawWall</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">setLineWidth</span><span class="p">(</span><span class="mf">5.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">},</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">});</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">},</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span> <span class="p">});</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">},</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span> <span class="p">});</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">getTimeStep</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">;</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="c1">// physics update (Temporarily disabled)</span>
+			<span class="c1">//rb0.update(dt);</span>
+			<span class="c1">//rb1.update(dt);</span>
+
+			<span class="c1">// coefficients</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">gravity</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.8</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">coeff_k</span> <span class="o">=</span> <span class="mf">50.0</span><span class="n">f</span><span class="p">;</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">coeff_d</span> <span class="o">=</span> <span class="mf">10.0</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="c1">// update rb1 (Note: rb0 is fixed)</span>
+			<span class="p">{</span>
+				<span class="k">const</span> <span class="kt">float</span> <span class="n">l0</span> <span class="o">=</span> <span class="mf">0.3</span><span class="n">f</span><span class="p">;</span>
+
+				<span class="c1">// rb0-rb1 spring</span>
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb0</span><span class="p">.</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb0</span><span class="p">.</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span><span class="c1">// unit vector</span>
+
+				<span class="c1">// compute stiffness force</span>
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span>
+					<span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">-</span> <span class="n">rb0</span><span class="p">.</span><span class="n">vel</span><span class="p">).</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+
+				<span class="c1">// compute damping force</span>
+
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">accel</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">+</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb1</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span>
+
+				<span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">+=</span> <span class="n">accel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+				<span class="c1">// to 'reaction' to rb0 because rb0 is fixed.</span>
+			<span class="p">}</span>
+
+			<span class="c1">// update rb2</span>
+			<span class="p">{</span>
+				<span class="k">const</span> <span class="kt">float</span> <span class="n">l0</span> <span class="o">=</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">;</span>
+
+				<span class="c1">// rb1-rb2 spring</span>
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb2</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb1</span><span class="p">.</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb2</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb1</span><span class="p">.</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span> <span class="c1">// unit vector</span>
+
+				<span class="c1">// compute stiffness force</span>
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span>
+					<span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">rb2</span><span class="p">.</span><span class="n">vel</span> <span class="o">-</span> <span class="n">rb1</span><span class="p">.</span><span class="n">vel</span><span class="p">).</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+
+				<span class="c1">// compute damping force</span>
+
+				<span class="k">const</span> <span class="k">auto</span> <span class="n">accel</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">+</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb2</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span>
+
+				<span class="n">rb2</span><span class="p">.</span><span class="n">vel</span> <span class="o">+=</span> <span class="n">accel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+				<span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">-=</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb1</span><span class="p">.</span><span class="n">mass</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span> <span class="c1">// reaction</span>
+			<span class="p">}</span>
+
+			<span class="c1">// update positions</span>
+			<span class="n">rb1</span><span class="p">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+			<span class="n">rb2</span><span class="p">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">rb2</span><span class="p">.</span><span class="n">vel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="c1">// draw</span>
+			<span class="n">drawWall</span><span class="p">();</span>
+
+			<span class="c1">// spring</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">rb0</span><span class="p">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">rb1</span><span class="p">.</span><span class="n">pos</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">rb1</span><span class="p">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="n">rb2</span><span class="p">.</span><span class="n">pos</span><span class="p">);</span>
+
+			<span class="c1">// mass points</span>
+			<span class="n">rb0</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+			<span class="n">rb1</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+			<span class="n">rb2</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+
+			<span class="c1">// reset button</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_KEY_R</span><span class="p">))</span> <span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">Example</span><span class="p">().</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="rb0--rb1-속도-업데이트-가속도">🟡<em>rb0</em> 👉🏻 🔵<em>rb1</em> 속도 업데이트 (가속도)</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+	<span class="k">const</span> <span class="kt">float</span> <span class="n">l0</span> <span class="o">=</span> <span class="mf">0.3</span><span class="n">f</span><span class="p">;</span>
+
+	<span class="c1">// rb0-rb1 spring</span>
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb0</span><span class="p">.</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb0</span><span class="p">.</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span><span class="c1">// unit vector</span>
+
+	<span class="c1">// compute stiffness force</span>
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">-</span> <span class="n">rb0</span><span class="p">.</span><span class="n">vel</span><span class="p">).</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+
+	<span class="c1">// compute damping force</span>
+
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">accel</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">+</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb1</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span>
+
+	<span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">+=</span> <span class="n">accel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+	<span class="c1">// to 'reaction' to rb0 because rb0 is fixed.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>🟡<em>rb0</em>은 고정이므로 속도를 업데이트 하지 않는다.</li>
+  <li>가속도 = 중력가속도 + 스프링의총힘/질량</li>
+  <li><em>const float l0 = 0.3f;</em>
+    <ul>
+      <li>🟡<em>rb0</em> 👉🏻 🔵<em>rb1</em> 의 고정 길이</li>
+    </ul>
+  </li>
+  <li>distance :  l rb1.pos - rb0.pos l</li>
+  <li>direction : <strong><em>rb0 → rb1</em></strong></li>
+  <li><code class="language-plaintext highlighter-rouge">rb1의 가속도</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">accel</code> = gravity + spring_force / rb1.mass;
+        <ol>
+          <li>중력가속도</li>
+          <li>spring_force / rb1의 질량
+            <ul>
+              <li>rb1이 spring_force로부터 받을 가속도</li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="rb1--rb2-속도-업데이트-가속도">🔵<em>rb1</em> 👉🏻 🔵<em>rb2</em> 속도 업데이트 (가속도)</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+	<span class="k">const</span> <span class="kt">float</span> <span class="n">l0</span> <span class="o">=</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">;</span> <span class="c1">// 원래 길이</span>
+
+	<span class="c1">// rb1-rb2 spring</span>
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb2</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb1</span><span class="p">.</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">rb2</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">rb1</span><span class="p">.</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span> <span class="c1">// unit vector</span>
+
+	<span class="c1">// compute stiffness force</span>
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">rb2</span><span class="p">.</span><span class="n">vel</span> <span class="o">-</span> <span class="n">rb1</span><span class="p">.</span><span class="n">vel</span><span class="p">).</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+
+	<span class="c1">// compute damping force</span>
+
+	<span class="k">const</span> <span class="k">auto</span> <span class="n">accel</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">+</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb2</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span>
+
+	<span class="n">rb2</span><span class="p">.</span><span class="n">vel</span> <span class="o">+=</span> <span class="n">accel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+	<span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">-=</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb1</span><span class="p">.</span><span class="n">mass</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span> <span class="c1">// reaction</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>🔵<em>rb2</em> 의 <code class="language-plaintext highlighter-rouge">가속도</code>
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="k">auto</span> <span class="n">accel</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">+</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb2</span><span class="p">.</span><span class="n">mass</span><span class="p">;</span>
+<span class="n">rb2</span><span class="p">.</span><span class="n">vel</span> <span class="o">+=</span> <span class="n">accel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</code></pre></div>    </div>
+    <ul>
+      <li>distance : l rb2.pos - rb1.pos l</li>
+      <li>direction : <strong><em>rb1 → rb2</em></strong></li>
+      <li><code class="language-plaintext highlighter-rouge">accel</code> = gravity + spring_force / rb2.mass*dt;
+        <ol>
+          <li>중력가속도</li>
+          <li>rb2이 spring_force로부터 받을 가속도
+            <ul>
+              <li>spring_force / rb2의 질량</li>
+              <li>rb1 → rb2</li>
+              <li>rb1 입장에서의 rb2의 상대속도 : <strong><em>rb1.vel - rb0.vel</em></strong></li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li>🔵<em>rb1</em> 의 <code class="language-plaintext highlighter-rouge">가속도</code>
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rb1</span><span class="p">.</span><span class="n">vel</span> <span class="o">-=</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">rb1</span><span class="p">.</span><span class="n">mass</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span> <span class="c1">// reaction</span>
+</code></pre></div>    </div>
+    <ul>
+      <li>rb1.vel의 중력 가속도는 🟡<em>rb0</em>👉🏻🔵<em>rb1</em> 에서 반영 했으니까 언급 X</li>
+      <li>🔵<em>rb1</em>👉🏻🔵<em>rb2</em> 의 스프링이 원래대로 돌아가는 힘은 🟡<em>rb0</em>👉🏻🔵<em>rb1</em>의 스프링이 원래대로 돌아가는 힘에 영향을 받은 🔵<em>rb1</em>의 <u>가속도를 줄인다.</u>
+        <ul>
+          <li>rb1.vel <code class="language-plaintext highlighter-rouge">-=</code> spring_force / rb1.mass * dt;</li>
+          <li><u>그래서 이렇게 빼주어야 한다.</u></li>
+          <li>이말은 즉 rb1의 속도 변화 폭이 점점 줄어든다는 것.
+            <ul>
+              <li><del>이 부분 이해가 빠삭하게 되는건 아님.. 아리까리 😥😭</del></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-q2-바둑판처럼-스프링을-촘촘하게-연결해보기">🙋 Q2. 바둑판처럼 스프링을 촘촘하게 연결해보기.</h2>
+<p><em>게임 내에서 플레이어의 옷감을 표현하는데에 많이 쓰이는 기법이다.  옷이 휘날린다던가 이럴 때!</em></p>
+
+<iframe width="1000" height="563" src="https://www.youtube.com/embed/CwMZETZaWNY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h3 id="아이디어">아이디어</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85253429-198eb400-b499-11ea-9b9e-c34517cd1b3b.png" alt="image" width="80%" height="80%" class="align-center" /></p>
+
+<ul>
+  <li><u>여러개의 질점</u>과 <u>여러개의 스프링</u>이 엮여 있을 때
+    <ul>
+      <li>
+        <blockquote>
+          <p>여러가지 힘을 다 합쳐주면 된다.</p>
+        </blockquote>
+        <ul>
+          <li>벡터 x_0이 받는 힘들을 다 더한후 질량으로 나누어 가속도로서 속도에 더해주면 된다.
+            <ul>
+              <li><em>x_0이 받는 힘 = x_1 로부터 받는 힘 + x_2 로부터 받는 힘 + x_3 로부터 받는 힘</em></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85254319-fb29b800-b49a-11ea-98d9-468c3b2bf7a5.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">row</code>, <code class="language-plaintext highlighter-rouge">col</code>을 설정해서 <code class="language-plaintext highlighter-rouge">row × col</code>개수의 질점을 만들 것이다.</li>
+  <li>🟡질점 2개는 고정되어 있다.</li>
+  <li>나머지 🔵질점들은 <u>양 옆(형제)</u>, <u>위에 있는(부모)</u> 질점들로부터 가속도 영향을 받는다.
+    <ul>
+      <li>자신보다 아래에 있는 자식 질점들로부터는 가속도 영향을 받지 않는다.
+        <ul>
+          <li>질점을 잡고 늘어지는 외부의 힘 중력으로부터 질점을 원래대로 끌어 올리는 스프링 힘은 <u>부모 또는 형제 질점이 자식 질점에게 가하는 것이므로.</u></li>
+          <li>따라서 자식 질점으로부터는 스프링의 힘을 받지 않음.</li>
+        </ul>
+      </li>
+      <li>위 사진은 각 질점들이 부모, 형제 질점들과 연결짓는 경우의 수 정리</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85254386-27ddcf80-b49b-11ea-815d-0f94ac7484a0.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<ul>
+  <li>질점들끼리 스프링 연결</li>
+</ul>
+
+<h3 id="전체-코드-1">전체 코드</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "Examples/PrimitivesGallery.h"
+#include "RandomNumberGenerator.h"
+#include "RigidCircle.h"
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+	<span class="k">class</span> <span class="nc">Example</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">RigidCircle</span> <span class="o">*&gt;</span> <span class="n">circles</span><span class="p">;</span>
+		<span class="k">const</span> <span class="kt">float</span> <span class="n">l0</span> <span class="o">=</span> <span class="mf">0.3</span><span class="n">f</span><span class="p">;</span>
+		<span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>   <span class="c1">// &lt;- 바꿔서도 실행 해보자</span>
+		<span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>   <span class="c1">// &lt;- 바꿔서도 실행 보자</span>
+
+		<span class="n">Example</span><span class="p">()</span>
+			<span class="o">:</span> <span class="n">Game2D</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">reset</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">vec2</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.75</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">vec2</span> <span class="n">vel</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">RGB</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">;</span>
+			<span class="kt">float</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">;</span>
+			<span class="kt">float</span> <span class="n">mass</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="c1">// Initial position and velocity</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">pos</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mf">0.75</span><span class="n">f</span> <span class="o">-</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">/</span> <span class="p">(</span><span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">col</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">pos</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="n">f</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">/</span> <span class="p">(</span><span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+					<span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+						<span class="n">color</span> <span class="o">=</span> <span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">;</span>
+					<span class="k">else</span>
+						<span class="n">color</span> <span class="o">=</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">;</span>
+
+					<span class="n">circles</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">new</span> <span class="n">RigidCircle</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">vel</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mass</span><span class="p">));</span>
+
+					<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">mass</span> <span class="o">=</span> <span class="n">circles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mass</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">pow</span><span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">radius</span> <span class="o">/</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">radius</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">drawWall</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">setLineWidth</span><span class="p">(</span><span class="mf">5.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">},</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">});</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">},</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span> <span class="p">});</span>
+			<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span> <span class="p">},</span> <span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="p">{</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span> <span class="p">});</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">getTimeStep</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">;</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="c1">// coefficients</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">gravity</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.8</span><span class="n">f</span><span class="p">);</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">coeff_k</span> <span class="o">=</span> <span class="mf">200.0</span><span class="n">f</span><span class="p">;</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">coeff_d</span> <span class="o">=</span> <span class="mf">5.0</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="c1">// vel update</span>
+			<span class="kt">float</span> <span class="n">distance</span><span class="p">;</span>
+			<span class="n">vec2</span> <span class="n">direction</span><span class="p">;</span>
+			<span class="n">vec2</span> <span class="n">rel_vel</span><span class="p">;</span>
+			<span class="n">vec2</span> <span class="n">spring_force</span><span class="p">;</span>
+			<span class="n">vec2</span> <span class="n">total_spring_force</span><span class="p">;</span>
+			<span class="n">vec2</span> <span class="n">accel</span><span class="p">;</span>
+			<span class="kt">int</span> <span class="n">me</span><span class="p">,</span> <span class="n">myDirectParent</span><span class="p">;</span>
+			<span class="kt">int</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">col</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">total_spring_force</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+							<span class="k">continue</span><span class="p">;</span>
+						<span class="k">else</span>
+						<span class="p">{</span>
+							<span class="n">me</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+
+							<span class="n">flag</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+							<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="c1">// 형제 2개</span>
+							<span class="p">{</span>
+								<span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+								<span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span>
+								<span class="n">rel_vel</span> <span class="o">=</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span><span class="p">;</span>
+								<span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="n">rel_vel</span><span class="p">.</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+								<span class="k">if</span><span class="p">(</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">me</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">!=</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+									<span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-=</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mass</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+								
+								<span class="n">total_spring_force</span> <span class="o">+=</span> <span class="n">spring_force</span><span class="p">;</span>
+
+								<span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+							<span class="p">}</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+					<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">==</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="n">me</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+						<span class="n">myDirectParent</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+
+						<span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+							<span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+						<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+							<span class="n">flag</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+						<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="c1">// 부모 2개</span>
+						<span class="p">{</span>
+							<span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">*</span> <span class="n">k</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+							<span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">*</span> <span class="n">k</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span>
+							<span class="n">rel_vel</span> <span class="o">=</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">*</span> <span class="n">k</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span><span class="p">;</span>
+							<span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="n">rel_vel</span><span class="p">.</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+							<span class="k">if</span> <span class="p">(</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">*</span> <span class="n">k</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">*</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+								<span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">*</span> <span class="n">k</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-=</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">*</span> <span class="n">k</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mass</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+							<span class="n">total_spring_force</span> <span class="o">+=</span> <span class="n">spring_force</span><span class="p">;</span>
+						<span class="p">}</span>
+						<span class="p">{</span>	<span class="c1">// 형제 1개</span>
+							<span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+							<span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span>
+							<span class="n">rel_vel</span> <span class="o">=</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span><span class="p">;</span>
+							<span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="n">rel_vel</span><span class="p">.</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+							<span class="k">if</span> <span class="p">(</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">me</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">!=</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+								<span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-=</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mass</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+							<span class="n">total_spring_force</span> <span class="o">+=</span> <span class="n">spring_force</span><span class="p">;</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+					<span class="k">else</span>
+					<span class="p">{</span>
+						<span class="n">me</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+						<span class="n">myDirectParent</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+
+						<span class="n">flag</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+						<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="c1">// 부모 3개</span>
+						<span class="p">{</span>
+							<span class="n">distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">).</span><span class="n">getMagnitude</span><span class="p">();</span>
+							<span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">)</span> <span class="o">/</span> <span class="n">distance</span><span class="p">;</span>
+							<span class="n">rel_vel</span> <span class="o">=</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span><span class="p">;</span>
+							<span class="n">spring_force</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="n">distance</span> <span class="o">-</span> <span class="n">l0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_k</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="o">-</span><span class="n">rel_vel</span><span class="p">.</span><span class="n">getDotProduct</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_d</span><span class="p">;</span>
+							<span class="k">if</span> <span class="p">(</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span>  <span class="o">!=</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+								<span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">-=</span> <span class="n">spring_force</span> <span class="o">/</span> <span class="n">circles</span><span class="p">[</span><span class="n">myDirectParent</span> <span class="o">+</span> <span class="n">flag</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mass</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+							<span class="n">total_spring_force</span> <span class="o">+=</span> <span class="n">spring_force</span><span class="p">;</span>
+							
+							<span class="n">flag</span><span class="o">++</span><span class="p">;</span>
+						<span class="p">}</span>
+						<span class="n">flag</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+					<span class="p">}</span>
+					<span class="n">accel</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">+</span> <span class="n">total_spring_force</span> <span class="o">/</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mass</span><span class="p">;</span>
+					<span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">+=</span> <span class="n">accel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		
+			<span class="c1">// update positions</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span> <span class="o">*</span> <span class="n">col</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="n">circles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="c1">// draw</span>
+			<span class="n">drawWall</span><span class="p">();</span>
+
+			<span class="c1">// draw spring</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>	
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+					<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">);</span>
+			
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">col</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+					<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">);</span>
+
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">);</span>
+					<span class="n">drawLine</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">,</span> <span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="n">circles</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">col</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">);</span>
+				<span class="p">}</span>				
+
+			<span class="c1">// draw circles</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span> <span class="o">*</span> <span class="n">col</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="n">circles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>
+
+			<span class="c1">// reset button</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_KEY_R</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">row</span> <span class="o">*</span> <span class="n">col</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+					<span class="k">delete</span> <span class="n">circles</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+				<span class="n">circles</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+				<span class="n">reset</span><span class="p">();</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">Example</span><span class="p">().</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>각 🔵의 부모 질점과 형제 질점과의 스프링 힘을 <code class="language-plaintext highlighter-rouge">total_spring_force</code> 에 합해 나간다.</p>
+</blockquote>
+
+<ul>
+  <li><em>if(i != 0)</em>
+    <ul>
+      <li>첫번째 줄</li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>*if (j == 0</td>
+              <td> </td>
+              <td>j == col - 1)*</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul>
+          <li>양 옆 끝</li>
+          <li><strong>고정된 🟡가 있는 곳</strong></li>
+          <li><em>continue</em> 속도를 업뎃 하지 않는다.</li>
+        </ul>
+      </li>
+      <li><em>else</em>
+        <ul>
+          <li><strong>고정된 🟡가 아닌 것들은 다 🔵</strong></li>
+          <li>양 옆 <code class="language-plaintext highlighter-rouge">형제🔵🔵2개</code> 질점과의 스프링 힘 계산</li>
+          <li>첫번째 줄의 🔵들은 부모 없고 형제만 2개</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>*else if (j == 0</td>
+          <td> </td>
+          <td>j == col - 1)*</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>첫번째 줄 제외한 그 모든 줄에서의 양 옆 끝</li>
+      <li><code class="language-plaintext highlighter-rouge">부모🔵🔵2개</code>, <code class="language-plaintext highlighter-rouge">형제🔵1개</code></li>
+    </ul>
+  </li>
+  <li><em>else</em>
+    <ul>
+      <li>첫번째 줄도 아니고 양 옆 끝도 아닌 경우</li>
+      <li><code class="language-plaintext highlighter-rouge">부모🔵🔵🔵3개</code>, <code class="language-plaintext highlighter-rouge">형제🔵🔵2개</code></li>
+    </ul>
+  </li>
+  <li>가속도와 속도 업데이트
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accel</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">+</span> <span class="n">total_spring_force</span> <span class="o">/</span> <span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">mass</span><span class="p">;</span>
+<span class="n">circles</span><span class="p">[</span><span class="n">me</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">+=</span> <span class="n">accel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">C++ games</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/c++%20games/chapter3-3/" class="pagination--pager" title="[C++] 3.3 질량-용수철 시스템
+">이전</a>
+    
+    
+      <a href="/c++%20games/chapter3-4/" class="pagination--pager" title="[C++] 3.4 파티클 시스템
+">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+
+  
+
+  
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/c++%20games/chapter3-3/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>[C++] 3.3 질량-용수철 시스템</a>
+    
+    
+      <a href="/c++%20games/chapter3-4/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>[C++] 3.4 파티클 시스템</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%5BC%2B%2B%5D+3.3+%EC%97%B0%EC%8A%B5+%EB%AC%B8%EC%A0%9C+%ED%92%80%EC%9D%B4%20http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter3-3-prac%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter3-3-prac%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter3-3-prac%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/bound/">[STL 알고리즘] upper_bound, lower_bound, equal_range, binary_search</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.17
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/stdc/">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include <bits/stdc++.h></a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/freopen/">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/mapsetcustom/">[STL 컨테이너] set, unordered_set (+ map)에 사용자 정의 구조체 혹은 객체 담기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/2/">[C] sprintf 로 원하는 형식대로 문자열 저장하기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/1/">[C] C스타일 문자열의 차이 (char 포인터, char 배열) by 메모리 영역</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.22
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/iospeed/">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/deque/">[STL 컨테이너] deque (+ 다른 자료구조들과의 차이점)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/sortmapset/">[STL 컨테이너] map 과 set의 정렬</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.30
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/const/">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 식빵맘💛. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'ansohxxn/comments');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

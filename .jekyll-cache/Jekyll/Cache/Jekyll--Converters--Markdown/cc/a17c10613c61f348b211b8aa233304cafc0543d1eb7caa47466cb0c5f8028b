@@ -1,0 +1,460 @@
+I"�u<p class="notice--warning">인프런에 있는 이재환님의 강의 <strong>게임 디자인 패턴 with Unity</strong> 를 듣고 정리한 필기입니다. 😀</p>
+
+<h1 id="chapter-12-observer-pattern">Chapter 12. Observer Pattern</h1>
+
+<h2 id="-개념">🔔 개념</h2>
+
+<blockquote>
+  <p>한 객체의 상태가 바뀌면 그 객체에 의존하는 <u>다른 객체들한테 연락이 가서 자동으로 내용이 갱신되는 방식</u>. 1:N 의존성을 정의한다.</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/101434223-ee682600-394d-11eb-8563-70cd533cea90.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/101441855-68ec7200-395d-11eb-9d0c-0ddf9a519dc4.png" alt="image" /></p>
+
+<p>Subject 객체가 <code class="language-plaintext highlighter-rouge">bCheck</code> 값 변경이 일어나면 Observer 객체들에게 이를 알린다. 각각의 Observer 객체들의 update() 함수에서 이를 감지하고 이에 따른 동작들을 수행한다.</p>
+
+<ul>
+  <li>Subject 가 Observer 에 대해서 아는 것은 Observer 가 특정 인터페이스를 구현한다는 것 뿐
+    <ul>
+      <li>예를 들어 Observer 객체들은 모두 update() 함수를 가지며 이에서 변화를 감지한다.</li>
+    </ul>
+  </li>
+  <li>Observer 는 언제든지 새로 추가할 수 있다.
+    <ul>
+      <li>Subject 는 Observer 인터페이스를 구현하는 객체 목록에만 의존하기 때문.</li>
+    </ul>
+  </li>
+  <li>새로운 형식의 Observer를 추가하려 해도 Subject 를 전혀 변경할 필요가 없다.
+    <ul>
+      <li>새로운 클래스에서 Observer 인터페이스만 구현해주면 된다.</li>
+    </ul>
+  </li>
+  <li>Subject 나 Observer 가 바뀌더라도 서로에게 전혀 영향을 주지 않는다. 그래서 Subject 와 Observer 는 서로 독립적으로 재사용할 수 있다.</li>
+</ul>
+
+<p><strong>서브젝트에서 옵저버들을 리스트로 관리를 하고, 이 리스트를 순회하며 옵저버들의 함수를 실행시키는 식으로 작동한다.</strong> 예를 들어 버튼 이벤트가 발생하면 서브젝트의 A 함수가 실행되고 이 A 함수는 옵저버 오브젝트들의 B 함수를 일괄적으로 실행시키는 식으로.</p>
+
+<p><br /></p>
+
+<p>유니티, C# 에서의 <u>델리게이트와 같다. 델리게이트가 곧 이 옵저버 패턴인 것이다.</u> 델리게이트 사용하면 옵저버 객체들을 리스트로 관리할 필요가 없다.</p>
+
+<p><br /></p>
+
+<h2 id="-예제-1">🔔 예제 1</h2>
+
+<h3 id="observer">📜Observer</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 옵저버 추상클래스</span>
+<span class="c1">// : 옵저버들이 구현해야 할 인터페이스 메서드</span>
+<span class="k">public</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Observer</span>
+<span class="p">{</span>
+    <span class="c1">// 상태 update 메서드</span>
+    <span class="k">public</span> <span class="k">abstract</span> <span class="k">void</span> <span class="nf">OnNotify</span><span class="p">();</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="concreteobserver1">📜ConcreteObserver1</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="c1">// 옵저버 구현클래스</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ConcreteObserver1</span> <span class="p">:</span> <span class="n">Observer</span>
+<span class="p">{</span>
+    <span class="c1">// 대상타입의 클래스에서 이 메소드를 실행시킴</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnNotify</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"옵저버 클래스의 메서드 실행 #1"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="concreteobserver2">📜ConcreteObserver2</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="c1">// 옵저버 구현클래스</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ConcreteObserver2</span> <span class="p">:</span> <span class="n">Observer</span>
+<span class="p">{</span>
+    <span class="c1">// 대상타입의 클래스에서 이 메소드를 실행시킴</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnNotify</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"옵저버 클래스의 메서드 실행 #2"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="subject">📜Subject</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 대상 인터페이스</span>
+<span class="c1">// : 옵저버 관리, 활용에 관한 타입 정의</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">ISubject</span>
+<span class="p">{</span>
+    <span class="k">void</span> <span class="nf">AddObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">o</span><span class="p">);</span>
+    <span class="k">void</span> <span class="nf">RemoveObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">o</span><span class="p">);</span>
+    <span class="k">void</span> <span class="nf">Notify</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>모든 Subject 인터페이스 자식 클래스들은 위 함수들으 ㄹ오버라이딩 해야 한다.</p>
+</blockquote>
+
+<ul>
+  <li>AddObserver
+    <ul>
+      <li>메세지 뿌릴 옵저버 추가</li>
+    </ul>
+  </li>
+  <li>RemoveObserver
+    <ul>
+      <li>메세지 뿌릴 옵저버 삭제</li>
+    </ul>
+  </li>
+  <li>Notify
+    <ul>
+      <li>옵저버들에게 연락하는 함수</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="concretesubject">📜ConcreteSubject</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="c1">// 대상 클래스</span>
+<span class="c1">// : 대상 인터페이스를 구현한 클래스</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ConcreteSubject</span> <span class="p">:</span> <span class="n">MonoBehaviour</span><span class="p">,</span> <span class="n">ISubject</span>
+<span class="p">{</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="n">Observer</span><span class="p">&gt;</span> <span class="n">observers</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Observer</span><span class="p">&gt;();</span>  <span class="c1">// 옵저버를 관리하는 List</span>
+
+    <span class="c1">// 관리할 옵저버를 등록</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">observer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">observers</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">observer</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 관리중인 옵저버를 삭제</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">RemoveObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">observer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">observers</span><span class="p">.</span><span class="nf">IndexOf</span><span class="p">(</span><span class="n">observer</span><span class="p">)</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="n">observers</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">observer</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 관리중인 옵저버에게 연락</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Notify</span><span class="p">()</span>
+    <span class="p">{</span>
+<span class="c1">//        for (int i = 0; i &lt; observers.Count; i++)</span>
+<span class="c1">//        {</span>
+<span class="c1">//            observers[i].OnNotify();</span>
+<span class="c1">//        }</span>
+		<span class="k">foreach</span> <span class="p">(</span><span class="n">Observer</span> <span class="n">o</span> <span class="k">in</span> <span class="n">observers</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">o</span><span class="p">.</span><span class="nf">OnNotify</span><span class="p">();</span>
+		<span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Observer</span> <span class="n">obj1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConcreteObserver1</span><span class="p">();</span>
+        <span class="n">Observer</span> <span class="n">obj2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConcreteObserver2</span><span class="p">();</span>
+
+        <span class="nf">AddObserver</span><span class="p">(</span><span class="n">obj1</span><span class="p">);</span>
+        <span class="nf">AddObserver</span><span class="p">(</span><span class="n">obj2</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>옵저버들을 리스트로 관리</li>
+  <li>Notify() 함수를 통해 옵저버들의 OnNotify() 함수를 다 실행시킴
+    <ul>
+      <li>유니티 버튼 이벤트에 이 Notify() 함수를 추가하여, 버튼이 눌리면 옵저버들의 OnNotify() 함수가 실행되도록 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-예제-2">🔔 예제 2</h2>
+
+<h3 id="observer-1">📜Observer</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 옵저버 추상클래스</span>
+<span class="c1">// : 옵저버들이 구현해야 할 인터페이스 메서드</span>
+<span class="k">public</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Observer</span>
+<span class="p">{</span>
+    <span class="c1">// 상태 update 메서드</span>
+    <span class="k">public</span> <span class="k">abstract</span> <span class="k">void</span> <span class="nf">OnNotify</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이번엔 Subject 로 부터 파라미터 데이터를 받는다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="concreteobserver1-1">📜ConcreteObserver1</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="c1">// 옵저버 구현클래스</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ConcreteObserver1</span> <span class="p">:</span> <span class="n">Observer</span>
+<span class="p">{</span>
+    <span class="n">GameObject</span> <span class="n">obj</span><span class="p">;</span>
+
+    <span class="c1">// 생성자를 통해 객체 전달</span>
+    <span class="k">public</span> <span class="nf">ConcreteObserver1</span><span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">obj</span> <span class="p">=</span> <span class="n">obj</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 대상타입의 클래스에서 이 메소드를 실행시킴</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnNotify</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">num2</span> <span class="p">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">ConcreteSubject</span><span class="p">&gt;().</span><span class="nf">getNum</span><span class="p">();</span>
+
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"옵저버 클래스의 메서드 실행 #1"</span><span class="p">);</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"메서드의 파라미터 : "</span> <span class="p">+</span> <span class="n">num</span><span class="p">);</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"객체 변수를 통한 접근 : "</span> <span class="p">+</span> <span class="n">num2</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">obj</code>로 부터 서브젝트 📜ConcreteSubject 가 붙어있는 오브젝트를 받는다.
+    <ul>
+      <li>📜ConcreteSubject의 함수와 데이터를 옵저버가 받기 위하여</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="concreteobserver2-1">📜ConcreteObserver2</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="c1">// 옵저버 구현클래스</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ConcreteObserver2</span> <span class="p">:</span> <span class="n">Observer</span>
+<span class="p">{</span>
+    <span class="n">GameObject</span> <span class="n">obj</span><span class="p">;</span>
+
+    <span class="c1">// 생성자를 통해 객체 전달</span>
+    <span class="k">public</span> <span class="nf">ConcreteObserver2</span><span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">obj</span> <span class="p">=</span> <span class="n">obj</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 대상타입의 클래스에서 이 메소드를 실행시킴</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnNotify</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">num2</span> <span class="p">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">ConcreteSubject</span><span class="p">&gt;().</span><span class="nf">getNum</span><span class="p">();</span>
+
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"옵저버 클래스의 메서드 실행 #2"</span><span class="p">);</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"메서드의 파라미터 : "</span> <span class="p">+</span> <span class="n">num</span><span class="p">);</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"객체 변수를 통한 접근 : "</span> <span class="p">+</span> <span class="n">num2</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">obj</code>로 부터 서브젝트 📜ConcreteSubject 가 붙어있는 오브젝트를 받는다.
+    <ul>
+      <li>📜ConcreteSubject의 함수와 데이터를 옵저버가 받기 위하여</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="subject-1">📜Subject</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 대상 인터페이스</span>
+<span class="c1">// : 옵저버 관리, 활용에 관한 타입 정의</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">ISubject</span>
+<span class="p">{</span>
+    <span class="k">void</span> <span class="nf">AddObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">o</span><span class="p">);</span>
+    <span class="k">void</span> <span class="nf">RemoveObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">o</span><span class="p">);</span>
+    <span class="k">void</span> <span class="nf">Notify</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>모든 Subject 인터페이스 자식 클래스들은 위 함수들으 ㄹ오버라이딩 해야 한다.</p>
+</blockquote>
+
+<ul>
+  <li>AddObserver
+    <ul>
+      <li>메세지 뿌릴 옵저버 추가</li>
+    </ul>
+  </li>
+  <li>RemoveObserver
+    <ul>
+      <li>메세지 뿌릴 옵저버 삭제</li>
+    </ul>
+  </li>
+  <li>Notify
+    <ul>
+      <li>옵저버들에게 연락하는 함수</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="concretesubject-1">📜ConcreteSubject</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="c1">// 대상 클래스</span>
+<span class="c1">// : 대상 인터페이스를 구현한 클래스</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ConcreteSubject</span> <span class="p">:</span> <span class="n">MonoBehaviour</span><span class="p">,</span> <span class="n">ISubject</span>
+<span class="p">{</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="n">Observer</span><span class="p">&gt;</span> <span class="n">observers</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Observer</span><span class="p">&gt;();</span>  <span class="c1">// 옵저버를 관리하는 List</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">myNum</span><span class="p">;</span>
+
+    <span class="c1">// 관리할 옵저버를 등록</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">observer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">observers</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">observer</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 관리중인 옵저버를 삭제</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">RemoveObserver</span><span class="p">(</span><span class="n">Observer</span> <span class="n">observer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">observers</span><span class="p">.</span><span class="nf">IndexOf</span><span class="p">(</span><span class="n">observer</span><span class="p">)</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="n">observers</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">observer</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 관리중인 옵저버에게 연락</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Notify</span><span class="p">()</span>
+    <span class="p">{</span>
+		  <span class="k">foreach</span> <span class="p">(</span><span class="n">Observer</span> <span class="n">o</span> <span class="k">in</span> <span class="n">observers</span><span class="p">)</span>
+		  <span class="p">{</span>
+			  <span class="n">o</span><span class="p">.</span><span class="nf">OnNotify</span><span class="p">(</span><span class="n">myNum</span><span class="p">);</span> 
+		  <span class="p">}</span> 
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">myNum</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+
+        <span class="n">Observer</span> <span class="n">obj1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConcreteObserver1</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+        <span class="n">Observer</span> <span class="n">obj2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConcreteObserver2</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+
+        <span class="nf">AddObserver</span><span class="p">(</span><span class="n">obj1</span><span class="p">);</span>
+        <span class="nf">AddObserver</span><span class="p">(</span><span class="n">obj2</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">getNum</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">myNum</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+</code></pre></div></div>
+
+<ul>
+  <li>옵저버들에게 <code class="language-plaintext highlighter-rouge">myNum</code> 데이터를 알려준다.  <code class="language-plaintext highlighter-rouge">o.OnNotify(myNum);</code></li>
+  <li>옵저버들에게 자신의 오브젝트를 넘겨 <code class="language-plaintext highlighter-rouge">this.gameObject</code>, 이를 통해 📜ConcreteSubject 의 <code class="language-plaintext highlighter-rouge">getNum()</code> 함수를 사용할 수 있게 해준다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-예제-3-delegate-사용">🔔 예제 3 (delegate 사용)</h2>
+
+<p>나머지 코드들은 예제 2 와 일치하다.</p>
+
+<h3 id="concretesubject-2">📜ConcreteSubject</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ConcreteSubject</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+  <span class="c1">//  List&lt;Observer&gt; observers = new List&lt;Observer&gt;();  // 옵저버를 관리하는 List</span>
+  
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">myNum</span><span class="p">;</span>
+
+	  <span class="k">delegate</span> <span class="k">void</span> <span class="nf">NotiHandler</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">);</span>
+	  <span class="n">NotiHandler</span> <span class="n">_notiHandler</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Notify</span><span class="p">()</span>
+    <span class="p">{</span>
+		    <span class="nf">_notiHandler</span><span class="p">(</span><span class="n">myNum</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">myNum</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+
+        <span class="n">Observer</span> <span class="n">obj1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConcreteObserver1</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+        <span class="n">Observer</span> <span class="n">obj2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConcreteObserver2</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+
+		    <span class="n">_notiHandler</span> <span class="p">+=</span> <span class="k">new</span> <span class="nf">NotiHandler</span><span class="p">(</span><span class="n">obj1</span><span class="p">.</span><span class="n">OnNotify</span><span class="p">);</span>
+		    <span class="n">_notiHandler</span> <span class="p">+=</span> <span class="k">new</span> <span class="nf">NotiHandler</span><span class="p">(</span><span class="n">obj2</span><span class="p">.</span><span class="n">OnNotify</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">getNum</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">myNum</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>int 파라미터 하나를 받는 void 형 함수들만 등록할 수 있는 <code class="language-plaintext highlighter-rouge">_notiHandler</code> 델리게이트 객체를 생성한다.
+    <ul>
+      <li>📜ConcreteSubject의 Notify()는 이 델리게이트를 파라미터만 넘겨 실행시킬 뿐이다. 어떤 함수들이 등록되있는지 알 필요 없는 체로.
+        <ul>
+          <li>이전에 개별적으로 리스트에 옵저버 객체들을 저장해두고 for문 돌려 일일이 옵저버들의 OnNotify를 실행시켰던 것과 달리 간단.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>델리게이트에 그저 옵저버의 OnNotify 함수를 등록시킬 뿐이다.
+    <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		  <span class="n">_notiHandler</span> <span class="p">+=</span> <span class="k">new</span> <span class="nf">NotiHandler</span><span class="p">(</span><span class="n">obj1</span><span class="p">.</span><span class="n">OnNotify</span><span class="p">);</span>
+          <span class="n">_notiHandler</span> <span class="p">+=</span> <span class="k">new</span> <span class="nf">NotiHandler</span><span class="p">(</span><span class="n">obj2</span><span class="p">.</span><span class="n">OnNotify</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

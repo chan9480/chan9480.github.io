@@ -1,0 +1,10 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-12-가상-함수들--override-final-공변-변환형">chapter 12. 가상 함수들 : override, final, 공변 변환형</a>
+    <ul>
+      <li><a href="#-override">🔔 override</a></li>
+      <li><a href="#-final">🔔 final</a></li>
+      <li><a href="#-공적-반환형covariant-return">🔔 공적 반환형(Covariant Return)</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

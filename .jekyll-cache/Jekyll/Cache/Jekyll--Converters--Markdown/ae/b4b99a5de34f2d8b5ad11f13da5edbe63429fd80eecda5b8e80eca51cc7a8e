@@ -1,0 +1,192 @@
+I"z$<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h2 id="네임스페이스">네임스페이스</h2>
+<ul>
+  <li>함수와 변수들에 이름을 붙여줄 수 있다.</li>
+  <li>네임 스페이스를 사용하는 이유
+    <ul>
+      <li><u>같은 이름의 함수나 변수더라도 구별할 수 있게 된다.</u></li>
+    </ul>
+
+    <p>ex)</p>
+
+    <ul>
+      <li>Myspqce 네임스페이스 공간 안에 있는 doSomething 함수
+        <ul>
+          <li>호출시 <code class="language-plaintext highlighter-rouge">Myspace::doSomething(3, 4);</code></li>
+        </ul>
+      </li>
+      <li>네임스페이스 안붙은 공간 안에 있는 doSomething 함수
+        <ul>
+          <li>호출시 <code class="language-plaintext highlighter-rouge">doSomething(3, 4);</code></li>
+        </ul>
+      </li>
+      <li>두 함수는 이름과 매개변수 타입, 리턴 타입까지 같지만 <u>별개의 다른 함수다.</u>
+        <ul>
+          <li><strong>네임스페이스가 다르기 때문 !</strong></li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">namespace</span> <span class="n">Myspace</span>
+  <span class="p">{</span>
+  	<span class="kt">int</span> <span class="n">doSomething</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
+  	<span class="p">{</span>
+  		<span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+  	<span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kt">int</span> <span class="nf">doSomething</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
+  <span class="p">{</span>
+  	<span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+  <span class="p">{</span>
+  	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">doSomething</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">using namespace 뫄뫄</code>
+    <ul>
+      <li>하면 해당 namespace를 생략할 수 있다.</li>
+      <li>using namespace std
+        <ul>
+          <li>하면 std::cout 이라고 안해도 되고 그냥 cout이라고만 해도 std의 cout이 호출 됨</li>
+        </ul>
+      </li>
+      <li>함수 안에도 쓸 수 있다. 함수 내부 안에서만 네임스페이스 생략 가능하도록</li>
+    </ul>
+  </li>
+  <li>네임스페이스 안에 네임스페이스 또 쓸 수 있다.
+    <ul>
+      <li>ex)
+        <ul>
+          <li>Myspace<strong>::</strong>InnerSpace<strong>::func()</strong></li>
+          <li>using namespace Myspace<strong>::</strong>InnerSpace</li>
+        </ul>
+
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">namespace</span> <span class="n">Myspace</span>
+  <span class="p">{</span>
+  	<span class="k">namespace</span> <span class="n">InnerSpace</span>
+  	<span class="p">{</span>
+  		<span class="kt">int</span> <span class="n">func</span> <span class="p">(</span> <span class="p">)</span>
+  		<span class="p">{</span>
+  			<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  		<span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="전처리기">전처리기</h2>
+<h3 id="define">#define</h3>
+
+<ul>
+  <li>매크로.</li>
+  <li>해당 파일 안에서만 <code class="language-plaintext highlighter-rouge">정의</code>가 적용된다.
+    <ul>
+      <li>#define NUMBER 9
+        <ul>
+          <li>NUMBER들은 다 9로 정의된다.</li>
+        </ul>
+      </li>
+      <li>#define NUMBER  “Hello”
+        <ul>
+          <li>NUMBER들은 다 “Hello”로 정의된다.</li>
+        </ul>
+      </li>
+      <li>#define Max(a, b) (a &gt; b) ? a : b
+        <ul>
+          <li>Max(1, 2) → (1 &gt; 2) ? 1 : 2
+            <ul>
+              <li>즉 2로 정의된다.</li>
+            </ul>
+          </li>
+          <li>Max(1 + 3, 2) → (1 + 3 &gt; 2) ? 1 + 3 : 2
+            <ul>
+              <li>즉 1+3=4, 4로 정의된다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">ifndef</code> , <code class="language-plaintext highlighter-rouge">ifdef</code> 와 <code class="language-plaintext highlighter-rouge">endif</code> 와의 응용
+    <ul>
+      <li>ifdef + 매크로 ~ endif : 해당 매크로로 정의가 됐을 때 이 구간 복사 허용</li>
+      <li>ifndef + 매크로 ~ endif : 해당 매크로로 정의가 되지 않았을 때 이 구간 복사 허용</li>
+      <li>
+        <p>ex)</p>
+
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cp">#include &lt;iostream&gt;
+</span>
+  <span class="cp">#define APPLE
+</span>
+  <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+  <span class="p">{</span>
+  	<span class="cp">#ifdef APPLE
+</span>  	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"APPLE"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+  	<span class="cp">#endif
+</span>
+  	<span class="cp">#ifndef APPLE
+</span>  	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"APPLE"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+  	<span class="cp">#endif
+</span>  <span class="p">}</span>
+</code></pre></div>        </div>
+
+        <ul>
+          <li>“APPLE”이 출력 될 것 !
+            <ul>
+              <li>“APPLE”이 정의되어 있기 때문에
+                <ul>
+                  <li>
+                    <p>ifdef APPLE 정의 되어 있기 때문에 이부분이 실행된다</p>
+
+                    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  	<span class="cp">#ifdef APPLE
+</span>  	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"APPLE"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+  	<span class="cp">#endif
+</span>
+</code></pre></div>                    </div>
+                  </li>
+                  <li>
+                    <p>ifndef APPLE → APPLE이 정의 되어 있기 떄문에 이부분은 실행되지 않는다.</p>
+                    <ul>
+                      <li>만약 #define APPLE이 없거나</li>
+                      <li>#define이 다른 코드 파일에 있다면 ( #define은 파일 안에서만 효력 )
+                        <ul>
+                          <li>아래 부분이 실행되겠지.</li>
+                        </ul>
+
+                        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  	<span class="cp">#ifndef APPLE
+</span>  	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"APPLE"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+  	<span class="cp">#endif
+</span></code></pre></div>                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

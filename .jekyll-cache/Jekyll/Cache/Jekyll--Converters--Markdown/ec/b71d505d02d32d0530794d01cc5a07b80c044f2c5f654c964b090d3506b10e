@@ -1,0 +1,392 @@
+I"f<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-9-연산자-오버로딩--증감-연산자-오버로딩">chapter 9. 연산자 오버로딩 : 증감 연산자 오버로딩</h1>
+
+<blockquote>
+  <p>증감 연산자 : <code class="language-plaintext highlighter-rouge">++</code>, <code class="language-plaintext highlighter-rouge">--</code></p>
+</blockquote>
+
+<p>추가적인 설명은 이전 포스트인 <a href="https://ansohxxn.github.io/cpp/chapter9-1/">9.1 연산자 오버로딩 시작하기</a> 참고하기</p>
+
+<p><strong><em>증감 연산자는 <code class="language-plaintext highlighter-rouge">전위</code>, <code class="language-plaintext highlighter-rouge">후위</code>를 구분해야 한다.</em></strong></p>
+
+<p><br /></p>
+
+<h2 id="-전위-증감-연산자-오버로딩">🔔 ‘전위’ 증감 연산자 오버로딩</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">++</span><span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 3 출력</span>
+</code></pre></div></div>
+<ul>
+  <li>이처럼 <strong>전위</strong> 증감 연산자는 값이 1만큼 증감하는게 <u>바로 반영이 되야한다.</u></li>
+</ul>
+
+<blockquote>
+  <p>따라서 전위 증감연산자는 <strong>자기 자신을 <u>참조</u>로 리턴 해야한다.</strong></p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="전역-함수로-구현하기">전역 함수로 구현하기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Digit</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_digit</span><span class="p">;</span>
+<span class="nl">public:</span>
+	<span class="n">Digit</span><span class="p">(</span><span class="kt">int</span> <span class="n">digit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_digit</span><span class="p">(</span><span class="n">digit</span><span class="p">)</span> <span class="p">{}</span>
+
+	<span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Digit</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">)</span>  <span class="c1">// 전역 함수</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">d</span><span class="p">.</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">friend</span> <span class="n">Digit</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="n">Digit</span> <span class="o">&amp;</span> <span class="n">digit</span><span class="p">)</span> <span class="c1">// ⭐전역 함수</span>
+	<span class="p">{</span>
+		<span class="o">++</span><span class="n">digit</span><span class="p">.</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">digit</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Digit</span> <span class="n">d</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">++</span><span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 6 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 6 출력</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>증감 연산자는 피연산자를 1개 필요로 한다.
+    <ul>
+      <li><strong>전역 함수</strong>로 구현하니 <u>인수 1개를 받아야 한다.</u></li>
+    </ul>
+  </li>
+  <li><strong>인수</strong> 👉 <u>Digit 타입의 객체의 참조를 받는다</u>
+    <ul>
+      <li>증가 시켜주어야 하니 const는 붙이지 않아야 한다.</li>
+      <li>인수로 넘겨 준 그 해당 객체의 멤버 값을 변경시킬거라 참조로 받아야 한다.</li>
+    </ul>
+  </li>
+  <li><strong>리턴 타입</strong> 👉 <u>Digit 타입의 객체의 참조를 리턴한다.</u>
+    <ul>
+      <li>인수로 받은 Digit 그 객체 그대로를 다시 내보낸다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="멤버-함수로-구현하기">멤버 함수로 구현하기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Digit</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_digit</span><span class="p">;</span>
+<span class="nl">public:</span>
+	<span class="n">Digit</span><span class="p">(</span><span class="kt">int</span> <span class="n">digit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_digit</span><span class="p">(</span><span class="n">digit</span><span class="p">)</span> <span class="p">{}</span>
+
+	<span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Digit</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">)</span> <span class="c1">// 전역 함수</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">d</span><span class="p">.</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">Digit</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">()</span>  <span class="c1">// ⭐멤버 함수</span>
+	<span class="p">{</span>
+		<span class="o">++</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> 
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Digit</span> <span class="n">d</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">++</span><span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>증감 연산자는 피연산자를 1개 필요로 한다.
+    <ul>
+      <li><strong>멤버 함수</strong>로 구현하니 <u>인수는 필요 없다.</u></li>
+    </ul>
+  </li>
+  <li><strong>자기 자신(Digit타입 객체)이 곧 피연산자다.</strong></li>
+  <li><strong>리턴 타입</strong> 👉 <u>Digit 타입의 객체의 참조를 리턴한다.</u>
+    <ul>
+      <li>자기 자신(Digit타입 객체)을 리턴해야 하니 <code class="language-plaintext highlighter-rouge">*this</code>을 리턴해준다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-후위-증감-연산자-오버로딩">🔔 ‘후위’ 증감 연산자 오버로딩</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="o">++</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 2 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 3 출력</span>
+</code></pre></div></div>
+<ul>
+  <li>이처럼 <strong>후위</strong> 증감 연산자는 값이 1만큼 증감하는게 <u>세미 콜론을 만난 후에 반영된다.</u></li>
+</ul>
+
+<h3 id="후위-증감연산자의-구현"><strong>후위 증감연산자</strong>의 구현</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">friend</span> <span class="n">Digit</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="n">Digit</span> <span class="o">&amp;</span> <span class="n">digit</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="c1">// 전역 함수 구현시</span>
+<span class="p">{</span>
+    <span class="n">Digit</span> <span class="n">temp</span><span class="p">(</span><span class="n">digit</span><span class="p">.</span><span class="n">m_digit</span><span class="p">);</span>
+		<span class="o">++</span><span class="n">digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Digit</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span>  <span class="c1">// 멤버 함수 구현시</span>
+<span class="p">{</span>
+	  <span class="n">Digit</span> <span class="n">temp</span><span class="p">(</span><span class="n">m_digit</span><span class="p">);</span> 
+	  <span class="o">++</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span> 
+	  <span class="k">return</span> <span class="n">temp</span><span class="p">;</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>전위 증감 연산자와 구분하기 위해 <strong><u>dummy 매개변수인 int</u></strong>를 둔다.
+    <ul>
+      <li>전위 증감 연산자는 리턴 타입이 참조기 때문에 이 점에서 후위 연산자와 구분이 되기는 하지만 <u>함수의 오버로딩에서 리턴 타입은 구분 기준이 되지 않는다.</u> <a href="https://ansohxxn.github.io/cpp/chapter7-5/">참고 포스트</a></li>
+      <li>따라서 아무 역할도 하지 않는(dummy), <u>그저 전위 증감 연산자와 구분하는데 도움이 되기 위한</u> <code class="language-plaintext highlighter-rouge">int</code>를 매개변수 자리에 둔다.</li>
+    </ul>
+  </li>
+  <li>후위 증감 연산자는 연산의 결과가 바로 반영되지 않기 때문에  <strong>미리 연산 전의 값을 옮겨놓은 다음에 연산</strong>을 한다. 그리고 <u>임시 저장해 둔 연산 전의 값을 리턴해준다.</u>
+    <ul>
+      <li><u>증가 시킬 때 '전위' 증감 연산자를 필요</u>로 하기 때문에 후위 연산자 오버로딩만 하지 말고 전위 연산자 오버로딩도 같이 해놓자.</li>
+    </ul>
+  </li>
+  <li>전위 증감 연산자와 다르게 자기 자신을 참조로 리턴 하면 안되고 <u>일반적인 call by value 타입으로 리턴</u> 해야한다.
+    <ul>
+      <li><strong>증가시키기 전의 값을 미리 옮겨 두었던 그 임시 객체를 리턴해야 하기 때문에</strong></li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="전역-함수로-구현하기-1">전역 함수로 구현하기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Digit</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_digit</span><span class="p">;</span>
+<span class="nl">public:</span>
+	<span class="n">Digit</span><span class="p">(</span><span class="kt">int</span> <span class="n">digit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_digit</span><span class="p">(</span><span class="n">digit</span><span class="p">)</span> <span class="p">{}</span>
+
+	<span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Digit</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">)</span>  <span class="c1">// 전역 함수</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">d</span><span class="p">.</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+
+  <span class="c1">//prefix</span>
+	<span class="k">friend</span> <span class="n">Digit</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="n">Digit</span> <span class="o">&amp;</span> <span class="n">digit</span><span class="p">)</span> <span class="c1">// ⭐전역 함수</span>
+	<span class="p">{</span>
+		<span class="o">++</span><span class="n">digit</span><span class="p">.</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">digit</span><span class="p">;</span>
+	<span class="p">}</span>
+
+  <span class="c1">//postfix</span>
+	<span class="k">friend</span> <span class="n">Digit</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="n">Digit</span> <span class="o">&amp;</span> <span class="n">digit</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="c1">// ⭐전역 함수</span>
+	<span class="p">{</span>
+		<span class="n">Digit</span> <span class="n">temp</span><span class="p">(</span><span class="n">digit</span><span class="p">.</span><span class="n">m_digit</span><span class="p">);</span>
+		<span class="o">++</span><span class="n">digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Digit</span> <span class="n">d</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span><span class="o">++</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// 5 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>    <span class="c1">// 6 출력</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>증감 연산자는 피연산자를 1개 필요로 한다.
+    <ul>
+      <li><strong>전역 함수</strong>로 구현하니 <u>인수 1개를 받아야 한다.</u></li>
+      <li>사실 <code class="language-plaintext highlighter-rouge">전위</code> 증감 연산자와의 구분(오버로딩)을 위하여 dummy변수인 <strong>int</strong>가 하나 붙어있긴 하지만 인수는 1개만 받는다.</li>
+    </ul>
+  </li>
+  <li><strong>인수</strong> 👉 <u>Digit 타입의 객체의 참조를 받는다</u>
+    <ul>
+      <li>증가 시켜주어야 하니 const는 붙이지 않아야 한다.</li>
+      <li>인수로 넘겨 준 그 해당 객체의 멤버 값을 변경시킬거라 참조로 받아야 한다.</li>
+    </ul>
+  </li>
+  <li><strong>구현</strong>
+    <ol>
+      <li><em>Digit <code class="language-plaintext highlighter-rouge">temp</code>(digit.m_digit);</em>
+        <ul>
+          <li>인수로 넘겨받은 <em>digit</em> 객체를 Digit 타입의 임시 객체 <em>temp</em>를 생성하여 이곳에 옮겨 놓는다.</li>
+        </ul>
+      </li>
+      <li><em>++digit;</em>
+        <ul>
+          <li>실제로 <em>digit</em> 객체를 증가 연산 시킨다.</li>
+          <li>이때 <strong>오버로딩된 전위 증감 연산자가 호출</strong>된다.</li>
+        </ul>
+      </li>
+      <li><em>return temp</em>
+        <ul>
+          <li>미리 옮겨 놓았었던 증가시키기 전의 <em>digit</em> 객체인 <u>임시 객체 temp</u>를 리턴한다.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li><strong>리턴 타입</strong> 👉 <u>Digit 타입의 객체를 call by value로 리턴한다.</u>
+    <ul>
+      <li>증가시키기 전의 <em>digit</em> 객체의 정보를 복사해 저장해두었던 <u>임시 객체 temp</u>를 리턴한다.</li>
+      <li><strong>Digit&amp; 참조로 리턴하면 안된다</strong>
+        <ul>
+          <li>임시 객체를 리턴할텐데 <em>temp</em>임시 객체는 지역변수라 함수가 끝나지면 사라지기 때문이다. 사라진 공간을 참조하게 되는 것이나 마찬가지이다.</li>
+          <li>그냥 <em>temp</em>임시 객체를 call by value로 리턴하면 임시 공간에 이 <em>temp</em> 객체가 복사되고 그 임시 공간이 R-value로서 리턴되는 식이라 문제가 없다.</li>
+          <li><a href="https://ansohxxn.github.io/cpp/chapter8-7/#%EC%9D%BC%EB%B0%98-%EB%A6%AC%ED%84%B4">참고 포스트</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="멤버-함수로-구현하기-1">멤버 함수로 구현하기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Digit</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_digit</span><span class="p">;</span>
+<span class="nl">public:</span>
+	<span class="n">Digit</span><span class="p">(</span><span class="kt">int</span> <span class="n">digit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_digit</span><span class="p">(</span><span class="n">digit</span><span class="p">)</span> <span class="p">{}</span>
+
+	<span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Digit</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">d</span><span class="p">.</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="c1">//prefix</span>
+	<span class="n">Digit</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">()</span>
+	<span class="p">{</span>
+		<span class="o">++</span><span class="n">m_digit</span><span class="p">;</span>
+		<span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> 
+	<span class="p">}</span>
+
+	<span class="c1">//postfix</span>
+	<span class="n">Digit</span> <span class="k">operator</span> <span class="o">++</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">Digit</span> <span class="n">temp</span><span class="p">(</span><span class="n">m_digit</span><span class="p">);</span> 
+		<span class="o">++</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span> 
+		<span class="k">return</span> <span class="n">temp</span><span class="p">;</span> 
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Digit</span> <span class="n">d</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span><span class="o">++</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// 5 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>    <span class="c1">// 6 출력</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>증감 연산자는 피연산자를 1개 필요로 한다.
+    <ul>
+      <li><strong>멤버 함수</strong>로 구현하니 <u>인수는 필요 없다.</u></li>
+    </ul>
+  </li>
+  <li><strong>자기 자신(Digit타입 객체)이 곧 피연산자다.</strong>
+    <ul>
+      <li>사실 <code class="language-plaintext highlighter-rouge">전위</code> 증감 연산자와의 구분(오버로딩)을 위하여 dummy변수인 <strong>int</strong>가 하나 붙어있긴 하지만 인수는 받지 않는다.</li>
+    </ul>
+  </li>
+  <li><strong>구현</strong>
+    <ol>
+      <li><em>Digit <code class="language-plaintext highlighter-rouge">temp</code>(m_digit);</em>
+        <ul>
+          <li>자기 자신의 멤버값과 똑같은 멤버를 가진 Digit 타입의 임시 객체 <em>temp</em>를 생성한다.</li>
+          <li>증가 전 자신의 정보를 미리 다른 곳에 옮겨 놓은 것이나 마찬가지.</li>
+        </ul>
+      </li>
+      <li><em>++(</em>this);*
+        <ul>
+          <li>자기 자신을 증가 연산 시킨다.</li>
+          <li>이때 <strong>오버로딩된 전위 증감 연산자가 호출</strong>된다.</li>
+        </ul>
+      </li>
+      <li><em>return temp</em>
+        <ul>
+          <li>미리 옮겨 놓았었던 증가시키기 전의 자기 자신을 복사해 둔 <u>임시 객체 temp</u>를 리턴한다.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li><strong>리턴 타입</strong> 👉 <u>Digit 타입의 객체를 call by value로 리턴한다.</u>
+    <ul>
+      <li>증가시키기 전의 자기 자신의 정보를 복사해 저장해두었던 <u>임시 객체 temp</u>를 리턴한다.</li>
+      <li><strong>Digit&amp; 참조로 리턴하면 안된다</strong>
+        <ul>
+          <li>임시 객체를 리턴할텐데 <em>temp</em>임시 객체는 지역변수라 함수가 끝나지면 사라지기 때문이다. 사라진 공간을 참조하게 되는 것이나 마찬가지이다.</li>
+          <li>그냥 <em>temp</em>임시 객체를 call by value로 리턴하면 임시 공간에 이 <em>temp</em> 객체가 복사되고 그 임시 공간이 R-value로서 리턴되는 식이라 문제가 없다.</li>
+          <li><a href="https://ansohxxn.github.io/cpp/chapter8-7/#%EC%9D%BC%EB%B0%98-%EB%A6%AC%ED%84%B4">참고 포스트</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

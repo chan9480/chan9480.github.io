@@ -1,0 +1,116 @@
+I"<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter2-변수와-기본-자료형">Chapter2. 변수와 기본 자료형</h1>
+<h1 id="문자형-char-type">문자형 char type</h1>
+
+<h2 id="아스키-코드">아스키 코드</h2>
+<ul>
+  <li>1개의 여러 문자들을 정수에 대응시켜 놓은 것</li>
+  <li>아스키 코드에 따라 <code class="language-plaintext highlighter-rouge">char</code> 문자들은 내부적으로 <code class="language-plaintext highlighter-rouge">정수</code>에 대응되어 있다.
+    <ul>
+      <li>65를 char로 출력하면 ‘A’출력</li>
+      <li>(char)65 형변환하여 출력하면 ‘A’출력
+        <ul>
+          <li>cf) C++ 스타일로는 char(65)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="nf">c1</span><span class="p">(</span><span class="mi">65</span><span class="p">);</span>
+
+<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c1</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">c1</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c1</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">c1</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>cin » c1;
+    <ul>
+      <li>c1 변수는 1개의 문자를 받는 char 타입
+        <ul>
+          <li>‘abc’를 콘솔 입력해본다.</li>
+          <li>‘a’만 c1에 저장되고
+            <ul>
+              <li>1개의 문자만 받으므로</li>
+            </ul>
+          </li>
+          <li>‘b’, ‘c’는 버퍼에 남아있게 된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>cout « c1 « ” “ « static_cast<int>(c1) &lt;&lt; endl;
+</int>    <ul>
+      <li>a 출력 , int 로 변환되 97 출력</li>
+    </ul>
+  </li>
+  <li>cin » c1;
+    <ul>
+      <li>콘솔 입력이 아닌 입력버퍼에 남아있던 ‘b’가 c1에 저장된다.</li>
+      <li>‘c’만 버퍼에 남아있는 상태</li>
+    </ul>
+  </li>
+  <li>cout « c1 « ” “ « static_cast<int>(c1) &lt;&lt; endl;
+</int>    <ul>
+      <li>b 출력, int로 변환되 98 출력</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="개행-문자-n-와-endl-의-차이">개행 문자 \n 와 endl 의 차이</h2>
+
+<h3 id="n"><code class="language-plaintext highlighter-rouge">\n</code></h3>
+
+<ul>
+  <li>char타입의 ‘문자’이다.</li>
+  <li>오로지 줄바꿈만 해준다.
+    <ul>
+      <li>\n 뒤에 다른 문자들이 있어도 \n을 만나면 <u>줄바꿈이 되며 뒤에 문자들은 버퍼에 남는다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="endl"><code class="language-plaintext highlighter-rouge">endl</code></h3>
+
+<ul>
+  <li>줄바꿈 + 버퍼비우기</li>
+  <li>줄바꿈과 동시에 버퍼에 있는 모든 내용들도 출력한다. flush 기능도 하는 것.</li>
+  <li><u>버퍼에 있는 것들을 무조건 다 출력한 후 줄바꿈</u>
+    <ul>
+      <li>따라서 <code class="language-plaintext highlighter-rouge">\n</code> 보다 느리다.
+        <ul>
+          <li>버퍼 비우는 과정도 해야하니까.
+            <ul>
+              <li>여러줄 연속으로 출력할땐 <code class="language-plaintext highlighter-rouge">\n</code>이 나을 수도 있다. 상황에 따라 다르지만 !</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="flush"><code class="language-plaintext highlighter-rouge">flush</code></h3>
+
+<ul>
+  <li>버퍼 비우기</li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

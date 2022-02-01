@@ -1,0 +1,271 @@
+I"~L<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-9-연산자-오버로딩--비교-연산자-오버로딩">chapter 9. 연산자 오버로딩 : 비교 연산자 오버로딩</h1>
+
+<blockquote>
+  <p>비교 연산자 : <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>, <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&gt;=</code></p>
+</blockquote>
+
+<p>추가적인 설명은 이전 포스트인 <a href="https://ansohxxn.github.io/cpp/chapter9-1/">9.1 연산자 오버로딩 시작하기</a> 참고하기</p>
+
+<blockquote>
+  <p>비교 연산자 오버로딩은 원래대로처럼 <u>bool 타입을 리턴하도록 구현하는 것을 권장한다.</u></p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">==</code> : 객체끼리 같은지를 비교할 때 오버로딩
+    <ul>
+      <li>오버로딩 안하고 <strong>객체 == 객체</strong> 해버리면 <u>주소가 같냐, 즉 동일한 객체인가냐</u>에 대한 결과를 얻는다.</li>
+      <li>동일한 객체가 아니더라도 어떤 멤버 변수 값이 같으면 같은 객체라고 하고 싶다거나 그러면 <code class="language-plaintext highlighter-rouge">==</code> 연산자를 오버로딩 하면 된다!</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">!=</code> : 객체끼리 다른지를 비교할 때 오버로딩</li>
+  <li><code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&gt;=</code> : 객체의 크기를 비교할 때 오버로딩
+    <ul>
+      <li>크기 비교 연산자 오버로딩시에는 주의 사항이 있다.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;</code>,  <code class="language-plaintext highlighter-rouge">&lt;=</code> 는 불가능하고 <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&gt;=</code>만 오버로딩이 가능하다.</li>
+          <li><a href="#내림차순-정렬">자세한건 밑에 문단 참고 Click</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="-전역-함수로-구현하기">🔔 전역 함수로 구현하기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Cents</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_cents</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Cents</span><span class="p">(</span><span class="kt">int</span> <span class="n">cents</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_cents</span> <span class="o">=</span> <span class="n">cents</span><span class="p">;</span> <span class="p">}</span>
+	<span class="kt">int</span> <span class="n">getCents</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_cents</span><span class="p">;</span> <span class="p">}</span>
+	<span class="kt">int</span><span class="o">&amp;</span> <span class="n">getCents</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_cents</span><span class="p">;</span> <span class="p">}</span>
+
+	<span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">cents</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">cents</span><span class="p">.</span><span class="n">m_cents</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span> <span class="o">==</span> <span class="p">(</span><span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">c1</span><span class="p">,</span> <span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">c2</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="n">c1</span><span class="p">.</span><span class="n">m_cents</span> <span class="o">==</span> <span class="n">c2</span><span class="p">.</span><span class="n">m_cents</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Cents</span> <span class="n">cents1</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+	<span class="n">Cents</span> <span class="n">cents2</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">cents1</span> <span class="o">==</span> <span class="n">cents2</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Equal "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">==</code> 연산자를 오버로딩 하였다.
+    <ul>
+      <li>피연산자가 2개 필요한데 <strong>전역 함수</strong>로 구현했으므로 <u>Cents 타입의 객체 2개를 인수로 받는다.</u></li>
+      <li>두 객체의 <em>m_cents</em> 멤버 값이 같으면 <code class="language-plaintext highlighter-rouge">true</code>를 리턴한다.</li>
+    </ul>
+  </li>
+  <li><em>cents1 == cents2</em>
+    <ul>
+      <li>실제로 두 객체가 동일한 객체는 아니지만
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">==</code>연산자 오버로딩에 의하여 두 멤버 변수의 값이 같으므로 <code class="language-plaintext highlighter-rouge">true</code>를 리턴한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-멤버-함수로-구현하기">🔔 멤버 함수로 구현하기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Cents</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_cents</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Cents</span><span class="p">(</span><span class="kt">int</span> <span class="n">cents</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_cents</span> <span class="o">=</span> <span class="n">cents</span><span class="p">;</span> <span class="p">}</span>
+	<span class="kt">int</span> <span class="n">getCents</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_cents</span><span class="p">;</span> <span class="p">}</span>
+	<span class="kt">int</span><span class="o">&amp;</span> <span class="n">getCents</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_cents</span><span class="p">;</span> <span class="p">}</span>
+
+	<span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span> <span class="p">(</span><span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">c2</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_cents</span> <span class="o">&lt;</span> <span class="n">c2</span><span class="p">.</span><span class="n">m_cents</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">bool</span> <span class="k">operator</span> <span class="o">==</span> <span class="p">(</span><span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">c2</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_cents</span> <span class="o">==</span> <span class="n">c2</span><span class="p">.</span><span class="n">m_cents</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">cents</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">cents</span><span class="p">.</span><span class="n">m_cents</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;</code> 연산자를 오버로딩 하였다.
+    <ul>
+      <li>피연산자가 2개 필요한데 <strong>멤버 함수</strong>로 구현했으므로 <u>Cents 타입의 객체 1개를 인수로 받는다.</u>
+        <ul>
+          <li><u>나머지 하나는 자기 자신이다</u>
+            <ul>
+              <li>멤버를 호출하는 왼쪽 피연산자</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>자기 자신의 멤버 값 (<code class="language-plaintext highlighter-rouge">this-&gt;m_cents</code>)과 인수로 받은 c2 객체의 <code class="language-plaintext highlighter-rouge">c2.m_cents</code> 멤버 값이 같으면 <code class="language-plaintext highlighter-rouge">true</code>를 리턴한다.</li>
+    </ul>
+  </li>
+  <li><em>cents1 &lt; cents2</em>
+    <ul>
+      <li>cents1가 멤버 함수를 호출하여 cents2를 인수로 넘긴다.</li>
+      <li>실제로 두 객체가 동일한 객체는 아니지만
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">==</code>연산자 오버로딩에 의하여 두 멤버 변수의 값이 같으므로 <code class="language-plaintext highlighter-rouge">true</code>를 리턴한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="객체들을-담은-벡터-정렬하기">객체들을 담은 벡터 정렬하기</h3>
+
+<blockquote>
+  <p>크기 비교가 가능해야 <code class="language-plaintext highlighter-rouge">정렬</code>을 할 수 있다.</p>
+</blockquote>
+
+<ul>
+  <li>객체들을 담는 벡터 컨테이너를 정렬시키려면 <u>크기 비교에 대한 기준이 있어야 한다.</u>
+    <ul>
+      <li>객체끼리는 크기 비교의 기준이 없기 때문에 비교 연산자를 오버로딩 해주어야 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">vector</span><span class="o">&lt;</span><span class="n">Cents</span><span class="o">&gt;</span> <span class="n">arr</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+		<span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">getCents</span><span class="p">()</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="n">random_shuffle</span><span class="p">(</span><span class="n">begin</span><span class="p">(</span><span class="n">arr</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">arr</span><span class="p">));</span> 
+	
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">e</span> <span class="o">:</span> <span class="n">arr</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">begin</span><span class="p">(</span><span class="n">arr</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">arr</span><span class="p">));</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">e</span> <span class="o">:</span> <span class="n">arr</span><span class="p">)</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>vector&lt;Cents&gt; arr(10);</em>
+    <ul>
+      <li>Cents 타입의 객체를 10개 넣을 수 있는 벡터 <code class="language-plaintext highlighter-rouge">arr</code> 정의</li>
+    </ul>
+  </li>
+  <li>for문의 <em>arr[i].getCents() = i;</em>
+    <ul>
+      <li>이 때의 getCents는 <em>int&amp; getCents()</em>이다.
+        <ul>
+          <li>참조 타입으로 리턴하기 때문에 L-value로서 대입할 수 있다.</li>
+          <li>각 원소(객체)의 <em>m_data</em> 멤버 변수에 i 값을 대입해준다.
+            <ul>
+              <li>여기까지 하면 0 1 2 3 4 5 6 7 8 9 이렇게 각각 객체의 <em>m_data</em> 에 들어간다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>std::random_shuffle(begin(arr), end(arr));</em>
+    <ul>
+      <li>벡터 원소들을 랜덤하게 섞는다.</li>
+      <li>이제 이걸 정렬해보자.</li>
+    </ul>
+  </li>
+  <li><em>std::<u>sort</u>(begin(arr), end(arr));</em>
+    <ul>
+      <li>벡터 원소들 정렬</li>
+      <li><code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">=</code> <u>비교 연산자 오버로딩을 해주지 않으면 객체들의 크기를 비교할 기준이 없기 때문에 에러가 난다. 정렬 못 함!</u></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="오름차순-정렬">오름차순 정렬</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span> <span class="p">(</span><span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">c2</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_cents</span> <span class="o">&lt;</span> <span class="n">c2</span><span class="p">.</span><span class="n">m_cents</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;</code> 이면 True</li>
+  <li><code class="language-plaintext highlighter-rouge">&gt;=</code> 이면 False</li>
+  <li>그러므로 이렇게 오버로딩한 후 정렬시키면 <strong>오름차순 정렬</strong> 된다.</li>
+</ul>
+
+<h4 id="내림차순-정렬">내림차순 정렬</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span> <span class="p">(</span><span class="k">const</span> <span class="n">Cents</span> <span class="o">&amp;</span><span class="n">c2</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_cents</span> <span class="o">&gt;</span> <span class="n">c2</span><span class="p">.</span><span class="n">m_cents</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&gt;</code> 이면 True</li>
+  <li><code class="language-plaintext highlighter-rouge">&lt;=</code> 이면 False</li>
+  <li>그러므로 이렇게 오버로딩한 후 정렬시키면 <strong>내림차순 정렬</strong> 된다.</li>
+</ul>
+
+<blockquote>
+  <p>크기 비교 연산자는 <code class="language-plaintext highlighter-rouge">&lt;</code>만 오버로딩이 가능하다. <code class="language-plaintext highlighter-rouge">&gt;</code>를 오버로딩 하고 싶다면 <code class="language-plaintext highlighter-rouge">&lt;</code>을 오버로딩 한 후 내용을 <code class="language-plaintext highlighter-rouge">&gt;</code>면 True를 리턴하게끔 구현하면 된다.</p>
+</blockquote>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

@@ -1,0 +1,274 @@
+I"�@<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-14-예외처리--예외처리와-스택-되감기">chapter 14. 예외처리 : 예외처리와 스택 되감기</h1>
+
+<h2 id="-예외처리-과정">🔔 예외처리 과정</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">last</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Last"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 💛 5 💛</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Throws exception"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 💛 6 💛</span>
+
+	<span class="k">throw</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"End Last"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 🟦 실행 X 🟦</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">third</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Third"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 💛 4 💛</span>
+
+	<span class="n">last</span><span class="p">();</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"End third"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 🟦 실행 X 🟦</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">second</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Second"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 💛 3 💛</span>
+
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="n">third</span><span class="p">();</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Second caught double exception!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 🟦 실행 X 🟦</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"End second"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 🟦 실행 X 🟦</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">first</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"First"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 💛 2 💛</span>
+
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="n">second</span><span class="p">();</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"first caught int exception!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 💛 7 💛</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"End first"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 💛 8 💛</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Start"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 💛 1 💛</span>
+
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="n">first</span><span class="p">();</span> 
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"main caught int exception!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 🟦 실행 X 🟦</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"End of main"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 💛 9 💛</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+Start
+First
+Second
+Third
+last
+Throws exception
+first caught int exception!
+End first
+End of main
+</code></pre></div></div>
+
+<blockquote>
+  <p>출력 및 실행 순서 💛주석 참고💛</p>
+</blockquote>
+
+<ul>
+  <li>💛1💛
+    <ul>
+      <li>main 함수에서 “Start”를 출력한다.</li>
+    </ul>
+  </li>
+  <li>💛2💛
+    <ul>
+      <li>main 함수의 <code class="language-plaintext highlighter-rouge">try</code>에서 <code class="language-plaintext highlighter-rouge">first()</code> 함수를 호출한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">first()</code> 함수에서 “First”를 출력한다.</li>
+    </ul>
+  </li>
+  <li>💛3💛
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">first()</code> 함수의 <code class="language-plaintext highlighter-rouge">try</code>에서 <code class="language-plaintext highlighter-rouge">second()</code> 함수를 호출한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">second()</code> 함수에서 “Second”를 출력한다.</li>
+    </ul>
+  </li>
+  <li>💛4💛
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">second()</code> 함수의 <code class="language-plaintext highlighter-rouge">try</code>에서 <code class="language-plaintext highlighter-rouge">third()</code> 함수를 호출한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">third()</code> 함수에서 “Third”를 출력한다.</li>
+    </ul>
+  </li>
+  <li>💛5💛
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">third()</code> 함수의 <code class="language-plaintext highlighter-rouge">try</code>에서 <code class="language-plaintext highlighter-rouge">last()</code> 함수를 호출한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">last()</code> 함수에서 “Last”를 출력한다.</li>
+    </ul>
+  </li>
+  <li>💛6💛
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">last()</code> 함수에서 “Throws exception”를 출력한다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">last()</code> 함수에서 <u>throw에서 catch를 향해 에러 메세지 `-1` 을 던졌다.</u>
+    <ul>
+      <li>throw에서 던진 <code class="language-plaintext highlighter-rouge">-1</code>은 <u>int 타입이다.</u>
+        <ul>
+          <li><strong>int 를 받는 catch를 찾아야 함</strong></li>
+        </ul>
+      </li>
+      <li>🟦<u>"End Last"는 출력 부분은 실행되지 않는다.</u></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">third()</code> 함수에서 <code class="language-plaintext highlighter-rouge">last()</code> 함수를 호출한 지점으로 돌아온다.
+    <ul>
+      <li>그러나 <code class="language-plaintext highlighter-rouge">-1</code>을 받을 수 있는 <code class="language-plaintext highlighter-rouge">catch</code>가 없으므로 그 지점 아래의 아무것도 실행하지 않고 지나간다.
+        <ul>
+          <li>🟦 <u>"End third"는 출력 부분은 실행되지 않는다.</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">second()</code> 함수에서 <code class="language-plaintext highlighter-rouge">third()</code> 함수를 호출한 지점으로 돌아온다.
+    <ul>
+      <li>그러나 <code class="language-plaintext highlighter-rouge">second()</code> 함수에 있는 <code class="language-plaintext highlighter-rouge">catch (double)</code>는 double 타입만 받으므로 int인 <code class="language-plaintext highlighter-rouge">-1</code>을 받을 수 없으므로 그냥 지나간다.
+        <ul>
+          <li>🟦 <u>"Second caught double exception!" 출력 부분은 실행되지 않는다.</u></li>
+        </ul>
+      </li>
+      <li>🟦 <u>"End third"는 출력 부분은 실행되지 않는다.</u></li>
+    </ul>
+  </li>
+  <li>💛7💛
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">first()</code> 함수에서 <code class="language-plaintext highlighter-rouge">second()</code> 함수를 호출한 지점으로 돌아온다.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">catch (int)</code>에서 <code class="language-plaintext highlighter-rouge">-1</code>을 받을 수 있으므로
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">first()</code> 함수의 <code class="language-plaintext highlighter-rouge">catch(int)</code>에서 “first caught int exception!”를 출력한다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>💛8💛
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">first()</code> 함수에서 “End first”를 출력한다.</li>
+    </ul>
+  </li>
+  <li>💛9💛
+    <ul>
+      <li>main 함수로 함수를 호출한 지점으로 돌아온다.
+        <ul>
+          <li>🟦 그러나 <code class="language-plaintext highlighter-rouge">first()</code> 함수의 <code class="language-plaintext highlighter-rouge">catch(int)</code>에서 <u>이미 예외를 처리했으므로 main 함수의 catch(int)는 실행되지 않는다.</u>
+            <ul>
+              <li>만약 <code class="language-plaintext highlighter-rouge">first()</code> 함수의 catch가 <code class="language-plaintext highlighter-rouge">catch(double)</code> 이었다면 main 함수의 catch(int)가 실행되고 여기서 <code class="language-plaintext highlighter-rouge">-1</code>을 받았을 것이다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>main 함수에서 “End of main”를 출력한다.</li>
+    </ul>
+  </li>
+  <li>프로그램 종료.</li>
+</ul>
+
+<blockquote>
+  <p>따라서 throw로 예외 처리를 위한 신호를 던지게 되면 <u>알맞는 catch를 찾을 때 까지, 즉 알맞는 예외 처리를 끝낼 때 까지 그 아래 모든 부분들은 스킵한 채로 강제 되감기 한다.</u> 알맞는 catch를 찾고 나면 <u>찾은 지점 이후부턴 catch 이외의 아래 부분들을 다 정상 실행</u>시킨다.</p>
+</blockquote>
+
+<blockquote>
+  <p>알맞는 <code class="language-plaintext highlighter-rouge">catch</code>는 <code class="language-plaintext highlighter-rouge">throw</code> 예외가 일어난 바로 아래 부분에서 찾지 않고 바로 Skip 후 <u>스택 되감기를 통해 알맞는 catch를 찾는다.</u></p>
+</blockquote>
+
+<ul>
+  <li>스택을 통해 계속해서 되감아서 알맞는 <code class="language-plaintext highlighter-rouge">catch</code>로 잡히면 끝난다.</li>
+  <li>이미 스택 상 위쪽에서 알맞는 catch를 찾아 예외처리를 했다면 아래 쪽의 예외처리는 실행 되지 않는다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-catch">🔔 catch(…)</h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">catch(...)</code> : 모든 데이터 타입을 다 받을 수 있는 catch 이다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">catch</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"main caught int exception"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(...)</span>
+<span class="p">{</span>
+    <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"main caught ellipses exception"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">throw</code>가 던진 에러 메세지가 <code class="language-plaintext highlighter-rouge">int</code>가 아니라면 <code class="language-plaintext highlighter-rouge">catch(...)</code>에서 예외처리가 될 것이다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-함수와-throw">🔔 함수와 throw</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">last</span><span class="p">()</span> <span class="k">throw</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Last"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Throws exception"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+
+	<span class="k">throw</span> <span class="sc">'a'</span><span class="p">;</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"End Last"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>void last() <code class="language-plaintext highlighter-rouge">throw(int)</code>
+    <ul>
+      <li>이 함수는 <code class="language-plaintext highlighter-rouge">int</code> 타입의 에러 메세지를 던질 수도 있다는 의미.</li>
+    </ul>
+  </li>
+  <li>void last() <code class="language-plaintext highlighter-rouge">throw(...)</code>
+    <ul>
+      <li>이 함수는 어떤 타입의 에러 메세지든 던질 수도 있다는 의미.</li>
+    </ul>
+  </li>
+  <li>void last() <code class="language-plaintext highlighter-rouge">throw()</code>
+    <ul>
+      <li>이 함수는 <u>예외를 발생시키지 않는다</u>는 의미.
+        <ul>
+          <li>이래놓고 함수 안에서 <code class="language-plaintext highlighter-rouge">throw 'a';</code> 이래버리면 에러가 난다.</li>
+          <li>예외를 발생시키지 않는 함수래놓고 예외를 발생시켜서 !</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+
+:ET

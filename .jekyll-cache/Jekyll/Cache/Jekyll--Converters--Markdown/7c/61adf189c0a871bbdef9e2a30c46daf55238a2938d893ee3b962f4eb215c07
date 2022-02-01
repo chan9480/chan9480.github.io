@@ -1,0 +1,23 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-1-기본-기능-구현">Chapter 1. 기본 기능 구현</a></li>
+  <li><a href="#15-fmod를-이용한-소리-재생">1.5 FMOD를 이용한 소리 재생</a>
+    <ul>
+      <li><a href="#fmod-설치-및-위치와-설정">FMOD 설치 및 위치와 설정</a>
+        <ul>
+          <li><a href="#로컬-위치">로컬 위치</a></li>
+          <li><a href="#비주얼-스튜디오에서의-라이브러리-설정">비주얼 스튜디오에서의 라이브러리 설정</a></li>
+        </ul>
+      </li>
+      <li><a href="#fmod-를-사용한-코드-설명">FMOD 를 사용한 코드 설명</a>
+        <ul>
+          <li><a href="#createsound">CreateSound</a></li>
+          <li><a href="#playsound">PlaySound</a></li>
+          <li><a href="#whiletrue-무한-루프">while(true) 무한 루프</a></li>
+          <li><a href="#기타">기타</a></li>
+        </ul>
+      </li>
+      <li><a href="#사운드-구하기">사운드 구하기</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,155 @@
+I"s&<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-9-연산자-오버로딩--형변환을-오버로딩-하기">chapter 9. 연산자 오버로딩 : 형변환을 오버로딩 하기</h1>
+
+<h2 id="-형변환-오버로딩이-필요할-때">🔔 형변환 오버로딩이 필요할 때</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Cents</span> <span class="n">c</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">);</span> <span class="c1">// 💥에러!💥 형변환이 이루어져야 한다.</span>
+</code></pre></div></div>
+<p>Cents 타입의 객체인 c 를 int로 형변환해야 하지만 <u>암시적으로 자동 형변환이 일어나지 않는다.</u> 직접 <strong>Cents 타입의 객체가 어떤 특정 자료형 타입으로 형변환해야할 시점에 호출</strong>되는 <strong><u>형변환 연산자 오버로딩</u></strong>이 필요하다.</p>
+
+<blockquote>
+  <p>오버로딩 해놓으면 <u>특정 객체가 어떤 자료형으로 형변환 되야하는 시점에 호출</u>된다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="-형변환-오버로딩-형식">🔔 형변환 오버로딩 형식</h2>
+
+<blockquote>
+  <p><strong>operator 자료형이름()</strong></p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">operator</span> <span class="nf">int</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"cast here"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_cents</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="k">return</span> <span class="n">m_cents</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>📢 주의사항 : <code class="language-plaintext highlighter-rouge">형변환 연산자</code> 오버로딩은 <u>멤버 함수로만 구현이 가능하다.</u>이유는 모르겠지만😱 전역 함수로 구현하는 것은 막혀있다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="-형변환-오버로딩이-호출되는-시점-보기">🔔 형변환 오버로딩이 호출되는 시점 보기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Cents</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_cents</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Cents</span><span class="p">(</span><span class="kt">int</span> <span class="n">cents</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_cents</span> <span class="o">=</span> <span class="n">cents</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="kt">int</span> <span class="n">getCents</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_cents</span><span class="p">;</span> <span class="p">}</span>
+	<span class="kt">void</span> <span class="n">setCents</span><span class="p">(</span><span class="kt">int</span> <span class="n">cents</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_cents</span> <span class="o">=</span> <span class="n">cents</span><span class="p">;</span> <span class="p">}</span>
+
+	<span class="k">operator</span> <span class="kt">int</span><span class="p">()</span>   <span class="c1">// ⭐ Cents 타입의 객체가 int 로 형변환 되야 할 때 호출</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"cast here"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_cents</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">m_cents</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Dollar</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="n">m_dollars</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Dollar</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_dollars</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="p">{}</span>
+
+	<span class="k">operator</span> <span class="n">Cents</span><span class="p">()</span>  <span class="c1">// ⭐ Dollar 타입의 객체가 Cents 타입으로 형변환 되야 할 때 호출</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="n">Cents</span><span class="p">(</span><span class="n">m_dollars</span><span class="o">*</span><span class="mi">100</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="kt">void</span> <span class="nf">printInt</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Cents</span> <span class="n">cents</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+
+	<span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">cents</span><span class="p">;</span>   <span class="c1">// 👈형변환 오버로딩 호출 </span>
+	<span class="n">value</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">cents</span><span class="p">);</span>   <span class="c1">// 👈형변환 오버로딩 호출 </span>
+	<span class="n">value</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">cents</span><span class="p">);</span>   <span class="c1">// 👈형변환 오버로딩 호출 </span>
+	<span class="n">printInt</span><span class="p">(</span><span class="n">cents</span><span class="p">);</span>  <span class="c1">// 👈형변환 오버로딩 호출 </span>
+
+    <span class="n">Dollar</span> <span class="n">dol</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="n">Cents</span> <span class="n">cents</span> <span class="o">=</span> <span class="n">dol</span><span class="p">;</span>  <span class="c1">// 👈형변환 오버로딩 호출. m_dollars는 200이 된다.</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Cents</code>의 <strong><em>operator int()</em></strong>
+    <ul>
+      <li><strong>Cents</strong> 타입의 객체가 <strong>int</strong> 로 형변환 되야 할 때 호출
+        <ul>
+          <li>호출될 때
+            <ul>
+              <li>int value = (int)cents;</li>
+              <li>value = int(cents);</li>
+              <li>value = static_cast<int>(cents);</int></li>
+              <li>printInt(cents);
+                <ul>
+                  <li>인수를 const int &amp; 타입으로 받는 함수라서</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Dollar</code>의 <strong><em>operator Cents()</em></strong>
+    <ul>
+      <li><strong>Dollar</strong> 타입의 객체가 <strong>Cents</strong> 타입으로 형변환 되야 할 때 호출
+        <ul>
+          <li>호출될 때
+            <ul>
+              <li>Cents cents = dol;
+                <ul>
+                  <li>m_dollars 값은 200이 된다.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

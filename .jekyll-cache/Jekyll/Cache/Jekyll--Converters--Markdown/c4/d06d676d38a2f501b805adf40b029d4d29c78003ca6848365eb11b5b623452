@@ -1,0 +1,65 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-7-함수--인라인-함수">chapter 7. 함수 : 인라인 함수</h1>
+
+<h2 id="일반적인-함수-호출-과정">일반적인 함수 호출 과정</h2>
+
+<p>함수가 호출되면 함수 정의 부분이 있는 코드로 간다. 그리고 리턴 값을 가지고 호출된 곳으로 다시 돌아온다</p>
+<ul>
+  <li>위 아래 왔다 갔다 하는 이 과정이 많이 반복된다면 속도가 느려질 것이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">inline</code> 키워드를 함수 정의 앞에 붙여주면 이 과정을 줄여주어 속도를 빠르게 하고 최적화를 돕는다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="inline-함수">inline 함수</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">min</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">)</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">min</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">inline</code>을 함수 정의 앞에 붙여주면 <u>함수가 아닌 것처럼 작동하게 된다</u> 마치 아래와 같이 작동한다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">min</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">)</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">3</span><span class="p">;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">15</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span> <span class="o">?</span> <span class="mi">15</span> <span class="o">:</span> <span class="mi">30</span><span class="p">;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>min 처럼 내용이 짧은 함수는 왔다 갔다하기 아까우니까 그냥 함수 내용을 복사해와서 위 코드와 같이 ㅈ작동하는 것 처럼 된다. 마치 함수가 아닌 것 처럼!</p>
+<ul>
+  <li>함수 바디까지 갔다 와야 하는 과정을 줄여줌</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="inline-함수-한계">inline 함수 한계</h3>
+
+<p>그러나 <code class="language-plaintext highlighter-rouge">inline</code> 붙인다고 무조건 이렇게 작동하는게 아니라 컴파일러가 <code class="language-plaintext highlighter-rouge">inline</code>으로 작동시켜도 되겠다고 판단한 것만 이런식으로 작동한다. 즉 <code class="language-plaintext highlighter-rouge">inline</code> 키워드는 컴파일러에게 권장 사항일 뿐이고 컴파일러는 이 요청을 무시할 수 있다. inline으로 돌리기 힘든 좀 긴 함수라면 inline 붙어도 inline함수처럼 처리 안됨. 또 inline 함수가 너무 많아지면 코드 양도 많아져 복잡해진다. 최적화를 위한 방법 중 하나일 뿐이고 요샌 inline 안붙여도 컴파일러가 알아서 판단해서 inline으로 돌려주기도 한다. 그래서 <code class="language-plaintext highlighter-rouge">inline</code> 키워드 붙일 필요가 요샌 없다..!</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

@@ -1,0 +1,100 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-3-게임-물리-맛보기--공-두-개를-충돌시켜보자">Chapter 3. 게임 물리 맛보기 : 공 두 개를 충돌시켜보자</h1>
+
+<blockquote>
+  <p>벡터, 상대 속도 등등, 해당 강의에서 다루었던 물리학적 개념들이 문과생인 나에겐 생소하고 잘 와닿지 않았던 개념이라 강의를 필기하기에 앞서 개인적으로 따로 공부하여 정리해보았다.</p>
+</blockquote>
+
+<ul>
+  <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-1/">벡터 개념</a></li>
+  <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-2/">벡터 내적</a></li>
+  <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-3/">노말 벡터</a></li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-상대-속도">🔔 상대 속도</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85217196-0f04e980-b3c9-11ea-8199-acd38b1eaaf9.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">상대속도</code> : 어떤 관측자 입장에서 느끼는 관측한 물체의 상대적인 속도.</p>
+</blockquote>
+
+<ul>
+  <li>상대속도 = 물체의 속도 - 관측자의 속도
+    <ul>
+      <li>\(\vec{v_{0\vert{1}}}=\vec{v_0}-\vec{v_1}\)
+        <ul>
+          <li>1️⃣ 에서 관측해서 느끼는 0️⃣ 의 속도</li>
+          <li><em>ex)</em> 동쪽으로 100km/h 속도로 (\(\vec{v_1}= 100\)) 달리는 버스 안에서 동쪽으로 60km/h 속도로 (\(\vec{v_0}= 60\) 속도로 달리는 자동차를 관측한다면 그 자동차가 \(\vec{v_{0\vert{1}}}=\vec{v_0}-\vec{v_1}=60-(+100)=-40\) 속도로 달리는 것처럼 보인다. 즉 서쪽으로 40km/h 가는 것 처럼 보임. \(\vec{v_{0\vert{1}}}=-40\)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>같은 방향, 같은 속력 즉 같은 속도 벡터를 가진 두 물체의 상대 속도는 0 이 된다.
+    <ul>
+      <li>상대 속도가 0에 가깝다는 것은 두 물체가 부딪쳐도 충격이 덜하다는 것.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-반발-계수">🔔 반발 계수</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85217879-006e0080-b3d0-11ea-9ba7-a45a5762a17a.png" alt="image" width="90%" height="90%" class="align-center" /></p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">반발 계수</code>(\(\epsilon\)) :  두 물체의 충돌 전 상대속도와 충돌 후 상대속도의 비. 즉 두 물체가 가까워지는 속도과 두 물체가 멀어지는 속도의 비다. (\(0&lt;\epsilon&lt;1)\)</p>
+</blockquote>
+
+<ul>
+  <li>반발 계수가 클 수록 충돌시 튕겨지는 정도가 크다.</li>
+</ul>
+
+<p>\[\epsilon=-{\vec{v_{0\vert{1}}}^{new}\cdot\vec{n_1}\over\vec{v_{0\vert{1}}}^{old}\cdot\vec{n_1}}\]</p>
+
+<ul>
+  <li>🔴공을 \(p_0\), 🟡공을 \(p_1\) 이라고 할 때</li>
+  <li>\(\vec{v_{0\vert{1}}}^{old}\)
+    <ul>
+      <li>충돌 전 🟡공에서 관측한 🔴공의 속도</li>
+    </ul>
+  </li>
+  <li>\(\vec{v_{0\vert{1}}}^{new}\)
+    <ul>
+      <li>충돌 후 🟡공에서 관측한 🔴공의 속도</li>
+    </ul>
+  </li>
+  <li>\(\vec{n_1}\)
+    <ul>
+      <li>🟡중심으로부터 🔴중심을 향하는 벡터의 <u>방향</u>을 의미하는 노말 벡터</li>
+    </ul>
+  </li>
+  <li>음수가 붙은 이유
+    <ul>
+      <li>충돌 전 후로 충돌로 인하여 방향이 바뀌기 때문에 \(\vec{v_{0\vert{1}}}^{new}\cdot\vec{n_1}\over\vec{v_{0\vert{1}}}^{old}\cdot\vec{n_1}\) 의 값은 음수가 된다.</li>
+      <li>반발계수를 양수로 표현하기 위해 마이너스를 붙여 양수로 만들어 줌.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>반발계수는 프로그래머가 그 값을 직접 설정해서 충돌시 튕겨져 나오는 정도를 설정한다.</p>
+</blockquote>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

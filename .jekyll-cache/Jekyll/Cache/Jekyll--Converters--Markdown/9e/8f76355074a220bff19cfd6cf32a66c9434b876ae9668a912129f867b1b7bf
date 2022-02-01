@@ -1,0 +1,22 @@
+I"1<ul class="toc__menu">
+  <li><a href="#스택--큐--우선순위-큐">스택 &amp; 큐 &amp; 우선순위 큐</a>
+    <ul>
+      <li><a href="#-스택">🔔 스택</a>
+        <ul>
+          <li><a href="#함수">함수</a></li>
+        </ul>
+      </li>
+      <li><a href="#-큐">🔔 큐</a>
+        <ul>
+          <li><a href="#함수-1">함수</a></li>
+        </ul>
+      </li>
+      <li><a href="#-우선순위-큐">🔔 우선순위 큐</a>
+        <ul>
+          <li><a href="#함수-2">함수</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

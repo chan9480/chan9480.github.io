@@ -1,0 +1,2225 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>[C++] 3.4 연습 문제 풀이 -  평생 공부 블로그 : Today I Learned‍ 🌙</title>
+<meta name="description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀  🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기  🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기! ">
+
+
+  <meta name="author" content="공부하는 식빵맘 👱‍♀️">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content=" 평생 공부 블로그 : Today I Learned‍ 🌙">
+<meta property="og:title" content="[C++] 3.4 연습 문제 풀이">
+<meta property="og:url" content="http://localhost:4000/c++%20games/chapter3-4-prac/">
+
+
+  <meta property="og:description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀  🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기  🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기! ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2020-06-21T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2020-06-21T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/c++%20games/chapter3-4-prac/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "식빵맘💛",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" 평생 공부 블로그 : Today I Learned‍ 🌙 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+           평생 공부 블로그 : Today I Learned‍ 🌙
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#c++-games" itemprop="item"><span itemprop="name">C++ games</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">[C++] 3.4 연습 문제 풀이</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="https://user-images.githubusercontent.com/42318591/108615416-2e1bb580-7447-11eb-8a54-6338e53ce625.png" alt="공부하는 식빵맘 👱‍♀️" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">공부하는 식빵맘 👱‍♀️</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:bboddak@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">303</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">C/C++/C#</span>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp" class="">C ++ (164)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/stl" class="">C++ STL & 표준 (13)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                        <li><a href="/categories/cpp-games" class="">C++ 연습 문제 패키지 (33)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp-network" class="">C++ Boost.Asio 네트워크 (4)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/c" class="">C (2)</a></li>
+                    
+                
+            </ul>
+        <span class="nav__sub-title">UE4</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-1" class="">언리얼 블루프린트 강의 1 (40)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-3" class="">언리얼 블루프린트 강의 2 (5)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/udemy-ue4-1" class="">언리얼 C++ 강의 1 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-2" class="">언리얼 C++ 책 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-docs" class="">내 언리얼 문서 (12)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4error" class="">에러 메모 (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">etc</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/design-pattern" class="">디자인 패턴 (15)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/blender" class="">Blender (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/git" class="">Git & Github (6)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/vs" class="">비주얼 스튜디오 (1)</a></li>
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[C++] 3.4 연습 문제 풀이">
+    <meta itemprop="description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀 🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기 🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!">
+    <meta itemprop="datePublished" content="2020-06-21T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2020-06-21T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">[C++] 3.4 연습 문제 풀이
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2020-06-21T00:00:00+09:00">2020.06.21</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-06-21">2020.06.21</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#c-games" class="page__taxonomy-item-category" rel="tag">C++ games</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#graphics" class="page__taxonomy-item-tag" rel="tag">Graphics</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#opengl" class="page__taxonomy-item-tag" rel="tag">OpenGL</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#32-연습문제">3.2 연습문제</a>
+    <ul>
+      <li><a href="#-q1-마우스-클릭하는-곳에-파티클-효과-일으키기">🙋 Q1. 마우스 클릭하는 곳에 파티클 효과 일으키기</a>
+        <ul>
+          <li><a href="#class-particle">📜class Particle</a></li>
+          <li><a href="#class-particlesystem">📜class ParticleSystem</a></li>
+          <li><a href="#class-example">📜class Example</a></li>
+        </ul>
+      </li>
+      <li><a href="#-q2-물이-뿜어져-나오듯이-지속적으로-파티클이-생성되도록">🙋 Q2. 물이 뿜어져 나오듯이 지속적으로 파티클이 생성되도록</a></li>
+      <li><a href="#-q3-공-위에-파티클을-뿌릴-경우-물체와의-충돌을-넣어보자-아직-풀이-x">🙋 Q3. 공 위에 파티클을 뿌릴 경우 물체와의 충돌을 넣어보자. (아직 풀이 X)</a></li>
+      <li><a href="#-q4-시간에-따라-별이-점점-더-커지다가-빵터지게-만들어-보자-아직-풀이-x">🙋 Q4. 시간에 따라 별이 점점 더 커지다가 빵터지게 만들어 보자. (아직 풀이 X)</a></li>
+    </ul>
+  </li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="32-연습문제">3.2 연습문제</h1>
+
+<p class="notice--warning"><strong>연습 문제</strong>는 스스로 풀이했습니다. 😀     <br />
+해당 챕터 보러가기 🖐 <a href="https://ansohxxn.github.io/c++%20games/chapter3-4/">3.4 파티클 시스템</a> <br />
+연습 문제 출처 : <a href="https://blog.naver.com/atelierjpro/221413483005">홍정모 교수님 블로그</a></p>
+
+<p><br /></p>
+
+<h2 id="-q1-마우스-클릭하는-곳에-파티클-효과-일으키기">🙋 Q1. 마우스 클릭하는 곳에 파티클 효과 일으키기</h2>
+
+<iframe width="478" height="360" src="https://www.youtube.com/embed/oWjqFsp-pjg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "Examples/PrimitivesGallery.h"
+#include "RandomNumberGenerator.h"
+#include "RigidCircle.h"
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+	<span class="k">static</span> <span class="k">const</span> <span class="k">auto</span> <span class="n">gravity</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.8</span><span class="n">f</span><span class="p">);</span>
+	<span class="k">const</span> <span class="kt">int</span> <span class="n">numOfParticle</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+
+	<span class="k">class</span> <span class="nc">Particle</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		
+		<span class="n">vec2</span> <span class="n">pos</span><span class="p">;</span>
+		<span class="n">vec2</span> <span class="n">vel</span><span class="p">;</span>
+
+		<span class="kt">float</span> <span class="n">rot</span><span class="p">;</span>
+		<span class="kt">float</span> <span class="n">angular_velocity</span><span class="p">;</span>
+
+		<span class="n">RGB</span>  <span class="n">color</span><span class="p">;</span>
+
+		<span class="kt">float</span> <span class="n">age</span><span class="p">;</span>
+		<span class="kt">float</span> <span class="n">life</span><span class="p">;</span>
+
+		<span class="kt">bool</span> <span class="n">isDisappeared</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="k">auto</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">gravity</span><span class="p">;</span> <span class="c1">//assumes GA only.</span>
+
+			<span class="n">vel</span> <span class="o">+=</span> <span class="n">acc</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+			<span class="n">pos</span> <span class="o">+=</span> <span class="n">vel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="n">rot</span> <span class="o">+=</span> <span class="n">angular_velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="c1">// update age.</span>
+			<span class="n">age</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">life</span> <span class="o">&lt;</span> <span class="n">age</span><span class="p">)</span>
+				<span class="n">isDisappeared</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+			<span class="c1">// update color (blend with background color)</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">ParticleSystem</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">Particle</span><span class="o">&gt;</span> <span class="n">particles</span><span class="p">;</span>
+		<span class="n">vec2</span> <span class="n">startAtMousePos</span><span class="p">;</span>
+		<span class="kt">bool</span> <span class="n">allDisapeared</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+		<span class="n">RandomNumberGenerator</span> <span class="n">rn</span><span class="p">;</span>
+
+		<span class="n">ParticleSystem</span><span class="p">(</span><span class="n">vec2</span> <span class="n">_startAtMousePos</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">startAtMousePos</span> <span class="o">=</span> <span class="n">_startAtMousePos</span><span class="p">;</span>
+			<span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="k">auto</span> <span class="n">getRandomUnitVector</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">3.141592</span><span class="n">f</span> <span class="o">*</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 0.0 ~ 2pi</span>
+
+			<span class="k">return</span> <span class="n">vec2</span><span class="p">{</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)};</span>
+		<span class="p">}</span>
+
+		<span class="k">auto</span> <span class="n">getRandomColor</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="k">return</span> <span class="n">RGB</span><span class="p">{</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">),</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">),</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">};</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">reset</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">particles</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+			<span class="c1">// initialize particles</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numOfParticle</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">Particle</span> <span class="n">new_particle</span><span class="p">;</span>
+				<span class="n">new_particle</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="n">startAtMousePos</span><span class="p">)</span> <span class="o">+</span> <span class="n">getRandomUnitVector</span><span class="p">()</span> <span class="o">*</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.001</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">new_particle</span><span class="p">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">getRandomUnitVector</span><span class="p">()</span> <span class="o">*</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.01</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">new_particle</span><span class="p">.</span><span class="n">rot</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.01</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span> <span class="o">*</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">360.0</span><span class="n">f</span><span class="p">;</span>
+				<span class="n">new_particle</span><span class="p">.</span><span class="n">angular_velocity</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">360.0</span><span class="n">f</span> <span class="o">*</span> <span class="mf">4.0</span><span class="n">f</span><span class="p">;</span>
+				<span class="n">new_particle</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">getRandomColor</span><span class="p">();</span>
+				<span class="n">new_particle</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+				<span class="n">new_particle</span><span class="p">.</span><span class="n">life</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+
+				<span class="n">particles</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">new_particle</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="kt">int</span> <span class="n">numOfDisappeared</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">pt</span> <span class="o">:</span> <span class="n">particles</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">pt</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">);</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">pt</span><span class="p">.</span><span class="n">isDisappeared</span> <span class="o">==</span> <span class="nb">true</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">numOfDisappeared</span><span class="o">++</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">numOfDisappeared</span> <span class="o">==</span> <span class="n">numOfParticle</span><span class="p">)</span>
+				<span class="n">allDisapeared</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+
+			<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="n">pt</span> <span class="o">:</span> <span class="n">particles</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">pt</span><span class="p">.</span><span class="n">life</span> <span class="o">&lt;</span> <span class="n">pt</span><span class="p">.</span><span class="n">age</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>	<span class="c1">// dead</span>
+
+				<span class="k">const</span> <span class="kt">float</span> <span class="n">color_alpha</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">pt</span><span class="p">.</span><span class="n">age</span> <span class="o">/</span> <span class="n">pt</span><span class="p">.</span><span class="n">life</span><span class="p">;</span>
+
+				<span class="k">const</span> <span class="n">RGB</span> <span class="n">blended_color</span> <span class="o">=</span> <span class="p">{</span> <span class="n">pt</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">color_alpha</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">color_alpha</span><span class="p">),</span>
+					<span class="n">pt</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">color_alpha</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">color_alpha</span><span class="p">),</span>
+					<span class="n">pt</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">color_alpha</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">color_alpha</span><span class="p">)</span> <span class="p">};</span>
+
+				<span class="c1">//drawPoint(blended_color, pt.pos, 3.0f);</span>
+				<span class="n">beginTransformation</span><span class="p">();</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">pt</span><span class="p">.</span><span class="n">pos</span><span class="p">);</span>
+				<span class="n">rotate</span><span class="p">(</span><span class="n">pt</span><span class="p">.</span><span class="n">rot</span><span class="p">);</span>
+				<span class="n">drawFilledStar</span><span class="p">(</span><span class="n">blended_color</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">endTransformation</span><span class="p">();</span>
+			<span class="p">}</span>
+
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">Example</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vector</span> <span class="o">&lt;</span><span class="n">ParticleSystem</span> <span class="o">*&gt;</span> <span class="n">ps</span><span class="p">;</span>
+
+		<span class="n">Example</span><span class="p">()</span>
+			<span class="o">:</span> <span class="n">Game2D</span><span class="p">()</span>
+		<span class="p">{}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">vec2</span> <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">getCursorPos</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isMouseButtonPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_MOUSE_BUTTON_1</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">ps</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">new</span> <span class="n">ParticleSystem</span><span class="p">(</span><span class="n">mouse_pos</span><span class="p">));</span>
+			<span class="p">}</span>
+
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">getTimeStep</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">empty</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ps</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">ps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">allDisapeared</span> <span class="o">==</span> <span class="nb">true</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="k">delete</span> <span class="n">ps</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+						<span class="n">ps</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">ps</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+						<span class="k">continue</span><span class="p">;</span>
+					<span class="p">}</span>
+					<span class="n">ps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">);</span>
+					<span class="n">ps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+			<span class="n">printf</span><span class="p">(</span><span class="s">"%d </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">ps</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+			<span class="c1">// reset button</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_KEY_R</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">empty</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+				<span class="p">{</span>
+					<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ps</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+						<span class="k">delete</span> <span class="n">ps</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+					<span class="n">ps</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+				<span class="p">}</span>		
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">Example</span><span class="p">().</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>const int numOfParticle = 100
+    <ul>
+      <li>1000개로 하면 너무 렉걸리길래 100개로 함</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="class-particle">📜<code class="language-plaintext highlighter-rouge">class Particle</code></h3>
+<ul>
+  <li><em>bool <code class="language-plaintext highlighter-rouge">isDisappeared</code> = false;</em>
+    <ul>
+      <li>파티클 입자 객체가 사라졌는지 체크할 bool 타입 변수</li>
+      <li>기본 값은 false</li>
+      <li>if (life &lt; age)
+        <ul>
+          <li>파티클 입자 객체의 수명이 다하면 이 입자 객체의 isDisappeared 를 true 로 바꾼다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="class-particlesystem">📜<code class="language-plaintext highlighter-rouge">class ParticleSystem</code></h3>
+<ul>
+  <li><strong>변수</strong>
+    <ul>
+      <li><em>vector&lt;Particle&gt; <code class="language-plaintext highlighter-rouge">particles</code>;</em>
+        <ul>
+          <li>파티클 <code class="language-plaintext highlighter-rouge">Particle</code> 입자 객체들을 모아둔 벡터</li>
+        </ul>
+      </li>
+      <li><em>vec2 <code class="language-plaintext highlighter-rouge">startAtMousePos</code>;</em>
+        <ul>
+          <li>마우스 클릭한 위치를 저장할 vec2 객체 생성</li>
+          <li>마우스 클릭한 위치에 <code class="language-plaintext highlighter-rouge">ParticleSystem</code>을 생성할 것.</li>
+        </ul>
+      </li>
+      <li><em>bool <code class="language-plaintext highlighter-rouge">allDisapeared</code> = false</em>
+        <ul>
+          <li>이 파티클 시스템 내의 파티클 입자들이 모두 수명을 다해 사라졌는지 체크</li>
+          <li>즉 파티클 입자 객체 벡터 <code class="language-plaintext highlighter-rouge">particles</code>의 모든 원소(<code class="language-plaintext highlighter-rouge">Particle</code>)들이 <code class="language-plaintext highlighter-rouge">isDisappeared</code> = ture 일 때 <code class="language-plaintext highlighter-rouge">allDisapeared</code> 은 true가 된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>생성자</strong>
+    <ul>
+      <li><em>ParticleSystem(vec2 _startAtMousePos)</em>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">startAtMousePos</code> 변수를 초기화함.
+            <ul>
+              <li>Game2D 상속 클래스에서 클릭한 마우스 위치를 받아와 <code class="language-plaintext highlighter-rouge">ParticleSystem</code>객체를 생성할거고 생성자로 <code class="language-plaintext highlighter-rouge">ParticleSystem</code>객체의  <code class="language-plaintext highlighter-rouge">startAtMousePos</code> 변수 값을 초기화할 것</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>함수</strong>
+    <ul>
+      <li><em>void reset()</em>
+        <ul>
+          <li>new_particle.pos = vec2(<code class="language-plaintext highlighter-rouge">startAtMousePos</code>) + getRandomUnitVector() * rn.getFloat(0.001f, 0.03f);
+            <ul>
+              <li>파티클 입자들은 모두 공통적으로 <code class="language-plaintext highlighter-rouge">startAtMousePos</code> 를 시작점으로 각각 여기서 랜덤한 방향, 랜덤한 거를 초기 위치로 가질 것.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>void update(const float &amp; dt)</em>
+        <ul>
+          <li>이 update함수는 <code class="language-plaintext highlighter-rouge">class Example</code> 의 <em>void update() override</em> 안 에서 매 프레임마다 실행된다.</li>
+          <li><em>int <code class="language-plaintext highlighter-rouge">numOfDisappeared</code> = 0;</em>
+            <ul>
+              <li>해당 파티클 시스템 내에 사라진 파티클 입자 수</li>
+              <li>함수 내에서만 살아있는 지역 변수</li>
+            </ul>
+          </li>
+          <li><em>for (auto &amp; pt : particles)</em>
+            <ul>
+              <li>매 프레임마다 파티클 시스템의 파티클 입자 벡터 원소 전부 for문 돌며 수명이 다한 입자 수를 센다.</li>
+              <li><em>pt.isDisappeared == true</em> 이면 <code class="language-plaintext highlighter-rouge">numOfDisappeared</code> 을 더해나간다.</li>
+              <li><em>if (numOfDisappeared == numOfParticle)</em>
+                <ul>
+                  <li>한 파티클 시스템 당 파티클 입자의 총 개수와 (=<code class="language-plaintext highlighter-rouge">numOfParticle</code>) 한 파티클 시스템 당 사라진 파티클 입자의 총 개수 (=<code class="language-plaintext highlighter-rouge">numOfDisappeared</code>)가 같다면</li>
+                  <li>allDisapeared = true;
+                    <ul>
+                      <li>이 파티클 시스템의 모든 파티클 입자들은 사라졌다고 판단하여 true로 바꿔준다.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="class-example">📜<code class="language-plaintext highlighter-rouge">class Example</code></h3>
+<ul>
+  <li><em>vector &lt;ParticleSystem *&gt; <code class="language-plaintext highlighter-rouge">ps</code>;</em>
+    <ul>
+      <li>클릭할때마다 파티클 시스템이 생성되야 하니 파티클 시스템 벡터 ps를 생성</li>
+      <li>파티클 입자들이 전부 수명이 다해버린 파티클 시스템은 delete 시킬거라 ParicleSystem 포인터 벡터로 설정했다.
+        <ul>
+          <li>생성자에 <code class="language-plaintext highlighter-rouge">ParticleSystem</code>의 reset 함수를 빼버렸다.
+            <ul>
+              <li>Example 객체 생성하자마자 파티클 시스템이 생성되는게 아니라 마우스 클릭할때 생겨야하므로</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>void update() override</em>
+    <ul>
+      <li><em>const vec2 <code class="language-plaintext highlighter-rouge">mouse_pos</code> = getCursorPos(true);</em>
+        <ul>
+          <li>매 프레임마다 <code class="language-plaintext highlighter-rouge">mouse_pos</code>에 마우스 현재 위치를 리턴 받는다.</li>
+        </ul>
+      </li>
+      <li>마우스 좌클 하면
+        <ul>
+          <li><em>ps.push_back(new ParticleSystem(mouse_pos));</em>
+            <ul>
+              <li>파티클 시스템을 동적으로 생성하여 그 포인터를 파티클 시스템 벡터에 삽입한다.</li>
+              <li>마우스 좌클한 그 위치를 생성자 매개변수로 넘긴다. 그 위치에서 파티클시스템이 그려질 수 있게끔</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>if (!empty(ps))</em>
+        <ul>
+          <li>비어있으면 포인터가 아무것도 없다는거고 그런 상태에서 delete 하거나 간접 참조 하면 런타임 에러. 이를 방지 !</li>
+          <li>for문 돌면서 파티클 시스템 포인터 벡터 순회
+            <ul>
+              <li><em>if (ps[i]-&gt;allDisapeared == true)</em>
+                <ul>
+                  <li>파티클 입자가 모두 사라진 파티클 시스템이라면</li>
+                  <li><em>delete ps[i];</em>
+                    <ul>
+                      <li>파티클 시스템 없액고</li>
+                    </ul>
+                  </li>
+                  <li><em>ps.erase(ps.begin() + i);</em>
+                    <ul>
+                      <li>없앤 자리도 없애고 땡긴다.</li>
+                    </ul>
+                  </li>
+                  <li><em>continue;</em>
+                    <ul>
+                      <li>삭제했으니 아래 update, draw과정은 건너 뛰어야함</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-q2-물이-뿜어져-나오듯이-지속적으로-파티클이-생성되도록">🙋 Q2. 물이 뿜어져 나오듯이 지속적으로 파티클이 생성되도록</h2>
+
+<iframe width="478" height="360" src="https://www.youtube.com/embed/qz44kyt3j8I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<blockquote>
+  <p>수명이 다해 죽은 파티클 자리에 새로운 파티클을 넣는식으로 효율적으로 벡터 관리하기</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "Examples/PrimitivesGallery.h"
+#include "RandomNumberGenerator.h"
+#include "RigidCircle.h"
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+	<span class="k">static</span> <span class="k">const</span> <span class="k">auto</span> <span class="n">gravity</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.8</span><span class="n">f</span><span class="p">);</span>
+
+	<span class="k">class</span> <span class="nc">Particle</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">pos</span><span class="p">;</span>
+		<span class="n">vec2</span> <span class="n">vel</span><span class="p">;</span>
+
+		<span class="kt">float</span> <span class="n">rot</span><span class="p">;</span>
+		<span class="kt">float</span> <span class="n">angular_velocity</span><span class="p">;</span>
+
+		<span class="n">RGB</span>  <span class="n">color</span><span class="p">;</span>
+
+		<span class="kt">float</span> <span class="n">age</span><span class="p">;</span>
+		<span class="kt">float</span> <span class="n">life</span><span class="p">;</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="k">auto</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">gravity</span><span class="p">;</span> <span class="c1">//assumes GA only.</span>
+
+			<span class="n">vel</span> <span class="o">+=</span> <span class="n">acc</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+			<span class="n">pos</span> <span class="o">+=</span> <span class="n">vel</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="n">rot</span> <span class="o">+=</span> <span class="n">angular_velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="c1">// update age.</span>
+			<span class="n">age</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">;</span>
+
+			<span class="c1">// update color (blend with background color)</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">ParticleSystem</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">Particle</span> <span class="o">*&gt;</span> <span class="n">particles</span><span class="p">;</span>
+
+		<span class="n">RandomNumberGenerator</span> <span class="n">rn</span><span class="p">;</span>
+
+		<span class="n">ParticleSystem</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="k">auto</span> <span class="n">getRandomUnitVector</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">3.141592</span><span class="n">f</span> <span class="o">*</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 0.0 ~ 2pi</span>
+
+			<span class="k">return</span> <span class="n">vec2</span><span class="p">{</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="p">};</span>
+		<span class="p">}</span>
+
+		<span class="k">auto</span> <span class="n">getRandomColor</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="k">return</span> <span class="n">RGB</span><span class="p">{</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">),</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">),</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">};</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="n">Particle</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">p</span><span class="o">-&gt;</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="n">getRandomUnitVector</span><span class="p">()</span> <span class="o">*</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.001</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">p</span><span class="o">-&gt;</span><span class="n">vel</span> <span class="o">=</span> <span class="n">getRandomUnitVector</span><span class="p">()</span> <span class="o">*</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.01</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">p</span><span class="o">-&gt;</span><span class="n">rot</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.01</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span> <span class="o">*</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">360.0</span><span class="n">f</span><span class="p">;</span>
+			<span class="n">p</span><span class="o">-&gt;</span><span class="n">angular_velocity</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">360.0</span><span class="n">f</span> <span class="o">*</span> <span class="mf">4.0</span><span class="n">f</span><span class="p">;</span>
+			<span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">getRandomColor</span><span class="p">();</span>
+			<span class="n">p</span><span class="o">-&gt;</span><span class="n">age</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+			<span class="n">p</span><span class="o">-&gt;</span><span class="n">life</span> <span class="o">=</span> <span class="n">rn</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">reset</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">particles</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+			<span class="c1">// initialize particles</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">Particle</span> <span class="o">*</span> <span class="n">new_particle</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Particle</span><span class="p">;</span>
+				<span class="n">init</span><span class="p">(</span><span class="n">new_particle</span><span class="p">);</span>
+
+				<span class="n">particles</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">new_particle</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">particles</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">life</span> <span class="o">&lt;</span> <span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">age</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="k">delete</span> <span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+					<span class="n">particles</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">particles</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+					
+					<span class="n">particles</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">particles</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="k">new</span> <span class="n">Particle</span><span class="p">);</span>
+					<span class="n">init</span><span class="p">(</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+				<span class="p">}</span>
+				<span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+
+			<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="n">pt</span> <span class="o">:</span> <span class="n">particles</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">pt</span><span class="o">-&gt;</span><span class="n">life</span> <span class="o">&lt;</span> <span class="n">pt</span><span class="o">-&gt;</span><span class="n">age</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>	<span class="c1">// dead</span>
+
+				<span class="k">const</span> <span class="kt">float</span> <span class="n">color_alpha</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">pt</span><span class="o">-&gt;</span><span class="n">age</span> <span class="o">/</span> <span class="n">pt</span><span class="o">-&gt;</span><span class="n">life</span><span class="p">;</span>
+
+				<span class="k">const</span> <span class="n">RGB</span> <span class="n">blended_color</span> <span class="o">=</span> <span class="p">{</span> <span class="n">pt</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">color_alpha</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">color_alpha</span><span class="p">),</span>
+					<span class="n">pt</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">color_alpha</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">color_alpha</span><span class="p">),</span>
+					<span class="n">pt</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">color_alpha</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="n">f</span> <span class="o">-</span> <span class="n">color_alpha</span><span class="p">)</span> <span class="p">};</span>
+
+				<span class="c1">//drawPoint(blended_color, pt.pos, 3.0f);</span>
+				<span class="n">beginTransformation</span><span class="p">();</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">pt</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">);</span>
+				<span class="n">rotate</span><span class="p">(</span><span class="n">pt</span><span class="o">-&gt;</span><span class="n">rot</span><span class="p">);</span>
+				<span class="n">drawFilledStar</span><span class="p">(</span><span class="n">blended_color</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">endTransformation</span><span class="p">();</span>
+			<span class="p">}</span>
+
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">Example</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">ParticleSystem</span> <span class="n">ps</span><span class="p">;</span>
+
+		<span class="n">Example</span><span class="p">()</span>
+			<span class="o">:</span> <span class="n">Game2D</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">reset</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">ps</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">getTimeStep</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">;</span>
+
+			<span class="n">ps</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">);</span>
+
+			<span class="n">ps</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+
+			<span class="c1">// reset button</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_KEY_R</span><span class="p">))</span> <span class="n">reset</span><span class="p">();</span>
+		<span class="p">}</span>
+
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">Example</span><span class="p">().</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>파티클 시스템은 1개만 있으면 된다.
+    <ul>
+      <li>수명이 다한 파티클 입자는 delete하고 그 자리에 그대로 새로운 파티클 입자를 생성해 삽입하여 파티클 입자가 지속적으로 생성되는 것처럼 보이게 할 것</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">class ParticleSystem</code>
+    <ul>
+      <li><em>vector&lt;Particle *&gt; <code class="language-plaintext highlighter-rouge">particles</code>;</em>
+        <ul>
+          <li>파티클 입자들은 delete되고 생성되고를 반복할거라서 Particle * 포인터 타입</li>
+        </ul>
+      </li>
+      <li><em>void init(Particle * p)</em>
+        <ul>
+          <li>파티클 입자의 포인터를 넘겨 받아 이 포인터로 간접참조하여 파티클의 멤버들을 초기화 할 것.</li>
+        </ul>
+      </li>
+      <li><em>void update(const float &amp; dt)</em>
+        <ul>
+          <li>이 update함수는 <code class="language-plaintext highlighter-rouge">class Example</code> 의 void update() override 에서 매 프레임마다 실행된다.</li>
+          <li><em>for (int i = 0; i &lt; particles.size(); i++)</em>
+            <ul>
+              <li>매 프레임마다 파티클 입자 벡터 전체를 순회</li>
+              <li><em>if (particles[i]-&gt;life &lt; particles[i]-&gt;age)</em>
+                <ul>
+                  <li>수명이 다한 파티클이라면</li>
+                  <li><em>delete particles[i];</em></li>
+                  <li><em>particles.erase(particles.begin() + i);</em>
+                    <ul>
+                      <li>삭제 해주고</li>
+                    </ul>
+                  </li>
+                  <li><em>particles.insert(particles.begin() + i, new Particle);</em></li>
+                  <li><em>init(particles[i]);</em>
+                    <ul>
+                      <li>그 자리에 새로운 파티클을 삽입한다.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">class Example</code>
+    <ul>
+      <li>ParticleSystem ps;
+        <ul>
+          <li>파티클 시스템 객체는 하나만 있으면 됨.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-q3-공-위에-파티클을-뿌릴-경우-물체와의-충돌을-넣어보자-아직-풀이-x">🙋 Q3. 공 위에 파티클을 뿌릴 경우 물체와의 충돌을 넣어보자. (아직 풀이 X)</h2>
+
+<blockquote>
+  <p>파티클들이 공을 뚫고 가는게 아니라 공에 부딪쳐서 튕겨 나오도록</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="-q4-시간에-따라-별이-점점-더-커지다가-빵터지게-만들어-보자-아직-풀이-x">🙋 Q4. 시간에 따라 별이 점점 더 커지다가 빵터지게 만들어 보자. (아직 풀이 X)</h2>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">C++ games</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/c++%20games/chapter3-4/" class="pagination--pager" title="[C++] 3.4 파티클 시스템
+">이전</a>
+    
+    
+      <a href="/cpp/chapter7-8/" class="pagination--pager" title="C++ Chapter 7.8 : 스택과 힙
+">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/c++%20games/chapter3-4/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>[C++] 3.4 파티클 시스템</a>
+    
+    
+      <a href="/c++%20games/chapter4-1/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>[C++] 4.1 외부 이미지 사용하기</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%5BC%2B%2B%5D+3.4+%EC%97%B0%EC%8A%B5+%EB%AC%B8%EC%A0%9C+%ED%92%80%EC%9D%B4%20http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter3-4-prac%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter3-4-prac%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter3-4-prac%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/bound/">[STL 알고리즘] upper_bound, lower_bound, equal_range, binary_search</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.17
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/stdc/">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include <bits/stdc++.h></a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/freopen/">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/mapsetcustom/">[STL 컨테이너] set, unordered_set (+ map)에 사용자 정의 구조체 혹은 객체 담기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/2/">[C] sprintf 로 원하는 형식대로 문자열 저장하기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/1/">[C] C스타일 문자열의 차이 (char 포인터, char 배열) by 메모리 영역</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.22
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/iospeed/">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/deque/">[STL 컨테이너] deque (+ 다른 자료구조들과의 차이점)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/sortmapset/">[STL 컨테이너] map 과 set의 정렬</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.30
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/const/">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 식빵맘💛. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'ansohxxn/comments');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

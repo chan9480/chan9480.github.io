@@ -1,0 +1,18 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-9-연산자-오버로딩--변환-생성자-explicit-delete">chapter 9. 연산자 오버로딩 : 변환 생성자, explicit, delete</a>
+    <ul>
+      <li><a href="#-변환-생성자">🔔 변환 생성자</a>
+        <ul>
+          <li><a href="#변환-생성자의-좋지-않은-점">변환 생성자의 좋지 않은 점</a></li>
+        </ul>
+      </li>
+      <li><a href="#-생성자-명확히-호출하기">🔔 생성자 명확히 호출하기</a>
+        <ul>
+          <li><a href="#explicit">explicit</a></li>
+          <li><a href="#delete">delete</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

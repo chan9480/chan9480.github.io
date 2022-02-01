@@ -1,0 +1,13 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-12-가상-함수들--다형성의-기본-개념">chapter 12. 가상 함수들 : 다형성의 기본 개념</a>
+    <ul>
+      <li><a href="#-다형성-활용하기-전">🔔 다형성 활용하기 전</a></li>
+      <li><a href="#-다형성을-사용하는-이유">🔔 다형성을 사용하는 이유</a>
+        <ul>
+          <li><a href="#virtual-가상-함수">virtual 가상 함수</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

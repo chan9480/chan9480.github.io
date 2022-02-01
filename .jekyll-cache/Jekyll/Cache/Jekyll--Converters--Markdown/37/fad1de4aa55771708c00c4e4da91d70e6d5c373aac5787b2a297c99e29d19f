@@ -1,0 +1,107 @@
+I"�%<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h2 id="char-와-char-의-차이에-대하여"><code class="language-plaintext highlighter-rouge">char*</code> 와 <code class="language-plaintext highlighter-rouge">char []</code>의 차이에 대하여</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">name</span> <span class="p">[]</span> <span class="o">=</span> <span class="s">"Jack Jack"</span><span class="p">;</span>  <span class="c1">// ⭕가능. 문자열 상수로 char 배열 초기화.</span>
+<span class="kt">char</span> <span class="o">*</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"Jack Jack"</span><span class="p">;</span>  <span class="c1">// ❌불가능! ! 오류 ! !</span>
+<span class="kt">char</span> <span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>  <span class="c1">// ⭕가능. ptr로 name 배열의 원소에 접근 가능.</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"Jack Jack"</span><span class="p">;</span> <span class="c1">// ⭕가능. const 붙으면 가능해진다. </span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">char name [] = "Jack Jack";</code>: 문자열 리터럴 상수 “Jack Jack”으로 char 배열을 초기화 한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">char * name = "Jack Jack";</code>가 안되는 이유
+    <ul>
+      <li>name은 포인터기 때문에.</li>
+      <li>“Jack Jack”은 주소가 아닐 뿐더러 <strong><u>리터럴 상수</u></strong>이므로 포인터처럼 사용하려고 하면 오류가 난다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">const char * name = "Jack Jack"</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">const</code>를 붙이면 상수로서 <code class="language-plaintext highlighter-rouge">char *</code>도 특별히 문자열로 <u>***초기화***가 가능해진다.</u></li>
+      <li><code class="language-plaintext highlighter-rouge">const</code>가 붙은 포인터이므로 “Jack Jack”문자열의 원소값을 간접참조로 바꿀 수 없다. 읽기만 가능하다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="const-char-">const char *</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="s">"jack jack"</span><span class="p">;</span>
+	<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name2</span> <span class="o">=</span> <span class="s">"jack jack"</span><span class="p">;</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 14322480</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">uintptr_t</span><span class="p">)</span><span class="n">name2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 14322480 놀랍게도 두 주소값이 같다. </span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">name</code>과 <code class="language-plaintext highlighter-rouge">name2</code>의 값은 같다. 즉 문자열 리터럴 상수의 내용이 전부 같으면 같은 메모리로 준다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="nf">getName</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="s">"Jack Jack"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>위와 같이 리턴 타입으로도 넣을 수 있다. const만 붙이면 char 포인터의 문자열 상수 초기화도 애초에 가능하니까. 리턴되는 “Jack Jack”의 타입은 <code class="language-plaintext highlighter-rouge">const char *</code></p>
+
+<p><br /></p>
+
+<h2 id="cout과-문자열">cout과 문자열</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">int_arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+  <span class="kt">char</span> <span class="n">char_arr</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Hello, World!"</span><span class="p">;</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"Jack Jack"</span><span class="p">;</span>
+
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">int_arr</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 006FF800 출력. 주소가 출력된다.</span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">char_arr</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// "Hello, World!" 문자열 출력.</span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// "Jack Jack" 문자열 출력</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>char [] 배열</li>
+  <li>char * 포인터</li>
+</ol>
+
+<p>을 출력하면 int * 포인터 출력할 때처럼 주소값 그대로를 출력하는 것이 아닌 문자열 내용을 출력한다.</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">\0</code>까지 출력한다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="sc">'Q'</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// Qㅇ저ㅑㅐ어재ㅑㅓㅐ어ㅑㅁ 이런 이상한 값이 출력된다.</span>
+</code></pre></div></div>
+<p>Q만 잘나오고 뒤에는 계속 쓰레기 값이 나오는 이유는 cout 은 char [] 혹은 char * 을 만나면 <code class="language-plaintext highlighter-rouge">\0</code>을 만날 때 까지 문자열 내용을 출력해주는데 <code class="language-plaintext highlighter-rouge">&amp; c</code>를 만나 char * 타입의 주소인줄 알고 <code class="language-plaintext highlighter-rouge">\0</code>까지 출력해줄라고 했더니만 <code class="language-plaintext highlighter-rouge">\0</code>이 안나와서 계속 출력하느라고 그런 것.</p>
+
+<p><br /></p>
+
+<h2 id="와-의-차이">'’와 ““의 차이</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">print</span><span class="p">(</span><span class="sc">'a'</span><span class="p">);</span> <span class="c1">// char 혹은 int</span>
+<span class="n">print</span><span class="p">(</span><span class="s">"a"</span><span class="p">);</span> <span class="c1">// 문자열. const char * 혹은 string 혹은 cahr [] 배열</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">''</code> 작은 따옴표는 문자고 <code class="language-plaintext highlighter-rouge">""</code> 큰 따옴표는 문자열이다.</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

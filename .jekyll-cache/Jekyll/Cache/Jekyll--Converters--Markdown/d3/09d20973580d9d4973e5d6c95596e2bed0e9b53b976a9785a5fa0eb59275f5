@@ -1,0 +1,295 @@
+I"<V<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-18-입력과-출력">chapter 18. 입력과 출력</h1>
+
+<h1 id="흐름-상태와-입력-유효성의-검증">흐름 상태와 입력 유효성의 검증</h1>
+
+<h2 id="-문자열-스트림의-현재-상태-확인하기">🔔 문자열 스트림의 현재 상태 확인하기</h2>
+
+<h3 id="첫-번째-방법--ios의-함수들-사용">첫 번째 방법 👉 ios의 함수들 사용</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">std::ios</code> : 가장 높은 조상 입출력 클래스다.</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/91554137-7c08a280-e969-11ea-9750-cf52f1aa2885.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">const std::ios &amp; stream</code>일 때
+    <ul>
+      <li>stream.<code class="language-plaintext highlighter-rouge">good()</code>
+        <ul>
+          <li><strong>std::ios::good</strong></li>
+          <li>스트림의 현재 상태가 좋으면 true 안좋으면 false 리턴</li>
+          <li>모든 error state flag가 0일 때 flag가 true가 된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>stream.eof()
+    <ul>
+      <li><strong>std::ios::eof</strong></li>
+      <li>eof 즉 end of file 에 도달했다면 true 리턴 아니면 false 리턴</li>
+      <li>파일을 끝까지 다 읽었는지</li>
+    </ul>
+  </li>
+  <li>stream.fail()
+    <ul>
+      <li><strong>std::ios::fail</strong></li>
+      <li>스트림 현재 상태가 실패면 true 성공이면 false 리턴.</li>
+      <li>good()의 반대</li>
+      <li>error state flag가 하나라도 1일 경우 flag가 true가 된다.</li>
+    </ul>
+  </li>
+  <li>stream.bad()
+    <ul>
+      <li><strong>std::ios::bad</strong></li>
+      <li>데이터를 읽거나 쓸 때 에러가 발생할 때 flag가 true가 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">printStates</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">&amp;</span> <span class="n">stream</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>		<span class="c1">// boolalpha option ON</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Good() = "</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">.</span><span class="n">good</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// 모든 error state flag가 0일 때 flag가 true가 된다.</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"eof() = "</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">.</span><span class="n">eof</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>		<span class="c1">// stream의 end of file에 도달하면 flag가 true가 된다.</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"fail() = "</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">.</span><span class="n">fail</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// error state flag가 하나라도 1일 경우 flag가 true가 된다.</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"bad() = "</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">.</span><span class="n">bad</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>		<span class="c1">// 데이터를 읽거나 쓸 때 에러가 발생할 때 flag가 true가 된다.</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+	<span class="p">{</span>
+	    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+	    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">;</span>
+	    
+	    <span class="n">printStates</span><span class="p">(</span><span class="n">cin</span><span class="p">);</span>
+	    
+	    <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+	    <span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="sc">'\n'</span><span class="p">);</span>
+	    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎입력💎
+123
+abc
+123.456
+
+💎출력💎
+good() = true
+eof() = false
+fail() = false
+bad() = false
+
+good() = false
+eof() = false
+fail() = true
+bad() = false
+
+good() = true
+eof() = false
+fail() = false
+bad() = false
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">printStates(cin)</code>
+    <ul>
+      <li>cin 스트림을 넘겨 줌.  <code class="language-plaintext highlighter-rouge">iostream</code>의 부모클래스인 <code class="language-plaintext highlighter-rouge">ios</code> 타입의 참조 변수로 <code class="language-plaintext highlighter-rouge">cin</code> 객체를 참조</li>
+      <li>123 입력
+        <ul>
+          <li>int i 에 123이 잘 들어갔다.</li>
+          <li>good() = true. 이상 없음</li>
+          <li>버퍼가 비워지고 이제 다시 while 반복</li>
+        </ul>
+      </li>
+      <li>abc 입력
+        <ul>
+          <li>abc는 문자열이므로 int i에 들어갈 수 없다.</li>
+          <li>논리적 오류 fail() = true</li>
+          <li>good() = false</li>
+          <li>버퍼가 지워지고 이제 다시 while 반복</li>
+        </ul>
+      </li>
+      <li>123.456 입력
+        <ul>
+          <li>123.456은 double형인데 int i에 123으로 들어갈 수 있음</li>
+          <li>good() = true 이상 없음</li>
+          <li>버퍼가 지워지고 이제 다시 while 반복</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="두-번째-방법--bitmask와-rdstate을-사용하여-비트로-흐름-상태-확인">두 번째 방법 👉 bitmask와 rdstate을 사용하여 비트로 흐름 상태 확인</h3>
+
+<blockquote>
+  <p>#include &lt;bitset&gt;</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;bitset&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+		<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">;</span>
+													
+		<span class="n">printStates</span><span class="p">(</span><span class="n">cin</span><span class="p">);</span>    <span class="c1">//   1️⃣ 스트림 상태를 알 수 있는 첫번째 방법  -&gt; ios의 good(), bad(), fail(), eof() 사용 </span>
+
+		<span class="cm">/* 2️⃣ 스트림 상태를 알 수 있는 두번째 방법 -&gt;	직접 goodbit, failbit 등등 bit를 사용 */</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">boolalpha</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">rdstate</span><span class="p">())</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">::</span><span class="n">goodbit</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">::</span><span class="n">failbit</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">!</span><span class="kt">bool</span><span class="p">((</span><span class="n">cin</span><span class="p">.</span><span class="n">rdstate</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">::</span><span class="n">failbit</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+		<span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+		<span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="sc">'\n'</span><span class="p">);</span>  <span class="c1">// 버퍼에 남은거 지우기 </span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>비트를 이용하므로 성능이 좋고 빠르지만 가독성이 떨어진다.</li>
+  <li><code class="language-plaintext highlighter-rouge">std::bitset&lt;8&gt;(cin.rdstate())</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">cin.rdstate()</code>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">ios</code>의 함수이다.</li>
+          <li>현재의 에러 상태의 flag 상태를 리턴한다.
+            <ul>
+              <li>이 때의 flag 는 비트 마스크 방식 (bitmask)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">std::bitset&lt;8&gt;(std::istream::goodbit)</code>
+      - good bitmask  = 00000000</li>
+  <li><code class="language-plaintext highlighter-rouge">std::bitset&lt;8&gt;(std::istream::failbit)</code>
+      - fail bitmask = 00000010</li>
+  <li><code class="language-plaintext highlighter-rouge">!bool((cin.rdstate() &amp; std::istream::failbit) != 0)</code>
+      - goodbit가 아닌 failbit로 <code class="language-plaintext highlighter-rouge">&amp;</code> 연산 하는 이유
+          - goodbit는 00000000 이라서.. 에러가 난적이 없으므로 그냥 00000000이다.
+      - <code class="language-plaintext highlighter-rouge">rdstate</code>가 fail비트를 가지고 있지 않다면 <u>성공인 상태.</u>
+          - good 상태.
+          - <code class="language-plaintext highlighter-rouge">&amp;</code>연산 결과 <code class="language-plaintext highlighter-rouge">0</code>이 나올 것.
+          - 0 = 0 이므로 <code class="language-plaintext highlighter-rouge">cin.rdstate() &amp; std::istream::failbit) != 0</code> 결과는 false
+          - 성공인 상태 즉 true로 리턴해주어야 하니까 앞에 ! 붙이는 것이다.
+              - <code class="language-plaintext highlighter-rouge">!</code>bool((cin.rdstate() &amp; std::istream::failbit) != 0)
+      - <code class="language-plaintext highlighter-rouge">rdstate</code>가 fail비트를 가지고 있지 않다면 <u>실패인 상태</u>
+          - fail인 상태.
+          - 0이 아닌 수가 나올 것. <code class="language-plaintext highlighter-rouge">&amp;</code>연산 결과가 fail 비트로 나올 것이다.
+          - 0 ≠ 0 이므로 결과는 true
+          - 실패인 상태 즉 false로 리턴해주어야 하니까 앞에 <code class="language-plaintext highlighter-rouge">!</code> 붙이기
+      - 이 비트 연산 결과를 bool로 형변환
+      - <code class="language-plaintext highlighter-rouge">cin.rdstate() == std::istream::goodbit;</code> 이렇게 하는  방법도 있음.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-입력-유효성-검증">🔔 입력 유효성 검증</h2>
+
+<blockquote>
+  <p>#include &lt;cctype&gt; 헤더 파일로부터 <code class="language-plaintext highlighter-rouge">isalpha</code>, <code class="language-plaintext highlighter-rouge">isalnum</code>, <code class="language-plaintext highlighter-rouge">isblank</code> 등드으이 함수를 사용하여 <u>내가 원하는대로 입력이 잘 들어갔는지를 검증</u></p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">#include &lt;cctype&gt;</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">isalpha</code>, <code class="language-plaintext highlighter-rouge">isalnum</code>, <code class="language-plaintext highlighter-rouge">isblank</code>, 등등…</li>
+      <li>리턴값이 integer 정수다.
+        <ul>
+          <li>0이 아닌 정수면 true로 간주</li>
+          <li>0이면 false로 간주</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="예제-1">예제 1</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">printCaracterClassification</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"isalpha = "</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">isalpha</span><span class="p">(</span><span class="n">input</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// 입력받은 게 문자인지?</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"isalnum = "</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">isalnum</span><span class="p">(</span><span class="n">input</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// 입력받은 게 문자 또는 숫자인지?</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"isblank = "</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">isblank</span><span class="p">(</span><span class="n">input</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// 입력받은 게 공백인지?</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"isdigit = "</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">isdigit</span><span class="p">(</span><span class="n">input</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// 입력받은 게 숫자인지?</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"islower = "</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">islower</span><span class="p">(</span><span class="n">input</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// 입력받은 게 소문자인지?</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"isupper = "</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">isupper</span><span class="p">(</span><span class="n">input</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>	<span class="c1">// 입력받은 게 대문자인지?</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>결과를 정수로 리턴하므로 <code class="language-plaintext highlighter-rouge">bool</code>로 형변환 하여 출력하였다.</li>
+</ul>
+
+<h3 id="예제-2">예제 2</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">isAllDigit</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">bool</span> <span class="n">ok_flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">e</span> <span class="o">:</span> <span class="n">str</span><span class="p">)</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="kt">bool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">isdigit</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+		<span class="p">{</span>
+			<span class="n">ok_flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="k">return</span> <span class="n">ok_flag</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">isAllDigit</span><span class="p">(</span><span class="s">"12345"</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>   <span class="c1">// true 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="kt">bool</span><span class="p">(</span><span class="n">isAllDigit</span><span class="p">(</span><span class="s">"12a34"</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>   <span class="c1">// false 출력</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">isAlldigit</code> 👉 입력 받은 문자열이 모두 숫자냐</li>
+  <li>bool isAllDigit(const string&amp; str)
+    <ul>
+      <li>입력받은 문자열 str을 한문자씩 다 뜯어서 문자인지 확인</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

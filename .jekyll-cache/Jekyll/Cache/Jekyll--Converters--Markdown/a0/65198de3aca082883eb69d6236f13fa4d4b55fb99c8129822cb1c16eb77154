@@ -1,0 +1,31 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-19-모던-c-필수-요소들">chapter 19. 모던 C++ 필수 요소들</a></li>
+  <li><a href="#stdthread와-멀티쓰레딩의-기초">std::thread와 멀티쓰레딩의 기초</a>
+    <ul>
+      <li><a href="#-멀티-쓰레딩의-개념과-원리">🔔 멀티 쓰레딩의 개념과 원리</a>
+        <ul>
+          <li><a href="#process">Process</a>
+            <ul>
+              <li><a href="#multi-processing">Multi Processing</a>
+                <ul>
+                  <li><a href="#내-cpu는-코어가-몇-개인지-확인해보기">내 CPU는 코어가 몇 개인지 확인해보기</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#multi-threading">Multi Threading</a></li>
+        </ul>
+      </li>
+      <li><a href="#-thread-생성하기">🔔 Thread 생성하기</a></li>
+      <li><a href="#-여러개의-thread-생성하기">🔔 여러개의 Thread 생성하기</a>
+        <ul>
+          <li><a href="#생길-수-있는-문제">생길 수 있는 문제</a></li>
+          <li><a href="#해결-시도-1--vector에-스레드-넣기-">해결 시도 1 : vector에 스레드 넣기 ❌</a></li>
+          <li><a href="#해결-시도-2--sleep_for-함수를-통해-스레드를-잠시-쉬게-하기-">해결 시도 2 : sleep_for 함수를 통해 스레드를 잠시 쉬게 하기 ❌</a></li>
+          <li><a href="#해결책--mutex-">해결책 : mutex ⭕</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

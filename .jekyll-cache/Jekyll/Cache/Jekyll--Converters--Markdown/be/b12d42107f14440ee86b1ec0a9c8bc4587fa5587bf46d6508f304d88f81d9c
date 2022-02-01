@@ -1,0 +1,21 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-15-의미론적-이동과-스마트-포인터">chapter 15. 의미론적 이동과 스마트 포인터</a></li>
+  <li><a href="#154-stdmove">15.4 std::move</a>
+    <ul>
+      <li><a href="#-stdmove-쓰기-전">🔔 std::move 쓰기 전</a>
+        <ul>
+          <li><a href="#autoptrh">📜AutoPtr.h</a></li>
+          <li><a href="#maincpp">📜main.cpp</a></li>
+        </ul>
+      </li>
+      <li><a href="#-stdmove-로-이동-생성자-호출하기">🔔 std::move 로 이동 생성자 호출하기</a>
+        <ul>
+          <li><a href="#maincpp-1">📜main.cpp</a></li>
+        </ul>
+      </li>
+      <li><a href="#-copy-semantics--vs--move-semantics">🔔 Copy Semantics  VS  Move Semantics</a></li>
+      <li><a href="#번외-이동-생성자가-늘-더-빠른-것은-아니다">🔔번외) 이동 생성자가 늘 더 빠른 것은 아니다.</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

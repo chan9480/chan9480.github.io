@@ -1,0 +1,361 @@
+I"�R<h2 id="-map-컨테이너">🔔 map 컨테이너</h2>
+
+<blockquote>
+  <p>#include &lt;map&gt;</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Associative Container</code> 中 하나로, <u>키(Key), 값(Value) 구조를 따른다.</u> 키는 값에 대응되며 한 쌍으로 함께 보관한다.</li>
+  <li>Key 는 중복 저장될 수 없다.
+    <ul>
+      <li>같은 Key가 원소로 이미 들어있다면 나중에 오는 <code class="language-plaintext highlighter-rouge">insert</code>는 무시된다.</li>
+    </ul>
+  </li>
+  <li>자동으로 원소들이 순서대로 정렬되어 들어간다.</li>
+</ul>
+
+<blockquote>
+  <p>벡터, 리스트 같이 원소들의 연속된 순서에 의미를 가지는 <code class="language-plaintext highlighter-rouge">Sequence Container</code> 가 아닌, Key 로서 접근에 의미를 가지는 <code class="language-plaintext highlighter-rouge">Associative Container</code>이다.</p>
+</blockquote>
+
+<h3 id="함수">함수</h3>
+
+<blockquote>
+  <p>map 의 원소는 <code class="language-plaintext highlighter-rouge">std::pair</code> 타입이다.</p>
+</blockquote>
+
+<ul>
+  <li>begin()
+    <ul>
+      <li>시작 반복자 리턴</li>
+    </ul>
+  </li>
+  <li>end()
+    <ul>
+      <li>끝의 바로 다음 반복자 리턴
+        <ul>
+          <li>컨테이너의 맨 끝에 <u>빈 곳</u>에 대한 반복자를 리턴한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>insert(std::pair)
+    <ul>
+      <li>(key, value) 형태로 원소 추가
+        <ul>
+          <li>반드시 <code class="language-plaintext highlighter-rouge">std::pair</code> 객체를 전달해야 한다.</li>
+          <li>std::pair 객체는 단순히 2개의 객체를 멤버로 가지는 C++ 표준 객체이다.
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T2</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">std</span><span class="o">::</span><span class="n">pair</span> <span class="p">{</span>
+<span class="n">T1</span> <span class="n">first</span><span class="p">;</span>
+<span class="n">T2</span> <span class="n">second</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>            </div>
+          </li>
+          <li><code class="language-plaintext highlighter-rouge">first</code>는 Key가 되고 <code class="language-plaintext highlighter-rouge">second</code>는 Value가 될 것이다.</li>
+        </ul>
+      </li>
+      <li>중복 원소는 허락하지 않으므로 <u>기존 Key가 이미 있다면 insert 하지 않고 무시한다.</u></li>
+    </ul>
+  </li>
+  <li>erase(key)
+    <ul>
+      <li>key 값에 대응하는 원소를 삭제</li>
+    </ul>
+  </li>
+  <li>clear()
+    <ul>
+      <li>맵의 모든 원소 삭제</li>
+    </ul>
+  </li>
+  <li>find(key)
+    <ul>
+      <li>key 값에 해당하는 <u>반복자를 리턴</u>한다.</li>
+      <li>key 값을 <u>찾지 못한다면 end()를 호출한다.</u>
+        <ul>
+          <li>맨 끝에 <u>빈 곳</u>에 대한 반복자를 리턴</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>count(key)
+    <ul>
+      <li>key 값에 해당하는 원소들의 개수 리턴</li>
+    </ul>
+  </li>
+  <li>empty()
+    <ul>
+      <li>map이 비어있으면 true, 아니면 false 리턴</li>
+    </ul>
+  </li>
+  <li>size()
+    <ul>
+      <li>원소의 총 개수 리턴</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="원소-추가하는-방법-3가지">원소 추가하는 방법 3가지</h4>
+
+<blockquote>
+  <p>map 컨테이너는 원소를 <code class="language-plaintext highlighter-rouge">pair</code> 타입 객체로 추가해야 한다.</p>
+</blockquote>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">std::pair</code> 👉 템플릿 구체화 해주기
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+  <span class="n">map</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"식빵"</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
+</code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">std::make_pair 함수</code> 👉 간편하게 std::pair 객체를 만들어 리턴해준다.
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+  <span class="n">map</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="s">"식빵"</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
+</code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">[]</code>연산자 사용 👉 &lt;map&gt; 헤더에 연산자 오버로딩이 되어 있다.
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+  <span class="n">map</span><span class="p">[</span><span class="s">"식빵"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<ul>
+  <li>원소의 Value를 수정, 바꿔주려면 <code class="language-plaintext highlighter-rouge">[]</code>을 사용하자.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">insert</code>를 사용하면 기존 키가 있는 경우 <code class="language-plaintext highlighter-rouge">insert</code>가 무시되기 때문이다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="원소-탐색--주의사항-find">원소 탐색 : []주의사항, find</h4>
+
+<blockquote>
+  <p>find(key) : 해당 키에 해당하는 원소의 <u>반복자를 리턴</u>한다. 못찾으면 <u>end()&lt;/u 리턴</u></p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">[]</code> 사용시 주의 사항
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">[]</code>로 <u>맵에 없는 Key를 참조하면</u> 자동으로 값의 디폴트 생성자를 호출해서 <u>원소를 추가해버린다.</u>
+        <ul>
+          <li>ex) <code class="language-plaintext highlighter-rouge">cout &lt;&lt; map["식빵"]</code>
+            <ul>
+              <li>현재 map에 “식빵”이라는 key가 없는데도 불구하고 디폴트 값인 0으로 (“식빵”, 0) pair를 원소로 추가해버린다</li>
+              <li>0이 출력됨</li>
+            </ul>
+          </li>
+          <li>사실 이를 이용할 수도 있음. 없는 key라면 value가 0 으로 자동 추가되어 0을 리턴할테니까 이를 논리 연산식에 이용할 수도 있음.
+            <ul>
+              <li>또 이를 활용하여 Key에 따른 <u>개수를 저장할 때는</u> <code class="language-plaintext highlighter-rouge">map[Key]++</code>만 해줄 수 있다. 기존 Key 가 없다면 1 로 저장될 것이고 원래 기존 Key가 있다면 그 Value 값을 1 증가시키는 것이니 Key 에 따른 총 개수가 Value로 저장되게 된다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><u>따라서 Key를 참조해야할 때는 find()을 사용하는게 더 안전하다.</u>
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Key 를 못 찾았을 때
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="for-each문">for-each문</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">elem</span> <span class="o">:</span> <span class="n">map</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">elem</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">elem</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>map 컨테이너의 <u>원소는 pair 객체이므로</u>
+    <ul>
+      <li>for-each문의 <code class="language-plaintext highlighter-rouge">elem</code>은 pair객체라는 것에 주의하자.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">elem.first</code> : Key</li>
+          <li><code class="language-plaintext highlighter-rouge">elem.second</code> : Value</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-multimap-컨테이너">🔔 multimap 컨테이너</h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">map</code>과 다르게 중복 Key를 허락한다.</p>
+</blockquote>
+
+<ul>
+  <li>중복 Key 가 있어도 insert 연산을 무시하지 않는다.</li>
+</ul>
+
+<h3 id="원소-탐색시">원소 탐색시</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">[]</code> 연산자를 사용할 수 없다.
+    <ul>
+      <li>중복 Key를 허용하므로 <code class="language-plaintext highlighter-rouge">map['a']</code> 하면 어떤 value를 리턴해야 하는지 모호하기 때문에.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">find()</code>함수를 사용하여 리턴할 경우 중복된 원소들 중 아무거나 리턴한다.
+    <ul>
+      <li>즉 라이브러리마다 어떤게 리턴될지 모름. 가장 먼저 나오는 Key의 Value가 나올 수도 있고 등등… 기준이 다 다르다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">std::equal_range</code> 함수 사용
+    <ul>
+      <li><u>멀티 맵의 Key값을 인자로 받은 후</u> 이 키에 대응되는
+        <ul>
+          <li><u>중복 원소들의 중 첫번째 원소의 반복자(begin)</u>와
+            <ul>
+              <li>first</li>
+            </ul>
+          </li>
+          <li><u>중복 원소들의 중 마지막 원소의 반복자(end)</u>를
+            <ul>
+              <li>second</li>
+            </ul>
+          </li>
+          <li><code class="language-plaintext highlighter-rouge">std::pair</code>형태로 리턴해준다.
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">range</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="n">equal_range</span><span class="p">(</span><span class="s">"식빵"</span><span class="p">);</span> <span class="c1">// Key가 식빵인 원소들의 맨 앞 반복자와 맨 끝 반복자를 pair로 리턴한다.</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">range</span><span class="p">.</span><span class="n">first</span><span class="p">;</span> <span class="n">itr</span> <span class="o">!=</span> <span class="n">range</span><span class="p">.</span><span class="n">second</span><span class="p">;</span> <span class="o">++</span><span class="n">itr</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// "식빵" 키를 가진 원소들을 출력 </span>
+  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">itr</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>            </div>
+            <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+식빵 : 1
+식빵 : 30
+식빵 : 6
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-unordered_map-컨테이너">🔔 unordered_map 컨테이너</h2>
+
+<ul>
+  <li>사용 방법은 <code class="language-plaintext highlighter-rouge">map</code>과 같다.</li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">map</code>과 다르게 정렬되지 않으며 <u>해시 함수</u>를 사용하여 원소를 탐색한다.</p>
+</blockquote>
+
+<ul>
+  <li>그래서 원래는 &lt;unordered_map&gt;가 아닌 &lt;hashmap&gt; 으로 지으려고 했으나 그런 이름을 가진 헤더가 많아 그냥 이렇게 지었다고 한다. tmi</li>
+  <li>원소를 해시 함수로 찾으니까 정렬될 필요가 없음
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Hash</code>
+        <ul>
+          <li>해시 함수 값이 동일하게 나오면 같은 상자 안에 저장된다.
+            <ul>
+              <li>동일한 원소끼리는 당연히 해시 함수 리턴 값이 같으니 같은 상자 안에 저장되지만</li>
+              <li>서로 다른 원소끼리도 우연히 해시 함수 값이 같으면 같은 상자 안에 저장될 수 있다.
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">해시 충돌</code></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>해시 함수로 리턴값만 받아 바로 주소 찾아가면 되므로 탐색 시간이 \(O(1)\) 상수시간 밖에 안걸린다.</li>
+  <li>But <code class="language-plaintext highlighter-rouge">해시 충돌</code>이 많이 일어나 한 상자 안에 서로 다른 원소들이 몰려서 저장되게 되면 해당 상자 안에서 찾고자 하는 원소를 탐색해야 하므로
+    <ul>
+      <li>최악의 경우 모든 원소가 한 곳에 모였을 때 \(O(N)\) 시간이 걸릴 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="내가-만든-클래스를-unordered_map-의-원소로-넣고-싶을-때">내가 만든 클래스를 unordered_map 의 원소로 넣고 싶을 때</h3>
+
+<ul>
+  <li>내 클래스에 맞는 <u>직접 해시 함수를 만들어 주어야</u> 한다.
+    <ul>
+      <li>내 클래스
+        <ul>
+          <li>정렬은 하지 않으니 <code class="language-plaintext highlighter-rouge">&lt;</code> 연산자 오버로딩은 필요 없음</li>
+          <li>해시 충돌이 일어날 때를 대비해 같은 상자 안에 있는 원소들끼리 비교해야 하므로 <code class="language-plaintext highlighter-rouge">==</code> 연산자 오버로딩도 해주어야 한다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">hash</code> 템플릿 구조체를 내 클래스 타입으로 특수화
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">unordered_map</code>은 해시 함수 계산을 위해 <code class="language-plaintext highlighter-rouge">hash</code> 객체를 사용하기 때문에</li>
+          <li><code class="language-plaintext highlighter-rouge">hash</code>를 내 클래스 타입으로 특수화 하여 <code class="language-plaintext highlighter-rouge">()</code> 연산자 오버로딩을 한다.
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">std</span> 
+<span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">hash</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">MyClass</span><span class="o">&amp;</span> <span class="n">myclass</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">hash</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">hash_func</span><span class="p">;</span>  <span class="c1">// C++에서 제공하는 string의 해시 함수 포인터</span>
+
+        <span class="k">return</span> <span class="n">myclass</span><span class="p">.</span><span class="n">m_data1</span> <span class="o">^</span> <span class="p">(</span><span class="n">hash_func</span><span class="p">(</span><span class="n">m_data2</span><span class="p">));</span>
+     <span class="p">}</span>
+<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>            </div>
+          </li>
+          <li>XOR (비트연산) 하도록 사용자 정의를 해주었다.
+            <ul>
+              <li>해시 함수 리턴값은 myclass.m_data1 ^ (hash_func(m_data2)) 의 결과가 된다.</li>
+            </ul>
+          </li>
+          <li>참고로 C++ 표준 클래스를 특수화 할 때는 <code class="language-plaintext highlighter-rouge">namespace std</code> 안에서 해주어야 한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>C++ 은 int, double, string 등등 기본 데이터 타입들에 대한 해시 함수 포인터를 제공해주므로 이를 활요하면 된다. <code class="language-plaintext highlighter-rouge">hash&lt;T&gt; hash_func</code></p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="map-과-unordered_map-의-차이">map 과 unordered_map 의 차이</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">map</code>은 정렬 되어있는 상태에서 탐색을 하므로 \(O(logN)\) 시간이 걸린다. 평균도 최악도!</li>
+  <li><code class="language-plaintext highlighter-rouge">hashmap</code>은 해시 함수로 탐색을 하므로 평균 \(O(1)\) 상수 시간이 걸려 매우 빠르지만 해시 충돌이 너무 많이 일어나는 최악의 경우 \(O(n)\) 로 그냥 <code class="language-plaintext highlighter-rouge">map</code>보다 더 오래걸릴 수 있다.</li>
+  <li>원소의 개수가 많을수록 해시충돌이 일어날 확률도 높아지므로
+    <ul>
+      <li>원소의 개수가 적고 빠른 성능을 원할 땐 <code class="language-plaintext highlighter-rouge">unordered_map</code></li>
+      <li>원소의 개수가 많아 안정성을 원할 땐 <code class="language-plaintext highlighter-rouge">map</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

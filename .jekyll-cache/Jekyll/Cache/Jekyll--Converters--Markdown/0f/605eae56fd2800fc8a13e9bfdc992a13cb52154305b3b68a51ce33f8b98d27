@@ -1,0 +1,146 @@
+I""<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-14-예외처리--예외-처리의-위험성과-단점">chapter 14. 예외처리 : 예외 처리의 위험성과 단점</h1>
+
+<h2 id="1-메모리-누수가-발생할-수-있다">1. 메모리 누수가 발생할 수 있다.</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="kt">int</span> <span class="o">*</span> <span class="n">i</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="mi">1000000</span><span class="p">];</span>  <span class="c1">// 꽤 큰 메모리 할당</span>
+
+		<span class="k">throw</span> <span class="s">"error"</span><span class="p">;</span>
+
+		<span class="k">delete</span><span class="p">[]</span> <span class="n">i</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(...)</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Catch"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>만약 위 코드에서 <code class="language-plaintext highlighter-rouge">throw "error"</code>가 발생한다면 아래의 delete이 실행 되지 못하고 바로 catch로 가기 때문에 delete이 되지 못한다.
+    <ul>
+      <li>👉 메모리 누수 발생</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="cf-스마트-포인터">cf. 스마트 포인터</h3>
+
+<ul>
+  <li>#include &lt;memory&gt; 를 해야 한다.</li>
+  <li>unique_ptr <u>스마트 포인터를 사용하면 이같은 메모리 누수를 방지할 수 있다.</u></li>
+  <li>해당 블록을 벗어나면 스마트 포인터가 알아서 동적 할당 받은 부분을 지워준다.
+→ delete 이 필요가 없다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;memory&gt; ⭐⭐⭐
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="kt">int</span> <span class="o">*</span> <span class="n">i</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="mi">1000000</span><span class="p">];</span>
+		<span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">up_i</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// ⭐스마트 포인터⭐</span>
+
+		<span class="k">throw</span> <span class="s">"error"</span><span class="p">;</span>
+
+		<span class="c1">// delete[] i; 없어도 괜춚</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(...)</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Catch"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="2-소멸자-안에선-예외를-던지면-안된다">2. 소멸자 안에선 예외를 던지면 안된다.</h2>
+
+<ul>
+  <li>소멸자는 해당 객체의 메모리를 날려버리는 순간 호출되는 것이기 때문에 정상적으로 예외를 던질 수 있는 상태로 보지 않는다</li>
+  <li>따라서 소멸자 안에서 예외를 던지는 것은 위험하다.</li>
+  <li>런타임 에러가 발생할 것</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="o">~</span><span class="n">A</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="k">throw</span> <span class="s">"eroor"</span><span class="p">;</span>  <span class="c1">//⭐⭐ 금기시 되는 일! 소멸자에선 예외를 던지면 안된다.</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="n">A</span> <span class="n">a</span><span class="p">;</span> <span class="c1">// ⭐⭐</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(...)</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Catch"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="3-루프-안에-try-catch-문을-넣는-것은-비추">3. 루프 안에 try-catch 문을 넣는 것은 비추</h2>
+
+<ul>
+  <li>try-catch 문 자체가 여러 스택을 왔다 갔다 하기도 하기 때문에 연산이 느리다.</li>
+  <li>가장 많이 사용되는 루프(while, for) 안 에다가<br />
+try-catch 를 넣으면 아주 느려질 수 있다.</li>
+  <li>가급적 루프 바깥에서 쓰기.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="4-모든-오류를-예외처리로-잡으려고-하지-않기">4. 모든 오류를 예외처리로 잡으려고 하지 않기</h2>
+
+<ul>
+  <li>오류와 예외는 다르다.</li>
+  <li>정상적으로 작동 해야하는 것은 성능을 위해 <u>예측이 가능한 경우엔 if 문으로 걸러내는 것이 좋다.</u>
+    <ul>
+      <li>ex) 사용자 입력 제대로 받기. 뭐 2글자 이상 못받으면 다시 받게 한다던지 등등</li>
+    </ul>
+  </li>
+  <li>분산처리, 네트워크 문제 이런건 예측할 수 없는 경우에 고장이 나기도 한다.
+    <ul>
+      <li>논리적으로 <u>예측이 어려운 경우엔 예외를 쓰는 것이 좋다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

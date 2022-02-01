@@ -1,0 +1,2446 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>[C++] 1.3 연습 문제 풀이 -  평생 공부 블로그 : Today I Learned‍ 🌙</title>
+<meta name="description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀  🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기  🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기! ">
+
+
+  <meta name="author" content="공부하는 식빵맘 👱‍♀️">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content=" 평생 공부 블로그 : Today I Learned‍ 🌙">
+<meta property="og:title" content="[C++] 1.3 연습 문제 풀이">
+<meta property="og:url" content="http://localhost:4000/c++%20games/chapter1-3-prac/">
+
+
+  <meta property="og:description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀  🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기  🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기! ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2020-06-03T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2020-06-03T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/c++%20games/chapter1-3-prac/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "식빵맘💛",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" 평생 공부 블로그 : Today I Learned‍ 🌙 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+           평생 공부 블로그 : Today I Learned‍ 🌙
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#c++-games" itemprop="item"><span itemprop="name">C++ games</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">[C++] 1.3 연습 문제 풀이</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="https://user-images.githubusercontent.com/42318591/108615416-2e1bb580-7447-11eb-8a54-6338e53ce625.png" alt="공부하는 식빵맘 👱‍♀️" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">공부하는 식빵맘 👱‍♀️</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:bboddak@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">303</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">C/C++/C#</span>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp" class="">C ++ (164)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/stl" class="">C++ STL & 표준 (13)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                        <li><a href="/categories/cpp-games" class="">C++ 연습 문제 패키지 (33)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp-network" class="">C++ Boost.Asio 네트워크 (4)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/c" class="">C (2)</a></li>
+                    
+                
+            </ul>
+        <span class="nav__sub-title">UE4</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-1" class="">언리얼 블루프린트 강의 1 (40)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-3" class="">언리얼 블루프린트 강의 2 (5)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/udemy-ue4-1" class="">언리얼 C++ 강의 1 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-2" class="">언리얼 C++ 책 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-docs" class="">내 언리얼 문서 (12)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4error" class="">에러 메모 (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">etc</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/design-pattern" class="">디자인 패턴 (15)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/blender" class="">Blender (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/git" class="">Git & Github (6)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/vs" class="">비주얼 스튜디오 (1)</a></li>
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[C++] 1.3 연습 문제 풀이">
+    <meta itemprop="description" content="인프런에 있는 홍정모 교수님의 홍정모의 게임 만들기 연습 문제 패키지 강의를 듣고 정리한 필기입니다.😀 🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기 🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!">
+    <meta itemprop="datePublished" content="2020-06-03T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2020-06-03T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">[C++] 1.3 연습 문제 풀이
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2020-06-03T00:00:00+09:00">2020.06.03</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-06-03">2020.06.03</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#c-games" class="page__taxonomy-item-category" rel="tag">C++ games</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#graphics" class="page__taxonomy-item-tag" rel="tag">Graphics</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#opengl" class="page__taxonomy-item-tag" rel="tag">OpenGL</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#13-연습문제">1.3 연습문제</a>
+    <ul>
+      <li><a href="#-q1-포탄-여러개-쏘는-탱크-구현하기">🙋 Q1. 포탄 여러개 쏘는 탱크 구현하기</a>
+        <ul>
+          <li><a href="#구현시-중점적으로-생각한-포인트">구현시 중점적으로 생각한 포인트</a></li>
+          <li><a href="#vector-컨테이너-특징">Vector 컨테이너 특징</a></li>
+          <li><a href="#소멸자">소멸자</a></li>
+          <li><a href="#-구현한-코드">📃 구현한 코드</a></li>
+        </ul>
+      </li>
+      <li><a href="#-q2-팔-다리를-흔들며-걸어가는-사람을-구현해보자">🙋 Q2. 팔 다리를 흔들며 걸어가는 사람을 구현해보자.</a>
+        <ul>
+          <li><a href="#1-먼저-2개의-팔과-2개의-다리를-그려보자">1. 먼저 2개의 팔과 2개의 다리를 그려보자.</a></li>
+          <li><a href="#2-여러-사람이-걸어다니는-것을-구현해보자-class를-이용하여-확장">2. 여러 사람이 걸어다니는 것을 구현해보자. (class를 이용하여 확장)</a>
+            <ul>
+              <li><a href="#class">Class</a></li>
+              <li><a href="#-구현-코드">📃 구현 코드</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#-q3-아이언맨처럼-손에서-리펄서-빔을-발사하며-걸어다니는-사람-구현">🙋 Q3. 아이언맨처럼 손에서 리펄서 빔을 발사하며 걸어다니는 사람 구현</a>
+        <ul>
+          <li><a href="#enum-사용">enum 사용</a></li>
+          <li><a href="#class-설명">class 설명</a>
+            <ul>
+              <li><a href="#구현-코드---walkingpersohh">구현 코드 : 📃 WalkingPersoh.h</a></li>
+              <li><a href="#구현-코드---walkingpersohcpp">구현 코드 : 📃 WalkingPersoh.cpp</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="13-연습문제">1.3 연습문제</h1>
+
+<p class="notice--warning">연습 문제는 스스로 풀이했습니다. 😀  <br />
+이전 포스트 보러가기 🖐 <a href="https://ansohxxn.github.io/c++%20games/chapter1-3/">1.3 상호작용 맛보기 - 키보드 입력과 반응</a> <br />
+연습 문제 출처 : <a href="https://blog.naver.com/atelierjpro/221413483005">홍정모 교수님 블로그</a></p>
+
+<p><br /></p>
+
+<h2 id="-q1-포탄-여러개-쏘는-탱크-구현하기">🙋 Q1. 포탄 여러개 쏘는 탱크 구현하기</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84557002-3709a280-ad62-11ea-8546-c7ff2c77ece8.png" alt="image" class="align-center" /></p>
+
+<h3 id="구현시-중점적으로-생각한-포인트">구현시 중점적으로 생각한 포인트</h3>
+<ul>
+  <li>총알 포인터(동적메모리) 여러개를 관리해야 하니 <u>vector 컨테이너</u>를 사용했다.</li>
+  <li>원본 코드에선 총알이 하나만 존재할 수 있는 상태였다.
+    <ul>
+      <li>총알을 새로 쏘면 기존 총알은 사라졌다.</li>
+      <li><u>이미 기존 bullet이 존재하는 상태에서 new Bullet을 bullet에 또 할당하면 안된다.</u> 가비지 생겨 메모리 누수 문제가 발생하기 때문.</li>
+    </ul>
+  </li>
+  <li><u>이미 화면을 멀리 벗어난지 오래인 포탄은 delete</u>시켜 메모리를 차지하지 않도록 해야한다.</li>
+</ul>
+
+<h3 id="vector-컨테이너-특징">Vector 컨테이너 특징</h3>
+<ul>
+  <li>사용하기 위해선 <code class="language-plaintext highlighter-rouge">#include &lt;vector&gt;</code> 해주기</li>
+  <li>vector <int> 는 0으로 자동 초기화되고 vector <포인터>는 nullptr로 자동 초기화 된다.</포인터></int></li>
+  <li><code class="language-plaintext highlighter-rouge">using namespace std;</code> 이 필요하다. std::vector 일일이 붙여주기 귀찮음.</li>
+  <li>추가, 삭제 연산시 <u>지가 알아서 컨테이너의 사이즈 조절을 한다.</u></li>
+  <li>Vector의 주요 함수
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">push_back(원소)</code> : 원소를 벡터 맨 뒤에 삽입</li>
+      <li><code class="language-plaintext highlighter-rouge">back()</code> : 벡터 맨 뒤의 원소</li>
+      <li><code class="language-plaintext highlighter-rouge">front()</code> : 벡터 맨 앞의 원소</li>
+      <li><code class="language-plaintext highlighter-rouge">end()</code> : 벡터 맨 뒤의 원소의 주소</li>
+      <li><code class="language-plaintext highlighter-rouge">front()</code> : 벡터 맨 앞의 원소의 주소</li>
+      <li><code class="language-plaintext highlighter-rouge">empty()</code> : 벡터가 비어 있으면 true 리턴</li>
+      <li><code class="language-plaintext highlighter-rouge">at(인덱스)</code> : 해당 인덱스의 원소 리턴</li>
+      <li><code class="language-plaintext highlighter-rouge">erase(원소의주소)</code> : 벡터의 해당 원소를 삭제하고 그 뒤의 원소들은 앞으로 당겨온다. size는 1 줄어들게 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="소멸자">소멸자</h3>
+
+<ul>
+  <li>프로그래머가 직접 호출하는 것은 권장하지 않는다.</li>
+  <li>소멸자는 객체가 메모리에서 해제될 때 내부에서 <u>자동으로 호출됨</u></li>
+  <li>즉 해당 scope에서 벗어날 때 자동으로 호출되는거라서
+화면 벗어날때마다 총알 객체를 delete 시킬거면 <u>소멸자에서 delete 시키는 것은 좋지 않을 것이라고 판단함.</u>
+    <ul>
+      <li>총알은 화면이 벗어날 때마다 delete 되야 하는데</li>
+      <li>원본 코드처럼 소멸자 안에서 delete 한다면 프로그램 종료시에만 총알이 delete 될테니</li>
+      <li><u>따라서 소멸자는 빈 코드로 두었다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="-구현한-코드">📃 구현한 코드</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once`
+</span>
+<span class="cp">#include "Game2D.h"
+#include &lt;vector&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	
+
+	<span class="k">class</span> <span class="nc">MyTank</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">center</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="c1">//vec2 direction = vec2(1.0f, 0.0f, 0.0f);</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="p">{</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">center</span><span class="p">);</span>
+				<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">);</span> <span class="c1">// body</span>
+				<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="mf">0.15</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.09</span><span class="n">f</span><span class="p">);</span> <span class="c1">// turret</span>
+				<span class="n">translate</span><span class="p">(</span><span class="mf">0.15</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.15</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// barrel</span>
+			<span class="p">}</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">MyBullet</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">center</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">vec2</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">center</span><span class="p">);</span>
+			<span class="n">drawFilledRegularConvexPolygon</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+			<span class="n">drawWiredRegularConvexPolygon</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gray</span><span class="p">,</span> <span class="mf">0.02</span><span class="n">f</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">center</span> <span class="o">+=</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">TankExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">MyTank</span> <span class="n">tank</span><span class="p">;</span>
+		<span class="n">vector</span><span class="o">&lt;</span><span class="n">MyBullet</span> <span class="o">*&gt;</span> <span class="n">bullets</span><span class="p">;</span>   
+        <span class="cm">/*⭐ MyBullet 포인터 타입들을 저장하는 벡터
+        ⭐ 여러번 발사를 하면 화면에 총알이 여러개 존재해야 하기 때문에 편하게 참조할 수 있도록 벡터 이용 함 ! 
+        동적 할당받아 포인터 벡터에 각 총알객체들의 주소들 저장하자
+        ⭐ 현재 아무 것도 안들은 원소 하나도 없는 empty한 벡터임
+        MyBullet *bullet = nullptr;  이건 지웠음
+        */</span>
+
+	<span class="nl">public:</span>
+		<span class="n">TankExample</span><span class="p">()</span>
+			<span class="o">:</span> <span class="n">Game2D</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">768</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="p">{}</span>
+
+		<span class="o">~</span><span class="n">TankExample</span><span class="p">()</span>                     <span class="c1">// ⭐ 소멸자는 비워 두었다.</span>
+		<span class="p">{</span>
+			
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="c1">// move tank</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_LEFT</span><span class="p">))</span>	<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_RIGHT</span><span class="p">))</span>	<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_UP</span><span class="p">))</span>		<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_DOWN</span><span class="p">))</span>	<span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">-=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">getTimeStep</span><span class="p">();</span>
+
+			<span class="c1">// shoot a cannon ball</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressedAndReleased</span><span class="p">(</span><span class="n">GLFW_KEY_SPACE</span><span class="p">))</span> 
+			<span class="p">{</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">new</span> <span class="n">MyBullet</span><span class="p">);</span>    <span class="c1">// ⭐ 총알을 동적 할당받아 만들고 벡터의 맨 마지막 원소(포인터)에 총알 객체의 주소 삽입</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">center</span> <span class="o">=</span> <span class="n">tank</span><span class="p">.</span><span class="n">center</span><span class="p">;</span> 		
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">;</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">;</span>
+				<span class="n">bullets</span><span class="p">.</span><span class="n">back</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">());</span> <span class="c1">// 이건 그냥 화면 벗어날 때마다 총알 없어지는지, 즉 벡터 사이즈가 줄어드는지 확인하려고 넣어보았다.</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">bullets</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>       <span class="c1">// ⭐ 꼭 ! 벡터가 비어있지 않아야 한다. 벡터가 비어 있는데 (= 아무 포인터도 없는데) update하고 draw 하려하면 런타임 에러남.</span>
+			<span class="p">{</span>   
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  <span class="c1">// ⭐  벡터 순회</span>
+				<span class="p">{</span>
+					<span class="n">bullets</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">getTimeStep</span><span class="p">());</span>  <span class="c1">// ⭐ 총알 위치 업뎃. (총알 위치 변화시키기)</span>
+					<span class="n">bullets</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>                <span class="c1">// ⭐  총알 그리기 </span>
+
+                    <span class="cm">/*
+                        이미 화면에 그려진게 움직이는 원리가 아니고, 매번 매 while마다 새로 바뀐 자리에 계속 draw 함수를 실행시켜
+                        매 프레임마다 그리는 것이다. 따라서 여러 총알들이 화면에 한꺼번에 보이려면 각 총알마다 각각!!! draw 실행시켜 주어야 함.
+                        기존 원본 코드는 이 과정 없이 그냥 space 누를때마다 새로 생기는 총알 객체를 참조하고 기존 총알 객체는 
+                        더 이상 참조하지 않는 가비지가 되어 버렸었다. 그러니 기존 총알 그릴 수도 없고 계속 새로운 총알 1개만 
+                        그렸었는데 이제는 기존의 총알들까지 다 벡터에 저장하니까 벡터에 담긴 그 전의 총알들 또한 각각 그들만의
+                        draw 과 update 을 해주면 된다. 매 프레임마다 모든 총알들이 draw, update을 실행하게 됨.
+                    */</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+			<span class="n">tank</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>  <span class="c1">//탱크 그리기</span>
+            
+            <span class="c1">// 화면 벗어나는 총알 delete 시키는 처리</span>
+            <span class="c1">// 이 과정 또한 매 update 마다, 즉 매 프레임마다 for 돌려서 벡터 전체를 순회하며 검사하게 된다. 화면을 벗어난 총알이 있는지.</span>
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">bullets</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bullets</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.5</span><span class="n">f</span><span class="p">)</span>   <span class="c1">// ⭐ 화면을 벗어날 때. (평평하게만 이동하니 y는 고려할 필요 없고 오른쪽 방향으로만 날라가니 대충 1.5f 넘으면 화면을 벗어났다고 가정했다.)</span>
+					<span class="p">{</span>
+						<span class="k">delete</span> <span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>                  <span class="c1">// ⭐ 벡터 원소(포인터)가 참조하는 총알 객체 delete</span>
+						<span class="n">bullets</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">bullets</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>  <span class="c1">// ⭐ 해당 벡터 원소도 없애고 뒤에껀 한칸 앞으로 당긴다. 벡터 사이즈가 1 줄어들 것.</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>			
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-q2-팔-다리를-흔들며-걸어가는-사람을-구현해보자">🙋 Q2. 팔 다리를 흔들며 걸어가는 사람을 구현해보자.</h2>
+
+<h3 id="1-먼저-2개의-팔과-2개의-다리를-그려보자">1. 먼저 2개의 팔과 2개의 다리를 그려보자.</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84557747-8783fe80-ad68-11ea-90dc-b7504d019c2e.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<p>📃 <code class="language-plaintext highlighter-rouge">WalkingPerson.h</code></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="cp">#include "Game2D.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">WalkingPerson</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+		<span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="c1">// gold face</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.12</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.08</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">white</span><span class="p">,</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">);</span> <span class="c1">// white eye</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+            <span class="c1">// ⭐몸통 뒤에서 흔드는 왼쪽 팔. 오른쪽 팔과 다른 방향으로 움직인다.</span>
+            <span class="c1">// 몸통 뒤에 있으므로 몸통보다 먼저 그려준다.</span>
+			<span class="c1">// yellow arm : 왼쪽 팔</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span> <span class="o">+</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>					<span class="c1">// animation!</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+            <span class="c1">// ⭐몸통 뒤에서 흔드는 왼쪽 다리. 왼쪽 다리와 다른 방향으로 움직인다.</span>
+            <span class="c1">// 몸통 뒤에 있으므로 몸통보다 먼저 그려준다.</span>
+			<span class="c1">// green leg : 왼쪽 다리</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>		<span class="c1">// animation!</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// red body : 몸통</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.13</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// yellow arm : 오른쪽 팔</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>					<span class="c1">// animation!</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// green leg : 오른쪽 다리</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span> <span class="o">+</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>	<span class="c1">// animation!</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			
+
+			<span class="n">time</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">getTimeStep</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>📃 <code class="language-plaintext highlighter-rouge">main.cpp</code></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "WalkingPerson.h"
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">WalkingPerson</span><span class="p">().</span><span class="n">run</span><span class="p">();</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2-여러-사람이-걸어다니는-것을-구현해보자-class를-이용하여-확장">2. 여러 사람이 걸어다니는 것을 구현해보자. (class를 이용하여 확장)</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84557809-fa8d7500-ad68-11ea-8fe2-f097ed96dbe5.png" alt="image" class="align-center" /></p>
+
+<ul>
+  <li>5명이 팔 다리를 휘저으는 애니메이션을 하며 걷고 있다.</li>
+</ul>
+
+<h4 id="class">Class</h4>
+
+<ol>
+  <li>Person : ‘사람’ 클래스. 사람 객체를 찍어내는 클래스며 사람을 그리는 draw 함수를 담고 있다.</li>
+  <li>WalkingPerson : 헤더 파일 이름과 동일. Game2D를 상속하여 update를 오버라이딩 한다.</li>
+</ol>
+
+<h4 id="-구현-코드">📃 구현 코드</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="cp">#include "Game2D.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span> <span class="p">{</span>
+
+	<span class="k">class</span> <span class="nc">Person</span> <span class="p">{</span>
+
+		<span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+		<span class="n">vec2</span> <span class="n">start</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>  <span class="c1">// 모든 사람의 초기 위치.</span>
+
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">dt</span><span class="p">)</span> <span class="p">{</span>   
+            
+            <span class="cm">/*
+            getTimeStep()은 Game2D를 상속하는 클래스에서만 물려받아 쓸 수 있기 때문에 
+            Person 클래스인 여기서 바로  time += this-&gt;getTimeStep(); 이렇게 사용할 수가 없다. 
+            따라서 Game2D를 상속하는 WalkingPerson 클래스에서 getTimeStep() 리턴값을 매개변수로 넘겨 받을 수 있도록
+            draw(const float&amp; dt) 로 매개변수를 가진 함수로 바꿨다.
+
+            5명 그려야 하니까 (-1.0f, 0.0f) 좌표에 5명을 다 그리고 update에서 한명씩 평행이동 시키는걸로.
+            translate(start);
+            */</span>
+
+			<span class="c1">// gold face</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.12</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.08</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.03</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">white</span><span class="p">,</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">);</span> <span class="c1">// white eye</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// yellow arm 1</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span> <span class="o">+</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>					<span class="c1">// animation!</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// green leg 1</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>		<span class="c1">// animation!</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// red body</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.13</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// yellow arm 2 </span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>					<span class="c1">// animation!</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// green leg 2</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span> <span class="o">+</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>	<span class="c1">// animation!</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="n">time</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">;</span>
+
+		<span class="p">}</span>
+	<span class="p">};</span>
+
+	<span class="k">class</span> <span class="nc">WalkingPerson</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">Person</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>      <span class="c1">// 5명그릴거야. 5 크기의 배열에 담음. 객체 '포인터' 사용함 !</span>
+
+	<span class="nl">public:</span>
+		<span class="n">WalkingPerson</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="p">();</span>              <span class="c1">// 객체를 동적 할당으로 생성하여 포인터 배열에 각각 넣어준다.</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="o">~</span><span class="n">WalkingPerson</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">delete</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>                 <span class="c1">// 소멸자에선 delete 시켜주고 원소 nullptr로 초기화</span>
+				<span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>  <span class="c1">// 매 프레임마다 실행됨 (Game2D의 run() 속에서 무한루프 됨)</span>
+		<span class="p">{</span> 
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+			<span class="p">{</span>
+                <span class="cm">/*
+                  translate -&gt; for문 안에서 계속해서 평행이동 누적 합 된다. 
+                  처음 그려지는 p[0] 사람은 for문 다 돌고나면 x축 (0.5f)자리에 그려질 것. -1.0f + (5 * 0.3f)
+                  가장 마지막에 그려지는 p[4] 사람은 딱 start위치인 x축 (-1.0f)에 (0.3f) 한번만 더해진 (-0.7f)에 그려질 것이다.
+                */</span>
+
+				<span class="n">translate</span><span class="p">(</span><span class="mf">0.3</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>        
+				<span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">(</span><span class="n">getTimeStep</span><span class="p">());</span>    <span class="c1">// 각 사람을 그려준다. </span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-q3-아이언맨처럼-손에서-리펄서-빔을-발사하며-걸어다니는-사람-구현">🙋 Q3. 아이언맨처럼 손에서 리펄서 빔을 발사하며 걸어다니는 사람 구현</h2>
+
+<iframe width="815" height="458" src="https://www.youtube.com/embed/iW1-_X1t-5M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h3 id="enum-사용">enum 사용</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">enum Direction</code>
+    <ul>
+      <li>오른쪽 왼쪽 구분이 필요한데 bool로 하기 보다 눈에 딱 들어오게 열거형으로 <code class="language-plaintext highlighter-rouge">LEFT = 1</code>, <code class="language-plaintext highlighter-rouge">RIGHT = 0</code> 로 지정했다.
+        <ol>
+          <li>눈의 방향
+            <ul>
+              <li>눈의 위치만 변해도 반대쪽으로 방향 튼 것으로 보이기 때문에 고려했다.</li>
+              <li><code class="language-plaintext highlighter-rouge">void drawEye(int dir);</code></li>
+            </ul>
+          </li>
+          <li>리펄서 쏠 때의 팔 방향
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">void drawRightArm(int repulsor, int dir);</code></li>
+            </ul>
+          </li>
+          <li>사람 위치
+            <ul>
+              <li>오른쪽이면 + 해주고 왼쪽이면 - 해줘야 하기 떄문에</li>
+              <li><code class="language-plaintext highlighter-rouge">void move(const float&amp; dt, int dir);</code></li>
+            </ul>
+          </li>
+          <li>리펄서 쏴지는 방향
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">void drawRepulsor(int dir);</code></li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">enum Repulse</code>
+    <ul>
+      <li>리펄서 쏠 때와 안 쏠 떄의 팔 모양이 다르니까 !</li>
+      <li>안 쏠 때 <code class="language-plaintext highlighter-rouge">WAIT = 0</code>, 쏠 때 <code class="language-plaintext highlighter-rouge">FIRE = 1</code>로 지정했다.</li>
+      <li>역시 bool로 하기보다는 눈에 딱 들어오게 하려고 열거형으로.</li>
+      <li><code class="language-plaintext highlighter-rouge">void drawRightArm(int repulsor, int dir);</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="class-설명">class 설명</h3>
+
+<ol>
+  <li>class Person : <u>사람</u>을 그리는데 필요한 함수들과 사람의 위치 멤버 변수를 묶어 둠</li>
+  <li>class Repulsor : <u>리펄서</u>를 그리는데 필요한 함수들과 리펄서의 위치 멤버 변수를 묶어 둠</li>
+  <li>class WalkingPerson : Game2D 클래스를 상속 받으며 그로부터 update함수를 받아 오버라이딩 해서 게임 무한 루프 돌림. <u>사람, 리펄서 객체를 만듬.</u></li>
+</ol>
+
+<ul>
+  <li>함수가 많아 복잡해서.. 헤더파일, CPP파일로 따로 나눴다!
+    <ul>
+      <li>📃 <code class="language-plaintext highlighter-rouge">WalkingPersoh.h</code> : 헤더파일은 함수의 프로토 타입만 모아둠.</li>
+      <li>📃 <code class="language-plaintext highlighter-rouge">WalkingPersoh.cpp</code> : cpp는 함수 바디를 모아 둠.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="구현-코드---walkingpersohh">구현 코드 : 📃 <code class="language-plaintext highlighter-rouge">WalkingPersoh.h</code></h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="cp">#include "Game2D.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span> <span class="p">{</span>
+
+	<span class="k">enum</span> <span class="n">Direction</span> 
+	<span class="p">{</span>
+		<span class="n">RIGHT</span><span class="p">,</span>
+		<span class="n">LEFT</span>
+	<span class="p">};</span>
+
+	<span class="k">enum</span> <span class="n">Repulse</span>
+	<span class="p">{</span>
+		<span class="n">WAIT</span><span class="p">,</span>
+		<span class="n">FIRE</span>
+	<span class="p">};</span>
+
+
+	<span class="k">class</span> <span class="nc">Person</span>  <span class="c1">// ⭐ 사람 클래스</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">personLocation</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>   <span class="c1">//사람의 위치</span>
+
+		<span class="n">Person</span><span class="p">(){}</span>
+
+		<span class="kt">void</span> <span class="n">drawFaceAndBody</span><span class="p">();</span>    <span class="c1">// 얼굴 + 몸 그리기   -&gt; 애니메이션 X </span>
+		<span class="kt">void</span> <span class="n">drawEye</span><span class="p">(</span><span class="kt">int</span> <span class="n">dir</span><span class="p">);</span>     <span class="c1">// 눈 그리기 ( 왼쪽 방향키 누르면 왼쪽 방향 )  -&gt; 애니메이션 X 단 위치는 바뀜</span>
+		<span class="kt">void</span> <span class="n">drawLeftArm</span><span class="p">();</span>        <span class="c1">// 왼팔 그리기 (몸통 뒤에 있는 팔을 왼팔이라고 칭했다)    -&gt; 애니메이션 O 무빙시 팔 흔듬</span>
+		<span class="kt">void</span> <span class="n">drawRightArm</span><span class="p">(</span><span class="kt">int</span> <span class="n">repulsor</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dir</span><span class="p">);</span>  <span class="c1">// 오른팔 그리기 ( 리펄서를 쏘고 있다면. 그리고 쏘는 방향에 따라 그려지는 팔의 모습 )  -&gt; 애니메이션 O 무빙시 팔 흔듬, 리펄서 쏠땐 애니메이션 X</span>
+		<span class="kt">void</span> <span class="n">drawLeftLeg</span><span class="p">();</span>       <span class="c1">// 왼다리 그리기 ( 몸통 뒤 )  -&gt;  애니메이션 O 무빙시 다리 흔듬</span>
+		<span class="kt">void</span> <span class="n">drawRightLeg</span><span class="p">();</span>      <span class="c1">// 오른다리 그리기  -&gt;  애니메이션 O 무빙시 다리 흔듬</span>
+
+		<span class="kt">void</span> <span class="n">stand</span><span class="p">();</span>             <span class="c1">// 서있을 때 모습. 실행시작 OR 방향키를 누르고 있지 않을 때  -&gt; 차렷하고 서있을 수 있게 애니메이션 효과를 없앤다. time 을 0으로 초기화 주면 됨</span>
+		<span class="kt">void</span> <span class="n">move</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">dt</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dir</span><span class="p">);</span>      <span class="c1">// 방향키 누를 때 사람의 위치 갱신</span>
+	<span class="p">};</span>
+
+
+	<span class="k">class</span> <span class="nc">Repulsor</span>  <span class="c1">// ⭐ 리펄서 클래스</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">vec2</span> <span class="n">repulsorLocation</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>    <span class="c1">// 리펄서 위치 ( 오른 팔 끝에서 나가야 한다. )</span>
+
+		<span class="kt">void</span> <span class="n">drawRepulsor</span><span class="p">(</span><span class="kt">int</span> <span class="n">dir</span><span class="p">);</span>      <span class="c1">// 리펄서 그리기  -&gt; 애니메이션은 x  사람 위치에 따라 같이 위치만 바뀜 </span>
+	<span class="p">};</span>
+
+
+	<span class="k">class</span> <span class="nc">WalkingPerson</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>  <span class="c1">// ⭐ 게임 실행 클래스</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="n">Person</span> <span class="n">person</span><span class="p">;</span>                      <span class="c1">// 사람 객체 생성</span>
+		<span class="n">Repulsor</span><span class="o">*</span> <span class="n">repulsor</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>       <span class="c1">// 리펄서 객체 포인터 ( 메모리 누수를 막기 위해 스페이스 안누를땐 리펄서가 없어져야 하고 싶으므로 포인터로 접근하기로 했다 )</span>
+		<span class="kt">int</span> <span class="n">dir</span> <span class="o">=</span> <span class="n">RIGHT</span><span class="p">;</span>                    <span class="c1">// 시작 시엔 오른쪽 향하는 상태로 초기화</span>
+		<span class="kt">int</span> <span class="n">rep</span> <span class="o">=</span> <span class="n">WAIT</span><span class="p">;</span>                     <span class="c1">// 시작 시엔 리펄서 안쏘는걸로 상태로 초기화</span>
+
+	<span class="nl">public:</span>
+
+        <span class="cm">/*
+            update은 무한 루프 안에서 돌아가며 매 실행마다 갱신된 위치에 새로 그리는 작업을 한다.
+            객체의 기존 그림이 이동하는거라고 착각하면 안돼. 매번 새로운 위치에 새 그림이 그려져서 우리 눈에 정지해 있는 그림 혹은 애니메이션으로 보이는거다.
+        */</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>                              
+		<span class="p">{</span>
+			<span class="n">person</span><span class="p">.</span><span class="n">drawLeftArm</span><span class="p">();</span>  <span class="c1">// 1. 왼쪽 팔을 그린다. (몸통에 가려지니 몸통보다 먼저 그려야.)</span>
+			<span class="n">person</span><span class="p">.</span><span class="n">drawLeftLeg</span><span class="p">();</span>  <span class="c1">// 2. 왼쪽 다리를 그린다. </span>
+			<span class="n">person</span><span class="p">.</span><span class="n">drawFaceAndBody</span><span class="p">();</span>  <span class="c1">// 3. 얼굴과 몸통을 그린다.</span>
+			<span class="n">person</span><span class="p">.</span><span class="n">drawEye</span><span class="p">(</span><span class="n">dir</span><span class="p">);</span>   <span class="c1">// 4. 눈을 그린다. (얼굴보다 나중에 그려야 얼굴 위에 그려짐)</span>
+			<span class="n">person</span><span class="p">.</span><span class="n">drawRightArm</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">dir</span><span class="p">);</span> <span class="c1">// 5. 오른 팔을 그린다. (몸통보다 나중에 그려야 몸통 위에 그려짐)</span>
+			<span class="n">person</span><span class="p">.</span><span class="n">drawRightLeg</span><span class="p">();</span>  <span class="c1">// 6. 오른 다리를 그린다.</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_LEFT</span><span class="p">))</span>  
+			<span class="p">{</span>
+				<span class="n">dir</span> <span class="o">=</span> <span class="n">LEFT</span><span class="p">;</span>   <span class="c1">// 왼쪽 방향키를 누르면 </span>
+				<span class="n">person</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">getTimeStep</span><span class="p">(),</span> <span class="n">dir</span><span class="p">);</span>   <span class="c1">// 사람이 왼쪽 방향으로 이동하게끔</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_RIGHT</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">dir</span> <span class="o">=</span> <span class="n">RIGHT</span><span class="p">;</span>   <span class="c1">// 오른쪽 방향키를 누르면 </span>
+				<span class="n">person</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">getTimeStep</span><span class="p">(),</span> <span class="n">dir</span><span class="p">);</span>   <span class="c1">// 사람이 오른쪽 방향으로 이동하게끔</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_RIGHT</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_LEFT</span><span class="p">))</span>    <span class="c1">// 왼쪽키와 오른쪽키 모두 누르지 않을때는 애니메이션 없이 가만히 서있는 자세가 되도록.</span>
+			<span class="p">{</span> 
+				<span class="n">person</span><span class="p">.</span><span class="n">stand</span><span class="p">();</span>         <span class="c1">// 더이상 팔다리를 흔들지 않게 time을 0으로 리셋하는 기능을 한다. </span>
+ 			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_SPACE</span><span class="p">))</span> <span class="c1">// 스페이스바를 누르면 스페이스 누를 때 리펄서 객체 생성</span>
+			<span class="p">{</span>
+				<span class="n">rep</span> <span class="o">=</span> <span class="n">FIRE</span><span class="p">;</span>
+				<span class="n">repulsor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Repulsor</span><span class="p">;</span>   
+				
+				<span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">LEFT</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">repulsor</span><span class="o">-&gt;</span><span class="n">repulsorLocation</span> <span class="o">=</span> <span class="n">person</span><span class="p">.</span><span class="n">personLocation</span> <span class="o">+</span> <span class="n">vec2</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>   <span class="c1">// 왼쪽 보고 있을 시 리펄서가 나가는 위치</span>
+				<span class="p">}</span>	
+				<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">RIGHT</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">repulsor</span><span class="o">-&gt;</span><span class="n">repulsorLocation</span> <span class="o">=</span> <span class="n">person</span><span class="p">.</span><span class="n">personLocation</span> <span class="o">+</span> <span class="n">vec2</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>   <span class="c1">// 오른쪽 보고 있을 시 리펄서가 나가는 위치</span>
+				<span class="p">}</span>
+				<span class="n">repulsor</span><span class="o">-&gt;</span><span class="n">drawRepulsor</span><span class="p">(</span><span class="n">dir</span><span class="p">);</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_SPACE</span><span class="p">))</span>   <span class="c1">// 스페이스 안누를 때 </span>
+			<span class="p">{</span>
+				<span class="n">rep</span> <span class="o">=</span> <span class="n">WAIT</span><span class="p">;</span>  <span class="c1">// 리펄서 안쏠 때는 WAIT으로 상태로 바꿔야하고</span>
+
+				<span class="k">delete</span> <span class="n">repulsor</span><span class="p">;</span> <span class="c1">// 리펄서 객체 delete 해야한다.</span>
+				<span class="n">repulsor</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="구현-코드---walkingpersohcpp">구현 코드 : 📃 <code class="language-plaintext highlighter-rouge">WalkingPersoh.cpp</code></h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "WalkingPerson.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span> <span class="p">{</span>
+	
+	<span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">drawFaceAndBody</span><span class="p">()</span>          <span class="c1">// drawFaceAndBody() : 얼굴 + 몸 그리는 함수 </span>
+	<span class="p">{</span>
+		<span class="n">beginTransformation</span><span class="p">();</span>            <span class="c1">// 얼굴 그리기</span>
+		<span class="p">{</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.12</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.08</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="n">beginTransformation</span><span class="p">();</span>
+		<span class="p">{</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>     <span class="c1">// 몸통 그리기</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.13</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="n">endTransformation</span><span class="p">();</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">drawEye</span><span class="p">(</span><span class="kt">int</span> <span class="n">dir</span><span class="p">)</span>    <span class="c1">// drawEye(int dir) : 눈 그리는 함수</span>
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">LEFT</span><span class="p">)</span>  <span class="c1">// 왼쪽을 볼 때</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="p">{</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+				<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.15</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">black</span><span class="p">,</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">RIGHT</span><span class="p">)</span> <span class="c1">// 오른쪽을 볼 때</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="p">{</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+				<span class="n">translate</span><span class="p">(</span><span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.15</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">drawFilledCircle</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">black</span><span class="p">,</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">drawLeftArm</span><span class="p">()</span>  <span class="c1">// drawLeftArm() : 왼쪽 팔(몸통 뒤에 있는 팔) 그리는 함수</span>
+	<span class="p">{</span>
+		<span class="n">beginTransformation</span><span class="p">();</span>
+		<span class="p">{</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span> <span class="o">+</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>					<span class="c1">// animation!</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="n">endTransformation</span><span class="p">();</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">drawRightArm</span><span class="p">(</span><span class="kt">int</span> <span class="n">repulsor</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dir</span><span class="p">)</span>    <span class="c1">// drawRightArm(int repulsor, int dir) : 오른 팔 그리는 함수. 리펄서를 쏘는 팔이다. </span>
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">repulsor</span> <span class="o">==</span> <span class="n">WAIT</span><span class="p">)</span>     <span class="c1">// 정지 상태&lt;time = 0&gt;    OR      움직일 때(발사는 안하되 그냥 걸어다닐 때)&lt;time != 0&gt;</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="p">{</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+				<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>					<span class="c1">// animation!</span>
+				<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">repulsor</span> <span class="o">==</span> <span class="n">FIRE</span><span class="p">)</span>  <span class="c1">// 발사 상태일 때</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">RIGHT</span><span class="p">)</span>  <span class="c1">// 오른쪽 발사시</span>
+			<span class="p">{</span>
+				<span class="n">beginTransformation</span><span class="p">();</span>
+				<span class="p">{</span>
+					<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+					<span class="n">rotate</span><span class="p">(</span><span class="mf">90.0</span><span class="n">f</span><span class="p">);</span>
+					<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+					<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>
+					<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="n">endTransformation</span><span class="p">();</span>
+			<span class="p">}</span>
+			<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">LEFT</span><span class="p">)</span>  <span class="c1">// 왼쪽 발사시</span>
+			<span class="p">{</span>
+				<span class="n">beginTransformation</span><span class="p">();</span>
+				<span class="p">{</span>
+					<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+					<span class="n">rotate</span><span class="p">(</span><span class="o">-</span><span class="mf">90.0</span><span class="n">f</span><span class="p">);</span>
+					<span class="n">scale</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">);</span>
+					<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="n">f</span><span class="p">);</span>	
+					<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">yellow</span><span class="p">,</span> <span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.18</span><span class="n">f</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="n">endTransformation</span><span class="p">();</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">drawLeftLeg</span><span class="p">()</span>  <span class="c1">// drawLeftLeg() : 왼쪽 다리 그리는 함수</span>
+	<span class="p">{</span>
+		<span class="n">beginTransformation</span><span class="p">();</span>
+		<span class="p">{</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span> <span class="o">+</span> <span class="mf">3.141592</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>	<span class="c1">// animation!</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="n">endTransformation</span><span class="p">();</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">drawRightLeg</span><span class="p">()</span> <span class="c1">// drawRighttLeg() : 오른쪽 다리 그리는 함수</span>
+	<span class="p">{</span>
+		<span class="n">beginTransformation</span><span class="p">();</span>
+		<span class="p">{</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">personLocation</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">rotate</span><span class="p">(</span><span class="n">sinf</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mf">5.0</span><span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="mf">30.0</span><span class="n">f</span><span class="p">);</span>	<span class="c1">// animation!</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">green</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="n">endTransformation</span><span class="p">();</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">stand</span><span class="p">()</span>     <span class="c1">// stand() : 방향키를 안누를땐 차렷 자세여야 하니 팔다리 안흔들도록 time 0으로 초기화</span>
+	<span class="p">{</span>
+		<span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Person</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">dt</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dir</span><span class="p">)</span> <span class="c1">// move(const float&amp; dt, int dir) : 사람의 위치 업뎃</span>
+	<span class="p">{</span>
+		<span class="n">time</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">;</span>                    <span class="c1">// time 업뎃</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">LEFT</span><span class="p">)</span>
+			<span class="n">personLocation</span><span class="p">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>  <span class="c1">// 사람의 위치 업뎃</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">RIGHT</span><span class="p">)</span>
+			<span class="n">personLocation</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="n">f</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">Repulsor</span><span class="o">::</span><span class="n">drawRepulsor</span><span class="p">(</span><span class="kt">int</span> <span class="n">dir</span><span class="p">)</span>  <span class="c1">// :drawRepulsor(int dir): Repulsor 클래스의 함수. 리펄서를 그린다.</span>
+	<span class="p">{</span>
+		<span class="n">beginTransformation</span><span class="p">();</span>
+		<span class="p">{</span>
+			<span class="n">translate</span><span class="p">(</span><span class="n">repulsorLocation</span><span class="p">);</span>
+			<span class="n">drawFilledBox</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">skyblue</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.08</span><span class="n">f</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="n">endTransformation</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">C++ games</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/cpp/chapter5-1/" class="pagination--pager" title="C++ Chapter 5.1 : 조건 분기 (if문, switch-case문)
+">이전</a>
+    
+    
+      <a href="/c++%20games/chapter1-4/" class="pagination--pager" title="[C++] 1.4 마우스 입력 다루기
+">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/c++%20games/chapter1-3/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>[C++] 1.3 상호작용 맛보기 - 키보드 입력과 반응</a>
+    
+    
+      <a href="/c++%20games/chapter1-4/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>[C++] 1.4 마우스 입력 다루기</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%5BC%2B%2B%5D+1.3+%EC%97%B0%EC%8A%B5+%EB%AC%B8%EC%A0%9C+%ED%92%80%EC%9D%B4%20http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter1-3-prac%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter1-3-prac%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fc%2B%2B%2520games%2Fchapter1-3-prac%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/bound/">[STL 알고리즘] upper_bound, lower_bound, equal_range, binary_search</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.17
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/stdc/">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include <bits/stdc++.h></a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/freopen/">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/mapsetcustom/">[STL 컨테이너] set, unordered_set (+ map)에 사용자 정의 구조체 혹은 객체 담기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/2/">[C] sprintf 로 원하는 형식대로 문자열 저장하기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/1/">[C] C스타일 문자열의 차이 (char 포인터, char 배열) by 메모리 영역</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.22
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/iospeed/">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/deque/">[STL 컨테이너] deque (+ 다른 자료구조들과의 차이점)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/sortmapset/">[STL 컨테이너] map 과 set의 정렬</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.30
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/const/">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 식빵맘💛. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'ansohxxn/comments');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

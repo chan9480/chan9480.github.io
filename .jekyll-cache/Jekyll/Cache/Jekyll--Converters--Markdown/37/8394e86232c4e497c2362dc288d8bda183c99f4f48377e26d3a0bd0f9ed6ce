@@ -1,0 +1,19 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-15-의미론적-이동과-스마트-포인터">chapter 15. 의미론적 이동과 스마트 포인터</a></li>
+  <li><a href="#157-스마트-포인터3️⃣-stdweak_ptr">15.7 스마트 포인터3️⃣ std::weak_ptr</a>
+    <ul>
+      <li><a href="#-참고">🚀 참고</a></li>
+      <li><a href="#-shared_ptr의-순환-의존성-문제">🔔 shared_ptr의 순환 의존성 문제</a></li>
+      <li><a href="#-stdweak_ptr">🔔 std::weak_ptr</a>
+        <ul>
+          <li><a href="#주의할-점">주의할 점</a>
+            <ul>
+              <li><a href="#lock-함수">lock 함수</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,1806 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>UE4 Chapter 3-7. 플레이어 캐릭터 : 카메라가 플레이어를 따라다니게 하기 -  평생 공부 블로그 : Today I Learned‍ 🌙</title>
+<meta name="description" content="인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html ">
+
+
+  <meta name="author" content="공부하는 식빵맘 👱‍♀️">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content=" 평생 공부 블로그 : Today I Learned‍ 🌙">
+<meta property="og:title" content="UE4 Chapter 3-7. 플레이어 캐릭터 : 카메라가 플레이어를 따라다니게 하기">
+<meta property="og:url" content="http://localhost:4000/ue4%20lesson%201/ch3-7/">
+
+
+  <meta property="og:description" content="인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2020-09-12T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2020-09-12T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/ue4%20lesson%201/ch3-7/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "식빵맘💛",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" 평생 공부 블로그 : Today I Learned‍ 🌙 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+           평생 공부 블로그 : Today I Learned‍ 🌙
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#ue4-lesson-1" itemprop="item"><span itemprop="name">Ue4 lesson 1</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">UE4 Chapter 3-7. 플레이어 캐릭터 : 카메라가 플레이어를 따라다니게 하기</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="https://user-images.githubusercontent.com/42318591/108615416-2e1bb580-7447-11eb-8a54-6338e53ce625.png" alt="공부하는 식빵맘 👱‍♀️" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">공부하는 식빵맘 👱‍♀️</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:bboddak@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">303</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">C/C++/C#</span>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp" class="">C ++ (164)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/stl" class="">C++ STL & 표준 (13)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                        <li><a href="/categories/cpp-games" class="">C++ 연습 문제 패키지 (33)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp-network" class="">C++ Boost.Asio 네트워크 (4)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/c" class="">C (2)</a></li>
+                    
+                
+            </ul>
+        <span class="nav__sub-title">UE4</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-1" class="">언리얼 블루프린트 강의 1 (40)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-3" class="">언리얼 블루프린트 강의 2 (5)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/udemy-ue4-1" class="">언리얼 C++ 강의 1 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-2" class="">언리얼 C++ 책 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-docs" class="">내 언리얼 문서 (12)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4error" class="">에러 메모 (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">etc</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/design-pattern" class="">디자인 패턴 (15)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/blender" class="">Blender (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/git" class="">Git & Github (6)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/vs" class="">비주얼 스튜디오 (1)</a></li>
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="UE4 Chapter 3-7. 플레이어 캐릭터 : 카메라가 플레이어를 따라다니게 하기">
+    <meta itemprop="description" content="인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html">
+    <meta itemprop="datePublished" content="2020-09-12T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2020-09-12T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">UE4 Chapter 3-7. 플레이어 캐릭터 : 카메라가 플레이어를 따라다니게 하기
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2020-09-12T00:00:00+09:00">2020.09.12</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-09-12">2020.09.12</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#ue4-lesson-1" class="page__taxonomy-item-category" rel="tag">UE4 Lesson 1</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#ue4" class="page__taxonomy-item-tag" rel="tag">UE4</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#-플레이어-캐릭터와-카메라-배치하기">🔔 플레이어 캐릭터와 카메라 배치하기</a>
+    <ul>
+      <li><a href="#캐릭터-배치">캐릭터 배치</a></li>
+      <li><a href="#카메라-배치">카메라 배치</a></li>
+    </ul>
+  </li>
+  <li><a href="#-카메라가-플레이어를-따라다니게-하기">🔔 카메라가 플레이어를 따라다니게 하기</a></li>
+  <li><a href="#-카메라가-플레이어를-부드럽게-따라가게-하기">🔔 카메라가 플레이어를 부드럽게 따라가게 하기</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
+<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
+
+<h2 id="-플레이어-캐릭터와-카메라-배치하기">🔔 플레이어 캐릭터와 카메라 배치하기</h2>
+
+<p>캐릭터와 카메라를 배치하고 카메라가 캐릭터를 따라다니게 구현해보자.</p>
+
+<h3 id="캐릭터-배치">캐릭터 배치</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92987060-0fa9a980-f4fa-11ea-8e5e-7246d6a7c818.png" alt="image" width="80%" height="80%" class="align-center" /></p>
+
+<p>이전 강의들에서 만들어 둔 “MoveCharBP” 블루프린트를 드래그 하여 뷰포트에 배치시켜준다.</p>
+
+<blockquote>
+  <p>🚩 “MoveCharBP”의 블루프린트 에디터에서의 디테일 패널</p>
+</blockquote>
+
+<p>현재 레벨이 바뀌어서 이전에 ‘레벨의 디테일 패널’에서 설정했던 “MoveCharBP”의 중력 scale, 점프 속도 등등 이런 설정값들이 다 날아간 상태다. 레벨이 바뀌어도 “MoveCharBP”의 설정값들은 변하지 않도록 “MoveCharBP”의 블루프린트 에디터에서의 디테일 패널에서 이를 다시 설정해주자. 그리고 컴파일 잊지 말기.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92987391-edfdf180-f4fc-11ea-8dea-29e253b3c713.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92987370-cc9d0580-f4fc-11ea-8aa1-28fee6569746.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<p>단, <code class="language-plaintext highlighter-rouge">cam</code> 변수에 카메라 할당하는 것은 레벨의 디테일 패널에서!</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92987415-21d91700-f4fd-11ea-9061-5245b5e741fc.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<blockquote>
+  <p>🚩 “MoveCharBP”의 블루프린트 이벤트 그래프</p>
+</blockquote>
+
+<p>횡스크롤로 게임을 진행할거라서 이전 강의에서 구현했었던 오른쪽 왼쪽 움직임은 지워주도록 한다. <strong>Forward Backward 입력 이벤트의 실행핀을 끊어주었다.</strong> 그리고 컴파일.</p>
+
+<p><br /></p>
+
+<h3 id="카메라-배치">카메라 배치</h3>
+
+<p>기존에 배치되어 있던 카메라 액터를 전부 지워주고 모드 패널에서 카메라를 검색하여 이를 뷰포트에 새로 배치시킨다. 플레이어가 카메라 화면의 가운데에 오게끔 적절히 카메라를 배치한다.</p>
+
+<p><br /></p>
+
+<h2 id="-카메라가-플레이어를-따라다니게-하기">🔔 카메라가 플레이어를 따라다니게 하기</h2>
+
+<p>뷰포트의 카메라 액터를 클릭한 상태에서 블루프린트를 추가해주기. 이름은 “FollowCamBP”. 카메라에게 플레이어를 매 프레임마다 따라다니도록 하는 기능을 구현할 것.</p>
+
+<blockquote>
+  <p>🚩 “FollowCamBP”의 블루프린트 이벤트 그래프</p>
+</blockquote>
+
+<p>새로운 카메라의 위치를 플레이어의 위치로부터 ‘카메라 위치와 플레이어 위치의 차이를 나타내는 고정적인 크기의 벡터’(= <code class="language-plaintext highlighter-rouge">Offset</code>)를 더한 값으로 매 프레임마다 설정해주면 된다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>카메라의 위치 = 플레이어의 위치 + Offset
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Offset</code> 변수 추가
+    <ul>
+      <li>Vector 3 타입</li>
+      <li>횡스크롤 게임이라 카메라와 플레이어 사이의 거리는 늘 일정하다. 따라서 <code class="language-plaintext highlighter-rouge">Offset</code> 값은 변하지 않고 유지된다. 그래서 게임 시작할 때 <code class="language-plaintext highlighter-rouge">Offset</code>을 구해놓는 것이다.
+        <ul>
+          <li>이 과정에서 구한 <code class="language-plaintext highlighter-rouge">Offset</code> 값을 사용해서 카메라의 위치를 계속 업데이트 할 것이다.
+‘카메라 위치와 플레이어 위치의 차이를 나타내는 벡터’를 <code class="language-plaintext highlighter-rouge">Offset</code>이라는 이름의 Vector3 변수에 담는다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92988022-e93c3c00-f502-11ea-84c8-20ffe3210525.png" alt="image" width="100%" height="100%" class="align-center" /></p>
+
+<p>💡 <em>게임이 시작되면 <code class="language-plaintext highlighter-rouge">Offset</code> 변수 값을 구해 놓는 작업</em></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">BeginPlay</code>
+    <ul>
+      <li>게임이 시작되면</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Set Offset</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Offset</code> 변수의 값을 설정한다.
+        <ul>
+          <li>어떤 값으로 설정하냐면
+            <ul>
+              <li>카메라의 위치 - Player 0 캐릭터의 위치
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">Get Actor Location</code> 👉 이 블루프린트가 붙어 있는 액터(타겟이 self)인 카메라 액터의 Vector3 위치를 리턴</li>
+                  <li><code class="language-plaintext highlighter-rouge">Get Player Character</code> 👉 Player Index 0 이 할당 되어 있는 ‘Character’를 리턴한다. 즉, “MoveCharBP”를 리턴함.</li>
+                  <li><code class="language-plaintext highlighter-rouge">Get Actor Location</code> 👉 <code class="language-plaintext highlighter-rouge">Get Player Character</code>로부터 “MoveCharBP”을 리턴받아 이 액터의 Vector3 위치를 리턴</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92988035-053fdd80-f503-11ea-8405-c184fc9c6dd2.png" alt="image" width="100%" height="100%" class="align-center" /></p>
+
+<p>💡 <em>카메라의 새로운 위치를 업데이트 하는 작업. 플레이어의 위치에 위에서 구한 <code class="language-plaintext highlighter-rouge">Offset</code> 값을 매 프레임마다 더해주면 된다.</em></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Tick</code>
+    <ul>
+      <li>매 프레임마다</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Set Actor Location</code>
+    <ul>
+      <li>이 블루프린트가 붙어 있는 액터(타겟이 self)인 카메라 액터의 Vector3 위치를</li>
+    </ul>
+  </li>
+  <li>(플레이어의 위치 + Offset) 으로 설정한다. <code class="language-plaintext highlighter-rouge">Set Actor Location</code>의 New Location에 연결한다.</li>
+</ul>
+
+<p><br /></p>
+
+<blockquote>
+  <p>“MoveCharBP”의 레벨 디테일 패널에서 <code class="language-plaintext highlighter-rouge">Cam</code> 변수에 “FollowCamBP”을 다시 할당.</p>
+</blockquote>
+
+<p>기존에 할당되어 있던 카메라 액터에 “FollowCamBP”이라는 블루프린트가 붙는 바람에 할당 되어 있던 카메라 액터가 날라간 상태. 다시 복습하는 차원에서 적어보자면, 이전 강의에서 “MoveCharBP”의 이벤트 그래프에서 언리얼이 “MoveCharBP”의 1인칭 카메라를 자동 생성하지 않고 <code class="language-plaintext highlighter-rouge">Cam</code>에 직접 할당한 카메라 액터를 사용하기 위해서 Set view with blend 해주는 작업을 했었 것을 기억해보자.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92987950-39ff6500-f502-11ea-99f2-5b4326540ffd.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<p><br /></p>
+
+<h2 id="-카메라가-플레이어를-부드럽게-따라가게-하기">🔔 카메라가 플레이어를 부드럽게 따라가게 하기</h2>
+
+<blockquote>
+  <p>🚩 “FollowCamBP”의 블루프린트 이벤트 그래프</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/92988604-07f10180-f508-11ea-8b19-258fcb557558.png" alt="image" width="100%" height="100%" class="align-center" /></p>
+
+<ul>
+  <li>한번에 바로 A 벡터에서 B 벡터로 바뀌는게 아니라 A 벡터에서 B 벡터로 부드럽게 바뀌는 효과를 가지려면 <code class="language-plaintext highlighter-rouge">Lerp</code> 와 <code class="language-plaintext highlighter-rouge">Delta Seconds</code>를 사용해야 한다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Lerp</code> 👉 A 벡터 값에서 B 벡터 값 사이에서 <code class="language-plaintext highlighter-rouge">alpha</code> 비율(보통 0~1 사이의 실수)에 해당하는 곳을 리턴
+        <ul>
+          <li>A 벡터(기존 카메라 위치)</li>
+          <li>B 벡터(새로운 카메라 위치 = 플레이어의 위치 + Offset)</li>
+          <li>위에서는 그냥 이 값을 바로 새 위치로 집어 넣었었음.</li>
+        </ul>
+      </li>
+      <li>처음 알았는데 <code class="language-plaintext highlighter-rouge">Tick</code> 이벤트는 <code class="language-plaintext highlighter-rouge">Delta Seconds</code>를 매 프레임마다 출력한다.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Delta Seconds</code> 란 현재 프레임과 다음 프레임과의 간격을 초 단위로 표현한 것이다. 예를 들어 프레임간의 간격이 20ms 이라면 <code class="language-plaintext highlighter-rouge">Delta Seconds</code> 값은 0.02가 된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Lerp</code> 노드를 통하여 A 벡터와 B 벡터 사이에서 매 프레임마다 <code class="language-plaintext highlighter-rouge">Smooth * Delta Seconds</code>비율에 해당하는 벡터를 리턴한다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Smooth</code> 없이 그냥 <code class="language-plaintext highlighter-rouge">Delta Seconds</code>만을 alpha로 한다면, 예를 들어 <code class="language-plaintext highlighter-rouge">Delta Seconds</code>가 0.02라면 매프레임마다 A 벡터에서 B 벡터 사이의 2 % 에 해당하는 벡터값이 카메라의 새 위치로 설정되는거라서 카메라가 플레이어를 너무 많이 느리게 따라간다. 너무 느려서 플레이어를 놓치기도..</li>
+      <li>따라서 1 이상의 값인 기본 값 6.0으로 float 타입의 <code class="language-plaintext highlighter-rouge">Smooth</code> 변수를 만들어 <code class="language-plaintext highlighter-rouge">Smooth * Delta Seconds</code>비율로 보간하도록 하였다. 좀 더 빠른 속도로 플레이어를 부드럽게 따라가게끔</li>
+    </ul>
+  </li>
+  <li><a href="#카메라가-플레이어를-따라다니게-하기">이 방법을 적용하기 전</a>에는 매 프레임마다 바로 B 벡터로 적용이 되서 카메라가 플레이러를 부드럽게 따라가는 모습은 아니였다.</li>
+</ul>
+
+<p><img src="https://camo.githubusercontent.com/580b4bd4b47a9b256f7cd0f3aef0d49f03345504/68747470733a2f2f706f737466696c65732e707374617469632e6e65742f4d6a41794d4441354d544a664d6a41672f4d4441784e546b354f446b774d5467344e4445312e55396a64527475706655456b6c594973325a36313963494849736937496d6a6a6d4b4148767167584a5145672e327931446971436137684856565f75626f624a314a383171493734414b6a355637616330367a3058575055672e4749462e736f6879756e655f616e2f756534322e6769663f747970653d77373733" alt="image" width="60%" height="60%" class="align-center" /></p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">UE4 Lesson 1</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/ue4%20lesson%201/ch3-6/" class="pagination--pager" title="UE4 Chapter 3-6. 플레이어 캐릭터 : 배경
+">이전</a>
+    
+    
+      <a href="/ue4%20lesson%201/ch3-8/" class="pagination--pager" title="UE4 Chapter 3-8. 플레이어 캐릭터 : 공격 충돌 처리
+">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/ue4%20lesson%201/ch3-6/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>UE4 Chapter 3-6. 플레이어 캐릭터 : 배경</a>
+    
+    
+      <a href="/ue4%20lesson%201/ch3-8/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>UE4 Chapter 3-8. 플레이어 캐릭터 : 공격 충돌 처리</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=UE4+Chapter+3-7.+%ED%94%8C%EB%A0%88%EC%9D%B4%EC%96%B4+%EC%BA%90%EB%A6%AD%ED%84%B0+%3A+%EC%B9%B4%EB%A9%94%EB%9D%BC%EA%B0%80+%ED%94%8C%EB%A0%88%EC%9D%B4%EC%96%B4%EB%A5%BC+%EB%94%B0%EB%9D%BC%EB%8B%A4%EB%8B%88%EA%B2%8C+%ED%95%98%EA%B8%B0%20http%3A%2F%2Flocalhost%3A4000%2Fue4%2520lesson%25201%2Fch3-7%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fue4%2520lesson%25201%2Fch3-7%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fue4%2520lesson%25201%2Fch3-7%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/bound/">[STL 알고리즘] upper_bound, lower_bound, equal_range, binary_search</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.17
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/stdc/">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include <bits/stdc++.h></a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/freopen/">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/mapsetcustom/">[STL 컨테이너] set, unordered_set (+ map)에 사용자 정의 구조체 혹은 객체 담기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/2/">[C] sprintf 로 원하는 형식대로 문자열 저장하기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/1/">[C] C스타일 문자열의 차이 (char 포인터, char 배열) by 메모리 영역</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.22
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/iospeed/">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/deque/">[STL 컨테이너] deque (+ 다른 자료구조들과의 차이점)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/sortmapset/">[STL 컨테이너] map 과 set의 정렬</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.30
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/const/">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 식빵맘💛. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'ansohxxn/comments');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

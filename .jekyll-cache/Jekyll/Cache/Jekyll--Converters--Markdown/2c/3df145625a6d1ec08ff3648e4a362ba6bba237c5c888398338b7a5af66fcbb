@@ -1,0 +1,271 @@
+I"�F<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-8-객체-지향의-기초--static-정적-멤버-함수">chapter 8. 객체 지향의 기초 : static 정적 멤버 함수</h1>
+
+<h2 id="-static-멤버-함수란">🔔 static 멤버 함수란?</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">staitc</code> 멤버 변수처럼
+    <ul>
+      <li>객체 이름은 물론이고 <u>클래스 이름만으로도 접근이 가능하다.</u></li>
+      <li>객체와 독립적이다. 객체 생성과 상관 없다.
+        <ul>
+          <li>따라서 멤버 변수는 객체가 생성되야 메모리를 할당받기 때문에 <code class="language-plaintext highlighter-rouge">static</code> 멤버 함수 내에서는 <u>멤버 변수를 사용할 수 없다.</u></li>
+          <li>그러나 미리 전역에서 메모리가 할당되는 <strong><u>static 멤버 변수는 사용이 가능하다.</u></strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">noramal_value</span> <span class="o">=</span> <span class="mi">99</span><span class="p">;</span>  <span class="c1">// 일반 멤버 변수</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">static_value</span><span class="p">;</span> <span class="c1">// static 멤버 변수</span>
+
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="kt">void</span> <span class="n">Func</span><span class="p">()</span>     <span class="c1">// ⭐ static 멤버 함수</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>      <span class="c1">// Func()내의 일반 지역 변수 </span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+        <span class="c1">// cout &lt;&lt; noramal_value &lt;&lt; endl; 👈👈 💥에러!!!💥 일반 멤버 변수는 사용할 수 없다. </span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">static_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// static 멤버 변수는 사용 가능</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">static_value</span> <span class="o">=</span> <span class="mi">777</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Something</span><span class="o">::</span><span class="n">Func</span><span class="p">();</span>  <span class="c1">// 객체 생성 없이 바로 클래스 이름으로 호출 가능</span>
+
+    <span class="cm">/* 👆 1024와 777을 출력한다. */</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-static-멤버-함수를-사용하는-이유">🔔 static 멤버 함수를 사용하는 이유</h2>
+
+<p>객체 생성 여부와 상관없이 바로 클래스 이름으로 접근하고 싶을 때 사용하지만 주로 <strong><u>private인 static 멤버 변수에 접근하려 할 때</u></strong> 많이 쓰인다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">staitc</code> <strong>멤버 변수</strong>는 모든 객체들이 사용하고 공유해야하는데 <code class="language-plaintext highlighter-rouge">private</code>이라면 외부에서 직접 접근하고 사용할 수가 없다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">private</code>인 멤버 변수들은 <u>멤버 함수들에서만 접근이 가능하다는 특징이 있다.</u></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">static</code> <strong>멤버 함수</strong> 를 통해서 <code class="language-plaintext highlighter-rouge">private</code>한 <code class="language-plaintext highlighter-rouge">staitc</code> <strong>멤버 변수</strong> 에 간접 접근할 수 있도록 구현할 수 있다.
+    <ul>
+      <li>마치 getter, setter 접근함수처럼!</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">static_value</span><span class="p">;</span> <span class="c1">// private한 static 멤버 변수</span>
+
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">getValue</span><span class="p">()</span>     <span class="c1">// ⭐ static 멤버 함수</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">static_value</span><span class="p">;</span>  
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">Something</span><span class="o">::</span><span class="n">static_value</span> <span class="o">=</span> <span class="mi">777</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// cout &lt;&lt; Something::static_value &lt;&lt; endl;  👈👈 💥에러!💥 private이므로 직접 접근 불가능</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Something</span><span class="o">::</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// 777 출력. 클래스 이름으로 호출했을 때. </span>
+
+    <span class="n">Something</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 777 출력. 객체 이름으로 호출했을 때. </span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>이처럼 private한 staitc 멤버 변수를 직접 접근할 수는 없지만 static 멤버 함수 <em>getValue()</em>를 통하여 간접적으로 staitc 멤버 변수를 리턴받을 수 있다.</p>
+
+<p><br /></p>
+
+<h2 id="-static-멤버-함수는-this-포인터를-사용할-수-없다">🔔 static 멤버 함수는 this 포인터를 사용할 수 없다.</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">this</code> 포인터는 객체인 자기 자신의 주소, 즉 <u>객체의 주소</u>를 담고 있기 때문에 <u>객체가 생성되야지만 사용할 수 있다.</u>
+    <ul>
+      <li>static 멤버 함수는 <u>객체들의 생성과 무관</u>하며 언제 어디서든 클래스 이름으로도 접근이 가능해야 하기 때문에</li>
+      <li><strong><u>static 멤버 함수 내부에서는 this 포인터를 사용할 수 없다.</u></strong></li>
+      <li>static 멤버 함수 내부에서 일반 멤버 변수를 사용할 수 없었듯이.</li>
+      <li>이에 더해 <strong>this포인터로 접근할 수 있는 모든 것을 하지 못 한다</strong>.
+        <ul>
+          <li>같은 객체 내의 멤버 변수나 멤버 함수는 접근하지 못한다. 눈에 보이지 않아도 이들을 접근할 땐 <code class="language-plaintext highlighter-rouge">this-&gt;</code>가 숨어있는 것이나 마찬가지기 때문에.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">static_value</span><span class="p">;</span> <span class="c1">// static 멤버 변수</span>
+
+<span class="nl">public:</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">getValue</span><span class="p">()</span>     <span class="c1">// ⭐ static 멤버 함수</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span> <span class="o">-&gt;</span> <span class="n">static_value</span><span class="p">;</span>  <span class="c1">// 💥에러💥 </span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">temp</span><span class="p">()</span>  <span class="c1">// ⭐ 일반 멤버 함수</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span> <span class="o">-&gt;</span> <span class="n">static_value</span><span class="p">;</span> <span class="c1">// 문제 없다.</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li>static 멤버 함수인 <em>getValue()</em>에선 <code class="language-plaintext highlighter-rouge">this</code>를 사용할 수 없다.</li>
+  <li>일반 멤버 함수인 <em>temp()</em>에선 <code class="language-plaintext highlighter-rouge">this</code>를 사용할 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="멤버-함수-포인터">멤버 함수 포인터</h3>
+
+<p><a href="https://ansohxxn.github.io/cpp/chapter7-7/">함수 포인터 포스트</a>에서 일반 함수는 <code class="language-plaintext highlighter-rouge">함수 이름</code>에 함수의 주소값이 들어있다는 것을 공부했었다. 그러나 <u>멤버 함수의 포인터는 조금 다르다.</u></p>
+
+<blockquote>
+  <p><u>멤버 함수의 포인터</u>는 <code class="language-plaintext highlighter-rouge">&amp; 클래스이름 :: 함수이름</code> 으로 접근해야 한다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Something</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int</span> <span class="n">temp</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Something</span> <span class="n">s1</span><span class="p">;</span>
+    <span class="n">Something</span> <span class="n">s2</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="p">(</span><span class="n">Something</span><span class="o">::*</span><span class="n">fptr_1</span><span class="p">)()</span> <span class="o">=</span> <span class="n">s1</span><span class="p">.</span><span class="n">temp</span><span class="p">;</span>  <span class="c1">// 💥에러💥</span>
+    <span class="kt">int</span> <span class="p">(</span><span class="n">Something</span><span class="o">::*</span><span class="n">fptr_2</span><span class="p">)()</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Something</span><span class="o">::</span><span class="n">temp</span><span class="p">;</span>  <span class="c1">// 문제 없다.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>int (Something::*fptr_1)() = <code class="language-plaintext highlighter-rouge">s1.temp</code>;</em>
+    <ul>
+      <li>💥에러💥
+        <ul>
+          <li>멤버 함수의 포인터는 이렇게 <code class="language-plaintext highlighter-rouge">s1.temp</code> 함수 이름으로 접근하면 안된다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>int (Something::*fptr_2)() = <code class="language-plaintext highlighter-rouge">&amp;Something::temp</code>;</em>
+    <ul>
+      <li>멤버 함수의 포인터는 이렇게 <code class="language-plaintext highlighter-rouge">&amp; 클래스이름 :: 함수이름</code>으로 <u>&amp;와 클래스 이름</u>으로 접근해야 한다.</li>
+    </ul>
+  </li>
+  <li><strong><em>이유</em></strong>
+    <ul>
+      <li><strong>멤버 변수</strong>는 각 객체들마다 따로 메모리를 가져 주소가 다르지만</li>
+      <li><strong>멤버 함수</strong>는 <u>객체마다 함수 메모리를 따로 갖는 방식이 아니기 때문이다.</u>
+        <ul>
+          <li>멤버 함수는 어딘가 한군데에 저장되어 있고 각 객체마다 그 공간에 동일하게 접근하여 각자의 다른 데이터로 사용하는 방식이다.</li>
+          <li>따라서 일반 함수의 주소와는 다르게 <u>멤버 함수의 주소를 받아와야 한다.</u>
+            <ul>
+              <li>그럴려면 속해있는 클래스가 어디인지 알려주어야 한다. <code class="language-plaintext highlighter-rouge">&amp;Something::</code></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="함수-포인터로-함수-실행하기--일반-멤버-함수">함수 포인터로 함수 실행하기 : 일반 멤버 함수</h4>
+
+<blockquote>
+  <p>temp()는 Something 클래스의 <strong>일반 멤버 함수</strong>라고 하자.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Something</span> <span class="n">s</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="p">(</span><span class="n">Something</span><span class="o">::*</span><span class="n">fptr_1</span><span class="p">)()</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Something</span><span class="o">::</span><span class="n">temp</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="o">*</span><span class="n">fptr_1</span><span class="p">)()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// 함수 포인터로 s 객체의 temp 함수 실행</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>int (Something::*fptr_1)()</em>
+    <ul>
+      <li>포인터 선언시 <code class="language-plaintext highlighter-rouge">Something::</code>를 꼭 붙여주어야 한다.</li>
+    </ul>
+  </li>
+  <li>함수 포인터로 일반 멤버 함수를 실행할 때는 꼭 <code class="language-plaintext highlighter-rouge">(s.*fptr_1)()</code> 처럼 <u>객체로 접근해 주어야 한다.</u>
+    <ul>
+      <li><em>fptr_1</em>은 객체에 종속되는 일반 멤버 함수를 참조하고 있기 때문에 단독으로 호출할 수 없기 때문이다.</li>
+      <li>멤버 함수 포인터는 객체의 내용물을 참조하기 때문에 <code class="language-plaintext highlighter-rouge">(객체.*멤버함수포인터)(매개변수)</code>로 사용해야 한다.
+        <ul>
+          <li>포인터로 객체를 참조하고 있다면 <code class="language-plaintext highlighter-rouge">(객체포인터-&gt;*멤버함수포인터)(매개변수)</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="함수-포인터로-함수-실행하기--static-멤버-함수">함수 포인터로 함수 실행하기 : static 멤버 함수</h4>
+
+<blockquote>
+  <p>getValue()는 Something 클래스의 <strong>static 멤버 함수</strong>라고 하자.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Something</span> <span class="n">s</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">fptr_2</span><span class="p">)()</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Something</span><span class="o">::</span><span class="n">temp</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">fptr_2</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// 함수 포인터로 s 객체의 temp 함수 실행</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>int (*fptr_2)()</em>
+    <ul>
+      <li>static 멤버 함수는 객체와 무관하게 연산이 이루어 지기 때문에 <u>일반 함수 포인터</u>로 취급 받는다.
+        <ul>
+          <li>따라서 포인터 선언시 Something:: 을 떼고 일반 함수처럼 <em>int (*fptr_2)()</em>로만 선언해준다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>fptr_2()</em>
+    <ul>
+      <li>일반 함수 포인터로 취급되기에 이렇게 <u>단독 호출할 수 있다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

@@ -1,0 +1,270 @@
+I"d-<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter2-변수와-기본-자료형">Chapter2. 변수와 기본 자료형</h1>
+
+<h2 id="부동소수점수">부동소수점수</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>영역</th>
+      <th>데이터 형</th>
+      <th>최소 크기</th>
+      <th>전형적인 크기</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>부동소수점</td>
+      <td>float</td>
+      <td>4byte</td>
+      <td>4byte</td>
+    </tr>
+    <tr>
+      <td>부동소수점</td>
+      <td>double</td>
+      <td>8byte</td>
+      <td>8byte</td>
+    </tr>
+    <tr>
+      <td>부동소수점</td>
+      <td>long double</td>
+      <td>8byte</td>
+      <td>8 or 12 or 16 byte</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="float의-내부">float의 내부</h2>
+
+<p>Q.  <code class="language-plaintext highlighter-rouge">0000011111000000000000000000000</code> 이 이진수를 float 실수로 어떤 수인지 알아보자</p>
+
+\[0 \ \ 0000111\ \ 11000000000000000000000 = +1.313554 \ * 10^{-36}\]
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">float</code>
+    <ul>
+      <li>4 byte = 32bits = 총 32자리</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">부호 비트</code>
+    <ul>
+      <li>1자리</li>
+      <li>0 이므로  +양수이다.</li>
+    </ul>
+  </li>
+</ul>
+
+\[00000111 = 2^0 +2^1+2^2=7\]
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">지수 비트</code>
+    <ul>
+      <li>8자리</li>
+      <li>00000111</li>
+      <li>십진수로 7 이다.</li>
+    </ul>
+  </li>
+</ul>
+
+\[11000000000000000000000=2^{-1}+2^{-2}=0.5 +0.25 = 0.75\]
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">가수 비트</code>
+    <ul>
+      <li>23자리</li>
+      <li>왼쪽 앞부터 (2^-1) 이며 소수 자리를 나타낸다.
+        <ul>
+          <li>-1, -2, -3, -4, …. 순</li>
+        </ul>
+      </li>
+      <li>십진수로 0.75이다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+\[+(1+0.75)\ * \ 2^{(7-127)} =  +1.313554 \ * 10^{-36}\]
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">+</code></li>
+  <li><code class="language-plaintext highlighter-rouge">( 1 + 0.75 )</code>
+    <ul>
+      <li>가수 비트 십진수 값에 1 더해주기</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">2^(7-127)</code>
+    <ul>
+      <li>지수 비트 십진수 값에 127을 빼주는 이유는 
+  32bit 기준으로 메모리에 값을 저장할 때 따르는 규칙이라고 보면 된다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">+ ( 1 + 0.75 ) * 2^(7-127)</code> 을 계산한 값이 +1.313554  * 10^{-36} 가 된다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="stdnumeric_limitslowest">std::numeric_limits<타입>::lowest()</타입></h2>
+
+<ul>
+  <li>min : 가장 작은 <code class="language-plaintext highlighter-rouge">절대값</code></li>
+  <li>lowest : 가장 작은 값. 음수일 수도.</li>
+  <li>각각 float, double, long double 이 표현할 수 있는 범위 중에서 가장 작은 값을 리턴해준다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/83946324-f1714500-a84a-11ea-9cec-12f408027681.png" alt="image" width="80%" height="80%" class="align-center" /></p>
+
+<p><br /></p>
+
+<h2 id="실수의-다양한-표현-방법">실수의 다양한 표현 방법</h2>
+
+<ul>
+  <li>float f(3.14)
+    <ul>
+      <li>double형인 3.14를 float으로 자동으로 형 변환해주어 저장한다. C++에서만 가능.</li>
+      <li>float f{3.14} 대괄호 사용은 엄격하여 형변환 불가능</li>
+    </ul>
+  </li>
+</ul>
+
+\[e-1 = *10^{-1}, \ e2 =*10^2\]
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">f</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)</span> 
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mf">3.14</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mf">31.4e-1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 3.14 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mf">31.4e-2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 0.314 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mf">31.4e1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 3.14 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mf">31.4e2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 3.14 출력</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="stdsetprecisionn">std::setprecision(n)</h2>
+
+<ul>
+  <li>#include &lt;iomanip&gt;
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">입출력</code> 조작하는 라이브러리</li>
+    </ul>
+  </li>
+  <li>자리 수를 지정한다.</li>
+</ul>
+
+<p>ex1)</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>cout « setprecision(16) « endl;
+    <ul>
+      <li>출력 스트림에 16자리까지 보장하도록 정보를 보낸다.</li>
+    </ul>
+  </li>
+  <li>cout « 1.0 / 3.0 « endl;
+    <ul>
+      <li>평소같으면 0.333333 이 정도 자리수의 정밀도만 보장할텐데</li>
+      <li>setprecision(16)으로 16자리까지 꼭 출력하도록 됐기 때문에</li>
+      <li>0.3333333333333333 출력</li>
+    </ul>
+  </li>
+</ul>
+
+<p>정밀도 차이가 쌓이소 쌍이면 버그나 잡기 힘든 에러가 생길 수 있다</p>
+
+<ul>
+  <li>실수 표현의 원리
+    <ul>
+      <li>이진수로 만드는거기 때문에 최대한 가깝게 표현하는 것이다.</li>
+      <li>0.25 처럼 2^(-2)로 딱 떨어지는 이진수 소수라면 100% 정확하지만</li>
+      <li>0.1 처럼 십진수 소수라면 그냥 이진수의 합의 조합들로 최대한 0.1에 가깝게 만드는 것이다.</li>
+      <li>그러므로 정확한 값과 차이가 존재한다.</li>
+      <li>정밀도가 높을 수록 최대한 가깝게 만들어 보는 것.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>ex2)</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="nf">d</span><span class="p">(</span><span class="mf">0.1</span><span class="p">);</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">17</span><span class="p">);</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="p">;</span> 
+</code></pre></div></div>
+
+<ul>
+  <li>cout « d « endl;
+    <ul>
+      <li>0.1 출력
+        <ul>
+          <li>사실 딱 떨어지는 0.1이 아니고 내부적으로 최대한 0.1에 가깝게 만든 것이다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>cout « std::setprecision(17);
+    <ul>
+      <li>출력 스트림에 16자리까지 보장하도록 정보를 보낸다.</li>
+    </ul>
+  </li>
+  <li>cout « d « endl ;
+    <ul>
+      <li>0.1000000000000001</li>
+      <li>17자리로 출력하니 안보이던 끝에 1이 보인다.</li>
+      <li>실제론 17자리 그 이상이였던 것 !!!!!!!!!!!!!!!!!!!!!!!!!!</li>
+      <li>이렇게 이진수들의 합으로 십진수인 0.1에 최대한 가깝게 만든 것!</li>
+    </ul>
+  </li>
+</ul>
+
+<p>ex3)</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="nf">d1</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span>
+<span class="kt">double</span> <span class="nf">d2</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">);</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">17</span><span class="p">);</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">d2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>cout « d1 « endl;
+    <ul>
+      <li>1 출력</li>
+      <li>17자리까지 안간다. 그냥 딱 떨어진 1 한자리 출력</li>
+      <li>1은 2의 0승이기 때문에 이진수로 표현이 깔끔하게 가능하기 때문이다.</li>
+      <li>실제로 딱 1 한자리</li>
+    </ul>
+  </li>
+  <li>cout « d2 « endl;
+    <ul>
+      <li>0.99999999999999999</li>
+      <li>1.0이 아닌 0.99999999999999999 로 나오는 이유
+        <ul>
+          <li>각각 더해주는 0.1를 이진수로 표현을 먼저 한 후 더해주기 때문이다.</li>
+          <li>이진수로 0.1은 딱 떨어지는 수가 아니기 때문에 이진수로 최대한 표현하다보니 차이가 생기는 것.</li>
+          <li>이들을 다 더하니 1.0에 가까워지긴 했지만 딱 떨어지는 1.0은 아니다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

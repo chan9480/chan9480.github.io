@@ -1,0 +1,33 @@
+I"y<ul class="toc__menu">
+  <li><a href="#chapter-10-builder-pattern">Chapter 10. Builder Pattern</a>
+    <ul>
+      <li><a href="#-개념">🔔 개념</a>
+        <ul>
+          <li><a href="#빌더-패턴-vs-추상-팩토리-패턴">빌더 패턴 Vs. 추상 팩토리 패턴</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-1">🔔 예제 1</a>
+        <ul>
+          <li><a href="#vehiclecs">📜Vehicle.cs</a></li>
+          <li><a href="#interfacebuildercs">📜InterfaceBuilder.cs</a></li>
+          <li><a href="#carbuildercs">📜CarBuilder.cs</a></li>
+          <li><a href="#motorcyclebuildercs">📜MotorCycleBuilder.cs</a></li>
+          <li><a href="#engineercs">📜Engineer.cs</a></li>
+          <li><a href="#builderusecs">📜BuilderUse.cs</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-2">🔔 예제 2</a>
+        <ul>
+          <li><a href="#vehiclecs-1">📜Vehicle.cs</a></li>
+          <li><a href="#interfacebuildercs-1">📜InterfaceBuilder.cs</a></li>
+          <li><a href="#carbuildercs-1">📜CarBuilder.cs</a></li>
+          <li><a href="#motorcyclebuildercs-1">📜MotorCycleBuilder.cs</a></li>
+          <li><a href="#engineercs-1">📜Engineer.cs</a></li>
+          <li><a href="#builderusecs-1">📜BuilderUse.cs</a></li>
+          <li><a href="#유니티-적용">유니티 적용</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

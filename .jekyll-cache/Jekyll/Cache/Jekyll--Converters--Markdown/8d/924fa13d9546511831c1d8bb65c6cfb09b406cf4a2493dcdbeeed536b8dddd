@@ -1,0 +1,32 @@
+I"m<ul class="toc__menu">
+  <li><a href="#chapter-19-모던-c-필수-요소들">chapter 19. 모던 C++ 필수 요소들</a></li>
+  <li><a href="#자료형-추론-auto와-decltype">자료형 추론 auto와 decltype</a>
+    <ul>
+      <li><a href="#-auto">🔔 auto</a>
+        <ul>
+          <li><a href="#예제-1️⃣-auto-는-긴-타입을-간결하게-줄여준다">예제 1️⃣ auto 는 긴 타입을 간결하게 줄여준다.</a></li>
+          <li><a href="#예제-2️⃣-auto-는-const--volatile-같은-추가-지정은-읽지-않는다">예제 2️⃣ auto 는 const &amp;, volatile 같은 추가 지정은 읽지 않는다.</a></li>
+          <li><a href="#예제-3️⃣-덧붙여-template-t-또한-const--volatile-같은건-읽지-않는다">예제 3️⃣ 덧붙여 Template T 또한 const, &amp;, volatile 같은건 읽지 않는다.</a></li>
+          <li><a href="#예제-4️⃣-auto--경우에는-const를-읽는다">예제 4️⃣ auto &amp; 경우에는 const를 읽는다.</a></li>
+          <li><a href="#예제-5️⃣-auto-">예제 5️⃣ auto &amp;&amp;</a></li>
+          <li><a href="#예제-6️⃣-auto-포인터일-경우에는-const-를-다-읽어들인다">예제 6️⃣ auto 포인터일 경우에는 const, *를 다 읽어들인다.</a></li>
+          <li><a href="#예제-7️⃣-auto-람다-함수는-파라미터에-auto를-사용할-수-있다">예제 7️⃣ auto 람다 함수는 파라미터에 auto를 사용할 수 있다.</a></li>
+        </ul>
+      </li>
+      <li><a href="#-decltype">🔔 decltype</a>
+        <ul>
+          <li><a href="#예제-1️⃣">예제 1️⃣</a></li>
+          <li><a href="#예제-2️⃣-decltype은-리턴-타입에도-사용-가능-하다">예제 2️⃣ decltype은 리턴 타입에도 사용 가능 하다.</a></li>
+          <li><a href="#예제-3️⃣-decltype-">예제 3️⃣ decltype(( ))</a></li>
+          <li><a href="#예제-4️⃣-리턴-타입을-auto-와-decltype-에-넣을-때">예제 4️⃣ 리턴 타입을 auto 와 decltype 에 넣을 때.</a></li>
+          <li><a href="#예제-5️⃣-l-value-r-value">예제 5️⃣ L-value, R-value</a></li>
+          <li><a href="#예제-6️⃣-decltype-레퍼런스-없애기-stdremove_reference">예제 6️⃣ decltype 레퍼런스 없애기 std::remove_reference</a></li>
+          <li><a href="#예제-7️⃣-decltype-은-런타임이-아닌-컴파일-타임에-결정-된다">예제 7️⃣ decltype 은 런타임이 아닌 컴파일 타임에 결정 된다.</a></li>
+          <li><a href="#예제-8️⃣-decltype-클래스-템플릿-클래스-안에-있는-타입-접근">예제 8️⃣ decltype 클래스 템플릿, 클래스 안에 있는 타입 접근</a></li>
+          <li><a href="#예제-9️⃣-decltype-람다-함수의-타입-접근하기">예제 9️⃣ decltype 람다 함수의 타입 접근하기</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

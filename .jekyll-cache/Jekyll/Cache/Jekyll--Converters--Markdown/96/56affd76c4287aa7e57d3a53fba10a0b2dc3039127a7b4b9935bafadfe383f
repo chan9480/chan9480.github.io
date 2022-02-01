@@ -1,0 +1,762 @@
+I"5�<p class="notice--warning">인프런에 있는 이재환님의 강의 <strong>게임 디자인 패턴 with Unity</strong> 를 듣고 정리한 필기입니다. 😀</p>
+
+<h1 id="chapter-1-sigleton-pattern">Chapter 1. Sigleton Pattern</h1>
+
+<ul>
+  <li>참고
+    <ul>
+      <li><a href="https://ansohxxn.github.io/unity%20lesson%201/chapter5-7/">싱글톤 포스트 1</a></li>
+      <li><a href="https://ansohxxn.github.io/c++%20games/chapter2-6/">싱글톤 포스트 2</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="-싱글톤-패턴이란">🔔 싱글톤 패턴이란?</h2>
+
+<blockquote>
+  <p><u>오직 한개의 클래스 인스턴스(static)</u>만 갖도록 보장하고, 이에 대한 전역적인 접근점을 제공한다.</p>
+</blockquote>
+
+<ul>
+  <li>일종의 <code class="language-plaintext highlighter-rouge">전역 변수</code>. 모든 곳에서 접근하여 공유할 수 있는 단 하나의 인스턴스.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="싱글톤-단점">싱글톤 단점</h3>
+
+<blockquote>
+  <p>전역 변수이므로 전역변수가 가지는 모든 장단점을 다 가지고 있다. 쓰지말잔 얘기가 아니라 이런 단점도 있음을 주의하고 사용하잔 의미.</p>
+</blockquote>
+
+<ul>
+  <li>모든 곳에서 접근이 가능하므로 싱글톤 객체의 변경 시점, 변경 주체, <u>호출 시점을 모두 알기가 어렵다.</u></li>
+  <li><u>여러 클래스와 커플링이 된다.</u>
+    <ul>
+      <li>하나의 코드를 수정했을때, 싱글톤과 연결된 다양한 곳들에서 문제 발생</li>
+    </ul>
+  </li>
+  <li><u>멀티 쓰레드 환경에서 문제 발생</u>
+    <ul>
+      <li>모든 곳에서 접근이 가능하므로 <code class="language-plaintext highlighter-rouge">race condition</code> 발생.
+        <ul>
+          <li>이를 막기 위해 싱글톤은 <strong>mutex lock, unlock</strong>을 반복적으로 걸기 때문에 <u>코드의 성능은 떨어지게 된다.</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="유니티-안에서의-싱글턴-패턴-객체">유니티 안에서의 싱글턴 패턴 객체</h3>
+
+<blockquote>
+  <p>여러 오브젝트들이 데이터를 사용하는 오브젝트를 단 한개를 만들어 두고 이를 공유한다.</p>
+</blockquote>
+
+<ul>
+  <li>같은 Scene 안에서의 데이터 공유시에 사용됨
+    <ul>
+      <li><a href="https://ansohxxn.github.io/design%20pattern/chapter2-1/">바로 가기</a></li>
+    </ul>
+  </li>
+  <li>서로 다른 scene들간의 데이터 공유시에 사용됨
+    <ul>
+      <li>DontDestroyOnLoad 메소드를 호출하여 <u>Scene 변경시에도 싱글톤 객체의 Destroy를 막아주는 형태로 구현한다.
+</u>        <ul>
+          <li><a href="https://ansohxxn.github.io/design%20pattern/chapter2-2/">바로 가기</a></li>
+          <li><a href="https://ansohxxn.github.io/design%20pattern/chapter2-3/">바로 가기</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-예제-1--한-scene-내에서-사용">🔔 예제 1 : 한 Scene 내에서 사용</h2>
+
+<blockquote>
+  <p>공 오브젝트가 중력에 의해 떨어져 바닥에 부딪치면 소리가 나게 구현해보자.</p>
+</blockquote>
+
+<ul>
+  <li>공 오브젝트에 Rigidbody, Collider 컴포넌트가 붙어있는 상태.
+    <ul>
+      <li>바닥에 부딪치면 OnCollisionEnter 이벤트 발생</li>
+    </ul>
+  </li>
+  <li>Audio Source컴포넌트를 통해 소리 파일을 실행시켜야 한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="싱글톤-사용하기-전">싱글톤 사용하기 전</h3>
+
+<h4 id="-whendestroyplaycs">📜 WhenDestroyPlay.cs</h4>
+
+<ul>
+  <li>공 오브젝트에 붙여준다.</li>
+  <li>자기 자신(공 오브젝트)이 바닥에 부딪쳐 OnCollisionEnter 이벤트 발생시키면
+    <ul>
+      <li>오디오를 플레이 한 후</li>
+      <li>자기 자신은 파괴하도록.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>이 코드의 문제점 👉 오디오가 재생되기도 전에 자기 자신(공 오브젝트)이 파괴되어버려 오디오를 재생할 수 없게 된다.</p>
+</blockquote>
+
+<ul>
+  <li>따라서 오디오를 플레이한 후 <u>소리 재생이 끝날때 까지 대기 시간</u>을 가진 후 파괴해야 한다.</li>
+</ul>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">WhenDestroyPlay</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="k">void</span> <span class="nf">OnCollisionEnter</span><span class="p">(</span><span class="n">Collision</span> <span class="n">collision</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">AudioSource</span><span class="p">&gt;().</span><span class="nf">Play</span><span class="p">();</span>  <span class="c1">// 오디오를 플레이한 후</span>
+
+		<span class="nf">Destroy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>  <span class="c1">// 자기 자신 파괴</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="-destroydelayedcs">📜 DestroyDelayed.cs</h4>
+
+<ul>
+  <li>공 오브젝트에 붙여준다.</li>
+  <li><em>Destroy(this.gameObject , <u>myAudio.clip.length</u> );</em>
+    <ul>
+      <li>재생이 끝난 후에 파괴하도록 문제를 해결했다.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>이 코드의 문제점 👉 소리가 재생되는 동안엔 오브젝트가 파괴가 되지 않고 기다리므로 어색하다. 바닥에 부딪치긴 했는데 소리 날 동안은 오브젝트가 살아 있으니까.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">싱글톤 패턴</code>을 도입하여 이 문제를 해결해보자.
+    <ul>
+      <li><u>⭐이 전체 시스템을 관할할 게임 매니저가 필요하다.</u></li>
+      <li>이 게임매니저 오브젝트의 <u>오디오 매니저 스크립트를 싱글톤으로 지정한 후</u> 공 오브젝트와 이를 공유 할것.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">DestroyDelayed</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="k">private</span> <span class="n">AudioSource</span> <span class="n">myAudio</span><span class="p">;</span>
+
+	<span class="k">void</span> <span class="nf">Start</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">myAudio</span> <span class="p">=</span> <span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">AudioSource</span><span class="p">&gt;();</span>
+	<span class="p">}</span>
+
+	<span class="k">void</span> <span class="nf">OnCollisionEnter</span><span class="p">(</span><span class="n">Collision</span> <span class="n">collision</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">myAudio</span><span class="p">.</span><span class="nf">Play</span><span class="p">();</span>
+
+        <span class="nf">Destroy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span> <span class="p">,</span> <span class="n">myAudio</span><span class="p">.</span><span class="n">clip</span><span class="p">.</span><span class="n">length</span> <span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="싱글톤-사용">싱글톤 사용</h3>
+
+<ul>
+  <li>컴포넌트 패턴도 함께 사용하여 기능별로 클래스(스크립트)를 나누었다.</li>
+</ul>
+
+<h4 id="-myaudioplaycs">📜 MyAudioPlay.cs</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">공 오브젝트</code>를 프리팹으로 만들고 이 프리팹에 붙여준다.</li>
+</ul>
+
+<blockquote>
+  <p>⭐<u>AudioManager.Instance()</u>.Play(clip);</p>
+</blockquote>
+
+<ul>
+  <li>싱글톤인 AudioManager의 static 함수 Instance()를 호출하여 싱글톤 Audio Manager를 리턴 받는다.
+    <ul>
+      <li>static 함수이기 때문에 클래스 이름인 AudioManager로 호출 가능.</li>
+    </ul>
+  </li>
+  <li><strong>공이 파괴되기 전, 공에 붙어 있는 Audio Source 컴포넌트의 <em>clip</em> 을 싱글톤인 AudioSource 가 재생시켜주도록 자기 자신의 <em>clip</em>을 넘겨준다.</strong>
+    <ul>
+      <li><em>clip</em>에 오디오 클립 드래그 앤 드롭</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MyAudioPlay</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="k">public</span> <span class="n">AudioClip</span> <span class="n">clip</span><span class="p">;</span>
+
+	<span class="k">void</span> <span class="nf">OnCollisionEnter</span><span class="p">(</span><span class="n">Collision</span> <span class="n">collision</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">AudioManager</span><span class="p">.</span><span class="nf">Instance</span><span class="p">().</span><span class="nf">Play</span><span class="p">(</span><span class="n">clip</span><span class="p">);</span>
+
+		<span class="nf">Destroy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h4 id="gamemanager-오브젝트-만들기"><code class="language-plaintext highlighter-rouge">GameManager</code> 오브젝트 만들기</h4>
+
+<ul>
+  <li><u>빈 오브젝트</u>를 만들어 이름을 <code class="language-plaintext highlighter-rouge">GameManager</code>라고 하였다.</li>
+  <li>Audio Source 컴포넌트를 붙여준다.
+    <ul>
+      <li>clip은 아직 없는 상태.</li>
+      <li>공을 먼저 파괴 시킨후 공의 clip을 가져와 <u>공의 음악 clip을 게임 매니저가 재생시킬 것이다.</u></li>
+    </ul>
+  </li>
+  <li>📜CreateBall.cs 붙이기</li>
+  <li>📜AudioManager.cs 붙이기</li>
+</ul>
+
+<h4 id="-createballcs">📜 CreateBall.cs</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GameManager</code> 오브젝트에 붙여준다.</li>
+  <li>프리팹 <code class="language-plaintext highlighter-rouge">공</code>을 오브젝트화 시켜 생성한다.
+    <ul>
+      <li><em>ball</em>에 프리팹 <code class="language-plaintext highlighter-rouge">공</code> 드래그 앤 드롭</li>
+      <li>Instantiate(ball, pos, Quaternion.identity);</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CreateBall</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+    <span class="k">public</span> <span class="n">GameObject</span> <span class="n">ball</span><span class="p">;</span>
+
+    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetButtonDown</span><span class="p">(</span><span class="s">"Fire1"</span><span class="p">))</span>   <span class="c1">// 좌클릭 하면, 발사 하면</span>
+        <span class="p">{</span>
+            <span class="n">Vector3</span> <span class="n">pos</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Vector3</span><span class="p">(</span><span class="m">0.0f</span><span class="p">,</span> <span class="m">4.0f</span><span class="p">,</span> <span class="m">0.0f</span><span class="p">);</span>
+            <span class="nf">Instantiate</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">Quaternion</span><span class="p">.</span><span class="n">identity</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="-audiomanagercs">📜 AudioManager.cs</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GameManager</code> 오브젝트에 붙여준다.</li>
+  <li>⭐⭐얘가 <u>싱글톤 객체</u>가 된다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">공</code> 오브젝트와 공유하게 될 것.</li>
+      <li><em>static AudioManager <code class="language-plaintext highlighter-rouge">_instance</code> = null;</em>
+        <ul>
+          <li>게임이 시작되면 자기 자신(<code class="language-plaintext highlighter-rouge">GameManager</code>)를 static 변수 <strong><em>_instance</em></strong> 에 넣는다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">AudioManager</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> 
+<span class="p">{</span>
+	<span class="k">static</span> <span class="n">AudioManager</span> <span class="n">_instance</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>  <span class="c1">// 싱글톤 객체</span>
+	<span class="k">public</span> <span class="k">static</span> <span class="n">AudioManager</span> <span class="nf">Instance</span><span class="p">()</span>  <span class="c1">// static 함수. 공유하고자 하는 외부에서 사용할 것.</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="n">_instance</span><span class="p">;</span>  <span class="c1">// 자기 자신 리턴</span>
+	<span class="p">}</span>
+	
+	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> 
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">_instance</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>  <span class="c1">// 게임 시작되면 자기 자신을 넣음</span>
+			<span class="n">_instance</span> <span class="p">=</span> <span class="k">this</span><span class="p">;</span>
+	<span class="p">}</span>
+	
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">Play</span><span class="p">(</span><span class="n">AudioClip</span> <span class="n">clip</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">AudioSource</span><span class="p">&gt;().</span><span class="nf">PlayOneShot</span><span class="p">(</span><span class="n">clip</span><span class="p">);</span>  <span class="c1">// 재생</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="정리">정리</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/86983898-0c2b3680-c1c8-11ea-9880-6ec89eecf3d1.png" alt="image" width="80%" height="80%" class="align-center" /></p>
+
+<p><br /></p>
+
+<h2 id="-예제-2-1-다른-scene들간의-싱글톤-사용">🔔 예제 2-1 다른 Scene들간의 싱글톤 사용</h2>
+
+<blockquote>
+  <p>다른 새로운 Scene으로 전환되면 기존 Scene의 오브젝트들이 Destroy 된다.</p>
+</blockquote>
+
+<blockquote>
+  <p>따라서 <u>Scene끼리의 전환이 활발한 게임에서도 싱글톤 객체가 유지되려면</u> <strong><u>DontDestroyOnLoad 함수를 사용</u></strong>해 씬이 전환되더라도 싱글톤 객체가 없어지지 않고 유지될 수 있게 해주어야 한다.</p>
+</blockquote>
+
+<h3 id="dontdestroyonloadgameobject">DontDestroyOnLoad(GameObject)</h3>
+<ul>
+  <li>씬이 변경되더라도 파괴되지 않고 유지할 오브젝트를 지정하는 UnityEngine 함수다.</li>
+</ul>
+
+<h3 id="scene-1-1-구조">“Scene 1-1” 구조</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GameManager</code> 오브젝트
+    <ul>
+      <li>📜 PointManager.cs
+        <ul>
+          <li>⭐싱글톤 객체가 될 것.
+            <ul>
+              <li>자기 자신을 담을 static 변수 <em>_instance</em></li>
+              <li>그 static 변수를 리턴할 static 함수 Instance()</li>
+              <li>게임 시작시(Awake) <em>_instance</em>에 자기 자신을 담음</li>
+              <li>PointManager 은 싱글톤 객체가 되기 때문에 여러 스크립트에서 <u>공유</u>된다. 따라서 <em>myPoint</em> 멤버 변수는 <u>누적된다.</u></li>
+            </ul>
+          </li>
+          <li><u>DontDestroyOnLoad(this.gameObject);</u>
+            <ul>
+              <li>씬이 변경되더라도 자기 자신(싱글톤)을 파괴하지 않고 유지하도록 설정.</li>
+              <li><em>else</em>
+                <ul>
+                  <li>이미 유지되고 있는 싱글톤이 있다면
+                    <ul>
+                      <li>즉 실행했었던 과거 Scene으로 다시 돌아왔다면</li>
+                    </ul>
+                  </li>
+                  <li><em>if (this != _instance)</em>
+                    <ul>
+                      <li>this : Scene이 변경되면서 방금 새로 생성된 싱글톤</li>
+                      <li>_instance : Scene이 변경되기 전에 저장해놨던 싱글톤</li>
+                      <li>둘이 다르다면 새로 생성된 싱글톤은 파괴해주기. (이전에 유지해놨던 싱글톤을 쓰기 위하여)
+                        <ul>
+                          <li><em>Destroy(this.gameObject)</em></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><em>AddPoint(int num)</em> : 인수를 <em>myPoint</em> 멤버 변수에 더해준다.</li>
+          <li><em>GetPoint()</em> : <em>myPoint</em> 멤버 변수를 리턴한다.
+            <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+      
+<span class="k">public</span> <span class="k">class</span> <span class="nc">PointManager</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> 
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">myPoint</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+        
+    <span class="k">static</span> <span class="n">PointManager</span> <span class="n">_instance</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+      <span class="k">public</span> <span class="k">static</span> <span class="n">PointManager</span> <span class="nf">Instance</span><span class="p">()</span>
+      <span class="p">{</span>
+          <span class="k">return</span> <span class="n">_instance</span><span class="p">;</span>
+      <span class="p">}</span>
+	  
+      <span class="k">void</span> <span class="nf">Awake</span> <span class="p">()</span> 
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_instance</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_instance</span> <span class="p">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="nf">DontDestroyOnLoad</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> 
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="p">!=</span> <span class="n">_instance</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="nf">Destroy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+        
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddPoint</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">myPoint</span> <span class="p">=</span> <span class="n">myPoint</span> <span class="p">+</span> <span class="n">num</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">GetPoint</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">myPoint</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Cube 1</code> 오브젝트
+    <ul>
+      <li>📜MyAddPoint.cs</li>
+      <li><code class="language-plaintext highlighter-rouge">PointManager.Instance()</code> + <code class="language-plaintext highlighter-rouge">AddPoint or GetPoint 함수</code>로 📜PointManager의 멤버 변수 <em>myPoint</em>에 접근.
+        <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+    
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MyAddPoint</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">myNum</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+
+    <span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nf">MyFunc</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">MyFunc</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">PointManager</span><span class="p">.</span><span class="nf">Instance</span><span class="p">().</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">myNum</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">myResult</span> <span class="p">=</span> <span class="n">PointManager</span><span class="p">.</span><span class="nf">Instance</span><span class="p">().</span><span class="nf">GetPoint</span><span class="p">();</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"Point : "</span> <span class="p">+</span> <span class="n">myResult</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Cube 2</code> 오브젝트
+    <ul>
+      <li>📜MyAddPoint.cs</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Main Camera</code> 오브젝트
+    <ul>
+      <li>📜 SceneTrans1.cs
+        <ul>
+          <li>각각 다른 씬으로 전환해 주는 두 함수가 구현되어 있다.
+            <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine.SceneManagement</span><span class="p">;</span>
+      
+<span class="k">public</span> <span class="k">class</span> <span class="nc">SceneTrans1</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+      
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">SceneTrans1_1</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="n">SceneManager</span><span class="p">.</span><span class="nf">LoadScene</span><span class="p">(</span><span class="s">"01-Scene1-1"</span><span class="p">);</span>
+    <span class="p">}</span>
+	  
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">SceneTrans1_2</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="n">SceneManager</span><span class="p">.</span><span class="nf">LoadScene</span><span class="p">(</span><span class="s">"02-Scene1-2"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>            </div>
+          </li>
+          <li>📜 SceneTrans1.cs을 <code class="language-plaintext highlighter-rouge">Gameobject</code>가 아닌 쌩뚱맞게 <code class="language-plaintext highlighter-rouge">Main Camera</code>에 붙이는 이유
+            <ul>
+              <li>📜 SceneTrans1.cs을 <code class="language-plaintext highlighter-rouge">Gameobject</code>에 붙이면 일어나는 일
+                <ul>
+                  <li>“Scene 1-2”씬의 <code class="language-plaintext highlighter-rouge">Gameobject</code>는 씬이 전환되어도 <strong>DontDestroyOnLoad</strong> 함수에 의해 <u>보존이 되는 오브젝트이기 때문에 "Scene 1-2" 씬의 `Gameobject`는 Destroy 되기 때문에 버튼 이벤트에 아무것도 들어오는게 없어 "Scene 1-2" 로 전환 버튼을 눌러도 아무런 일이 일어나지 않는다.
+</u>                    <ul>
+                      <li>📜PointManager.cs에서 기존에 보존된 싱글톤이 있으면 새 싱글톤 오브젝트는 Destroy 하도록 구현해 놨기 때문에.</li>
+                    </ul>
+                  </li>
+                  <li>따라서 Destroy되는 일이 없는 <code class="language-plaintext highlighter-rouge">Main Camera</code>에 부착</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="scene-1-2-구조">“Scene 1-2” 구조</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GameManager</code> 오브젝트
+    <ul>
+      <li>📜 PointManager.cs</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Cube 1</code> 오브젝트
+    <ul>
+      <li>📜MyAddPoint.cs</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Main Camera</code> 오브젝트
+    <ul>
+      <li>📜 SceneTrans1.cs</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="실행">실행</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/86990358-61227900-c1d7-11ea-91d6-587c43e6f347.png" alt="image" width="60%" height="60%" class="align-center" /></p>
+
+<ul>
+  <li>“Scene 1-1” 에서
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Cube 1</code>의 <em>myNum</em>을 1 로 입력.</li>
+      <li><code class="language-plaintext highlighter-rouge">Cube 2</code>의 <em>myNum</em>을 2 로 입력.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Cube 1</code>, <code class="language-plaintext highlighter-rouge">Cube 2</code>는 📜 PointManager 싱글톤 객체를 공유함.
+            <ul>
+              <li>즉, <em>myPoint</em> 값 공유.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>버튼 이벤트에 📜 SceneTrans1.cs의 SceneTrans1_1 함수 등록</li>
+    </ul>
+  </li>
+  <li>“Scene 1-2” 에서
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Cube 3</code>의 <em>myNum</em>을 3 로 입력.
+        <ul>
+          <li>
+            <blockquote>
+              <p>⭐<code class="language-plaintext highlighter-rouge">Cube 1</code>, <code class="language-plaintext highlighter-rouge">Cube 2</code>, <code class="language-plaintext highlighter-rouge">Cube 3</code>까지 📜 PointManager 싱글톤 객체를 공유함.⭐ <em>myPoint</em> 값 공유.</p>
+            </blockquote>
+            <ul>
+              <li>⭐<u>1-2 씬으로 전환되어 `Cube3`이 생성되어도 else에 걸려 새롭게 생성된 📜 PointManager객체를 파괴하고 DontDestroyOnLoad 함수에 의해 _instance에 값이 유지됐던 기존 📜 PointManager 싱글톤 객체를 사용하기 때문이다. </u>⭐</li>
+              <li>이런 과정이 없었다면 동일한 씬 내에 있는 <code class="language-plaintext highlighter-rouge">Cube 1</code>, <code class="language-plaintext highlighter-rouge">Cube 2</code>끼리만 📜 PointManager 싱글톤 객체를 공유했을 것이다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>버튼 이벤트에 📜 SceneTrans1.cs의 SceneTrans1_2 함수 등록</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">씬 1-1 👉 씬 1-2 👉 씬 1-1</code> 이렇게 Scene이 변경됐다가 다시 <code class="language-plaintext highlighter-rouge">씬 1-1</code>로 돌아와도 <em>myPoint</em> 값이 누적되는 것을 알 수 있다. <u>싱글톤 객체인 PointManager가 유지되었기 때문에</u></p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">씬 1-1 👉 씬 1-2 👉 씬 1-1</code> 실행한 후
+    <ul>
+      <li>1 3 6 7 9 출력
+        <ul>
+          <li>씬 1-1 : 1 3
+            <ul>
+              <li>0 + 1 = 1</li>
+              <li>1 + 2 = 3</li>
+            </ul>
+          </li>
+          <li>씬 2-1 : 6
+            <ul>
+              <li>3 + 3 = 6</li>
+            </ul>
+          </li>
+          <li>씬 1-1 :  7 9
+            <ul>
+              <li>6 + 1 = 7</li>
+              <li>7 + 2 = 9</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-예제-2-2-현재-씬에-다른-씬을-덧대어-추가했을-때">🔔 예제 2-2 현재 씬에 다른 씬을 덧대어 추가했을 때</h2>
+
+<ul>
+  <li>“Scene 2-1” 위에 “Scene 2-2” 씬을 덧대어 추가했을 때도 두 씬이 싱글톤 객체를 잘 공유하도록 구현 함.
+    <ul>
+      <li><strong>Scene 추가</strong>
+        <ul>
+          <li>기본적으로는 화면에는 한개의 Scene이 로드되고, 다른 Scene을 다시 로드하는 방식으로 Scene을 교체한다.</li>
+          <li>기존 Scene에 Scene을 추가할 수도 있는데, 이것을 <code class="language-plaintext highlighter-rouge">Additive Loading</code>이라고 한다.
+            <ul>
+              <li>Additive Scene은 예를 들면 말풍선 모양으로 상상하는 씬(?) 같은 느낌이다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="scene-2-1-구조">“Scene 2-1” 구조</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GameManager</code> 오브젝트
+    <ul>
+      <li>📜 PointManager.cs
+        <ul>
+          <li>⭐싱글톤 객체가 될 것.
+            <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+      
+<span class="k">public</span> <span class="k">class</span> <span class="nc">PointManager</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> 
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">myPoint</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+        
+    <span class="k">static</span> <span class="n">PointManager</span> <span class="n">_instance</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+      <span class="k">public</span> <span class="k">static</span> <span class="n">PointManager</span> <span class="nf">Instance</span><span class="p">()</span>
+      <span class="p">{</span>
+          <span class="k">return</span> <span class="n">_instance</span><span class="p">;</span>
+      <span class="p">}</span>
+	  
+      <span class="k">void</span> <span class="nf">Awake</span> <span class="p">()</span> 
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_instance</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_instance</span> <span class="p">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="nf">DontDestroyOnLoad</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> 
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="p">!=</span> <span class="n">_instance</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="nf">Destroy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">gameObject</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+        
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddPoint</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">myPoint</span> <span class="p">=</span> <span class="n">myPoint</span> <span class="p">+</span> <span class="n">num</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">GetPoint</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">myPoint</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Cube 1</code> 오브젝트
+    <ul>
+      <li>📜MyAddPoint.cs</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Cube 2</code> 오브젝트
+    <ul>
+      <li>📜MyAddPoint.cs</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Main Camera</code> 오브젝트
+    <ul>
+      <li>📜 SceneTrans2.cs
+        <ul>
+          <li>각각 다른 씬으로 전환해 주는 두 함수가 구현되어 있다.
+            <ul>
+              <li>현재 씬에 새로운 씬을 덧대어 추가해주는 함수
+                <ul>
+                  <li><strong>SceneManager.LoadScene(“04-Scene2-2”, LoadSceneMode.Additive);</strong>
+                    <ul>
+                      <li>“04-Scene2-2”씬을 <code class="language-plaintext highlighter-rouge">LoadSceneMode.Additive</code> 모드로 한 씬 내에서 추가적으로, 보조적으로 씬을 위에 로드한다.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>어떤 씬을 unload 하고 싶을 때
+                <ul>
+                  <li><strong>SceneManager.UnloadSceneAsync(“04-Scene2-2”);</strong>
+                    <ul>
+                      <li>“04-Scene2-2”씬을 언로드한다.
+                        <ul>
+                          <li>“04-Scene2-2”씬 상의 오브젝트들을 파괴한다.
+```c#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+            <p>public class SceneTrans2 : MonoBehaviour {</p>
+
+            <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public void AddScene () {
+    SceneManager.LoadScene("04-Scene2-2", LoadSceneMode.Additive);
+}
+        
+public void RemoveScene () {
+    SceneManager.UnloadSceneAsync("04-Scene2-2");
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+} } ```
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="scene-2-2-구조">“Scene 2-2” 구조</h3>
+
+<ul>
+  <li>“Scene 2-1” 위에 덧대어 추가 될 씬이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Cube 2</code> 오브젝트
+    <ul>
+      <li>📜MyAddPoint.cs</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">GameManager</code> 오브젝트는 없다.
+    <ul>
+      <li><u>"Scene 2-1"에 이미 있으므로 없어도 된다.</u> <code class="language-plaintext highlighter-rouge">GameManager</code>는 <u>한 씬에선 전체 하나만 있으면 됨.("Scene 2-2"는 덧대어지는 씬일 뿐 새롭게 로드되는건 아님)</u></li>
+    </ul>
+  </li>
+  <li>✨ <code class="language-plaintext highlighter-rouge">Main Camera</code> 오브젝트는 꺼져있다.
+    <ul>
+      <li><u>"Scene 2-1"의 Main Camera를 공유하여 사용할거라서.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="실행-1">실행</h3>
+
+<p>예제 2-1 와 실행 원리 같다.</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

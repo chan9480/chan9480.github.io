@@ -1,0 +1,72 @@
+I"�<h2 id="-deque-컨테이너-소개">🚀 deque 컨테이너 소개</h2>
+
+<blockquote>
+  <p>#include &lt;deque&gt;</p>
+</blockquote>
+
+<p class="notice--warning"><strong><u>d</u>ouble <u>e</u>nded <u>que</u>ue</strong>
+컨테이너의 맨 앞과 맨 뒤에서 삽입/제거를 빠르게 할 수 있다는 것이 대표적 특징이다. 
+스택(LIFO)과 큐(FIFO)를 합쳐놓은 것이라고 생각하면 될 것 같다.</p>
+
+<p>맨 앞 원소와 맨 뒤 원소 삽입/제거가 빈번하다면 <code class="language-plaintext highlighter-rouge">deque</code>를 고려하는 것이 좋겠다.</p>
+
+<h3 id="-deque-의-특징-다른-자료구조들과의-비교">🔥 deque 의 특징 (다른 자료구조들과의 비교)</h3>
+
+<ul>
+  <li>vector 처럼 원소들을 <code class="language-plaintext highlighter-rouge">[]</code> 인덱스를 사용하여 <strong>Random Access</strong> 가 가능하다.
+    <ul>
+      <li>stack 과 queue 와 차별화된 강점</li>
+    </ul>
+  </li>
+  <li>vector 처럼 원소들을 어떤 순서로든 앞로든 뒤 원소들을 순회할 수 있다.</li>
+  <li>vector 가 capacity 가 고갈되면 전체 메모리 크기의 이상을 재할당 받는 것과 달리 deque 는 일정 크기를 가지는 chunk 단위로 메모리가 확장된다.
+    <ul>
+      <li>vector 보다 확장 비용이 절감된다.</li>
+    </ul>
+  </li>
+  <li>vector 와 달리 <strong>연속 메모리 공간이 아니다.</strong>
+    <ul>
+      <li>따라서 vector와 달리 포인터 연산이 불가능하다.</li>
+    </ul>
+  </li>
+  <li>list 처럼 <strong>연속 메모리 공간이 아니다.</strong></li>
+  <li>stack, vector, list 처럼 <strong>맨 뒤에서 삽입/제거</strong> 하는 것이 빠르다.
+    <ul>
+      <li>queue 은 오직 맨 앞에서만 제거가 가능하지만 deque 는 맨 뒤에서도 제거가 가능</li>
+      <li>stack 과 queue 가 deque 로 구현 가능한 이유.</li>
+    </ul>
+  </li>
+  <li>queue, list 처럼 <strong>맨 앞에서 삽입/제거</strong> 하는 것이 빠르다.
+    <ul>
+      <li>vector 와 차별화된 강점</li>
+      <li>stack 은 오직 맨 뒤에서만 제거가 가능하지만 deque 는 맨 앞에서도 제거가 가능</li>
+      <li>stack 과 queue 가 deque 로 구현 가능한 이유.</li>
+    </ul>
+  </li>
+  <li>list 와 달리 맨 뒤, 맨 앞이 아닌 **<u>중간 원소를 삽입/제거 하는 것은 느리다.&lt;/u**</u></li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-함수">🚀 함수</h2>
+
+<p>vector 와 다르게 맨 앞 원소를 삭제하는 <code class="language-plaintext highlighter-rouge">pop_front</code>, 맨 앞에 추가하는 <code class="language-plaintext highlighter-rouge">push_front</code> 함수가 있다. 이것 빼고는 vector 의 멤버들과 같다. <a href="https://ansohxxn.github.io/stl/vector/">[STL 컨테이너] vecto</a></p>
+
+<p><br /></p>
+
+<h2 id="-참고-및-출처">🚀 참고 및 출처</h2>
+
+<ul>
+  <li>수까락의 프로그래밍 이야기 <a href="http://egloos.zum.com/sweeper/v/2817817">http://egloos.zum.com/sweeper/v/2817817</a></li>
+  <li>한빛출판네트워크 <a href="https://www.hanbit.co.kr/channel/category/category_view.html?cms_code=CMS3942847236">https://www.hanbit.co.kr/channel/category/category_view.html?cms_code=CMS3942847236</a></li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

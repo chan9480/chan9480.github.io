@@ -1,0 +1,174 @@
+I"�-<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-13-템플릿--함수-템플릿-특수화">chapter 13. 템플릿 : 함수 템플릿 특수화</h1>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">특수화</code> : 템플릿에서 특정 타입에 대해서 다른 실행 처리를 하고 싶을 때 그 타입에 대해서만 특수화.</p>
+</blockquote>
+
+<h2 id="-일반-전역-함수의-특수화">🔔 일반 전역 함수의 특수화</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="n">T</span> <span class="nf">getMax</span><span class="p">(</span><span class="n">T</span> <span class="n">x</span><span class="p">,</span> <span class="n">T</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">)</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">getMax</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">getMax</span> <span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">getMax(1, 2)</code> 👉 <code class="language-plaintext highlighter-rouge">getMax &lt;int&gt; (1, 2)</code>나 마찬가지다.</li>
+  <li><code class="language-plaintext highlighter-rouge">getMax &lt;double&gt; (1, 2)</code> 👉 int 인 1 과 2 를 강제로 double로 형변환한다. 1.0, 2.0 으로.</li>
+</ul>
+
+<blockquote>
+  <p>만약 getMax를 &lt;char&gt; 타입으로 구체화 할 때만 예외적으로 경고 메세지를 주고 싶다면?</p>
+</blockquote>
+
+<ul>
+  <li>if-else문
+    <ul>
+      <li>런타임 때 결정되서 안된다.</li>
+      <li>if ( T == char ) 같은건 쓸 수 없다.</li>
+      <li><u>템플릿이 어떤 타입으로 구체화 될 것인가는 런타임이 아닌 컴파일 타임에 결정이 되야 한다.</u> ⭐</li>
+    </ul>
+  </li>
+  <li><u>특정 타입에 대해서만 특수화 하기</u></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="n">T</span> <span class="nf">getMax</span><span class="p">(</span><span class="n">T</span> <span class="n">x</span><span class="p">,</span> <span class="n">T</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">)</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
+<span class="kt">char</span> <span class="nf">getMax</span><span class="p">(</span><span class="kt">char</span> <span class="n">x</span><span class="p">,</span> <span class="kt">char</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"경고! 문자 끼리 비교할 때는 주의 해주세요"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">)</span> <span class="o">?</span> <span class="n">x</span> <span class="o">:</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">getMax</span><span class="p">(</span><span class="sc">'a'</span> <span class="p">,</span> <span class="sc">'b'</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">template&lt;&gt;</code> 을 붙인 후 특정 타입에 대해서만 한번 더 정의하면 된다.</p>
+</blockquote>
+
+<ul>
+  <li>위와 같이 <code class="language-plaintext highlighter-rouge">char</code>타입에 대해서만 특수화를 해주었기 때문에
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">getMax('a' , 'b')</code>은 <code class="language-plaintext highlighter-rouge">getMax &lt;char&gt;('a' , 'b')</code>나 마찬가지기 때문에 특수하게 “경고! 문자 끼리 비교할 때는 주의 해주세요”가 출력된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-멤버-함수의-특수화">🔔 멤버 함수의 특수화</h2>
+
+<blockquote>
+  <p>클래스 바깥에서 해당 타입에 대해 <code class="language-plaintext highlighter-rouge">template&lt;&gt;</code> 을 붙인 후 한번 더 정의해준다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">Storage</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="n">T</span> <span class="n">m_value</span><span class="p">;</span>
+<span class="nl">public:</span>
+	<span class="n">Storage</span><span class="p">(</span><span class="n">T</span> <span class="n">value</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">Storage</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">print</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"This is Double Type"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Storage</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">nValue</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+	<span class="n">Storage</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dValue</span><span class="p">(</span><span class="mf">3.14</span><span class="p">);</span>
+
+	<span class="n">nValue</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+	<span class="n">dValue</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>double 타입인 <em>dValue.print();</em> 에서만 특수하게  “This is Double Type”  문구가 출력된다.</li>
+</ul>
+
+<h3 id="주의사항">주의사항</h3>
+
+<ul>
+  <li><a href="https://ansohxxn.github.io/cpp/chapter13-2/">이전 포스트</a>에서 언급했던 것처럼
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">Storage</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">print</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"This is Double Type"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+    <ul>
+      <li>멤버 함수 특수화 코드를 <u>.cpp 파일에 따로 정의하면 특수화가 되지 않는다.</u>
+        <ul>
+          <li><u>특수화도 아직 틀일 뿐이지 구체화된건 아니기 때문.</u></li>
+        </ul>
+      </li>
+      <li>그냥 특수화도 헤더 파일안에 같이 해주는 것을 권장한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

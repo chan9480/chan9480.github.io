@@ -1,0 +1,484 @@
+I"`�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-4-외부-이미지-사용하기">Chapter 4. 외부 이미지 사용하기</h1>
+<p><em>드디어 마지막 챕터!!</em> 🙆‍♂️</p>
+
+<h2 id="-stb-라이브러리-설치하기">🔔 stb 라이브러리 설치하기</h2>
+
+<ul>
+  <li>우선 외부 이미지를 사용하려면 <code class="language-plaintext highlighter-rouge">stb 라이브러리</code>를 설치해야한다
+    <ul>
+      <li>cmd에서 cd를 통해 vcpkg 폴더로 이동한 후 <strong><em>vcpkg - install -stb:x64-windows</em></strong> 명령어로 설치하기
+        <ul>
+          <li>설치 좀 많이 오래걸린다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong><em>비주얼 스튜디오 - 프로젝트 속성 - C/C++ - 추가 포함 디렉터리</em></strong> 에서 stb 헤더 파일들이 있는 폴더를 환경변수로 지정해주기</li>
+</ul>
+
+<h3 id="코드">코드</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85297054-3f3dac80-b4dd-11ea-8307-477f810e4ea3.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "Examples/PrimitivesGallery.h"
+#include "RandomNumberGenerator.h"
+#include "ImageObject.h"
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+	<span class="k">class</span> <span class="nc">Example</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+
+		<span class="n">ImageObject</span> <span class="n">house</span><span class="p">;</span>
+		<span class="n">ImageObject</span> <span class="n">background</span><span class="p">;</span>
+		<span class="n">ImageObject</span> <span class="n">sentence</span><span class="p">;</span>
+
+		<span class="n">Example</span><span class="p">()</span>
+			<span class="o">:</span> <span class="n">Game2D</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1280</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="nb">false</span><span class="p">)</span> <span class="c1">// MUST initialize Game2D</span>
+		<span class="p">{</span>
+			<span class="n">house</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="s">"car.png"</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">);</span> <span class="c1">// white to transparent</span>
+			<span class="n">background</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="s">"Background_image.bmp"</span><span class="p">);</span>
+			<span class="n">sentence</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="s">"sentence.png"</span><span class="p">);</span>
+		<span class="p">}</span>
+
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>
+		<span class="p">{</span>
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">background</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+			
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledStar</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 별그리기</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">sentence</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">// moving car</span>
+			<span class="p">{</span>
+				<span class="k">static</span> <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+
+				<span class="n">beginTransformation</span><span class="p">();</span>
+				<span class="n">translate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">scale</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+				<span class="n">house</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+				<span class="n">endTransformation</span><span class="p">();</span>
+
+				<span class="n">x</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">;</span>
+
+				<span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+			<span class="p">}</span>
+
+			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">translate</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">drawFilledStar</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.1</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 별그리기</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+
+			<span class="c1">//background.draw(); //this hides everything 덮어씌워지니까 </span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">Example</span><span class="p">().</span><span class="n">run</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>#include “ImageObject.h”
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">ImageObject.h</code> 클래스 헤더파일을 include 해준다.</li>
+      <li>ImageObject
+        <ul>
+          <li><u>이미지 객체</u>의 역할을 할 것이다.
+            <ul>
+              <li><em>ImageObject house</em>
+                <ul>
+                  <li>차 이미지</li>
+                </ul>
+              </li>
+              <li><em>ImageObject background</em>
+                <ul>
+                  <li>배경 이미지</li>
+                </ul>
+              </li>
+              <li><em>ImageObject sentence</em>
+                <ul>
+                  <li>문구 이미지</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>생성자</em>
+    <ul>
+      <li><em>init 함수</em>
+        <ul>
+          <li>각 이미지 객체를 초기화 한다.</li>
+          <li>각 이미지의 <code class="language-plaintext highlighter-rouge">파일명(필수)</code> 을 매개변수로 넘긴다.
+            <ul>
+              <li><em>house.init(“car.png”, 255, 255, 255);</em>
+                <ul>
+                  <li>원하는 색을 투명하게 만들어주는 코드</li>
+                  <li>255, 255, 255 는 하얀색이므로 이미지 내의 하얀색 부분들을 투명하게 만듬</li>
+                </ul>
+              </li>
+              <li><em>house.init(“car.png”, 0, 0, 0);</em>
+                <ul>
+                  <li>이면 검정색 부분들을 투명하게 만듬</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>void update() override</em>
+    <ul>
+      <li>배경 그리기
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>			<span class="n">beginTransformation</span><span class="p">();</span>
+			<span class="n">scale</span><span class="p">(</span><span class="mf">1.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.5</span><span class="n">f</span><span class="p">);</span>
+			<span class="n">background</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+			<span class="n">endTransformation</span><span class="p">();</span>
+</code></pre></div>        </div>
+        <ul>
+          <li>문장 그리기
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          <span class="n">beginTransformation</span><span class="p">();</span>
+          <span class="n">translate</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>   <span class="err">이동</span>
+          <span class="n">scale</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>  <span class="err">크기를</span> <span class="err">키운</span> <span class="err">후</span> 
+          <span class="n">sentence</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+          <span class="n">endTransformation</span><span class="p">();</span>
+</code></pre></div>            </div>
+          </li>
+          <li>움직이는 차 그리기
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          <span class="p">{</span>
+              <span class="k">static</span> <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+
+              <span class="n">beginTransformation</span><span class="p">();</span>
+              <span class="n">translate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+              <span class="n">scale</span><span class="p">(</span><span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+              <span class="n">house</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+              <span class="n">endTransformation</span><span class="p">();</span>
+
+              <span class="n">x</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="n">f</span><span class="p">;</span>
+
+              <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+          <span class="p">}</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>노란별 → 차 → 빨간별</strong> 순서로 그렸기 때문에 노란별은 차 뒤에있고 빨간별은 차 앞에 덮는 식으로 그려진다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="imageobjecth">📜ImageObject.h</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="cp">#include "Game2D.h"
+#include &lt;string&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+	<span class="k">class</span> <span class="nc">ImageObject</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">texture</span><span class="p">;</span>
+
+		<span class="kt">float</span> <span class="n">ratio</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+
+		<span class="n">ImageObject</span><span class="p">()</span>
+		<span class="p">{}</span>
+
+		<span class="n">ImageObject</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">filename</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">init</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+		<span class="p">}</span>
+
+		<span class="c1">// Use tr_r, tr_g, tr_b set transparent color</span>
+		<span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">filename</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">tr_r</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">tr_g</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">tr_b</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+		<span class="kt">void</span> <span class="n">draw</span><span class="p">();</span>
+	<span class="p">};</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li><em>unsigned int texture</em></li>
+  <li><em>float ratio = 1.0f;</em></li>
+  <li><em>생성자</em>
+    <ul>
+      <li>파일 이름을 매개변수로 받는다.</li>
+      <li>init 함수를 호출한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="imageobjectcpp">📜ImageObject.cpp</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "ImageObject.h"
+</span>
+<span class="c1">// https://learnopengl.com/Getting-started/Textures</span>
+<span class="c1">// vcpkg install stb:x64-windows</span>
+<span class="cp">#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="c1">// Use tr_r, tr_g, tr_b set transparent color</span>
+
+	<span class="kt">void</span> <span class="n">ImageObject</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">filename</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">tr_r</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">tr_g</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">tr_b</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">glEnable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+		<span class="n">glEnable</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">);</span>
+		<span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+
+		<span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">n_ch</span><span class="p">;</span>
+		<span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="n">stbi_load</span><span class="p">(</span><span class="n">filename</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">width</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n_ch</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">n_ch</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+					<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">&amp;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">count</span><span class="p">];</span>
+						<span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">&amp;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+						<span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">&amp;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">count</span> <span class="o">+</span> <span class="mi">2</span><span class="p">];</span>
+
+						<span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="n">tr_r</span> <span class="o">&amp;&amp;</span> <span class="n">g</span> <span class="o">==</span> <span class="n">tr_g</span> <span class="o">&amp;&amp;</span> <span class="n">b</span> <span class="o">==</span> <span class="n">tr_b</span><span class="p">)</span>
+						<span class="p">{</span>
+							<span class="n">data</span><span class="p">[</span><span class="n">count</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// alpha = 0 -&gt; transparent</span>
+						<span class="p">}</span>
+
+						<span class="n">count</span> <span class="o">+=</span> <span class="mi">4</span><span class="p">;</span>
+					<span class="p">}</span>
+			<span class="p">}</span>
+
+			<span class="c1">//cout &lt;&lt; width &lt;&lt; " " &lt;&lt; height &lt;&lt; " " &lt;&lt; n_ch &lt;&lt; endl;</span>
+
+			<span class="n">ratio</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">width</span><span class="p">)</span> <span class="o">/</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">height</span><span class="p">);</span>
+
+			<span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+			<span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+			<span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_REPEAT</span><span class="p">);</span>
+			<span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_REPEAT</span><span class="p">);</span>
+			<span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+			<span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">n_ch</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span>
+				<span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+			<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">n_ch</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+				<span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGB</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGB</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+			<span class="k">else</span>
+			<span class="p">{</span>
+				<span class="n">printf</span><span class="p">(</span><span class="s">"Use RGB or RGBA images. Your input image has %d channels."</span><span class="p">,</span> <span class="n">n_ch</span><span class="p">);</span>
+			<span class="p">}</span>
+
+			<span class="n">glGenerateMipmap</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to load texture"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="n">stbi_image_free</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+	<span class="p">}</span>
+	
+	<span class="kt">void</span> <span class="n">ImageObject</span><span class="o">::</span><span class="n">draw</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">glEnable</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">);</span>
+		<span class="n">glEnable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+		<span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+
+		<span class="n">beginTransformation</span><span class="p">();</span>
+
+		<span class="n">scale</span><span class="p">(</span><span class="n">ratio</span> <span class="o">*</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">*</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="c1">//glActiveTexture(GL_TEXTURE0);</span>
+		<span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+		<span class="n">glBegin</span><span class="p">(</span><span class="n">GL_QUADS</span><span class="p">);</span>
+
+		<span class="n">glColor3f</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="c1">// upside down texture coordinates</span>
+		<span class="n">glTexCoord2d</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">glVertex2d</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="n">glTexCoord2d</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">glVertex2d</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="n">glTexCoord2d</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">glVertex2d</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="n">glTexCoord2d</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+		<span class="n">glVertex2d</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+
+		<span class="cm">/*glTexCoord2d(0.0f, 0.0f);
+		glVertex2d(-1.0f, -1.0f);
+
+		glTexCoord2d(1.0f, 0.0f);
+		glVertex2d(1.0f, -1.0f);
+
+		glTexCoord2d(1.0f, 1.0f);
+		glVertex2d(1.0f, 1.0f);
+
+		glTexCoord2d(0.0f, 1.0f);
+		glVertex2d(-1.0f, 1.0f);*/</span>
+
+		<span class="n">glEnd</span><span class="p">();</span>
+
+		<span class="n">endTransformation</span><span class="p">();</span>
+
+		<span class="n">glDisable</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li><em>void init (const string &amp; filename, const int tr_r = -1, const int tr_g = -1, const int tr_b = -1);</em>
+    <ul>
+      <li>(tr_r, tr_g, tr_b) 색상을 투명하게 만든다.</li>
+      <li>매개변수 기본 값이 -1로 설정되어 있어 색상 매개변수 굳이 넘기지 않고 파일이름만 넘겨도 된다.
+        <ul>
+          <li>(-1,-1,-1)은 있을 수 없는 색상이라 그냥 넘어가게 됨.</li>
+        </ul>
+      </li>
+      <li><em>glEnable(GL_BLEND);</em>
+        <ul>
+          <li>alpha blending을 하겠다는 얘기
+            <ul>
+              <li>alpha
+                <ul>
+                  <li>불투명도</li>
+                  <li>alpha가 1에 가까우면 불투명, 0에 가까우면 투명</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>glEnable(GL_TEXTURE_2D);</em>
+        <ul>
+          <li>이미지를 읽어와서 텍스처로 사용한다.</li>
+        </ul>
+      </li>
+      <li><em>glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);</em>
+        <ul>
+          <li>alpha blending을 어떻게 할지 설정</li>
+        </ul>
+      </li>
+      <li><em>int width, height, n_ch</em></li>
+      <li><em>unsigned char *data = stbi_load(filename.c_str(), &amp;width, &amp;height, &amp;n_ch, 0);</em>
+        <ul>
+          <li>data는 동적할당 array의 포인터가 된다</li>
+          <li>stb 라이브러리의 함수 <em>stbi_load</em>
+            <ul>
+              <li>이미지 파일을 읽어온다</li>
+              <li>width, height는 해상도</li>
+              <li>n_ch
+                <ul>
+                  <li>채널의 개수</li>
+                  <li>RGB 이렇게 3개의 채널인 경우  n_ch = 3</li>
+                  <li>RGB + alpha 이렇게 4개의 채널인 경우   n_ch = 4</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>if (data)</em> : 데이터가 제대로 읽어 졌다면
+        <ul>
+          <li><em>if (n_ch == 4)</em>
+            <ul>
+              <li>4채널인 경우. 즉, alpha를 사용하는 경우
+                <ul>
+                  <li>특정한 색 ( tr_r, tr_g, tr_b ) 의 alpha를 0으로.  (alpha는 0에 가까울수록 투명)</li>
+                  <li>이중 for를 돌면서 data배열로부터 모든 해상도 픽셀의 색상을 가져오며 비교</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>ratio = static_cast&lt;float&gt;(width) / static_cast&lt;float&gt;(height);</em>
+    <ul>
+      <li>width와 height의 비율 저장
+        <ul>
+          <li>정사각형이면 1일 것.</li>
+          <li>이미지를 저장하고 불러올때 컴퓨터는 정사각형으로 저장함.
+            <ul>
+              <li>다시 불러올때 그 비율대로 덧씌우기 위해.</li>
+              <li>정사각형으로 그리고 원래 비율대로 덧씌우는 방식이다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>stbi_image_free(data);</em>
+    <ul>
+      <li>맨끝에서 이렇게 data를 해제 해준다.</li>
+      <li>data는 동적할당 포인터</li>
+      <li>stb 라이브리러 함수 이용</li>
+    </ul>
+  </li>
+  <li><em>void ImageObject::draw()</em>
+    <ul>
+      <li><em>scale(ratio * 0.5f, 1.0f * 0.5f);</em>
+        <ul>
+          <li>기본적으로 2x2 정사각형으로 저장되기 때문에 1x1로 맞춰주기 위해 0.5를 곱했고</li>
+          <li>원래 비율에 맞게 ratio를 x방향에 곱해주고 있다.</li>
+          <li>나머지는 이미지를 그려주는 과정.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

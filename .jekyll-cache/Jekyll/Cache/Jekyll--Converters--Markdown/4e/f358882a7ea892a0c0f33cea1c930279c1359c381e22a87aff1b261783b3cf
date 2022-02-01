@@ -1,0 +1,700 @@
+I"��<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-10-객체들-사이의-관계--집합-관계">chapter 10. 객체들 사이의 관계 : 집합 관계</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">관계 종류</th>
+      <th style="text-align: center">관계를 표현하는 동사</th>
+      <th style="text-align: center">관계 형태</th>
+      <th style="text-align: center">다른 클래스에 속할 수 있는가?</th>
+      <th style="text-align: center">멤버의 존재를 <br /> 클래스가 관리 하는가?</th>
+      <th style="text-align: center">방향성</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><strong>집합</strong></td>
+      <td style="text-align: center">Has-a</td>
+      <td style="text-align: center">전체/부품</td>
+      <td style="text-align: center">Yes</td>
+      <td style="text-align: center">No</td>
+      <td style="text-align: center">단방향</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="-구성-관계의-부작용">🔔 구성 관계의 부작용</h2>
+
+<ul>
+  <li>학생 한명이 여러 강의를 수강할 수 있으므로 <u>서로 다른 강의 객체에 속해있어도 동일한 학생이라면 동기화 해야한다.</u></li>
+  <li>그러나 <strong>강의-학생</strong> <code class="language-plaintext highlighter-rouge">객체</code>끼리의 관계가 <strong>구성 관계</strong>라면 학생은 다른 강의 객체에 속할 수 없으므로 동기화에 있어 문제가 생긴다.</li>
+</ul>
+
+<blockquote>
+  <p>구성 관계의 단점은 <u>동일한 의미를 가지는 객체에 대해서 각각 다른 객체가 속해(구성)있더라도 동기화가 불가능하다는 점이다</u></p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="코드-구조-설명">코드 구조 설명</h3>
+
+<ul>
+  <li>📜Lecture 클래스
+    <ul>
+      <li><em>멤버</em>
+        <ul>
+          <li>string m_name : 강의 이름</li>
+          <li><strong>Teacher teacher</strong> : 강의 담당 교사 객체</li>
+          <li><strong>std::vector&lt;Student&gt; students</strong> : 수강하는 학생들 객체 벡터</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="studenth">📜Student.h</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+</span>
+<span class="k">class</span> <span class="nc">Student</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">m_intel</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+	<span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span> <span class="o">=</span> <span class="s">"No Name"</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">intel_in</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">),</span> <span class="n">m_intel</span><span class="p">(</span><span class="n">intel_in</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+	<span class="kt">void</span> <span class="n">setName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_name</span> <span class="o">=</span> <span class="n">name_in</span><span class="p">;</span>
+
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">setIntel</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">intel_in</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_intel</span> <span class="o">=</span> <span class="n">intel_in</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">int</span> <span class="n">getIntel</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="n">m_intel</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">operaotr</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Student</span> <span class="o">&amp;</span> <span class="n">student</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">student</span><span class="p">.</span><span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">student</span><span class="p">.</span><span class="n">m_intel</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>멤버</em>
+    <ul>
+      <li>string m_name : 학생 이름</li>
+      <li><strong>int m_intel</strong> : 학생 지능</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="teacherh">📜Teacher.h</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="cp">#include &lt;string&gt;
+</span>
+<span class="k">class</span> <span class="nc">Teacher</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">Teacher</span><span class="p">()</span>
+    <span class="p">{}</span>
+
+	<span class="n">Teacher</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+	<span class="kt">void</span> <span class="n">setName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_name</span> <span class="o">=</span> <span class="n">name_in</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getName</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="n">m_name</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">operaotr</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Teacher</span> <span class="o">&amp;</span> <span class="n">teacher</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">teacher</span><span class="p">.</span><span class="n">m_name</span><span class="p">;</span>
+		<span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li><em>멤버</em>
+    <ul>
+      <li>string m_name : 교사 이름</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="lectureh">📜Lecture.h</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="cp">#include &lt;vector&gt;
+#include "Student.h"
+#include "Teacher.h"
+</span>
+<span class="k">class</span> <span class="nc">Lecture</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+
+	<span class="n">Teacher</span> <span class="n">teacher</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="n">students</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+	<span class="n">Lecture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+	<span class="kt">void</span> <span class="n">assignTeacher</span><span class="p">(</span><span class="k">const</span> <span class="n">Teacher</span> <span class="o">&amp;</span> <span class="k">const</span> <span class="n">teacher_input</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">teacher</span> <span class="o">=</span> <span class="n">teacher_input</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">registerStudent</span><span class="p">(</span><span class="k">const</span> <span class="n">Student</span> <span class="o">&amp;</span> <span class="k">const</span> <span class="n">student_input</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">students</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">student_input</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">study</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="s">" Study "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">element</span> <span class="o">:</span> <span class="n">students</span><span class="p">)</span>
+			<span class="n">element</span><span class="p">.</span><span class="n">setIntel</span><span class="p">(</span><span class="n">element</span><span class="p">.</span><span class="n">getIntel</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Lecture</span> <span class="o">&amp;</span> <span class="n">lecture</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="s">"Lecture name: "</span> <span class="o">&lt;&lt;</span> <span class="n">lecture</span><span class="p">.</span><span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">lecture</span><span class="p">.</span><span class="n">teacher</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">element</span> <span class="o">:</span> <span class="n">lecture</span><span class="p">.</span><span class="n">students</span><span class="p">)</span>
+			<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">element</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+     <span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Lecture</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+
+	<span class="n">Teacher</span> <span class="n">teacher</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="n">students</span><span class="p">;</span> 
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">Lecture</code>객체가 사라지면 그에 속한 <code class="language-plaintext highlighter-rouge">Teacher</code> 객체 멤버와 <code class="language-plaintext highlighter-rouge">Student</code> 벡터 객체 멤버도 함께 사라진다. <strong>구성 관계</strong> 이기 때문</p>
+</blockquote>
+
+<ul>
+  <li><em>멤버 변수</em>
+    <ul>
+      <li>string m_name : 강의 이름</li>
+      <li><strong>Teacher teacher</strong> : 강의 담당 교사 객체
+        <ul>
+          <li>#include “Teacher.h”</li>
+        </ul>
+      </li>
+      <li><strong>std::vector&lt;Student&gt; students</strong> : 수강하는 학생들 객체 벡터
+        <ul>
+          <li>#include “Student.h”</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>멤버 함수</em>
+    <ul>
+      <li><strong>void assignTeacher(<u>const Teacher &amp; const teacher_input</u>)</strong>
+        <ul>
+          <li>해당 강의에 교사를 배정함
+            <ul>
+              <li>인수로 받은 교사 객체를 해당 강의의 교사 멤버에 대입함</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>void registerStudent(<u>const Student &amp; const student_input</u>)</strong></li>
+      <li>해당 강의에 학생을 배정함
+        <ul>
+          <li>인수로 받은 학생 객체를 해당 강의의 학생 벡터 멤버에 삽입 추가한다.</li>
+        </ul>
+      </li>
+      <li><strong><u>void study()</u></strong>
+        <ul>
+          <li>자기 자신(강의 객체)을 수강하면 해당 강의를 들은 학생들의 <em>m_intel</em> 을 1 올린다. 즉, 지능 증가!
+            <ul>
+              <li>for문 돌려 벡터안에 든 개개인의 학생 객체들 <em>m_intel</em> 을 1 올린다.
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">&amp;</code> 안붙이면, 즉 참조 안하면 반영 안됨.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="예시-1">예시 1</h3>
+
+<h4 id="maincpp">📜main.cpp</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include "Lecture.h"
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+	<span class="c1">//composition relationship</span>
+	<span class="n">Lecture</span> <span class="n">lec1</span><span class="p">(</span><span class="s">"C++"</span><span class="p">);</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">assignTeacher</span><span class="p">(</span><span class="n">Teacher</span><span class="p">(</span><span class="s">"Prof. Hong"</span><span class="p">));</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">Student</span><span class="p">(</span><span class="s">"Jack Jack"</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">Student</span><span class="p">(</span><span class="s">"Dash, 1"</span><span class="p">));</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">Student</span><span class="p">(</span><span class="s">"Violet"</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+
+	<span class="n">Lecture</span> <span class="n">lec2</span><span class="p">(</span><span class="s">"Java"</span><span class="p">);</span>
+	<span class="n">lec2</span><span class="p">.</span><span class="n">assignTeacher</span><span class="p">(</span><span class="n">Teacher</span><span class="p">(</span><span class="s">"Prof. Good"</span><span class="p">));</span>
+	<span class="n">lec2</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">Student</span><span class="p">(</span><span class="s">"Jack Jack"</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+		<span class="n">lec2</span><span class="p">.</span><span class="n">study</span><span class="p">();</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>“Jack Jack” 학생은 Java 수업과 C++ 수업을 동시에 수강하고 있기 때문에 <code class="language-plaintext highlighter-rouge">lec2.study();</code> Java 수업을 공부한 후에는 “Jack Jack” 학생 객체의 <em>m_intel</em>이 1 증가해야 한다. 그러나 출력결과를 보면 <code class="language-plaintext highlighter-rouge">lect1</code>의 “Jack Jack” 학생은 <em>m_intel</em>값이 여전히 0 이고 <code class="language-plaintext highlighter-rouge">lect2</code>의 “Jack Jack” 학생만 <em>m_intel</em>값이 1 증가한 것을 알 수 있다. 즉 <code class="language-plaintext highlighter-rouge">lect1</code>의 “Jack Jack”객체와 Java++ 수업 객체 <code class="language-plaintext highlighter-rouge">lect2</code>의 “Jack Jack”객체는 서로 다른 존재이기 때문에 Java 수업을 수강했더라도 <code class="language-plaintext highlighter-rouge">lect2</code>의 “Jack Jack”객체에만 지능이 증가했다.</p>
+
+<h4 id="문제점">문제점</h4>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/86427382-04c9e000-bd25-11ea-8397-694fc608f89a.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<ul>
+  <li>C++ 수업 객체 <code class="language-plaintext highlighter-rouge">lect1</code>의 “Jack Jack”객체와 Java++ 수업 객체 <code class="language-plaintext highlighter-rouge">lect2</code>의 “Jack Jack”객체는 서로 다른 존재이다.
+    <ul>
+      <li>멤버 값이 단순히 같을 뿐, 즉 그냥 내용물만 같을 뿐이다.</li>
+      <li>C++ 수업을 듣는 “Jack Jack”과 Java 수업을 듣는 “Jack Jack”는 동일 인물 취급을 받아야 한다. <u>즉, 주소가 같은 동일한 객체여야 한다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>학생 객체 내용물을 <code class="language-plaintext highlighter-rouge">Lec1</code>, <code class="language-plaintext highlighter-rouge">Lec2</code> 강의 객체에 <strong><u>구성 요소</u></strong>로 속해선 안된다. 학생 객체들은 각각 여러 강의에 속할 수 있어야 하기 때문에 강의와 학생은 <strong><u>집합 관계</u></strong>로 이루어져야 한다. 학생이 교집합으로서 이 강의 저 강의에도 속할 수 있도록!</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="예시-2">예시 2</h3>
+
+<blockquote>
+  <p>학생 객체들과 선생님 <u>객체들을 독립적으로 미리 생성해둔 후 이를 인수로 넘긴다면</u> 어떨까?</p>
+</blockquote>
+
+<h4 id="maincpp-1">📜main.cpp</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include "Lecture.h"
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="n">Student</span> <span class="n">std1</span><span class="p">(</span><span class="s">"Jack Jack"</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+	<span class="n">Student</span> <span class="n">std2</span><span class="p">(</span><span class="s">"Dash"</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="n">Student</span> <span class="n">std3</span><span class="p">(</span><span class="s">"Violet"</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+	<span class="n">Teacher</span> <span class="n">teacher1</span><span class="p">(</span><span class="s">"Prof. Hong"</span><span class="p">);</span>
+	<span class="n">Teacher</span> <span class="n">teacher2</span><span class="p">(</span><span class="s">"Prof. Good"</span><span class="p">);</span>
+
+	<span class="c1">//composition relationship</span>
+	<span class="n">Lecture</span> <span class="n">lec1</span><span class="p">(</span><span class="s">"C++"</span><span class="p">);</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">assignTeacher</span><span class="p">(</span><span class="n">teacher1</span><span class="p">);</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">std1</span><span class="p">);</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">std2</span><span class="p">);</span>
+	<span class="n">lec1</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">std3</span><span class="p">);</span>
+
+	<span class="n">Lecture</span> <span class="n">lec2</span><span class="p">(</span><span class="s">"Java"</span><span class="p">);</span>
+	<span class="n">lec2</span><span class="p">.</span><span class="n">assignTeacher</span><span class="p">(</span><span class="n">teacher2</span><span class="p">);</span>
+	<span class="n">lec2</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">std1</span><span class="p">);</span>
+
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+		<span class="n">lec2</span><span class="p">.</span><span class="n">study</span><span class="p">();</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>출력 결과를 보면 알 수 있지만 객체들을 독립적으로 미리 생성해둔 후 이를 인수로 넘겨주더라도 <u>여전히 문제는 해결되지 않았다.</u>
+    <ul>
+      <li><strong>여전히 C++의 “Jack Jack”과 Java의 “Jack Jack”은 별개의 객체이다.</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="문제점-1">문제점</h4>
+
+<blockquote>
+  <p>객체들을 독립적으로 미리 생성해둔 후 이를 인수로 넘겨주더라도 <strong><u>인수가 벡터 멤버에 Call-by-Value 로 복사 되기 때문이다.</u></strong></p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/86429902-c84db280-bd2b-11ea-80ca-18500c2e27c3.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">registerStudent</span><span class="p">(</span><span class="k">const</span> <span class="n">Student</span> <span class="o">&amp;</span> <span class="k">const</span> <span class="n">student_input</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">students</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">student_input</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">...</span>
+<span class="n">lec1</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">std1</span><span class="p">);</span>
+<span class="n">lec2</span><span class="p">.</span><span class="n">registerStudent</span><span class="p">(</span><span class="n">std1</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/86430467-51b1b480-bd2d-11ea-9ff3-58fba9c47629.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<ul>
+  <li><em>std1</em>이 인수로 넘어가면서 매개 변수 <em>student_input</em> 이 <em>std1</em> 메모리를 참조하게 된다.
+    <ul>
+      <li>const Student <code class="language-plaintext highlighter-rouge">&amp;</code> const 타입이므로.</li>
+    </ul>
+  </li>
+  <li>벡터에 <em>student_input</em>, 즉 <em>std1</em> 객체가 삽입되는 과정에서 내부적으로 <code class="language-plaintext highlighter-rouge">lect1.students[0] = student_input</code> 되며 <u>Call by Value 복사가 이루어진다.</u>
+    <ul>
+      <li>즉 <code class="language-plaintext highlighter-rouge">lect1.students[0]</code>과 <em>std1</em> 객체는 <u>서로 다른 존재이다. 내용물만 같을뿐</u></li>
+      <li>고로 <code class="language-plaintext highlighter-rouge">lect1.students[0]</code>과 <code class="language-plaintext highlighter-rouge">lect2.students[0]</code>도 서로 다른 존재이다. 내용물만 같을뿐</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>따라서 <strong>동일한 객체를 인수로 넘겨주어도 Call by Value로 복사가 이루어지기 때문에 “Jack Jack”이 동기화 되지 않는 문제가 여전히 해결되지 않았다.</strong></p>
+</blockquote>
+
+<blockquote>
+  <p>학생 개개인의 객체 내용물은 구성관계로서 강의 객체에 소속되지 않아야 한다. <u>그 내용물을 가리키는 포인터만 강의 객체에 소속되고 내용물은 강의 객체에 독립적이어야 한다. 각각 다른 강의 객체에도 속하는게 가능하도록!</u></p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="-집합-관계--포인터-사용하기">🔔 집합 관계 : 포인터 사용하기</h2>
+
+<h3 id="집합-관계를-나타내는-코드">집합 관계를 나타내는 코드</h3>
+
+<h4 id="lectureh-1">📜Lecture.h</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;vector&gt;
+#include "Student.h"
+#include "Teacher.h"
+</span>
+<span class="k">class</span> <span class="nc">Lecture</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+
+	<span class="n">Teacher</span> <span class="o">*</span><span class="n">teacher</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">*&gt;</span> <span class="n">students</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Lecture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">name_in</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name_in</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+	<span class="o">~</span><span class="n">Lecture</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="k">delete</span> <span class="n">teacher</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"delete teacher"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		
+		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="n">element</span> <span class="o">:</span> <span class="n">students</span><span class="p">)</span>
+		<span class="p">{</span>
+		    <span class="k">delete</span> <span class="n">element</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"delete students"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">assignTeacher</span><span class="p">(</span><span class="n">Teacher</span> <span class="o">*</span> <span class="k">const</span> <span class="n">teacher_input</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">teacher</span> <span class="o">=</span> <span class="n">teacher_input</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">registerStudent</span><span class="p">(</span><span class="n">Student</span> <span class="o">*</span> <span class="k">const</span> <span class="n">student_input</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">students</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">student_input</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">study</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="s">"Study "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">element</span> <span class="o">:</span> <span class="n">students</span><span class="p">)</span>
+			<span class="p">(</span><span class="o">*</span><span class="n">element</span><span class="p">).</span><span class="n">setIntel</span><span class="p">((</span><span class="o">*</span><span class="n">element</span><span class="p">).</span><span class="n">getIntel</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="k">const</span> <span class="n">Lecture</span> <span class="o">&amp;</span> <span class="n">lecture</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="s">"Lecture name: "</span> <span class="o">&lt;&lt;</span> <span class="n">lecture</span><span class="p">.</span><span class="n">m_name</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">lecture</span><span class="p">.</span><span class="n">teacher</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">element</span> <span class="o">:</span> <span class="n">lecture</span><span class="p">.</span><span class="n">students</span><span class="p">)</span>
+			<span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">element</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+     <span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>내용물</strong>은 <u>강의 객체에 구성(소속)되지 않게 하고</u> 그 <strong>내용물의 주소를 담은 포인터</strong>만 <u>강의 객체에 구성(소속)되게 한다.</u></p>
+</blockquote>
+
+<ul>
+  <li>멤버를 <u>객체 포인터</u>로 바꾸었다.
+    <ul>
+      <li><em>Teacher *teacher;</em></li>
+      <li><em>std::vector&lt;Student</em>&gt; students;*</li>
+    </ul>
+  </li>
+  <li><strong><u>소멸자</u></strong>
+    <ul>
+      <li>객체 포인터에다 학생, 교사 객체의 내용물은 동적할당 받을 것이기 때문에 강의 객체가 소멸될 때 학생, 교사 객체의 내용물이 메모리 해제될 수 있도록 <code class="language-plaintext highlighter-rouge">delete</code>를 해주었다.</li>
+      <li>학생은 객체 포인터 벡터안에 담겨있으므로 for문 돌려 모든 원소들을 <code class="language-plaintext highlighter-rouge">delete</code> 시켜준다.
+        <ul>
+          <li>벡터 안엔 주소가 담겨 있으므로 for-each 문에서 <code class="language-plaintext highlighter-rouge">&amp;</code>를 붙일 필요는 없다. (붙여도 상관 없지만)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>void registerStudent(<u>Student * const student_input</u>)</strong>
+    <ul>
+      <li>일반 객체로 인수를 넘겼을 때는 <code class="language-plaintext highlighter-rouge">const Student * const</code> 타입으로 받았으나 포인터를 인수로 넘길 때는 앞에 <code class="language-plaintext highlighter-rouge">const</code>를 빼고 <code class="language-plaintext highlighter-rouge">Student * const</code> 타입의 매개변수로 받는다.
+        <ul>
+          <li>강의를 study() 할 때 학생 객체의 멤버 <em>m_intel</em> 값을 <u>간접 참조로 증가시켜야 하기 때문이다</u>
+            <ol>
+              <li><code class="language-plaintext highlighter-rouge">const</code> 포인터는 가리키는 대상을 <u>간접참조로 값을 변경할 수 없다.</u></li>
+              <li>⭐ <u>일반 포인터 타입에 const 포인터 타입을 대입할 수는 없다.</u></li>
+            </ol>
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">int * = const int *</code> 는 불가능하다.</li>
+              <li>주소값을 대입받는 일반 포인터 변수가 간접참조로 값을 변경할 우려가 있기 때문이다.</li>
+              <li><code class="language-plaintext highlighter-rouge">Student *</code> 타입인 벡터에 <code class="language-plaintext highlighter-rouge">Const Student *</code> 타입의 포인터를 복사하여 넘겨줄 순 없다.</li>
+              <li>그냥 <strong>참조</strong> 타입 변수에 <strong>const 참조</strong> 타입 변수를 대입하는건 단순히 값을 복사하는 것이기 때문에 괜찮지만 <strong>포인터</strong>는 주소값을 복사해서 넘겨주는 과정에서 const가 아닌 일반 <strong>포인터</strong>가 간접참조로 값을 변경할 것을 우려하기 때문에 <strong><u>일반 포인터에 const 포인터를 할당하는건 막혀있다.</u></strong></li>
+              <li><code class="language-plaintext highlighter-rouge">char *</code> 타입의 변수에 <code class="language-plaintext highlighter-rouge">const char *</code> 즉, 문자열 상수를 대입할 수 없는 것도 이와 같은 이유.</li>
+              <li><a href="https://ansohxxn.github.io/cpp/chapter6-12/">참고 포스트: 포인터와 const</a>
+                <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="o">*</span> <span class="n">ptr1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="o">*</span> <span class="n">ptr2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
+
+<span class="n">ptr1</span> <span class="o">=</span> <span class="n">ptr2</span><span class="p">;</span>  <span class="c1">// ⚡⚡에러⚡⚡ </span>
+<span class="c1">// const int* 타입인 ptr2를 그냥 int* 인 ptr1에 대입할 수 없음.</span>
+<span class="c1">// a의 주소값을 복사받은 ptr1이 a의 값을 간접참조로 바꿀 수도 있기 때문에</span>
+        
+<span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">300</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">700</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">ref2</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+<span class="kt">int</span> <span class="o">&amp;</span> <span class="n">ref1</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+
+<span class="n">ref1</span> <span class="o">=</span> <span class="n">ref2</span><span class="p">;</span>   <span class="c1">// 문제 없음</span>
+</code></pre></div>                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>void study()</strong>
+    <ul>
+      <li><em>for (auto element : students)</em>
+        <ul>
+          <li>students 벡터엔 <code class="language-plaintext highlighter-rouge">Students</code>타입의 객체들을 가리키는 <u>포인터</u>들이 들어있기 때문에 참조 하지 않고 그냥 <code class="language-plaintext highlighter-rouge">&amp;</code>떼고 <em>auto element</em>라고만 해도 된다.</li>
+        </ul>
+      </li>
+      <li><u>간접 참조로 m_intel 1 증가시키기</u>
+        <ul>
+          <li><em>(*element).setIntel((*element).getIntel() + 1);</em></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>출력 연산자 오버로딩</strong>
+    <ul>
+      <li><u>간접 참조로 가리키는 내용물 출력하기</u></li>
+      <li>그냥 element는 주소값이므로
+        <ul>
+          <li><em>out « *element « std::endl;</em></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="maincpp-2">📜main.cpp</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include "Lecture.h"
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+	<span class="c1">// 같은 학생이나 교수를 재생성하지 않도록 </span>
+	<span class="n">Student</span> <span class="o">*</span><span class="n">std1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Student</span><span class="p">(</span><span class="s">"Jack Jack"</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+	<span class="n">Student</span> <span class="o">*</span><span class="n">std2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Student</span><span class="p">(</span><span class="s">"Dash"</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="n">Student</span> <span class="o">*</span><span class="n">std3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Student</span><span class="p">(</span><span class="s">"Violet"</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+	<span class="n">Teacher</span> <span class="o">*</span><span class="n">teacher1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Teacher</span><span class="p">(</span><span class="s">"Prof. Hong"</span><span class="p">);</span>
+	<span class="n">Teacher</span> <span class="o">*</span><span class="n">teacher2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Teacher</span><span class="p">(</span><span class="s">"Prof. Good"</span><span class="p">);</span>
+
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+		<span class="c1">//event</span>
+		<span class="n">lec2</span><span class="p">.</span><span class="n">study</span><span class="p">();</span>
+
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lec2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/86441605-73b83080-bd47-11ea-9725-2d9b00a24347.png" alt="image" width="50%" height="50%" class="align-center" /></p>
+
+<ul>
+  <li>각 학생과 교사 객체를 동적할 당받아 그 주소를 담는 포인터들을 선언한다.
+    <ul>
+      <li>그리고 이들을 인수로 넘긴다.</li>
+    </ul>
+  </li>
+  <li>C++의 “Jack Jack”과 Java의 “Jack Jack”은 동일한 주소값을 가진다.
+    <ul>
+      <li>따라서 그 <u>주소를 통해 간접 참조하면 동일한 학생 객체 "Jack Jack"에 접근할 수 있다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">집합 관계</code> : 학생 객체의 주소값을 담는 포인터 멤버 <em>teacher</em>, <em>students</em>는 <code class="language-plaintext highlighter-rouge">Lecture</code>객체가 사라지면 함께 사라지는 구성요소지만 그 포인터 멤버가 가리키는 <code class="language-plaintext highlighter-rouge">Teacher</code>, <code class="language-plaintext highlighter-rouge">Student</code> 타입의 객체(내용물)들은 <code class="language-plaintext highlighter-rouge">Lecture</code>객체가 사려졌다고 해서 같이 사라지는 건 아니다. 구성 요소가 아님. 독립적인 객체로서 이곳 저곳 다른 객체와도 연결될 수 있다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="집합-관계-설명">집합 관계 설명</h3>
+
+<blockquote>
+  <p><strong><em>Has-a</em></strong></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">구성 관계</code>보다 <u>느슨한</u> 전체/부품 관계이다. 집합처럼 다른 클래스에도 속할 수 있다.</p>
+</blockquote>
+
+<ul>
+  <li>사람은 자동차를 가질 수 있지만 자동차가 사라져도 사람은 존재한다. 또한 사람이 사라져도 자동차는 존재한다.</li>
+  <li>다른 클래스에 속할 수 있는가? : <strong>Yes</strong>
+    <ul>
+      <li>포인터는 구성요소지만</li>
+      <li>포인터 <code class="language-plaintext highlighter-rouge">std1</code>이 <u>가리키는 객체(Jack Jack)</u>은 <code class="language-plaintext highlighter-rouge">lec1</code>에도 속하고 <code class="language-plaintext highlighter-rouge">lec2</code>에도 속한다고 볼 수 있다.</li>
+    </ul>
+  </li>
+  <li>멤버의 존재를 클래스가 관리 하는가?  : <strong>No</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">lec1</code>, <code class="language-plaintext highlighter-rouge">lec2</code>이 사라진다고 해서 <code class="language-plaintext highlighter-rouge">std1</code>이 <u>가리키는 객체(Jack Jack)</u>도 사라지는건 아니다.</li>
+    </ul>
+  </li>
+  <li><u>단방향</u>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">lec1</code>, <code class="language-plaintext highlighter-rouge">lec2</code>을 통해서 <code class="language-plaintext highlighter-rouge">std1</code>이 가리키는 객체(Jack Jack)에 접근할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="cf">cf</h3>
+
+<p>분산처리시에는 여러 컴퓨터들이 메모리를 분리해서 쓰기 떄문에 이를 공유하는데 있어 <code class="language-plaintext highlighter-rouge">동기화</code> OR <code class="language-plaintext highlighter-rouge">사본화</code>을 잘 숙지해야 한다.</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+<p><br /></p>
+:ET

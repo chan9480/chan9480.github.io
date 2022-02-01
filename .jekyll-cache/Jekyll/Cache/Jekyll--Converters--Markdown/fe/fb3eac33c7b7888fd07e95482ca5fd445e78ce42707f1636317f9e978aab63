@@ -1,0 +1,17 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-8-객체-지향의-기초--캡슐화-접근-지정자-접근-함수">chapter 8. 객체 지향의 기초 : 캡슐화, 접근 지정자, 접근 함수</a>
+    <ul>
+      <li><a href="#-캡슐화">🔔 캡슐화</a></li>
+      <li><a href="#접근-지정자">🔔접근 지정자</a></li>
+      <li><a href="#-접근-함수-setter-getter">🔔 접근 함수 Setter, Getter</a>
+        <ul>
+          <li><a href="#setter--private-멤버-변수-값-바꾸기">Setter : private 멤버 변수 값 바꾸기</a></li>
+          <li><a href="#getter--private-멤버-변수-리턴-받기">Getter : private 멤버 변수 리턴 받기</a></li>
+          <li><a href="#다른-객체의-멤버들을-복사해오는-접근-함수">다른 객체의 멤버들을 복사해오는 접근 함수</a></li>
+        </ul>
+      </li>
+      <li><a href="#-캡슐화를-사용하면-좋은-점">🔔 캡슐화를 사용하면 좋은 점</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

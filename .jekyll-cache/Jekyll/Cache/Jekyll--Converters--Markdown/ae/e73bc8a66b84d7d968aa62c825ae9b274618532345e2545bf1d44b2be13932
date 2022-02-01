@@ -1,0 +1,27 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-8-flyweight-pattern">Chapter 8. Flyweight Pattern</a>
+    <ul>
+      <li><a href="#-flyweight-pattern">🔔 Flyweight Pattern</a>
+        <ul>
+          <li><a href="#구현">구현</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-1">🔔 예제 1</a>
+        <ul>
+          <li><a href="#unitcs">📜Unit.cs</a></li>
+          <li><a href="#unitfactorycs">📜UnitFactory.cs</a></li>
+          <li><a href="#flyweightusecs">📜FlyweightUse.cs</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-2">🔔 예제 2</a>
+        <ul>
+          <li><a href="#unitcs-1">📜Unit.cs</a></li>
+          <li><a href="#marinecs">📜Marine.cs</a></li>
+          <li><a href="#unitfactorycs-1">📜UnitFactory.cs</a></li>
+          <li><a href="#flyweightusecs-1">📜FlyweightUse.cs</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

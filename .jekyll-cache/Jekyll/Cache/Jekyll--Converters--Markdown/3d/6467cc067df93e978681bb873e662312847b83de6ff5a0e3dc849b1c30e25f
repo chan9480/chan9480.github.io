@@ -1,0 +1,18 @@
+I"<ul class="toc__menu">
+  <li><a href="#chapter-20-중급-프로그래머들의-상식">chapter 20. 중급 프로그래머들의 상식</a>
+    <ul>
+      <li><a href="#외부-라이브러리-설치해보기">외부 라이브러리 설치해보기</a>
+        <ul>
+          <li><a href="#첫-번째-방법--git-clone">첫 번째 방법 : git clone</a></li>
+          <li><a href="#두-번째-방법--cmake-사용">두 번째 방법 : CMake 사용</a></li>
+        </ul>
+      </li>
+      <li><a href="#외부-라이브러리의-코드를-사용하고-싶을-때">외부 라이브러리의 코드를 사용하고 싶을 때</a>
+        <ul>
+          <li><a href="#프로젝트-템플릿">프로젝트 템플릿</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

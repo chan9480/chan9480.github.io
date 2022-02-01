@@ -1,0 +1,505 @@
+I"\�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="비트끼리의-연산-bitwise-operators">비트끼리의 연산 Bitwise Operators</h1>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;&lt;</code>, <code class="language-plaintext highlighter-rouge">&gt;&gt;</code>, <code class="language-plaintext highlighter-rouge">~</code>, <code class="language-plaintext highlighter-rouge">&amp;</code>, <code class="language-plaintext highlighter-rouge">|</code>, <code class="language-plaintext highlighter-rouge">^</code></li>
+  <li>#include &lt;bitset&gt;
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::bitset&lt;4&gt;(x)</code>
+        <ul>
+          <li>x값을 4자리의 이진수 비트로 <em>출력</em> 하게끔 해준다. (cout 스트림에 흘림)</li>
+          <li>십진수를 이진수 비트로 표현해준다</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong><u>Bitwise 연산은 메모리를 의미있게, 빠르게 계산하기 위하여 사용한다.</u></strong>
+    <ul>
+      <li>그냥 곱하기, 나누기 연산하는거보다 <u>left shift</u>, <u>right shift</u> 해주는게 더 빠름</li>
+    </ul>
+  </li>
+  <li>비트 연산은 <code class="language-plaintext highlighter-rouge">unsigned</code> 를 사용한다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mb">0b1100</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mb">0b0110</span><span class="p">;</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="p">;</span> <span class="c1">// 12 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="p">;</span> <span class="c1">// 6 츨력</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;bitset&gt;
+</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 0011 출력 ( 3의 4자리 이진수 )</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="shift연산자--">shift연산자 <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> <code class="language-plaintext highlighter-rouge">&lt;&lt;</code></h2>
+
+<h3 id="--left-shift"><code class="language-plaintext highlighter-rouge">&lt;&lt;</code> : left shift</h3>
+<ul>
+  <li>0011 <code class="language-plaintext highlighter-rouge">&lt;&lt;</code> 2  → 2칸 왼쪽</li>
+  <li>0011 <code class="language-plaintext highlighter-rouge">&lt;&lt;</code> 2  == 1100  왼쪽으로 2칸씩 옮겨지고 빈 곳은 0으로 채우기</li>
+  <li>A <code class="language-plaintext highlighter-rouge">&lt;&lt;</code> N 은 곧 A × 2^n <u>곱하기</u> 하는 것과 마찬가지다. 따라서 <code class="language-plaintext highlighter-rouge">left shift 연산</code>으로 <u>곱하기</u> 연산을 하면 <em>더 빠르다 !</em></li>
+  <li>0011 = 십진수로 3,</li>
+  <li>
+    <p>0011 « 2 = 1100 = 십진수로 12  ( = 3 × 2^2 )</p>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cp">#include &lt;bitset&gt;
+</span>
+  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// a가 왼쪽으로 1칸 옮겨진 결과가 b에 저장 됨. b = 6</span>
+  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 0110 출력</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li>a = 3 = <code class="language-plaintext highlighter-rouge">0011</code></li>
+      <li>a « 1 = <code class="language-plaintext highlighter-rouge">0110</code> = 6</li>
+      <li><code class="language-plaintext highlighter-rouge">&gt;&gt;</code> <code class="language-plaintext highlighter-rouge">&lt;&lt;</code> 연산자는 <code class="language-plaintext highlighter-rouge">=</code> 보다 우선순위가 높다.</li>
+      <li>따리서 <code class="language-plaintext highlighter-rouge">a &lt;&lt; 1</code> 이 먼저 연산된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="--right-shift"><code class="language-plaintext highlighter-rouge">&gt;&gt;</code> : right shift</h3>
+<ul>
+  <li>1011 <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> 2 → 2칸 오른쪽</li>
+  <li>1011 <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> 2 == 0010 오른쪽으로 2칸씩 옮겨지고 빈 곳은 0으로 채우기</li>
+  <li>A <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> N 은 곧 A ÷ 2^n <u>나누기</u> 하는 것과 마찬가지다. 따라서 <code class="language-plaintext highlighter-rouge">rightshift 연산</code>으로 <u>나누기</u> 연산을 하면 <em>더 빠르다 !</em></li>
+  <li>1011 = 십진수로 11</li>
+  <li>1011 » 2 = 0010 = 십진수로 2 ( = 11 / 2^2 = 11 / 4 몫 )</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="보수-연산자-">보수 연산자 <code class="language-plaintext highlighter-rouge">~</code></h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">~</code> 연산자는 비트에 보수를 취한다.
+    <ul>
+      <li>~1100 = 0011</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="비트-논리연산자---">비트 논리연산자 <code class="language-plaintext highlighter-rouge">&amp;</code> <code class="language-plaintext highlighter-rouge">|</code> <code class="language-plaintext highlighter-rouge">^</code></h2>
+
+<ul>
+  <li>2개의 비트 피연산자의 논리 관계를 따진다.
+    <ul>
+      <li>결과값은 boolean 타입</li>
+      <li>각 자리 끼리 연산한다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">&amp;</code> : and
+    <ul>
+      <li>a &amp;= b → a = a &amp; b</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">|</code> : or
+    <ul>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>a</td>
+              <td>= b → a = a</td>
+              <td>b</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">^</code> : xor ⭐ 같으면 false, 다르면 true
+    <ul>
+      <li>a ^= b → a = a ^ b</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mb">0b1100</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mb">0b0110</span><span class="p">;</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 0100 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span> <span class="o">|</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1110 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1010 출력</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/83950269-70bf4280-a864-11ea-9d55-4472b9b29112.png" alt="image" width="80%" height="80%" class="align-center" /></p>
+
+<p><br /></p>
+
+<h1 id="비트플래그-비트마스크-사용-방법">비트플래그, 비트마스크 사용 방법</h1>
+<p>💛 둘 다 게임 프로그래밍에 요긴하게 쓰인다.</p>
+
+<h2 id="비트플래그">비트플래그</h2>
+<h3 id="비트플래그를-사용하는-이유">비트플래그를 사용하는 이유</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">boolean</span> <span class="n">has_item1</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> 
+<span class="n">boolean</span> <span class="n">has_item2</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="n">boolean</span> <span class="n">has_item3</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="n">boolean</span> <span class="n">has_item4</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="n">boolean</span> <span class="n">has_item5</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">.....</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>boolean has_item1 = true, boolean has_item2 = false , boolean has_item3 = true,  …..</p>
+
+    <p>→ <strong><em>불 편 ! ! !</em></strong></p>
+
+    <ul>
+      <li>예를들어 게임 프로그래밍에서 아이템1 가졌는지 아이템 2 가졌는지 체크 하려면</li>
+      <li>아이템 개수가 64개라면 64개의 boolean 변수가 필요하다.</li>
+      <li>각 아이템을 가졌는지 체크해서 실행하는 함수가 있다면 파라미터도 64개나 받아야하는 꼴이 된다.  for문을 64번 돌리던지…</li>
+    </ul>
+
+    <p>→ <strong><u>비트에 아이템 유무 플래그를 각각 표시하면 간편하다.</u></strong> <code class="language-plaintext highlighter-rouge">비트 플래그</code></p>
+
+    <ul>
+      <li>unsigned int 변수 하나가 32bit를 가지고 있으니</li>
+      <li>각 비트 자리를 아이템들에 대치시켜 아이템 유무를 비트 <em>자리 값</em> 1, 0 으로 판단하면 된다.
+        <ul>
+          <li>이렇게 하면 <u>unsined int 변수 하나로 *32개의 아이템 유무 정보*를 표현 가능</u></li>
+          <li>unsigned int 변수 2개만으로 64개 아이템도 표현할 수 있겠네</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;bitset&gt;
+</span>
+<span class="cm">/* 이렇게 각 아이템 유무 상태들만 정의 */</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt0</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 00000001  아이템 0을 가진 상태 정의</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 00000010  아이템 1을 가진 상태 정의</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// 00000100  아이템 2을 가진 상태 정의</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt3</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// 00001000  아이템 3을 가진 상태 정의</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt3</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">// 00010000  아이템 4을 가진 상태 정의</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt3</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// 00100000  아이템 5을 가진 상태 정의</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt3</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="c1">// 01000000  아이템 6을 가진 상태 정의</span>
+<span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">opt3</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">;</span> <span class="c1">// 10000000  아이템 7을 가진 상태 정의</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">opt0</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00000001 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">opt1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00000010 출력</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">opt2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00000100 출력 </span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">opt3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00001000 출력 </span>
+
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">**</span><span class="n">items_flag</span><span class="o">**</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 현재는 00000000 로 초기화. 아이템 없는 상태.</span>
+</code></pre></div></div>
+
+<ul>
+  <li>opt0, opt1, opt2, opt3 각각 아이템 0,1,2,3 을 가진 상태 비트를 정의한 것이다. const.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">1 &lt;&lt; n</code> 연산 사용해 정의. 각 아이템 자리를 나타내는거라 한자리만 1.</li>
+      <li>정의 해놓은 opt 들의 조합으로 <code class="language-plaintext highlighter-rouge">items_flag</code>를 조작해 아이템 가진 상태들을 만들고 수정해나갈 것이다.</li>
+      <li>정의들만 해놓고 <code class="language-plaintext highlighter-rouge">items_flag</code> 변수 하나로 아이템 보유 상태를 표현할 것.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">items_flag</code> 비트의 각 자리는 아이템0~7의 유무를 표현한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="아이템을-얻었을-때-">아이템을 얻었을 때. <code class="language-plaintext highlighter-rouge">|=</code></h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">**</span><span class="n">items_flag</span><span class="o">**</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 현재는 00000000 로 초기화. 아이템 없는 상태.</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"No item "</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">items_flag</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00000000 출력</span>
+
+<span class="n">items_flag</span> <span class="o">**|=**</span> <span class="n">opt0</span><span class="p">;</span> <span class="c1">// 아이템 0 을 얻었다.</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"item 0 obtained "</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">items_flag</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00000001 출력</span>
+
+<span class="n">items_flag</span> <span class="o">**|=**</span> <span class="p">(</span><span class="n">opt2</span> <span class="o">|</span> <span class="n">opt3</span><span class="p">);</span> <span class="c1">// 아이템 2와 3 을 얻었다. (opt2 | opt3) -&gt; 000001100</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"item 2, 3 obtained "</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">items_flag</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00001101 출력</span>
+</code></pre></div></div>
+
+<ul>
+  <li>아이템을 얻었을 떄 <code class="language-plaintext highlighter-rouge">|=</code> 로 아이템 상태를 합집합 한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="아이템을-잃었을-때--">아이템을 잃었을 때. <code class="language-plaintext highlighter-rouge">&amp;= ~</code></h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// items_flag 는 현재 00001101 상태 </span>
+
+<span class="n">items_flag</span> <span class="o">**&amp;=</span> <span class="o">~**</span> <span class="n">opt3</span><span class="p">;</span> <span class="c1">// 아이템 3 을 잃었다.</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"item 3 losted "</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">items_flag</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 0000**0**101 출력</span>
+</code></pre></div></div>
+
+<ul>
+  <li>items_flag <strong>&amp;= ~</strong> opt3;
+    <ul>
+      <li>opt3의 보수 <code class="language-plaintext highlighter-rouge">~opt3</code> 은 <code class="language-plaintext highlighter-rouge">11110111</code> 이다.
+        <ul>
+          <li>아이템 3 자리만 0 인 상태.</li>
+        </ul>
+      </li>
+      <li>items_flag 와 <code class="language-plaintext highlighter-rouge">11110111</code> 와의 and <code class="language-plaintext highlighter-rouge">&amp;</code> 연산.
+        <ul>
+          <li>0을 만나면 무조건 0이 되는 and의 특징을 이용하여</li>
+          <li>items_flag의 아이템3 자리 값을 0으로 만들어 잃게 만든다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>00001101 에서 아이템 3을 잃고 0000<strong>0</strong>101 가 되었다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="해당-아이템-소유-상태를-확인하고-싶을-땐-">해당 아이템 소유 상태를 확인하고 싶을 땐 <code class="language-plaintext highlighter-rouge">&amp;</code></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&amp; =</code> 이 아닌 그냥 <code class="language-plaintext highlighter-rouge">&amp;</code>
+    <ul>
+      <li>고로 items_flag 값을 변화시키는건 아니다. 단지 확인만.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">items_flag</span> <span class="o">&amp;</span> <span class="n">opt1</span><span class="p">)</span> <span class="c1">//itmes_flag의 아이템 1 자리가 0 이면 false가 나와 가지고 있지 않다고 판명</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Has item1"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="k">else</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Not have item1"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 이게 출력될 것.</span>
+</code></pre></div></div>
+
+<ul>
+  <li>현재 items_flag 값 → 00000101</li>
+  <li>opt1 → 00000010</li>
+  <li>if (items_flag <code class="language-plaintext highlighter-rouge">&amp;</code> <strong>opt1</strong>)
+    <ul>
+      <li>itmes_flag의 아이템 1 자리가 0 이면 결과값이 00000000로 false가 나와서
+        <ul>
+          <li>아이템 1을 가지고 있지 않다고 판명된다.</li>
+          <li>아이템 1의 자리는 0이므로 else에 걸릴 것.</li>
+        </ul>
+      </li>
+      <li>itmes_flag의 아이템 1 자리가 1 이면 결과값이 00000010로 true가 나와서
+        <ul>
+          <li>아이템 1을 가지고 있다고 판명된다.</li>
+          <li>0 이 아닌 모든 수는 true.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">if</code> ( ( items_flag <code class="language-plaintext highlighter-rouge">&amp;</code> opt2 )  <code class="language-plaintext highlighter-rouge">&amp;&amp;</code> ! ( items_flag &amp; opt1 ) )
+    <ul>
+      <li>응용)  아이템 2는 가지고 있고 아이템 1은 가지고 있지 않다면.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="해당-아이템-유무-상태를-뒤바꿔주려면-xor--">해당 아이템 유무 상태를 뒤바꿔주려면 XOR <code class="language-plaintext highlighter-rouge">^ =</code></h3>
+<ul>
+  <li>있다면 없게 바꾸고 없다면 있게 바꾸기</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// items_flag 는 현재 00000101 상태</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">items_flag</span> <span class="o">&amp;</span> <span class="n">opt2</span> <span class="p">)</span>  <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="p">(</span> <span class="n">items_flag</span> <span class="o">&amp;</span> <span class="n">opt1</span> <span class="p">)</span> <span class="p">)</span>
+<span class="p">{</span>
+		<span class="n">items_flag</span> <span class="o">**^=**</span> <span class="n">opt1</span><span class="p">;</span> <span class="c1">// 000001**1**1</span>
+		<span class="n">items_flag</span> <span class="o">**^=**</span> <span class="n">opt2</span><span class="p">;</span> <span class="c1">// 00000**01**1</span>
+<span class="p">}</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">items_flag</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 00000011 출력</span>
+</code></pre></div></div>
+
+<ul>
+  <li>현재 items_flag 값 → 00000101</li>
+  <li><code class="language-plaintext highlighter-rouge">if</code> ( ( items_flag <code class="language-plaintext highlighter-rouge">&amp;</code> opt2 )  <code class="language-plaintext highlighter-rouge">&amp;&amp;</code> ! ( items_flag &amp; opt1 ) )
+    <ul>
+      <li>아이템 2는 가지고 있고 아이템 1은 가지고 있지 않다면.</li>
+      <li>items_flag <strong>^=</strong> opt1;
+        <ul>
+          <li>아이템1 값이 0이므로 1로 바뀐다. → 000001<strong>1</strong>1</li>
+          <li>아이템2 값이 1이므로 0로 바뀐ㄷ. → 00000<strong>0</strong>11</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="비트-마스크">비트 마스크</h2>
+<ul>
+  <li><u>색 Color</u>를 표현할 땐 보통 <u>1 byte(=8bit) 3개</u>로 표현한다.  ( 총 24 bit )
+    <ul>
+      <li>16진수 하나의 수로 4bit 표현 가능
+        <ul>
+          <li>0 ~ 9 → 0000 ~ 1001</li>
+          <li>A → 1010</li>
+          <li>B → 1011</li>
+          <li>C → 1100</li>
+          <li>D → 1101</li>
+          <li>E → 1110</li>
+          <li>F → 1111</li>
+          <li>FF → 11111111</li>
+        </ul>
+      </li>
+      <li>16진수 6개로 색 표현 가능</li>
+      <li>16진수 2자리 수로 각각 빨간색, 초록색, 파란색 표현.
+        <ul>
+          <li>이 3개의 색 조합으로 색을 표현한다.</li>
+        </ul>
+      </li>
+      <li>0x RR GG BB</li>
+    </ul>
+  </li>
+  <li>빨간색 0x<u>FF</u>0000</li>
+  <li>초록색 0x00<u>FF</u>00</li>
+  <li>파란색 0x0000<u>FF</u></li>
+  <li>0xDAA520 → 11011010 10100101 00100000
+    <ul>
+      <li>빨간색이 DA 정도, 초로색이 A5 정도, 파란색이 20 정도로 섞여있는 색이라는 뜻</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="비트-플래그를-이용해-blue-값-추출하기">비트 플래그를 이용해 blue 값 추출하기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">blue_mask</span> <span class="o">=</span> <span class="mh">0x0000FF</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pixel_color</span> <span class="o">=</span> <span class="mh">0xDAA520</span><span class="p">;</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">32</span><span class="o">&gt;</span><span class="p">(</span><span class="n">blue_mask</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">32</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pixel_color</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">blue</span> <span class="o">=</span> <span class="n">pixel_color</span> <span class="o">&amp;</span> <span class="n">blue_mask</span><span class="p">;</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"blue "</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">blue</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>cout « std::bitset&lt;32&gt;(blue_mask) « endl;
+    <ul>
+      <li>00000000 00000000 00000000 11111111 출력</li>
+    </ul>
+  </li>
+  <li>cout « std::bitset&lt;32&gt;(pixel_color) « endl;
+    <ul>
+      <li>00000000 11011010 10100101 00100000 출력</li>
+    </ul>
+  </li>
+  <li>cout « “blue “ « bitset&lt;8&gt;(blue) « endl;
+    <ul>
+      <li>pixel_color <code class="language-plaintext highlighter-rouge">&amp;</code> blue_mask;
+        <ul>
+          <li>blue값 자리에 해당되는 것들만 추출</li>
+        </ul>
+      </li>
+      <li>00100000 출력</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="비트-플래그를-이용해-green-값-추출하기">비트 플래그를 이용해 green 값 추출하기</h3>
+
+<ul>
+  <li>green값은 8~16 번째 자리에 위치한다.</li>
+  <li>중간에 위치하므로 8자리로 추출시 → <code class="language-plaintext highlighter-rouge">right shift연산</code> 필요</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">green_mask</span> <span class="o">=</span> <span class="mh">0x00FF00</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pixel_color</span> <span class="o">=</span> <span class="mh">0xDAA520</span><span class="p">;</span>
+
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">green</span> <span class="o">=</span> <span class="n">pixel_color</span> <span class="o">&amp;</span> <span class="n">green_mask</span><span class="p">;</span>
+<span class="n">green</span> <span class="o">=</span> <span class="p">(</span><span class="n">pixel_color</span> <span class="o">&amp;</span> <span class="n">green_mask</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span>
+
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"green "</span> <span class="o">&lt;&lt;</span> <span class="n">bitset</span><span class="o">&lt;</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">(</span><span class="n">green</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>unsigned char green = pixel_color &amp; green_mask;
+    <ul>
+      <li>00000000 00000000 10100101 00000000 값이 된다.</li>
+    </ul>
+  </li>
+  <li>green = (pixel_color &amp; green_mask) » 8
+    <ul>
+      <li>8자리로 출력할거라서 오른쪽으로 8칸 밀어준다.</li>
+      <li>00000000 00000000 00000000 10100101</li>
+    </ul>
+  </li>
+  <li>cout « “green “ « bitset&lt;8&gt;(green) « endl;
+    <ul>
+      <li>10100101 출력</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="연습문제">연습문제</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">option_viewed</span> <span class="o">=</span> <span class="mh">0x01</span><span class="p">;</span> <span class="c1">// 00000001 기사를 클릭했을 때 상태</span>
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">option_edited</span> <span class="o">=</span> <span class="mh">0x02</span><span class="p">;</span> <span class="c1">// 00000010 기사를 수정 했을 때 상태</span>
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">option_liked</span> <span class="o">=</span> <span class="mh">0x04</span><span class="p">;</span> <span class="c1">// 00000100  기사의 좋아요 했을 때 상태</span>
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">option_shared</span> <span class="o">=</span> <span class="mh">0x08</span><span class="p">;</span> <span class="c1">// 00001000 기사를 공유했을 때 상태</span>
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">option_deleted</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span> <span class="c1">// 10000000 기사를 삭제했을 때 상태</span>
+
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">my_article_flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="1-기사를-보았을-때">1. 기사를 보았을 때</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_article_flag</span> <span class="o">|=</span> <span class="n">option_viewed</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">00000001</code> 이 된다.</li>
+</ul>
+
+<h3 id="2-기사-좋아요-눌렀을-때">2. 기사 좋아요 눌렀을 때</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_article_flag</span> <span class="o">|=</span> <span class="n">option_liked</span> 
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">000000101</code> 이 된다.</li>
+</ul>
+
+<h3 id="3-기사-좋아요를-다시-눌렀을-때">3. 기사 좋아요를 다시 눌렀을 때</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_article_flag</span> <span class="o">^=</span> <span class="n">option_liked</span> 
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">000000001</code> 이 된다.</li>
+</ul>
+
+<h3 id="4-본-기사만-삭제할-때">4. 본 기사만 삭제할 때</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">my_article_flag</span> <span class="o">&amp;</span> <span class="n">option_viewed</span><span class="p">)</span> <span class="c1">// 본 기사로 상태가 저장되어 있다면</span>
+		<span class="n">my_article_flag</span> <span class="o">|=</span> <span class="n">option_deleted</span>  <span class="c1">// 삭제한다.</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">100000001</code> 이 된다.</li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

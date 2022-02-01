@@ -1,0 +1,309 @@
+I"�^<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-1-기본-기능-구현">Chapter 1. 기본 기능 구현</h1>
+<h1 id="11-실시간-상호-작용-어플리케이션의-구조">1.1 실시간 상호 작용 어플리케이션의 구조</h1>
+
+<p>👱🏽‍♀️ <u>게임 엔진의 원리</u>를 이해하기 좋은 코드들이다.</p>
+
+<h2 id="game2dh-설명">Game2D.h 설명</h2>
+
+<p><code class="language-plaintext highlighter-rouge">update</code> 함수는 <u>꼭 오버라이딩 해주어야 한다.</u></p>
+
+<p><strong><em>📃Game2D.h</em></strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "RGB.h"           // 색을 결정. R,G,B 값을 받는 생성자 有 
+#include "Vector2.h"       // 2차원 좌표
+#include "Vector3.h"       // 3차원 좌표
+#include "Colors.h"        
+</span><span class="c1">// 👆 RGB를 include하여 다양한 색상 이름의 RGB 객체들을 미리 정의해 둠. const RGB yellow(255, 255, 0) 이런식으로.</span>
+<span class="cp">#include "Timer.h"
+#include "DrawFunctions.h" 
+</span><span class="c1">// 👆 원, 세모, 네모, 선분 등등 그림을 그리는 함수들을 모은 클래스. drawWLine, drawFilledBox 등등..</span>
+
+<span class="cp">#include &lt;GL/glew.h&gt;
+#include &lt;GLFW/glfw3.h&gt;
+#include &lt;thread&gt;         // std::this_thread::sleep_for
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;map&gt;
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">using</span> <span class="n">vec2</span> <span class="o">=</span> <span class="n">Vector2</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">;</span>
+	<span class="k">using</span> <span class="n">vec3</span> <span class="o">=</span> <span class="n">Vector3</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">;</span>
+
+	<span class="k">class</span> <span class="nc">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">private:</span>
+		
+		<span class="cm">/*게임 창 해상도*/</span> 
+		<span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">640</span><span class="p">;</span> 
+		<span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">480</span><span class="p">;</span>
+
+		<span class="cm">/*게임 창 화면의 포인터*/</span>
+		<span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">glfw_window</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+
+		<span class="n">Timer</span> <span class="n">timer</span><span class="p">;</span>
+
+		<span class="cm">/*fps (프레임)의 역수*/</span>
+		<span class="kt">float</span> <span class="n">spf</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">/</span> <span class="mf">60.0</span><span class="n">f</span><span class="p">;</span>		 <span class="c1">// second(s) per frame</span>
+
+		<span class="cm">/*키보드 입력을 받아서 그릴거냐(true) 말거냐(false) */</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">key_status</span><span class="p">;</span>  <span class="c1">// key_id, is_pressed</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">mbtn_status</span><span class="p">;</span> <span class="c1">// mouse_button_id, is_pressed</span>
+		<span class="kt">bool</span> <span class="n">draw_grid</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+	<span class="nl">public:</span>                <span class="c1">// 생성자</span>
+		<span class="n">Game2D</span><span class="p">()</span>
+		<span class="p">{}</span>
+
+		<span class="cm">/* 제목(title), 해상도(width, height), 풀스크린 사용여부, 어느 모니터에 출력할지
+이렇게 4가지 설정 가능 */</span>
+		<span class="n">Game2D</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">_title</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">_width</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">_height</span><span class="p">,</span>
+			<span class="k">const</span> <span class="kt">bool</span> <span class="o">&amp;</span> <span class="n">use_full_screen</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">display_ix</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+
+		<span class="o">~</span><span class="n">Game2D</span><span class="p">();</span>
+
+		<span class="n">Game2D</span> <span class="o">&amp;</span> <span class="n">init</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">_title</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">_width</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">_height</span><span class="p">,</span>
+			<span class="k">const</span> <span class="kt">bool</span> <span class="o">&amp;</span> <span class="n">use_full_screen</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">display_ix</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+
+		<span class="err">초기화</span> <span class="err">하는</span> <span class="err">과정에서의</span> <span class="err">에러</span> <span class="err">출력</span> <span class="p">(</span><span class="err">거의</span> <span class="err">볼</span> <span class="err">일</span> <span class="n">X</span><span class="p">)</span>
+		<span class="kt">void</span> <span class="n">reportErrorAndExit</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">function_name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">message</span><span class="p">);</span>
+
+		<span class="kt">bool</span> <span class="n">isKeyPressed</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">);</span> 
+		<span class="kt">bool</span> <span class="n">isKeyReleased</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">key</span><span class="p">);</span>
+		<span class="kt">bool</span> <span class="n">isKeyPressedAndReleased</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">);</span> <span class="c1">// 사용자가 키를 눌렀다가 뗐는지를 확인하는 함수</span>
+
+		<span class="kt">bool</span> <span class="n">isMouseButtonPressed</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">mbtn</span><span class="p">);</span>
+		<span class="kt">bool</span> <span class="n">isMouseButtonReleased</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">mbtn</span><span class="p">);</span>
+		<span class="kt">bool</span> <span class="n">isMouseButtonPressedAndReleased</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">mbtn</span><span class="p">);</span>
+
+		<span class="n">vec2</span> <span class="n">getCursorPos</span><span class="p">(</span><span class="k">const</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">screen_coordinates</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span>
+
+		<span class="kt">float</span> <span class="n">getTimeStep</span><span class="p">();</span> <span class="c1">// 한 프레임 당 시간이 얼마나 지났는지 측정해주는 함수</span>
+
+		<span class="kt">void</span> <span class="n">drawGrid</span><span class="p">();</span>
+
+		<span class="cm">/*run과 update 아주 중요!*/</span> 
+ 		<span class="kt">void</span> <span class="n">run</span><span class="p">();</span> <span class="c1">// Game2D.cpp 에 바디 있음</span>
+
+		<span class="k">virtual</span> <span class="kt">void</span> <span class="n">update</span><span class="p">()</span>  <span class="c1">//가상함수인 이유 -&gt; 꼭 오버라이딩 해서 사용하라는 의미 ! </span>
+		<span class="p">{</span>
+      <span class="c1">// 예시</span>
+			  <span class="c1">// draw</span>
+			  <span class="c1">// play sould</span>
+			  <span class="c1">// physics update</span>
+			  <span class="c1">// etc.</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong><em>📜Game2D.cpp</em></strong>에서 <code class="language-plaintext highlighter-rouge">void Game2D::run()</code> 함수 부분 설명</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">while</code>부분이 제일 중요하다. 프로그램의 메인 Loop가 된다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Game2D</span><span class="p">.</span><span class="n">cpp</span> <span class="err">中</span>
+
+<span class="kt">void</span> <span class="n">Game2D</span><span class="o">::</span><span class="n">run</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">glfw_window</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span>
+			<span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1280</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span> <span class="c1">// initialize with default setting</span>
+
+		<span class="c1">// 게임의 메인 루프</span>
+		<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">glfwWindowShouldClose</span><span class="p">(</span><span class="n">glfw_window</span><span class="p">))</span><span class="c1">// main loop</span>
+		<span class="p">{</span>
+			<span class="c1">// 1. ESC 누르면 종료 </span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">isKeyPressed</span><span class="p">(</span><span class="n">GLFW_KEY_ESCAPE</span><span class="p">))</span> <span class="p">{</span>
+				<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"ESC key ends main loop"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="p">}</span>
+			
+			<span class="c1">// 2. 타이머 start</span>
+			<span class="n">timer</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+
+			<span class="c1">// 3. 렌더링 시작 전 전처리</span>
+			<span class="n">glfwMakeContextCurrent</span><span class="p">(</span><span class="n">glfw_window</span><span class="p">);</span>
+			<span class="n">glClearColor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>			 <span class="c1">// while background</span>
+			<span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span> <span class="o">|</span> <span class="n">GL_DEPTH_BUFFER_BIT</span><span class="p">);</span>
+			<span class="n">glMatrixMode</span><span class="p">(</span><span class="n">GL_MODELVIEW</span><span class="p">);</span>
+			<span class="n">glPushMatrix</span><span class="p">();</span>
+
+			<span class="c1">// 4. 격자 그리기</span>
+			<span class="n">drawGrid</span><span class="p">();</span>
+
+			<span class="c1">// 5. ⭐update 함수 호출⭐</span>
+			<span class="n">update</span><span class="p">();</span>	<span class="c1">// the major worker function</span>
+
+			<span class="c1">// 6. 렌더링 완료하고 마무리</span>
+			<span class="n">glPopMatrix</span><span class="p">();</span>
+			<span class="c1">// post draw</span>
+			<span class="n">glfwSwapBuffers</span><span class="p">(</span><span class="n">glfw_window</span><span class="p">);</span> <span class="c1">// double buffering</span>
+			<span class="c1">//glfwSetInputMode(glfw_window, GLFW_STICKY_KEYS, GLFW_FALSE); // not working </span>
+			<span class="n">glfwPollEvents</span><span class="p">();</span>
+
+			<span class="c1">//const double dt = timer.stopAndGetElapsedMilli();</span>
+
+			<span class="c1">//Debugging</span>
+			<span class="c1">//std::cout &lt;&lt; dt &lt;&lt; std::endl;</span>
+
+			<span class="c1">//if (dt &lt; spf) // to prevent too high fps</span>
+			<span class="c1">//{</span>
+			<span class="c1">//	const auto time_to_sleep = static_cast&lt;int&gt;((spf - dt) * 1000.0f);</span>
+			<span class="c1">//	std::this_thread::sleep_for(std::chrono::milliseconds(time_to_sleep));</span>
+			<span class="c1">//	</span>
+			<span class="c1">//	//Debugging</span>
+			<span class="c1">//	//std::cout &lt;&lt; "sleep " &lt;&lt; time_to_sleep &lt;&lt; std::endl;</span>
+			<span class="c1">//}</span>
+		<span class="p">}</span>
+
+		<span class="n">glfwTerminate</span><span class="p">();</span>
+	<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="내가-실습한-코드">내가 실습한 코드</h2>
+
+<h3 id="1-빈-화면만-출력하기">1. 빈 화면만 출력하기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "PrimitivesGallery.h"
+#include "TankExample.h"
+#include "FaceExample.h"
+#include "WalkingPerson.h"
+#include "SolarSystem.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>  <span class="c1">// Game2D의 update 함수 오버라이딩</span>
+		<span class="p">{</span>
+
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">RotatingStarExample</span><span class="p">().</span><span class="n">run</span><span class="p">();</span>
+	
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2-풀-스크린의-빈-스크린-출력하기">2. 풀 스크린의 빈 스크린 출력하기</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "PrimitivesGallery.h"
+#include "TankExample.h"
+#include "FaceExample.h"
+#include "WalkingPerson.h"
+#include "SolarSystem.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>  <span class="c1">// Game2D의 update 함수 오버라이딩</span>
+		<span class="p">{</span>
+
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="cm">/* 생성자 네번째 인수를 true로 바꿔 풀스크린 
+	창 이름은 "This is my digital canvas!" */</span>
+	<span class="n">jm</span><span class="o">::</span><span class="n">RotatingStarExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1280</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="nb">true</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+	
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="3-별-그려보기">3. 별 그려보기</h3>
+
+<p><code class="language-plaintext highlighter-rouge">DrawFunction.h</code>의 <code class="language-plaintext highlighter-rouge">drawFilledStar</code> 함수 사용</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "PrimitivesGallery.h"
+#include "TankExample.h"
+#include "FaceExample.h"
+#include "WalkingPerson.h"
+#include "SolarSystem.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span>  <span class="c1">// Game2D의 update 함수 오버라이딩</span>
+		<span class="p">{</span>
+				<span class="n">drawFilledStar</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+				<span class="c1">// 별의 바깥쪽 원의 반지름이 0.4f라는 의미, 별 안쪽의 원의 반지름이 0.25f라는 의미</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+
+	<span class="n">jm</span><span class="o">::</span><span class="n">RotatingStarExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1280</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="nb">false</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+	
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="4-회전하는-별-그려보기-시간-개념-필요">4. 회전하는 별 그려보기 (시간 개념 필요)</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "Game2D.h"
+#include "PrimitivesGallery.h"
+#include "TankExample.h"
+#include "FaceExample.h"
+#include "WalkingPerson.h"
+#include "SolarSystem.h"
+</span>
+<span class="k">namespace</span> <span class="n">jm</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">RotatingStarExample</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Game2D</span>
+	<span class="p">{</span>
+		<span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>  <span class="c1">// 시간 0.0에서 시작</span>
+	<span class="nl">public:</span>
+		<span class="kt">void</span> <span class="n">update</span><span class="p">()</span> <span class="k">override</span> <span class="c1">// Game2D의 update 함수 오버라이딩</span>
+		<span class="p">{</span>
+				<span class="n">rotate</span><span class="p">(</span><span class="n">time</span> <span class="o">*</span> <span class="mf">180.0</span><span class="n">f</span><span class="p">);</span> <span class="c1">// 1초에 반바퀴 돌게끔</span>
+
+				<span class="n">drawFilledStar</span><span class="p">(</span><span class="n">Colors</span><span class="o">::</span><span class="n">gold</span><span class="p">,</span> <span class="mf">0.4</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.25</span><span class="n">f</span><span class="p">);</span>
+				
+				<span class="n">time</span> <span class="o">+=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">getTimeStep</span><span class="p">();</span> <span class="c1">// 시간이 흘러야 함</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+
+	<span class="n">jm</span><span class="o">::</span><span class="n">RotatingStarExample</span><span class="p">().</span><span class="n">init</span><span class="p">(</span><span class="s">"This is my digital canvas!"</span><span class="p">,</span> <span class="mi">1280</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="nb">false</span><span class="p">).</span><span class="n">run</span><span class="p">();</span>
+	
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

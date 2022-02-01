@@ -1,0 +1,143 @@
+I"�"<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-17-stdstring-문자열-클래스">chapter 17. std::string 문자열 클래스</h1>
+
+<h1 id="stdstring의-길이와-용량">std::string의 길이와 용량</h1>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">size</code>와 <code class="language-plaintext highlighter-rouge">capacity</code> 구분하기.</p>
+</blockquote>
+
+<h2 id="-길이-size">🔔 길이 (size)</h2>
+
+<ul>
+  <li>“012345678”
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">size()</code> 👉🏻 9</li>
+      <li><code class="language-plaintext highlighter-rouge">length()</code> 👉🏻 9 글자</li>
+    </ul>
+  </li>
+  <li>cf)
+    <ul>
+      <li>C 스타일 문자열(<code class="language-plaintext highlighter-rouge">char *</code>)은 뒤에 ‘\0’ 이 붙어있다. 문자열의 끝을 표시하기 위하여</li>
+      <li>C++ 의 <code class="language-plaintext highlighter-rouge">str::string</code> 에서는 ‘\0’ 같은 쓸데 없는 문자가 더 붙지 않는다.
+        <ul>
+          <li>string 클래스에서 문자열 길이를 자체적으로 직접 가지고 있기 때문에 C처럼 문자열의 끝을 알려주는 ‘\0’가 붙을 필요가 없기 때문에.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">string</span> <span class="n">my_str</span><span class="p">(</span><span class="s">"012345678"</span><span class="p">);</span>
+	
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_str</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 9</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="empty">empty()</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">empty()</code> : 빈 문자열이라면 true 리턴, 아니면 false 리턴</li>
+  <li>C스타일 문자열(<code class="language-plaintext highlighter-rouge">char *</code>)과 달리 Null은 비어있는 문자열이라고 판단한다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">string my_str("")</code> → empty</li>
+      <li><code class="language-plaintext highlighter-rouge">string my_str</code> → empty</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">string</span> <span class="n">my_str</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+	
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>   
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_str</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// true 출력</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-용량-capacity">🔔 용량 (capacity)</h2>
+
+<ul>
+  <li>“01234567”
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">length()</code> 👉🏻 8   (8글자)</li>
+      <li><code class="language-plaintext highlighter-rouge">size()</code> 👉🏻 8   (8글자)
+        <ul>
+          <li>C언어 스타일의 문자열은 뒤에 <code class="language-plaintext highlighter-rouge">\0</code>가 붙으므로 <code class="language-plaintext highlighter-rouge">size</code>가 문자열 길이 <code class="language-plaintext highlighter-rouge">length</code>보다 1 만큼 더 크다.</li>
+          <li>반면에 <code class="language-plaintext highlighter-rouge">std::string</code>은 뒤에 ‘\0’같은게 붙지 않으므로 <code class="language-plaintext highlighter-rouge">length</code>와 <code class="language-plaintext highlighter-rouge">size</code> 값이 같다</li>
+        </ul>
+      </li>
+      <li>✨<code class="language-plaintext highlighter-rouge">capaticy()</code> 👉🏻 <strong>1007</strong>
+        <ul>
+          <li>문자열의 메모리 용량을 1007 길이의 문자열이 들어갈 수 있게끔 잡아둔다.
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">string</code> 도 <code class="language-plaintext highlighter-rouge">vector</code>처럼 용량이 추가되거나 줄어들 것을 고려하여 용량을 할당받는다. <u>reallocate 연산을 줄이기 위하여! (new, delete 사용 줄이기)</u></li>
+            </ul>
+          </li>
+          <li>시스템 마다 다를 수 있음.</li>
+          <li>현재 <code class="language-plaintext highlighter-rouge">reserve(1000)</code>해서 1000이상으로 나온 상황</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">max_size()</code>
+        <ul>
+          <li><u>최대한으로 메모리를 할당했을 경우 저장할 수 있는 문자열의 길이</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">string</span> <span class="n">my_str</span><span class="p">(</span><span class="s">"01234567"</span><span class="p">);</span>
+	<span class="n">my_str</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+	
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>   
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_str</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 8 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_str</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 8 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_str</span><span class="p">.</span><span class="n">capacity</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 1000 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_str</span><span class="p">.</span><span class="n">max_size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 46116861018427387897 출력</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

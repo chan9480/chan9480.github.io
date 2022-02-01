@@ -1,0 +1,145 @@
+I"�'<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-11-상속--상속-받은-함수를-감추기">chapter 11. 상속 : 상속 받은 함수를 감추기</h1>
+
+<h2 id="-using--접근-지정자-바꾸기">🔔 <code class="language-plaintext highlighter-rouge">using</code> : 접근 지정자 바꾸기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Base</span>
+<span class="p">{</span>
+<span class="nl">protected:</span>
+	<span class="kt">int</span> <span class="n">m_i</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Base</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span> 
+		<span class="o">:</span> <span class="n">m_i</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"I'm Base "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">double</span> <span class="n">m_d</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Derived</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">Base</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+    <span class="k">using</span> <span class="n">Base</span><span class="o">::</span><span class="n">m_i</span><span class="p">;</span>  <span class="c1">// ⭐⭐</span>
+<span class="p">};</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Derived</span> <span class="n">derived</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+	<span class="n">derived</span><span class="p">.</span><span class="n">m_i</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>   <span class="c1">// Base 에서 protected 임에도 불구하고 문제 없다.</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">public:</span>
+    <span class="k">using</span> <span class="n">Base</span><span class="o">::</span><span class="n">m_i</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Derived 클래스가 Base 클래스를 상속 받으면서 <em>m_i</em> 멤버도 상속 받았다. 그러나 이 <em>m_i</em> 멤버는 <u>protected</u>. 자식 클래스인 Derived 클래스 안에서만 접근할 수 있고 main함수 같은 외부에선 접근이 불가하다. 이때 <strong>Derived클래스의 public: 영역에서 <code class="language-plaintext highlighter-rouge">using Base::m_i</code>을 명시해주면 <em>m_i</em>이 <code class="language-plaintext highlighter-rouge">public</code>으로 접근지정자가 변경된다.</strong> 따라서 이제 main 함수안에서 바로 <em>m_i</em>을 접근해도 문제가 없다. <code class="language-plaintext highlighter-rouge">public</code>으로 변경했기 때문에!</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="n">Derived</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">Base</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+	<span class="p">{}</span>
+
+<span class="nl">private:</span>
+    <span class="k">using</span> <span class="n">Base</span><span class="o">::</span><span class="n">print</span><span class="p">;</span>  <span class="c1">// ⭐⭐</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Derived</span> <span class="n">derived</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+	<span class="n">derived</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>   <span class="c1">// ❌에러❌</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Derived클래스의 private: 영역에서 <code class="language-plaintext highlighter-rouge">using Base::print</code>, 이렇게 뒤에 함수 이름만을 명시해주어 <em>함수 print()</em>이 <code class="language-plaintext highlighter-rouge">private</code>으로 접근지정자가 변경되었다.</strong> 따라서 이제 main 함수나 Derived의 자식 클래스, 즉 Base의 손자 클래스에서 함수 <em>print()</em>을 호출하면 문제가 생긴다. <code class="language-plaintext highlighter-rouge">private</code>으로 변경했기 때문에!</p>
+
+<p><br /></p>
+
+<h2 id="-delete--상속-받은-함수-접근-막기">🔔 <code class="language-plaintext highlighter-rouge">delete</code> : 상속 받은 함수 접근 막기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Base</span>
+<span class="p">{</span>
+<span class="nl">protected:</span>
+	<span class="kt">int</span> <span class="n">m_i</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Base</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="c1">// 생성자</span>
+		<span class="o">:</span> <span class="n">m_i</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+	<span class="p">{</span>
+
+	<span class="p">}</span>
+
+	<span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"I'm Base "</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">double</span> <span class="n">m_d</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+	<span class="n">Derived</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+		<span class="o">:</span> <span class="n">Base</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+	<span class="p">{}</span>
+<span class="nl">private:</span>
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Derived</span> <span class="n">derived</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+	<span class="n">derived</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>   <span class="c1">// ❌에러❌</span>
+    <span class="n">derived</span><span class="p">.</span><span class="n">Base</span><span class="o">::</span><span class="n">print</span><span class="p">();</span> <span class="c1">// 문제 없음!</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">private:</span>
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Derived에서는 Base로부터 상속받은 멤버 함수 <code class="language-plaintext highlighter-rouge">print()</code>을 못쓰게 막는다. <u>이제 base.print() 호출만 가능하고 derived.print() 호출은 불가능해진다.</u></p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

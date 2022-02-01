@@ -1,0 +1,187 @@
+I"J*<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-12-가상-함수들--가상-소멸자">chapter 12. 가상 함수들 : 가상 소멸자</h1>
+
+<h2 id="-가상-소멸자를-사용하기-전">🔔 가상 소멸자를 사용하기 전</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Base</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="o">~</span><span class="n">Base</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"~Base()"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="o">*</span><span class="n">m_array</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+	<span class="n">Derived</span><span class="p">(</span><span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+	<span class="p">}</span>
+
+	<span class="o">~</span><span class="n">Derived</span><span class="p">()</span>  
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"~Derived()"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="k">delete</span><span class="p">[]</span> <span class="n">m_array</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Derived</span> <span class="n">derived</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+~Derived()
+~Base()
+</code></pre></div></div>
+
+<ul>
+  <li>생성자 호출 순서와 다르게 소멸자는
+    <ul>
+      <li>자식 소멸자가 먼저 호출되고 그 다음에 부모 소멸자가 호출된다.</li>
+      <li>제일 조상일 수록 가장 마지막에 소멸 됨.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Derived</span> <span class="o">*</span> <span class="n">derived</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Derived</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// 동적 할당</span>
+    <span class="n">Base</span> <span class="o">*</span> <span class="n">base</span> <span class="o">=</span> <span class="n">derived</span><span class="p">;</span>  <span class="c1">// 다형성, 동적할당</span>
+    <span class="k">delete</span> <span class="n">base</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+~Base()
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">delete base</code>
+    <ul>
+      <li>부모인 Base 타입인 <code class="language-plaintext highlighter-rouge">base</code>는 자식인 Derived 타입의 <code class="language-plaintext highlighter-rouge">derived</code> 객체를 참조하고 있다.</li>
+      <li>이때 <code class="language-plaintext highlighter-rouge">base</code>를 delete시켜주면 <u>Derived 소멸자는 호출 되지 않고 부모인 Base 소멸자만 호출된다.</u></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>자식을 지우면 (자식 소멸자 👉 부모 소멸자) 순으로 부모 소멸자까지 호출되지만, <u>부모를 지우면 부모 소멸자만 호출되며 자식 소멸자는 호출되지 않는다.</u>(상속에 있어 부모는 자식을 다 포함하지 않으므로 당연한 얘기!)</p>
+</blockquote>
+
+<ul>
+  <li><u>소멸자도 자식들 본연의 소멸자들이 각각 다르게 호출되야 한다.</u>
+    <ul>
+      <li>일일이 delete 자식1, delete 자식2, … 해줄 수도 없고 😱</li>
+      <li>자식 객체 내용물 중 동적 할당 받은 부분이 있어 이는 delete 되지 않으면 메모리 누수 문제가 생길 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-가상-소멸자-virtual">🔔 가상 소멸자 virtual</h2>
+
+<blockquote>
+  <p>소멸자에 <code class="language-plaintext highlighter-rouge">virtual</code>을 붙여주면 <u>부모 타입으로 자식 객체를 참조해도 자식 객체의 소멸자를 호출 시킨다.</u> 가상 함수와 비슷.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Base</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+	<span class="k">virtual</span> <span class="o">~</span><span class="n">Base</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"~Base()"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+	<span class="kt">int</span> <span class="o">*</span><span class="n">m_array</span><span class="p">;</span> 
+
+<span class="nl">public:</span>
+	<span class="n">Derived</span><span class="p">(</span><span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">m_array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+	<span class="p">}</span>
+
+	<span class="o">~</span><span class="n">Derived</span><span class="p">()</span>  
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"~Derived()"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="k">delete</span><span class="p">[]</span> <span class="n">m_array</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Derived</span> <span class="o">*</span> <span class="n">derived</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Derived</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// 동적 할당</span>
+    <span class="n">Base</span> <span class="o">*</span> <span class="n">base</span> <span class="o">=</span> <span class="n">derived</span><span class="p">;</span>  <span class="c1">// 다형성, 동적할당</span>
+    <span class="k">delete</span> <span class="n">base</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+~Derived()
+~Base()
+</code></pre></div></div>
+
+<ul>
+  <li><strong>virtual ~Base()</strong> : 가상 소멸자
+    <ul>
+      <li>마찬가지로 Derived의 소멸자 ~Derived()도 <code class="language-plaintext highlighter-rouge">virtual</code> 속성을 물려받게 된다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">delete base</code>
+    <ul>
+      <li>이제 원래대로 먼저 자식 소멸자가 호출되며 뒤이어 부모 소멸자가 호출된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="o">~</span><span class="n">Derived</span><span class="p">()</span> <span class="k">override</span>
+	<span class="p">{</span><span class="err">ㄴ</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"~Derived()"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="k">delete</span><span class="p">[]</span> <span class="n">m_array</span><span class="p">;</span>
+	<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>자식 소멸자에 <code class="language-plaintext highlighter-rouge">override</code>를 붙일 수 있는데 이 경우엔 꼭 부모 소멸자에 <code class="language-plaintext highlighter-rouge">virtual</code>을 붙여주어야 한다.
+    <ul>
+      <li>부모 소멸자가 가상 소멸자가 아니라면 자식 소멸자에 <code class="language-plaintext highlighter-rouge">override</code>를 붙일 수 없다.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

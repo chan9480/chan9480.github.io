@@ -1,0 +1,408 @@
+I"�Z<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-205-tcpip-네트워킹-맛-보기">chapter 20.5 TCP/IP 네트워킹 맛 보기</h1>
+
+<h2 id="서버">서버</h2>
+
+<blockquote>
+  <p>클라이언트와 서버가 서로 데이터를 주고 받음</p>
+</blockquote>
+
+<ul>
+  <li>서버가 처음 하는 일
+    <ol>
+      <li>서버를 키고</li>
+      <li>클라이언트를 기다림</li>
+    </ol>
+  </li>
+  <li>서버와 클라이언트가 서로 주고 받는게 빈번한 <u>게임같은 경우에는 TCP 말고 UDP를 쓰기도 한다.</u></li>
+  <li><strong>클라이언트와 서버를 ‘소켓’ 으로 연결</strong></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="서버-코드">서버 코드</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;	
+#include &lt;vector&gt;
+#include &lt;utility&gt;
+#include &lt;boost/asio.hpp&gt;
+</span>
+<span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">io_service</span> <span class="n">io_service</span><span class="p">;</span>
+
+		<span class="n">tcp</span><span class="o">::</span><span class="n">endpoint</span> <span class="n">endpoint</span><span class="p">(</span><span class="n">tcp</span><span class="o">::</span><span class="n">v4</span><span class="p">(),</span> <span class="mi">13</span><span class="p">);</span>			<span class="c1">// 통신을 하는 양 끝점 endpoint. 13은 port # 임의의 숫자 가능</span>
+		<span class="n">tcp</span><span class="o">::</span><span class="n">acceptor</span> <span class="n">acceptor</span><span class="p">(</span><span class="n">io_service</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">);</span>	<span class="c1">// endpoint에서 io_service를 accept할 acceptor를 생성</span>
+
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Server started"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(;;)</span>	<span class="c1">// 무한 루프</span>
+		<span class="p">{</span>
+			<span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">message_to_send</span> <span class="o">=</span> <span class="s">"Hello From Server"</span><span class="p">;</span>
+
+			<span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="o">::</span><span class="n">iostream</span> <span class="n">stream</span><span class="p">;</span>	<span class="c1">// 일반 iostream이 아니라 오버로드된 tcp::iostream이다.</span>
+
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"check 1"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>	<span class="c1">// 네트워킹에서도 cout을 쓸 수 있다.</span>
+
+			<span class="n">boost</span><span class="o">::</span><span class="n">system</span><span class="o">::</span><span class="n">error_code</span> <span class="n">ec</span><span class="p">;</span>
+			<span class="n">acceptor</span><span class="p">.</span><span class="n">accept</span><span class="p">(</span><span class="o">*</span><span class="n">stream</span><span class="p">.</span><span class="n">rdbuf</span><span class="p">(),</span> <span class="n">ec</span><span class="p">);</span>	<span class="c1">// 클라이언트 접속을 받아들인다.</span>
+
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"check 2"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ec</span><span class="p">)</span>	<span class="c1">//TODO: How to take care of multiple clients? Multi-threading?</span>
+			<span class="p">{</span>	<span class="c1">// 클라이언트가 제대로 접속이 됐다면,</span>
+
+				<span class="c1">// receive message from client </span>
+				<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">line</span><span class="p">;</span>
+				<span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>			<span class="c1">// 입출력 스트림에서 클라이언트로부터 메세지를 받는다.</span>
+				<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">line</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>		<span class="c1">// 클라이언트 입장에서는 여기서 데이터를 보내야 서버가 받는다.</span>
+
+				<span class="c1">// send message to client</span>
+				<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="n">message_to_send</span><span class="p">;</span>
+				<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>				<span class="c1">// 클라이언트 입장에서는 여기서 데이터를 읽어야 서버가 보낸다.</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>						<span class="c1">// 예외 발생시</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>#include &lt;boost/asio.hpp&gt;</li>
+  <li>서버는 자기 자신이 구동이 되면서 자기 자신의 ip주소를 가지고 시작한다.
+    <ul>
+      <li>서버 스스로 자기 ip를 알고 있기 때문에 서버 시작을 준비하는 아래 과정에선 ip다루는 부분 없다.
+        <ul>
+          <li>using boost::asio::ip::tcp;
+            <ul>
+              <li>네임 스페이스 👉 boost::asio::ip::tcp;
+                <ul>
+                  <li>boost 안에 있는 asio 안에 있는 ip 안에 있는 tcp</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>try - catch
+            <ul>
+              <li>네트워크 프로그래밍을 할 때에는 예외처리를 기본으로 해놔야한다. 불안정적인 상황 고려.</li>
+            </ul>
+          </li>
+          <li>boost::asio::io_service <code class="language-plaintext highlighter-rouge">io_service</code>;</li>
+          <li>tcp::endpoint <code class="language-plaintext highlighter-rouge">endpoint</code> (tcp::v4(), 13);
+            <ul>
+              <li>통신을 하는 양 끝점. 종이컵 전화기의 양 끝 종이컵이라고 생각하며 됨. endpoint.</li>
+              <li>tcp::v4()
+                <ul>
+                  <li>tcp 버전 4 를 사용</li>
+                </ul>
+              </li>
+              <li>13
+                <ul>
+                  <li>포트 넘버
+                    <ul>
+                      <li>필수</li>
+                      <li>한 회선 안에서 마치 여러개의 회선이 있는 것 처럼 채널로 나눠주는 것
+                        <ul>
+                          <li>TV 회선은 1개지만 채널이 여러개인 것처럼</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>tcp::acceptor acceptor(io_service, endpoint);
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">어셉터</code> 를 만든다.</li>
+              <li>endpoint에서 io_service를 accept할 acceptor를 생성</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>for (;;)
+    <ul>
+      <li>서버는 무한 루프로 돌린다.
+        <ul>
+          <li>const std::string <code class="language-plaintext highlighter-rouge">message_to_send</code> = “Hello From Server”;
+            <ul>
+              <li>서버인 나에게 접속해 온 클라이언트에게 이 string을 보여줄 것!</li>
+            </ul>
+          </li>
+          <li>boost::asio::ip::tcp::iostream <code class="language-plaintext highlighter-rouge">stream</code>;
+            <ul>
+              <li>일반 iostream이 아니라 오버로드된 tcp::iostream이다.</li>
+              <li>std::cout « “check 1” « std::endl;
+                <ul>
+                  <li>네트워킹에서도 cout을 쓸 수 있다.</li>
+                  <li>« »가 오버로딩 되어있어서 !</li>
+                </ul>
+              </li>
+              <li>stream은 매 반복마다 다시 선언되므로 for문 끝에 도달하면 비워진다 ! 지역변수니까. 매 반복마다 새로 생성됨</li>
+            </ul>
+          </li>
+          <li>boost::system::error_code <code class="language-plaintext highlighter-rouge">ec</code>;
+            <ul>
+              <li>에러코드로 사용할 객체</li>
+            </ul>
+          </li>
+          <li>acceptor.accept(*stream.rdbuf(), ec);
+            <ul>
+              <li>클라이언트 접속을 받아들인다.( = appecptor가 appept 하다.)</li>
+              <li>acceptor는 좀전에 위에서 io_service와 endpoint를 이용해 만들었다.</li>
+              <li>*stream.rdbuf()
+                <ul>
+                  <li>클라이언트가 접속을 해오면 stream으로부터 rdbuf를 읽어 옴.</li>
+                </ul>
+              </li>
+              <li>ec
+                <ul>
+                  <li>받아 들여진게 없거나 에러가 나면 ec = NULL 로 만들어준다.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>if (!ec)
+            <ul>
+              <li>에러코드가 NULL 값이 아니라면</li>
+              <li>accpector로부터 서버에 클라이언트가 들어온게 확인되면</li>
+              <li>즉 클라이언트가 서버에 제대로 접속이 됐다면
+                <ul>
+                  <li><code class="language-plaintext highlighter-rouge">receive message from client</code> 클라이언트로부터 메세지 받기
+                    <ul>
+                      <li>std::string <code class="language-plaintext highlighter-rouge">line</code>;</li>
+                      <li>std::getline(stream, line);
+                        <ul>
+                          <li>한 줄 통째로 받기</li>
+                          <li>입출력 스트림에서 클라이언트로부터 메세지를 받는다.</li>
+                          <li>클라이언트 입장에서는 여기서 데이터를 보내야 서버가 받는다.</li>
+                          <li>여기서 stream은 아까 tcp::iostream</li>
+                        </ul>
+                      </li>
+                      <li>std::cout « line « std::endl;
+                        <ul>
+                          <li>입력 받은걸 그대로 출력</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><code class="language-plaintext highlighter-rouge">send message to client</code> 클라이언트에게 메세지 보내기
+                    <ul>
+                      <li>stream « message_to_send;
+                        <ul>
+                          <li>“Hello From Server”;</li>
+                        </ul>
+                      </li>
+                      <li>stream « std::endl;
+                        <ul>
+                          <li>getline으로 클러이언트에게서 메세지를 받고 있기 때문에
+                            <ul>
+                              <li>개행 문자를 버퍼에서 없애기 위해 꼭 필요한 과정</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="클라이언트">클라이언트</h2>
+
+<blockquote>
+  <p>클라이언트 <strong>솔루션</strong>과 서버코드의 <strong>솔루션</strong>은 다르다. 별개의 파일.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;	
+#include &lt;boost/asio.hpp&gt;
+</span>
+<span class="k">using</span> <span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">ip</span><span class="o">::</span><span class="n">tcp</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">try</span>
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Usage : Client &lt;host&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+			<span class="k">return</span> <span class="n">EXIT_FAILURE</span><span class="p">;</span>
+		<span class="p">}</span>
+		
+		<span class="n">tcp</span><span class="o">::</span><span class="n">iostream</span> <span class="n">stream</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="mi">13</span><span class="p">)));</span> <span class="c1">// port num = 13</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">stream</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"No address. Unable to connect: "</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">.</span><span class="n">error</span><span class="p">().</span><span class="n">message</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+			<span class="k">return</span> <span class="n">EXIT_FAILURE</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="c1">// send message to server</span>
+		<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello from client"</span><span class="p">;</span>
+		<span class="n">stream</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+		<span class="c1">// receive message from server</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">line</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">line</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">catch</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>int main(int argc, char** argv)
+    <ul>
+      <li>서버 주소를 명령 인수에서 입력을 받는다.
+        <ul>
+          <li>프로젝트 - 우클 - 속성 - 디버깅 - 명령 인수
+            <ul>
+              <li><img src="https://user-images.githubusercontent.com/42318591/88562832-255b3080-d06c-11ea-8d1a-1988de9f591b.png" alt="image" width="70%" height="70%" class="align-center" />
+                <ul>
+                  <li>여기에 서버 주소를 입력한다.
+                    <ul>
+                      <li>ex) 127.0.0.1(내 PC안에서 두개 다돌림) , 다른 컴퓨터의 ip주소</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>if (argc != 2)
+    <ul>
+      <li>즉 서버 주소를 명령 인수에 입력 안했다면 !</li>
+      <li>그냥 종료 return EXIT_FAILURE;</li>
+    </ul>
+  </li>
+  <li>tcp::iostream <code class="language-plaintext highlighter-rouge">stream</code>(argv[1], std::to_string(int(13)));
+    <ul>
+      <li>tcp::iostream 타입인 stream 객체를 생성한다. ( 매개변수 2개 생성자 )
+        <ul>
+          <li>argv[1]
+            <ul>
+              <li>입력한 서버 주소</li>
+            </ul>
+          </li>
+          <li>std::to_string(int(13))
+            <ul>
+              <li>포트 넘버를 문자열로 변환</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>if (!stream)
+    <ul>
+      <li>stream이 안만들어지는 오류가 발생했다면</li>
+      <li>그냥 종료 return EXIT_FAILURE;</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">send message to server</code> 서버에게 메세지 보내기
+    <ul>
+      <li>stream « “Hello from client”;
+        <ul>
+          <li>서버에게 보낼 스트림에 메세지 넣기</li>
+        </ul>
+      </li>
+      <li>서버는 getline으로 stream을 받기 때문에 개행 문자 꼭 넣어주기
+        <ul>
+          <li>stream « std::endl;</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">receive message from server</code> 서버로부터 메세지 받기
+    <ul>
+      <li>std::string <code class="language-plaintext highlighter-rouge">line</code>;
+        <ul>
+          <li>line에 받을 것</li>
+        </ul>
+      </li>
+      <li>std::getline(stream, line);
+        <ul>
+          <li>stream으로부터 메세지를 받는다.</li>
+        </ul>
+      </li>
+      <li>std::cout « line « std::endl;
+        <ul>
+          <li>받은거 출력</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="실행해보기">실행해보기</h2>
+
+<ol>
+  <li><strong>서버</strong>를 먼저 실행하였다.
+    <ul>
+      <li>check1 밑에서 깜빡거리며 클라이언트가 accept 되기를 기다리는 중이다.</li>
+      <li><img src="https://user-images.githubusercontent.com/42318591/88563223-b29e8500-d06c-11ea-9f40-baac9cfc64e0.png" alt="image" width="70%" height="70%" class="align-center" /></li>
+    </ul>
+  </li>
+  <li>이때 <strong>클라이언트</strong>를 실행하면
+    <ul>
+      <li><img src="https://user-images.githubusercontent.com/42318591/88563316-d1048080-d06c-11ea-87c4-6b35d1707ce6.png" alt="image" width="70%" height="70%" class="align-center" /></li>
+      <li>왼쪽 창 → 클라이언트 / 오른쪽 창 → 서버</li>
+      <li>클라이언트가 실행되자마자 서버로부터 “Hello From Server” 메세지를 받는다.</li>
+      <li>동시에 서버창에서도 check2가 출력되고 “Hello From Server” 가 출력됐다.
+        <ul>
+          <li>무한 루프에 따라 다시 새로운 클라이언트가 실행되어 accpect되기를 기다린다. 
+  (check 1)</li>
+        </ul>
+      </li>
+      <li><em>서로 stream을 주고 받고 하는 과정 !</em></li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h2 id="채팅-프로그램-구현시-고려해볼-점">채팅 프로그램 구현시 고려해볼 점</h2>
+
+<ol>
+  <li>사용자 둘이서 언제나 번갈아가면서 얘기하진 않음</li>
+  <li>How to take care of multiple clients? → Multi-threading 사용하기</li>
+</ol>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

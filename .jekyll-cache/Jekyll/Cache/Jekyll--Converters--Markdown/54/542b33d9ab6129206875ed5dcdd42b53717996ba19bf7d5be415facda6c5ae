@@ -1,0 +1,33 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="24-연습문제">2.4 연습문제</h1>
+
+<p class="notice--warning"><strong>연습 문제</strong>는 스스로 풀이했습니다. 😀     <br />
+해당 챕터 보러가기 🖐 <a href="https://ansohxxn.github.io/c++%20games/chapter2-4/">2.4 공장 패턴</a> <br />
+연습 문제 출처 : <a href="https://blog.naver.com/atelierjpro/221413483005">홍정모 교수님 블로그</a></p>
+
+<p><br /></p>
+
+<blockquote>
+  <p>아직 연습 문제를 풀지 못한 챕터. 언제 풀지.. 😐</p>
+</blockquote>
+
+<h2 id="-q1-스마트-포인터를-팩토리-패턴에-사용해보세요--shared_ptr--or--unique_ptr-">🙋 Q1. 스마트 포인터를 팩토리 패턴에 사용해보세요. ( shared_ptr  OR  unique_ptr )</h2>
+
+<h2 id="-q2-콘솔창으로부터-입력을-받아서-화면에-물체를-생성해보세요">🙋 Q2. 콘솔창으로부터 입력을 받아서 화면에 물체를 생성해보세요.</h2>
+
+<h2 id="-q3-콘솔창-입력-기능을-확장해서-파일로부터-입력을-받도록-해보세요">🙋 Q3. 콘솔창 입력 기능을 확장해서 파일로부터 입력을 받도록 해보세요.</h2>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

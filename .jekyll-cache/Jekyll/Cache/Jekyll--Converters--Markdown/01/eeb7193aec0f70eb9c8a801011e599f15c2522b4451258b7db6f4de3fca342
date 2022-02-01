@@ -1,0 +1,21 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-15-의미론적-이동과-스마트-포인터">chapter 15. 의미론적 이동과 스마트 포인터</a></li>
+  <li><a href="#155-스마트-포인터1️⃣-stdunique_ptr">15.5 스마트 포인터1️⃣ std::unique_ptr</a>
+    <ul>
+      <li><a href="#-스마트-포인터란">🔔 스마트 포인터란?</a></li>
+      <li><a href="#-unique_ptr">🔔 unique_ptr</a>
+        <ul>
+          <li><a href="#unique_ptr의-함수들">unique_ptr의 함수들</a>
+            <ul>
+              <li><a href="#make_unique-함수">make_unique 함수</a></li>
+              <li><a href="#get-함수">get 함수</a></li>
+            </ul>
+          </li>
+          <li><a href="#stdunique_ptr의-특징">std::unique_ptr의 특징</a></li>
+          <li><a href="#unique_ptr을-함수-파라미터로-넘겨주는-경우">unique_ptr을 함수 파라미터로 넘겨주는 경우</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

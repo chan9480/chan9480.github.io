@@ -1,0 +1,412 @@
+I"Xl<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-18-입력과-출력">chapter 18. 입력과 출력</h1>
+
+<h1 id="ostream으로-출력하기">ostream으로 출력하기</h1>
+
+<blockquote>
+  <p>#include &lt;iostream&gt;</p>
+</blockquote>
+
+<blockquote>
+  <p>#include &lt;iomanip&gt;</p>
+</blockquote>
+
+<h2 id="-coutsetf-coutunsetf">🔔 cout.setf, cout.unsetf</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cout.setf</code>
+    <ul>
+      <li><strong>출력 옵션</strong>을 바꿀 수 있다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">cout.unsetf</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">setf</code>로 세팅한 출력 옵션 해제</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="stdiosshowpo">std::ios::showpo</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">cout.setf(std::ios::showpo)</code> 👉 양수도 <code class="language-plaintext highlighter-rouge">+</code> 기호가 붙어서 나오게끔 출력한다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+	<span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">showpos</span><span class="p">);</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span><span class="p">.</span><span class="n">unsetf</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">showpos</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
++108
+108
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="stdioshex">std::ios::hex</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">cout.setf(std::ios::hex)</code> 👉 16진수로 출력되게 한다.</p>
+</blockquote>
+
+<ul>
+  <li>정수를 16진수로 출력하기
+    <ul>
+      <li>1️⃣ 반드시 먼저 10진수 모드를 꺼준다.
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">unsetf</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">dec</span><span class="p">);</span>  <span class="c1">// 먼저 10진수 모드 꺼주고 나서</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">hex</span><span class="p">);</span>  <span class="c1">// 16진수로 출력 세팅</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 108의 16진수인 "6c" 출력</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+      <li>2️⃣ 혹은 <code class="language-plaintext highlighter-rouge">std::ios::basefield</code>를 16진수로 설정해주면 된다. 따라서 10진수 모드를 끌 필요 없다.
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">hex</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">basefield</span><span class="p">);</span>  <span class="c1">//  16진수로 출력하는 것을 디폴트로 세팅</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 108의 16진수인 "6c" 출력</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+      <li>3️⃣ <code class="language-plaintext highlighter-rouge">cout</code>에 <code class="language-plaintext highlighter-rouge">std::hex</code>를 흘려보낸 후 출력하는 방법도 있다. <code class="language-plaintext highlighter-rouge">std::hex</code>와 <code class="language-plaintext highlighter-rouge">std::dec</code>는 <strong>include &lt;manip&gt;</strong>에 있다.
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span><span class="p">;</span>   <span class="c1">// 16진수로 출력되게끔</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 108의 16진수인 "6c" 출력</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">109</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 109의 16진수인 "6d" 출력</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">dec</span><span class="p">;</span>   <span class="c1">// 다시 십진수로 출력되게끔</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// "108" 출력</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">109</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// "109" 출력</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="stdiosuppercase">std::ios::uppercase</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">std::ios::uppercase</code> 👉 16 진수에 사용되는 abcdef 알파벳을 대문자로 출력하게끔 한다. (소문자가 디폴트)</p>
+</blockquote>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">cout.setf(std::ios::uppercase)</code></li>
+  <li>혹은 <code class="language-plaintext highlighter-rouge">cout &lt;&lt; std::hex &lt;&lt; std::uppercase</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::uppercase</code> 또한 <strong>include &lt;manip&gt;</strong>에 있다</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">#include &lt;iostream&gt;
+</span>    <span class="cp">#include &lt;string&gt;
+</span>    <span class="cp">#include &lt;iomanip&gt;	
+</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+    <span class="p">{</span>
+	    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">uppercase</span><span class="p">;</span>   <span class="c1">// 16진수로 출력되게끔</span>
+	    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 108의 16진수인 "6C" 출력</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">109</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 109의 16진수인 "6D" 출력</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">dec</span><span class="p">;</span>   <span class="c1">// 다시 십진수로 출력되게끔</span>
+	    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">108</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// "108" 출력</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">109</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// "109" 출력</span>
+
+	    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-stdboolalpha">🔔 std::boolalpha</h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">std::boolalpha</code>는 <strong>include &lt;manip&gt;</strong>에서 사용할 수 있으며 bool값(0, 1)을 true, false 문자열로 출력하고 싶을 때 사용하면 된다.</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">#include &lt;iostream&gt;
+</span>    <span class="cp">#include &lt;string&gt;
+</span>    <span class="cp">#include &lt;iomanip&gt;	
+</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+    <span class="p">{</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="nb">true</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="nb">false</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="nb">true</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="nb">false</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+1 0
+true false
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-문자-정밀도-조절">🔔 문자 정밀도 조절</h2>
+
+<h3 id="stdsetprecision">std::setprecision</h3>
+
+<blockquote>
+  <p>#include &lt;iomanip&gt;</p>
+</blockquote>
+
+<ul>
+  <li>자연수를 포함하여 <code class="language-plaintext highlighter-rouge">n</code>개로 출력된다.</li>
+  <li>반올림도 된다.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+123
+123.5
+123.46
+123.456
+123.456
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::setprecision(5) &lt;&lt; 123.456</code>
+    <ul>
+      <li>123.456 을 5 자리로 출력한다.</li>
+      <li>소수점 셋째 자리 6에서 반올림되어 123.46이 출력된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="stdfixed">std::fixed</h3>
+
+<blockquote>
+  <p>#include &lt;iomanip&gt;</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::setprecision(n)</code> 앞에 써주면 <u>소수점부터 시작하여 n개를 출력한다</u>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::setprecision(n)</code>가 자연수를 포함하지 않고 소수부터 <code class="language-plaintext highlighter-rouge">n</code>개 출력되도록 해준다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">fixed</span><span class="p">;</span>  <span class="c1">// ⭐</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+123.456
+123.4560
+123.45600
+123.456000
+123.4560000
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="stdshowpoint">std::showpoint</h3>
+
+<blockquote>
+  <p>#include &lt;iomanip&gt;</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::setprecision(n)</code> 앞에 써주면 <u>소수점도 `.`도 출력되게끔 한다.</u>
+    <ul>
+      <li>123 같은 정수도 <code class="language-plaintext highlighter-rouge">123.</code> 으로 소수점 붙여 출력되게끔</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">showpoint</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mf">123.456</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎0
+
+123.
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-문자의-폭-맞춤-지정">🔔 문자의 폭, 맞춤 지정</h2>
+
+<blockquote>
+  <p>#include &lt;iomanip&gt;</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;iomanip&gt;	
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">left</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">right</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">internal</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    
+    <span class="n">cout</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="sc">'*'</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">left</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">right</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">internal</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="mi">12345</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+-12345
+-12345
+    -12345
+-    12345
+-****12345
+-12345****
+****-12345
+-****12345
+</code></pre></div></div>
+
+<h3 id="stdsew">std::sew</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::setw(10)</code>
+    <ul>
+      <li>폭을 10의 크기로 지정하고 10 글자만 출력되게끔 한다.</li>
+      <li>디폴트로 오른쪽부터 문자가 들어간다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="stdleft">std::left</h3>
+<ul>
+  <li>왼쪽 정렬</li>
+</ul>
+
+<h3 id="stdright">std::right</h3>
+<ul>
+  <li>오른쪽 정렬</li>
+</ul>
+
+<h3 id="stdinternal">std::internal</h3>
+<ul>
+  <li>부호는 왼쪽 정렬 / 숫자는 오른쪽 정렬
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">std::setw(10) &lt;&lt; std::internal &lt;&lt; -12345</code> 는 <code class="language-plaintext highlighter-rouge">-    12345</code>가 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="coutfill">cout.fill</h3>
+<ul>
+  <li>빈칸을 해당 문자로 채워준다. <code class="language-plaintext highlighter-rouge">cout.fill(*)</code> 빈칸을 별 <code class="language-plaintext highlighter-rouge">*</code>로 채워줌.</li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+:ET

@@ -1,0 +1,47 @@
+I"R
+<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter2-변수와-기본-자료형">Chapter2. 변수와 기본 자료형</h1>
+
+<h2 id="void">void</h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">void</code>는 <strong><u>메모리를 차지 하지 않는다.</u></strong>
+    <ul>
+      <li>
+        <p>에러</p>
+
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">void</span> <span class="n">a</span><span class="p">;</span>  <span class="c1">// 에러. 있을 수 없음. 메모리를 차지 하지 않는 타입이니 변수 선언 불가</span>
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>하지만 <strong><u>void * 포인터는 메모리를 차지 한다.</u></strong></p>
+        <ul>
+          <li>주소라서 숫자를 담기 떄문</li>
+          <li><code class="language-plaintext highlighter-rouge">포인터</code> : 각 데이터 타입의 첫 주소를 저장하는 변수
+            <ul>
+              <li>어떤 데이터 타입의 변수든 간에 그 변수의 주소는 언제나 integer 숫자이다.</li>
+            </ul>
+          </li>
+          <li>다른 타입의 포인터로 (void *) 로 형변환도 가능하다.</li>
+        </ul>
+
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">void</span> <span class="o">*</span> <span class="n">ptr</span><span class="p">;</span>  <span class="c1">// 에러 아님. 가능.</span>
+  <span class="n">ptr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">i</span><span class="p">;</span> <span class="c1">// 가능. int * 타입인 &amp;i 를 void * 로 형변환</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

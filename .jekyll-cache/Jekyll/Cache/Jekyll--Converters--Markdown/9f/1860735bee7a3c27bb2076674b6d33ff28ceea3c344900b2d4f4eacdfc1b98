@@ -1,0 +1,30 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-18-입력과-출력">chapter 18. 입력과 출력</a></li>
+  <li><a href="#기본적인-파일-입출력">기본적인 파일 입출력</a>
+    <ul>
+      <li><a href="#-파일-출력-writing">🔔 파일 출력 (Writing)</a>
+        <ul>
+          <li><a href="#아스키-포맷으로-파일-출력-디폴트">아스키 포맷으로 파일 출력 (디폴트)</a></li>
+          <li><a href="#바이너리로-파일-출력">바이너리로 파일 출력</a>
+            <ul>
+              <li><a href="#방법-1️⃣-ofstream의-write-사용">방법 1️⃣ ofstream의 write 사용</a></li>
+              <li><a href="#방법-2️⃣-파일-스트림-모드를-iosbinary로">방법 2️⃣ 파일 스트림 모드를 ios::binary로.</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#-파일-입력-reading">🔔 파일 입력 (Reading)</a>
+        <ul>
+          <li><a href="#아스키-포맷으로-파일-입력--디폴트-">아스키 포맷으로 파일 입력 ( 디폴트 )</a></li>
+          <li><a href="#바이너리-파일-입력">바이너리 파일 입력</a>
+            <ul>
+              <li><a href="#방법-1️⃣-ifstream의-read이용">방법 1️⃣ ifstream의 read()이용</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#-파일-모드">🔔 파일 모드</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,25 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-2-객체-지향으로-가는-길--싱글톤-패턴">Chapter 2. 객체 지향으로 가는 길 : 싱글톤 패턴</a>
+    <ul>
+      <li><a href="#-싱글톤-패턴이란">🔔 싱글톤 패턴이란?</a></li>
+      <li><a href="#soundengineh-설명">📜SoundEngine.h 설명</a></li>
+      <li><a href="#-싱글톤-유무-비교하기">🔔 싱글톤 유무 비교하기</a>
+        <ul>
+          <li><a href="#사운드-엔진을-객체로-생성하여-사용한-경우-싱글톤x">사운드 엔진을 객체로 생성하여 사용한 경우 (싱글톤X)</a></li>
+          <li><a href="#사운드-엔진을-싱글톤으로-사용한-경우">사운드 엔진을 싱글톤으로 사용한 경우</a>
+            <ul>
+              <li><a href="#싱글톤을-사용하는-이유">싱글톤을 사용하는 이유</a></li>
+              <li><a href="#static-멤버-변수-특징">static 멤버 변수 특징</a></li>
+              <li><a href="#static-멤버-함수-특징">static 멤버 함수 특징</a></li>
+              <li><a href="#soundengine_singletonh">📜SoundEngine_Singleton.h</a></li>
+              <li><a href="#soundengine_singletoncpp">📜SoundEngine_Singleton.cpp</a></li>
+              <li><a href="#tankexampleh">📜TankExample.h</a></li>
+              <li><a href="#mybulleth">📜MyBullet.h</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

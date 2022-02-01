@@ -1,0 +1,15 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-7-함수--stdvector를-스택처럼-사용하기">chapter 7. 함수 : std::vector를 스택처럼 사용하기</a>
+    <ul>
+      <li><a href="#-stdvector">🔔 std::vector</a></li>
+      <li><a href="#-vector의-size와-capacity">🔔 vector의 size와 capacity</a></li>
+      <li><a href="#-vector의-resize와-reserve">🔔 vector의 resize와 reserve</a></li>
+      <li><a href="#-vecotr를-스택처럼-사용하는-법">🔔 vecotr를 스택처럼 사용하는 법</a>
+        <ul>
+          <li><a href="#스택을-vector로-쓰는-이유">스택을 vector로 쓰는 이유</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

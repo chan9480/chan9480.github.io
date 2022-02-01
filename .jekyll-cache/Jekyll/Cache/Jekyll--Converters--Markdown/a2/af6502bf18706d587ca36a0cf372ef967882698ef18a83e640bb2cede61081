@@ -1,0 +1,74 @@
+I"�<h2 id="-sprintf-소개">🚀 <code class="language-plaintext highlighter-rouge">sprintf</code> 소개</h2>
+
+<blockquote>
+  <p>#include &lt;stdio.h&gt;</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">printf</code> 함수처럼 원하는 형식 포맷으로 문자열을 저장할 수 있다. <code class="language-plaintext highlighter-rouge">printf</code>는 콘솔창에 어떤 포맷으로 출력할 것인지를 다루는 함수라면, <code class="language-plaintext highlighter-rouge">sprintf</code>는 문자열(<u>C언어 함수이니 char 배열!</u>) 을 <strong>어떤 포맷으로 저장할 것인지</strong>를 다루는 함수이다.</p>
+
+<p>문자열을 다루는 코딩테스트 문제를 푸는데 있어 매우 유용하게 사용될 것 같아 정리한다. C++ 로 풀이를 할 때 <code class="language-plaintext highlighter-rouge">string</code>에 <code class="language-plaintext highlighter-rouge">char 배열</code>을 그냥 대입하면 자동 변환이 된다는 것을 기억하자.</p>
+
+<p><br /></p>
+
+<h2 id="-sprintf-예시">🚀 <code class="language-plaintext highlighter-rouge">sprintf</code> 예시</h2>
+
+<blockquote>
+  <p>%[플래그(flag)][폭(width)][.정밀도][크기(length)]서식 문자(specifier)</p>
+</blockquote>
+
+<h3 id="-예시-1">🔥 예시 1</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s">"%05d.png %f"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span> <span class="c1">// buf = "00123.png 3.140000"</span>
+
+    <span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="n">buf</span><span class="p">;</span> <span class="c1">// C++ string 변환</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">str</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+00123.png 3.140000
+</code></pre></div></div>
+
+<p>위와 같이 <strong>sprintf</strong>를 사용하여, <code class="language-plaintext highlighter-rouge">int</code>인 i와 <code class="language-plaintext highlighter-rouge">double</code>인 d를 함께 사용하여 <u>char 배열인 문자열 buf에 "00123.png 3.140000" 형태로 저장할 수 있었다.</u></p>
+
+<p><br /></p>
+
+<h3 id="-예시-2">🔥 예시 2</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">seconds</span> <span class="o">=</span> <span class="mi">18768</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c_time</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">c_time</span><span class="p">,</span> <span class="s">"%02d시간 %02d분 %02d초"</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">%</span> <span class="mi">60</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">%</span> <span class="mi">60</span><span class="p">);</span>
+
+    <span class="n">string</span> <span class="n">time</span> <span class="o">=</span> <span class="n">c_time</span><span class="p">;</span> <span class="c1">// C++ string 변환</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+5시간 12분 48초
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-참고">🚀 참고</h2>
+
+<ul>
+  <li><a href="https://modoocode.com/66">모두의 코드</a></li>
+  <li><a href="https://www.inflearn.com/course/following-c/dashboard">홍정모의 따라 배우는 C</a></li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

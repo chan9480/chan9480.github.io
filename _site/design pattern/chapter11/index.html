@@ -1,0 +1,2020 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Chapter 11. 상태 패턴(State Pattern) -  평생 공부 블로그 : Today I Learned‍ 🌙</title>
+<meta name="description" content="인프런에 있는 이재환님의 강의 게임 디자인 패턴 with Unity 를 듣고 정리한 필기입니다. 😀 ">
+
+
+  <meta name="author" content="공부하는 식빵맘 👱‍♀️">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content=" 평생 공부 블로그 : Today I Learned‍ 🌙">
+<meta property="og:title" content="Chapter 11. 상태 패턴(State Pattern)">
+<meta property="og:url" content="http://localhost:4000/design%20pattern/chapter11/">
+
+
+  <meta property="og:description" content="인프런에 있는 이재환님의 강의 게임 디자인 패턴 with Unity 를 듣고 정리한 필기입니다. 😀 ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2020-09-01T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2020-09-01T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/design%20pattern/chapter11/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "식빵맘💛",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" 평생 공부 블로그 : Today I Learned‍ 🌙 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+           평생 공부 블로그 : Today I Learned‍ 🌙
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#design-pattern" itemprop="item"><span itemprop="name">Design pattern</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">Chapter 11. 상태 패턴(State Pattern)</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="https://user-images.githubusercontent.com/42318591/108615416-2e1bb580-7447-11eb-8a54-6338e53ce625.png" alt="공부하는 식빵맘 👱‍♀️" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">공부하는 식빵맘 👱‍♀️</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:bboddak@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">303</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">C/C++/C#</span>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp" class="">C ++ (164)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/stl" class="">C++ STL & 표준 (13)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                        <li><a href="/categories/cpp-games" class="">C++ 연습 문제 패키지 (33)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/cpp-network" class="">C++ Boost.Asio 네트워크 (4)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/c" class="">C (2)</a></li>
+                    
+                
+            </ul>
+        <span class="nav__sub-title">UE4</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-1" class="">언리얼 블루프린트 강의 1 (40)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-3" class="">언리얼 블루프린트 강의 2 (5)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/udemy-ue4-1" class="">언리얼 C++ 강의 1 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-lesson-2" class="">언리얼 C++ 책 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4-docs" class="">내 언리얼 문서 (12)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ue4error" class="">에러 메모 (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">etc</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/design-pattern" class="">디자인 패턴 (15)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/blender" class="">Blender (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/git" class="">Git & Github (6)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/vs" class="">비주얼 스튜디오 (1)</a></li>
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Chapter 11. 상태 패턴(State Pattern)">
+    <meta itemprop="description" content="인프런에 있는 이재환님의 강의 게임 디자인 패턴 with Unity 를 듣고 정리한 필기입니다. 😀">
+    <meta itemprop="datePublished" content="2020-09-01T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2020-09-01T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Chapter 11. 상태 패턴(State Pattern)
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2020-09-01T00:00:00+09:00">2020.09.01</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-09-01">2020.09.01</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#design-pattern" class="page__taxonomy-item-category" rel="tag">Design Pattern</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#design-pattern" class="page__taxonomy-item-tag" rel="tag">Design Pattern</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#unity" class="page__taxonomy-item-tag" rel="tag">Unity</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#game-engine" class="page__taxonomy-item-tag" rel="tag">Game Engine</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#chapter-11-state-pattern">Chapter 11. State Pattern</a>
+    <ul>
+      <li><a href="#-개념">🔔 개념</a>
+        <ul>
+          <li><a href="#상태-패턴을-사용하지-않은-경우">상태 패턴을 사용하지 않은 경우</a>
+            <ul>
+              <li><a href="#상태-플래그-변수-사용할-때">상태 플래그 변수 사용할 때</a></li>
+              <li><a href="#fsm-을-사용할-때">FSM 을 사용할 때</a></li>
+            </ul>
+          </li>
+          <li><a href="#상태-패턴-정의-및-적용하기">상태 패턴 정의 및 적용하기</a>
+            <ul>
+              <li><a href="#핵심-정리">핵심 정리</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#-예제-1">🔔 예제 1</a>
+        <ul>
+          <li><a href="#-statecs">📜 State.cs</a></li>
+          <li><a href="#-movecs">📜 Move.cs</a></li>
+          <li><a href="#-attackcs">📜 Attack.cs</a></li>
+          <li><a href="#-monstercs">📜 Monster.cs</a></li>
+          <li><a href="#-statemanagercs">📜 StateManager.cs</a></li>
+        </ul>
+      </li>
+      <li><a href="#-예제-2">🔔 예제 2</a></li>
+      <li><a href="#-예제-3">🔔 예제 3</a></li>
+    </ul>
+  </li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p class="notice--warning">인프런에 있는 이재환님의 강의 <strong>게임 디자인 패턴 with Unity</strong> 를 듣고 정리한 필기입니다. 😀</p>
+
+<h1 id="chapter-11-state-pattern">Chapter 11. State Pattern</h1>
+
+<h2 id="-개념">🔔 개념</h2>
+
+<h3 id="상태-패턴을-사용하지-않은-경우">상태 패턴을 사용하지 않은 경우</h3>
+
+<h4 id="상태-플래그-변수-사용할-때">상태 플래그 변수 사용할 때</h4>
+
+<blockquote>
+  <p>슈퍼마리오 같은 횡스크롤 게임을 만든다면 서있기 / 점프 / 엎드리기 / 엎드려 기모으기 / 이동 과 같은 동작을 만들 것이다. <u>이단 점프는 허용 안 한다고 가정.</u></p>
+</blockquote>
+
+<ul>
+  <li>일단 스페이스바 누르면 점프하도록 만들기
+    <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">Space</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleJump"</span><span class="p">);</span>  <span class="c1">// 점프를 처리하는 코루틴 함수</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>이단 점프를 허용 안한다고 가정하므로 이단 점프를 막기 위해 다음과 같이 추가한다.
+    <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+ <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">Space</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="k">is</span><span class="p">.</span><span class="n">Jumping</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">isJumping</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+            <span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleJump"</span><span class="p">);</span>  <span class="c1">// 점프를 처리하는 코루틴 함수</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>이제 캐릭터가 땅에 있을 때 아래쪽 버튼을 누르면 엎드리고, 버튼을 떼면 다시 일어서는 기능을 추가해보자.
+    <div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+ <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">Space</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="k">is</span><span class="p">.</span><span class="n">Jumping</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">isJumping</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+            <span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleJump"</span><span class="p">);</span>  <span class="c1">// 점프를 처리하는 코루틴 함수</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>  <span class="c1">// ↓ 키를 누르면</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="k">is</span><span class="p">.</span><span class="n">Jumping</span><span class="p">)</span>  <span class="c1">// 점프 상태가 아닐 때만 엎드릴 수 있어야 함</span>
+        <span class="p">{</span>
+            <span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleDown"</span><span class="p">);</span>  <span class="c1">// 엎드리기를 처리하는 코루틴 함수</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyUp</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>  <span class="c1">// ↓ 키를 떼면</span>
+    <span class="p">{</span>
+        <span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleStand"</span><span class="p">);</span>  <span class="c1">// 일어나기를 처리하는 코루틴 함수</span>
+    <span class="p">}</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>그런데 이렇게 해도 또 수정해야할 버그가 있다. 예를 들어 엎드린 상태에서 점프를 하고 공중에서 아래 버튼을 뗀다면 점프 중인데도 잠시 동안 땅에 서있다가 다시 올라가는 버그가 생길 것이다.
+    <ul>
+      <li>👉 상태 변경을 더 체크해야 하므로 상태 변경을 체크할 <code class="language-plaintext highlighter-rouge">isJumping</code>같은 플래그 변수를 더 추가 해야 한다.
+        <ul>
+          <li><u>근데 그래도 또! 버그가 생길 것이고 플래그 변수를 더 추가해야 한다. 너무 복잡</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="fsm-을-사용할-때">FSM 을 사용할 때</h4>
+
+<blockquote>
+  <p>위와 같은 문제를 <code class="language-plaintext highlighter-rouge">FSM (유한 상태 기계)</code> 사용으로 해결해보자.</p>
+</blockquote>
+
+<ul>
+  <li>캐릭터가 할 수 있는 동작들을 모두 적고 상태도를 그림
+    <ul>
+      <li><img src="https://user-images.githubusercontent.com/42318591/91814493-2d138380-ec6f-11ea-83cc-b9d105735b8a.png" alt="image" width="70%" height="70%" class="align-center" /></li>
+    </ul>
+  </li>
+  <li>switch 문으로 <code class="language-plaintext highlighter-rouge">case : STATE_Standing</code> , <code class="language-plaintext highlighter-rouge">case : STATE_Jumping</code> … 등등
+    <ul>
+      <li>이런식으로 각각의 상태들 경우에 따라 따로 처리를 해주는 방식이다.</li>
+    </ul>
+  </li>
+  <li><u>그러나 FSM을 제어하기 위한 열거문 만으로도 부족할 때가 있다</u>
+    <ul>
+      <li>코드가 꼬인다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="상태-패턴-정의-및-적용하기">상태 패턴 정의 및 적용하기</h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">상태</code>를 별도의 클래스로 캡슐화한 다음 현재 상태를 나타내는 객체에게 행동을 위임한다.</p>
+</blockquote>
+
+<ul>
+  <li>따라서 내부 상태가 바뀜에 따라서 행동이 달라지게 된다.</li>
+  <li><u>동적으로 행동을 교체할 수 있다.</u></li>
+  <li><a href="https://ansohxxn.github.io/design%20pattern/chapter3/">전략 패턴</a>과 구조는 거의 동일하나 쓰임의 용도가 다르다.</li>
+</ul>
+
+<h4 id="핵심-정리">핵심 정리</h4>
+
+<ul>
+  <li>상태 패턴을 사용하면 내부 상태를 바탕으로 여러가지 서로 다른 행동을 사용할 수 있다.</li>
+  <li>상태 패턴을 사용하면 FSM을 쓸 때와 달리 <u>각 상태를 클래스를 이용하여 표한하게 된다.</u></li>
+  <li>상태를 사용하는 Context 객체에서는 현재 상태에게 행동을 위임한다.</li>
+  <li><u>각 상태를 클래스로 캡슐화함으로써 나중에 변경시켜야 하는 내용을 국지화시킬 수 있다.</u></li>
+  <li><em>상태 패턴</em> 과 <em>전략 패턴</em> 의 용도 차이점
+    <ul>
+      <li><em>전략 패턴</em>
+        <ul>
+          <li>행동 또는 알고리즘을 Context 클래스를 만들 때 설정한다.</li>
+        </ul>
+      </li>
+      <li><em>상태 패턴</em>
+        <ul>
+          <li>Context의 <u>내부 상태가 바뀜에 따라 알아서 행동을 바꿀 수 있도록 할 수 있다.</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>상태 전환은 <strong>State 클래스</strong>에 의햇서 제어할 수도 있고 <strong>Context 클래스</strong>에 의해서 제어할 수도 있다.</li>
+  <li><u>State클래스를 여러 Context 객체의 인스턴스에서 공유하도록 디자인 할 수도 있다.</u></li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-예제-1">🔔 예제 1</h2>
+
+<h3 id="-statecs">📜 State.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 상태 인터페이스 클래스</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">State</span>
+<span class="p">{</span>
+    <span class="k">void</span> <span class="nf">Action</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="c1">// 추상 클래스로 구현해도 됨</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="-movecs">📜 Move.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Move</span> <span class="p">:</span> <span class="n">State</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Action</span><span class="p">()</span>  <span class="c1">// 오버라이딩</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"이동 !!!"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="-attackcs">📜 Attack.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Attack</span> <span class="p">:</span> <span class="n">State</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Action</span><span class="p">()</span> <span class="c1">// 오버라이딩</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"공격 !!!"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="-monstercs">📜 Monster.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Monster</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="n">State</span> <span class="n">state</span><span class="p">;</span>
+
+    <span class="c1">// Constructor</span>
+    <span class="k">public</span> <span class="nf">Monster</span><span class="p">(</span><span class="n">State</span> <span class="n">state</span><span class="p">)</span> <span class="c1">// 어떤 상태가 들어올지 모르지만 일단 상태 입력을 받고</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">state</span> <span class="p">=</span> <span class="n">state</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">setState</span><span class="p">(</span><span class="n">State</span> <span class="n">state</span><span class="p">)</span> <span class="c1">// setter 상태를 set</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">state</span> <span class="p">=</span> <span class="n">state</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">act</span><span class="p">()</span>  <span class="c1">// getter 상대를 get. ⭐상태에 따른 행동을 알아서 한다.⭐</span>
+    <span class="p">{</span>
+        <span class="n">state</span><span class="p">.</span><span class="nf">Action</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="-statemanagercs">📜 StateManager.cs</h3>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">StateManager</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="n">Monster</span> <span class="n">monster</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Monster</span><span class="p">(</span><span class="k">new</span> <span class="nf">Move</span><span class="p">());</span> <span class="c1">// 상태를 만들고 상태에 따른 행동을 위임</span>
+        <span class="n">monster</span><span class="p">.</span><span class="nf">act</span><span class="p">();</span>
+
+        <span class="n">monster</span><span class="p">.</span><span class="nf">setState</span><span class="p">(</span><span class="k">new</span> <span class="nf">Attack</span><span class="p">());</span> <span class="c1">// 상태를 Attack로 바꿔줌</span>
+        <span class="n">monster</span><span class="p">.</span><span class="nf">act</span><span class="p">();</span>
+
+        <span class="n">monster</span><span class="p">.</span><span class="nf">setState</span><span class="p">(</span><span class="k">new</span> <span class="nf">Move</span><span class="p">());</span>  <span class="c1">// 상태를 Move로 바꿔줌</span>
+        <span class="n">monster</span><span class="p">.</span><span class="nf">act</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="-예제-2">🔔 예제 2</h2>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+		<span class="k">switch</span> <span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_STANDING</span><span class="p">:</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">Space</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">state</span> <span class="p">=</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_JUMPING</span><span class="p">;</span>
+				<span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleJump"</span><span class="p">);</span>
+			<span class="p">}</span> 
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">chargeTime</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+
+				<span class="n">state</span> <span class="p">=</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DUCKING</span><span class="p">;</span>
+				<span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleDown"</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_JUMPING</span><span class="p">:</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">state</span> <span class="p">=</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DIVING</span><span class="p">;</span>
+				<span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleAttack"</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DUCKING</span><span class="p">:</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyUp</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>
+			<span class="p">{</span>
+				<span class="n">state</span> <span class="p">=</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_STANDING</span><span class="p">;</span>
+				<span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleStand"</span><span class="p">);</span>
+			<span class="p">}</span>
+
+			<span class="n">chargeTime</span> <span class="p">++;</span>
+			<span class="k">if</span> <span class="p">(</span> <span class="n">chargeTime</span> <span class="p">&gt;</span> <span class="n">MAX_CHARGE</span> <span class="p">)</span> <span class="p">{</span>
+				<span class="c1">// 스킬 발동;</span>
+				<span class="n">state</span> <span class="p">=</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_STANDING</span><span class="p">;</span>
+				<span class="nf">StartCoroutine</span><span class="p">(</span><span class="s">"HandleSkill"</span><span class="p">);</span>
+			<span class="p">}</span>
+
+			<span class="k">break</span><span class="p">;</span>
+		<span class="k">default</span><span class="p">:</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>상태 패턴으로 구현</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">STATE_DUCKING</code> 상태일 때 기모으기를 해서 스킬을 발동시키려면 <code class="language-plaintext highlighter-rouge">chargeTime</code>을 증가시켜야 하는데 <code class="language-plaintext highlighter-rouge">MyState.STATE_STANDING</code> 서 있을 때 미리 초기화 하여 <code class="language-plaintext highlighter-rouge">chargeTime = 0</code> 하는 작업이 필요하다. A 상태에서 B 상태가 발동될 수 있을 때, B 상태에 필요한 작업을 미리 해놔야 한다는게 강의에서 언급한 상태 패턴의 단점이다.</p>
+
+<p><br /></p>
+
+<h2 id="-예제-3">🔔 예제 3</h2>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">State</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">abstract</span> <span class="k">void</span> <span class="nf">DoAction</span><span class="p">(</span><span class="n">MyState</span> <span class="n">state</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li>📜State (인터페이스이며 DoAction 함수를 오버라이딩 하라고 강제)
+    <ul>
+      <li>📜ConcreteStateAttack (DoAction 오버라이딩 👉 내려찍는 공격)</li>
+      <li>📜ConcreteStateDown (DoAction 오버라이딩 👉 엎드리고 기모으기)</li>
+      <li>📜ConcreteStateJump (DoAction 오버라이딩 👉 점프)</li>
+      <li>📜ConcreteStateSkill (DoAction 오버라이딩 👉 기 모은 후 공격)</li>
+      <li>📜ConcreteStateStand (DoAction 오버라이딩 👉 서 있기)</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">enum</span> <span class="n">MyState</span>
+<span class="p">{</span>
+    <span class="n">STATE_STANDING</span><span class="p">,</span>
+    <span class="n">STATE_JUMPING</span><span class="p">,</span>
+    <span class="n">STATE_DUCKING</span><span class="p">,</span>
+    <span class="n">STATE_DIVING</span><span class="p">,</span>
+    <span class="n">STATE_SKILL</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MyAction8</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="n">MyState</span> <span class="n">state</span><span class="p">;</span>
+
+	<span class="c1">// Concrete클래스들의 접근점(인터페이스)</span>
+	<span class="k">private</span> <span class="n">State</span> <span class="n">myState</span><span class="p">;</span>
+
+	<span class="c1">// 상태 클래스 교환...</span>
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">setActionType</span> <span class="p">(</span><span class="n">MyState</span> <span class="n">state</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// 현재 상태 저장</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">state</span> <span class="p">=</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="c1">// 다양한 상태 중에 어떤 것을 가져와야 할 지 모르므로</span>
+        <span class="c1">// 인터페이스를 대표로 해서 가져온다.</span>
+		<span class="n">Component</span> <span class="n">c</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">State</span><span class="p">&gt;()</span> <span class="k">as</span> <span class="n">Component</span><span class="p">;</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nf">Destroy</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+		<span class="p">}</span>
+
+        <span class="k">switch</span> <span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_STANDING</span><span class="p">:</span>
+                <span class="n">myState</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">ConcreteStateStand</span><span class="p">&gt;();</span>
+                <span class="n">myState</span><span class="p">.</span><span class="nf">DoAction</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_JUMPING</span><span class="p">:</span>
+                <span class="n">myState</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">ConcreteStateJump</span><span class="p">&gt;();</span>
+                <span class="n">myState</span><span class="p">.</span><span class="nf">DoAction</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DUCKING</span><span class="p">:</span>
+                <span class="n">myState</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">ConcreteStateDown</span><span class="p">&gt;();</span>
+                <span class="n">myState</span><span class="p">.</span><span class="nf">DoAction</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DIVING</span><span class="p">:</span>
+                <span class="n">myState</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">ConcreteStateAttack</span><span class="p">&gt;();</span>
+                <span class="n">myState</span><span class="p">.</span><span class="nf">DoAction</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_SKILL</span><span class="p">:</span>
+                <span class="n">myState</span> <span class="p">=</span> <span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">ConcreteStateSkill</span><span class="p">&gt;();</span>
+                <span class="n">myState</span><span class="p">.</span><span class="nf">DoAction</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="p">:</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> 
+	<span class="p">{</span>
+        <span class="nf">setActionType</span><span class="p">(</span><span class="n">MyState</span><span class="p">.</span><span class="n">STATE_STANDING</span><span class="p">);</span>
+	<span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_STANDING</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">Space</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="nf">setActionType</span><span class="p">(</span><span class="n">MyState</span><span class="p">.</span><span class="n">STATE_JUMPING</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="nf">setActionType</span><span class="p">(</span><span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DUCKING</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_JUMPING</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="nf">setActionType</span><span class="p">(</span><span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DIVING</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="n">MyState</span><span class="p">.</span><span class="n">STATE_DUCKING</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyUp</span><span class="p">(</span><span class="n">KeyCode</span><span class="p">.</span><span class="n">DownArrow</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="nf">setActionType</span><span class="p">(</span><span class="n">MyState</span><span class="p">.</span><span class="n">STATE_STANDING</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="p">:</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">Design Pattern</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/cpp%20network/chapter2/" class="pagination--pager" title="Chapter 2. 동기 I/O 방식의 TCP/IP Echo 서버, 클라이언트
+">이전</a>
+    
+    
+      <a href="/ue4%20lesson%201/ch2/" class="pagination--pager" title="UE4 Chapter 2. 블루프린트
+">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+
+  
+
+  
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/design%20pattern/chapter10/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>Chapter 10. 빌더 패턴(Builder Pattern)</a>
+    
+    
+      <a href="/design%20pattern/chapter12/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>Chapter 12. 옵저버 패턴(Observer Pattern)</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Chapter+11.+%EC%83%81%ED%83%9C+%ED%8C%A8%ED%84%B4%28State+Pattern%29%20http%3A%2F%2Flocalhost%3A4000%2Fdesign%2520pattern%2Fchapter11%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fdesign%2520pattern%2Fchapter11%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fdesign%2520pattern%2Fchapter11%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/bound/">[STL 알고리즘] upper_bound, lower_bound, equal_range, binary_search</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.17
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/stdc/">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include <bits/stdc++.h></a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/freopen/">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/mapsetcustom/">[STL 컨테이너] set, unordered_set (+ map)에 사용자 정의 구조체 혹은 객체 담기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/2/">[C] sprintf 로 원하는 형식대로 문자열 저장하기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.04.01
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/c/1/">[C] C스타일 문자열의 차이 (char 포인터, char 배열) by 메모리 영역</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.22
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#c" class="page__taxonomy-item-category" rel="tag">C</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#c" class="page__taxonomy-item-tag" rel="tag">C</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/iospeed/">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/deque/">[STL 컨테이너] deque (+ 다른 자료구조들과의 차이점)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.03.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/stl/sortmapset/">[STL 컨테이너] map 과 set의 정렬</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.30
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#stl" class="page__taxonomy-item-category" rel="tag">STL</a>
+                    
+                    
+                    <a href="/tags/#coding-test" class="page__taxonomy-item-tag" rel="tag">Coding Test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">Data Structure</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stl" class="page__taxonomy-item-tag" rel="tag">STL</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/cpp/const/">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.01.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#cpp" class="page__taxonomy-item-category" rel="tag">Cpp</a>
+                    
+                    
+                    <a href="/tags/#cpp" class="page__taxonomy-item-tag" rel="tag">Cpp</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#programming" class="page__taxonomy-item-tag" rel="tag">Programming</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/ansohxxn" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 식빵맘💛. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'ansohxxn/comments');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

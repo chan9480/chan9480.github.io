@@ -1,0 +1,31 @@
+I"�<ul class="toc__menu">
+  <li><a href="#chapter-18-입력과-출력">chapter 18. 입력과 출력</a></li>
+  <li><a href="#istream으로-입력받기">istream으로 입력받기</a>
+    <ul>
+      <li><a href="#-iostreamh">🔔 iostream.h</a></li>
+      <li><a href="#-iomaniph">🔔 iomanip.h</a>
+        <ul>
+          <li><a href="#iomaiph-을-사용하면-도움될-때">iomaip.h 을 사용하면 도움될 때</a></li>
+          <li><a href="#setw">setw</a></li>
+        </ul>
+      </li>
+      <li><a href="#-cin-의-여러-함수들">🔔 cin 의 여러 함수들</a>
+        <ul>
+          <li><a href="#cinget">cin.get</a></li>
+          <li><a href="#cingcount">cin.gcount</a></li>
+          <li><a href="#cingetline">cin.getline</a>
+            <ul>
+              <li><a href="#get과-getline의-차이">get과 getline의 차이</a></li>
+            </ul>
+          </li>
+          <li><a href="#cinignore">cin.ignore()</a></li>
+          <li><a href="#cinpeek">cin.peek</a></li>
+          <li><a href="#cinunget">cin.unget</a></li>
+          <li><a href="#cinputbacka">cin.putback(‘A’)</a></li>
+        </ul>
+      </li>
+      <li><a href="#-동적-버퍼string에-입력하기">🔔 동적 버퍼(string)에 입력하기</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,186 @@
+I"�<<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h2 id="포인터와-배열-이름은-일맥상통하는게-있다">포인터와 배열 이름은 일맥상통하는게 있다.</h2>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span> 
+<span class="kt">int</span> <span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">array</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>배열의 이름 👉🏻 <u>포인터 상수</u>나 마찬가지. (변하지 않는 주소 값)</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">array</code>와 <code class="language-plaintext highlighter-rouge">&amp;array[0]</code>은 같다.
+    <ul>
+      <li>배열의 이름 👉🏻배열의 첫번째 원소의 주소</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">*array</code>와 <code class="language-plaintext highlighter-rouge">array[0]</code>은 같다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">*array</code> 👉🏻 배열의 첫번째 원소를 간접 참조함.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">int * ptr = array;</code>
+    <ul>
+      <li>ptr 포인터 변수가 array 배열의 주소를 담게 되었으니 이제 ptr로 array 배열에 간접참조가 가능해짐.</li>
+      <li><code class="language-plaintext highlighter-rouge">*ptr</code> 와 <code class="language-plaintext highlighter-rouge">array[0]</code>은 같다.</li>
+      <li><code class="language-plaintext highlighter-rouge">*ptr = 100</code>은 <code class="language-plaintext highlighter-rouge">array[0]=100</code>과 같다.
+        <ul>
+          <li>배열의 주소를 복사해 담은 포인터로 배열의 원소 값을 이렇게 바꿀 수도 있지만 <u>char * 형 포인터에 char [] 문자열 배열의 원소를 바꾸려는 시도는 불가능하다.</u> [다다음 포스트 참고]</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="배열의-이름과-포인터의-차이">배열의 이름과 포인터의 차이</h2>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span> 
+<span class="kt">int</span> <span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">array</span><span class="p">;</span>
+
+<span class="k">sizeof</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="c1">// 👉🏻 20</span>
+<span class="k">sizeof</span><span class="p">(</span><span class="n">ptr</span><span class="p">))</span> <span class="c1">// 👉🏻 4</span>
+</code></pre></div></div>
+
+<ul>
+  <li>sizeof에 배열의 이름을 넣으면 배열의 총 메모리 크기를 알려주지만</li>
+  <li>sizeof에 포인터를 넣으면 포인터가 배열을 가리키고 있더라도 포인터의 크기만 알려준다.
+    <ul>
+      <li>포인터의 크기는 int * 든 double * 든 데이터 타입에 상관없이 4byte. (64 bit 환경에선 8byte)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="함수-파라미터로-배열을-넘길-때">함수 파라미터로 배열을 넘길 때</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">printArray</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span> <span class="n">array</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  
+    <span class="c1">// 지역변수 array에 배열의 이름이 들어오든 포인터가 들어오든 지역변수 array는 포인터이므로 언제나 4가 출력될 것. </span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span> 
+    <span class="kt">int</span> <span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">array</span><span class="p">;</span>
+    
+    <span class="n">printArray</span><span class="p">(</span><span class="n">array</span><span class="p">);</span>  <span class="c1">// 배열의 주소가 printArray 함수 내부의 array 지역변수에 대입된다. </span>
+    <span class="n">printArray</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">// 포인터 ptr 값이 printArray 함수의 지역변수 array에 대입된다.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><u>함수의 매개변수로 배열을 전달할 때는 포인터로서 전달 된다.</u> (주소만 복사되어 넘어감)
+    <ul>
+      <li>성능 상 이유로 매개변수 타입 자체를 배열로 하여 배열을 통째로 복사하여 넘기는 것은 금지되어 있다.</li>
+      <li>배열 크기가 클때는 배열 복사하는데 시간이 많이 소요되기 때문.</li>
+      <li>매개변수를 포인터로 선언해서 배열의 이름 (= 배열의 첫번째 원소의 주소)만 복사하여 넘겨주면 포인터로 배열 원소에 접근할 수 있으므로 효율적이다.
+        <ul>
+          <li>어차피 배열 원소들은 연속된 메모리 공간으로 위치하므로 첫번째 원소 주소값 (= 배열의 이름)만 알면 다른 원소들도 4 (int 기준) 씩만 더해주어 주소를 알아낼 수 있다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>이처럼 배열의 주소를 포인터 매개변수로 넘길 땐 포인터 매개변수만으로는 배열의 크기를 알 수 없으므로 int len 형태로 배열의 크기를 직접 같이 넘겨주어야 한다.
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">printArray</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span> <span class="n">array</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="매개변수가-배열-같아-보여도-사실-포인터다">매개변수가 배열 같아 보여도 사실 포인터다.</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">printArray</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span> <span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span> 
+    <span class="kt">int</span> <span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">array</span><span class="p">;</span>
+    
+    <span class="n">printArray</span><span class="p">(</span><span class="n">array</span><span class="p">);</span>  
+    <span class="n">printArray</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">void printArray(int array [5])</code></p>
+
+<ul>
+  <li>매개변수를 <u>배열로 받는 것 같아 보여도 사실 포인터</u>다.
+    <ul>
+      <li>배열을 위한 포인터라고 <code class="language-plaintext highlighter-rouge">[]</code> 대괄호 기호를 써서 배열의 주소를 넘겨 받을 것임을 강조하는 것 뿐</li>
+      <li>오직 매개변수 타입에서만 <code class="language-plaintext highlighter-rouge">*</code>를 <code class="language-plaintext highlighter-rouge">[]</code>로 바꾸는 것이 가능하다.
+        <ul>
+          <li>더블포인터와 같이 <code class="language-plaintext highlighter-rouge">*</code>가 여러개인 경우엔 하나만 <code class="language-plaintext highlighter-rouge">[]</code>로 바꿀 수 있다.
+            <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="o">**</span> <span class="n">pArr</span><span class="p">)</span> <span class="c1">// 가능</span>
+<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span> <span class="n">pArr</span><span class="p">[])</span> <span class="c1">// 가능</span>
+<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">pArr</span><span class="p">[][])</span> <span class="c1">// 불가능</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>따라서 <code class="language-plaintext highlighter-rouge">[]</code>기호 안의 숫자도 아무 의미 없다. 실제로 3 크기의 배열을 넘기는 것이라도 매개변수에 [5]라고 되있다고 해서 오류가 발생하는 것도 아니다.</li>
+      <li>프로그램에는 영향을 미치지 않고 단순 5 크기의 배열을 받을 것이라는 표시일뿐.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="구조체-혹은-클래스의-멤버로-속한-배열을-매개변수로-넘길-때">구조체 혹은 클래스의 멤버로 속한 배열을 매개변수로 넘길 때</h2>
+
+<h3 id="이-경우엔-포인터로-전환되지-않고-배열-자체가-그대로-넘겨진다">이 경우엔 포인터로 전환되지 않고 배열 자체가 그대로 넘겨진다.</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="nc">Mystruct</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span> <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">doSomething</span><span class="p">(</span><span class="n">Mystruct</span> <span class="o">*</span> <span class="n">ms</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">((</span><span class="o">*</span><span class="n">ms</span><span class="p">).</span><span class="n">array</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 4가 아닌 20 출력</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">Mystruct</span> <span class="n">ms</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ms</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 9 출력</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ms</span><span class="p">.</span><span class="n">array</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">// 20 출력 (멤버가 array 배열 하나 뿐)</span>
+
+	<span class="n">doSomething</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>배열이 구조체나 클래스의 멤버로 있을 땐
+    <ul>
+      <li>파라미터가 구조체 타입으로 받든 구조체 포인터로 받든</li>
+      <li><strong>배열 그 자체가 넘어간다</strong>
+        <ul>
+          <li>위와 같이 배열의 주소가 포인터에 복사되어 넘어가는 것이 아닌!</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

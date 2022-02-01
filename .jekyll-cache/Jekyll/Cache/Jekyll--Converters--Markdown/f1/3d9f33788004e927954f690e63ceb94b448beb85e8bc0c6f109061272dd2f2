@@ -1,0 +1,118 @@
+I"�<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-13-템플릿--멤버-함수를-한번-더-템플릿화-하기">chapter 13. 템플릿 : 멤버 함수를 한번 더 템플릿화 하기</h1>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include &lt;iostream&gt;
+#include &lt;typeid&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">T</span> <span class="n">m_value</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">A</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_value</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="p">{}</span>
+    
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">TT</span><span class="p">&gt;</span>
+    <span class="kt">void</span> <span class="n">doSomething</span><span class="p">(</span><span class="k">const</span> <span class="n">TT</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="k">typeid</span><span class="p">(</span><span class="n">TT</span><span class="p">).</span><span class="n">name</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">TT</span><span class="p">)</span><span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+  
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a_int</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+    <span class="n">a_int</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    
+    <span class="n">a_int</span><span class="p">.</span><span class="n">doSomething</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">123.4</span><span class="p">);</span>
+    <span class="n">a_int</span><span class="p">.</span><span class="n">doSomething</span><span class="p">(</span><span class="mf">123.4</span><span class="p">);</span>
+
+    <span class="n">A</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">a_char</span><span class="p">(</span><span class="sc">'A'</span><span class="p">);</span>
+    <span class="n">a_char</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+
+    <span class="n">a_char</span><span class="p">.</span><span class="n">doSomething</span><span class="p">(</span><span class="kt">int</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
+
+123
+int float
+123
+int double
+123
+char int
+65
+</code></pre></div></div>
+
+<blockquote>
+  <p>멤버 함수를 일반적인 다른 타입에 대해 템플릿화 할 수 있다.</p>
+</blockquote>
+
+<ul>
+  <li>멤버 함수 doSomething은 <code class="language-plaintext highlighter-rouge">TT</code>라는 일반적인 타입 이름으로 한번 더 템플릿화 되었다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">typeid(T).name()</code>
+        <ul>
+          <li>멤버 함수를 호출하는 객체가 구체화 된 데이터 타입 이름</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">typeid(TT).name()</code>
+        <ul>
+          <li><u>멤버 함수가 구체화된 데이터 타입 이름</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">a_int.doSomething&lt;float&gt;(123.4);</code>
+    <ul>
+      <li>멤버 함수를 호출한 객체 <code class="language-plaintext highlighter-rouge">a_int</code>는 <strong>int</strong>로 구체화가 되었지만</li>
+      <li>멤버 함수는 <strong>float</strong>으로 구체화 되었다.
+        <ul>
+          <li>인수로 넘긴 123.4 은 double 타입이므로 float으로 자동 형 변환된다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">(TT)m_value </code> : int이자 123인 m_value는 float인 <code class="language-plaintext highlighter-rouge">TT</code>로 형변환 되봤자 123이다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">a_int.doSomething(123.4);</code>
+    <ul>
+      <li>멤버 함수를 호출한 객체 <code class="language-plaintext highlighter-rouge">a_int</code>는 <strong>int</strong>로 구체화가 되었지만</li>
+      <li>멤버 함수는 <code class="language-plaintext highlighter-rouge">&lt;타입&gt;</code>을 명시해주진 않았지만 인수가 double 타입이므로 이 멤버 함수는 <strong>dobule</strong>로 구체화 되었다.</li>
+      <li><code class="language-plaintext highlighter-rouge">(TT)m_value </code> : int이자 123인 m_value는 double인 <code class="language-plaintext highlighter-rouge">TT</code>로 형변환 되봤자 123이다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">a_char.doSomething(int());</code>
+    <ul>
+      <li>멤버 함수를 호출한 객체 <code class="language-plaintext highlighter-rouge">a_char</code>는 <strong>char</strong>로 구체화가 되었지만</li>
+      <li>멤버 함수는 <code class="language-plaintext highlighter-rouge">&lt;타입&gt;</code>을 명시해주진 않았지만 인수가 int 타입이므로 이 멤버 함수는 <strong>int</strong>로 구체화 되었다.</li>
+      <li><code class="language-plaintext highlighter-rouge">(TT)m_value </code> : char이자 ‘A’인 m_value는 int인 <code class="language-plaintext highlighter-rouge">TT</code>로 형변환되어 65가 된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a>
+<br /></p>
+
+:ET

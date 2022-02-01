@@ -1,0 +1,18 @@
+I"<ul class="toc__menu">
+  <li><a href="#정적-배열">정적 배열</a></li>
+  <li><a href="#stdarray">std::array</a>
+    <ul>
+      <li><a href="#다른-배열로-값을-바꿀-수-있다">다른 배열로 값을 바꿀 수 있다.</a></li>
+      <li><a href="#파라미터로-stdarray를-보낼-때-원래-성질이-그대로-유지된다">파라미터로 std::array를 보낼 때 원래 성질이 그대로 유지된다.</a></li>
+      <li><a href="#for-each-에도-돌릴-수-있다">for-each 에도 돌릴 수 있다</a></li>
+      <li><a href="#함수">함수</a>
+        <ul>
+          <li><a href="#ati">at(i)</a></li>
+          <li><a href="#size">size()</a></li>
+          <li><a href="#정렬">정렬</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

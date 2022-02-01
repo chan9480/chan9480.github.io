@@ -1,0 +1,100 @@
+I"<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 따라 하며 배우는 C++</strong> 강의를 듣고 정리한 필기입니다. 😀  <br />
+<a href="https://www.inflearn.com/course/following-c-plus">🌜 [홍정모의 따라 하며 배우는 C++]강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h2 id="리터럴과-연산자">리터럴과 연산자</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">리터럴</code>
+    <ul>
+      <li>int x = 2
+        <ul>
+          <li>x는 변수</li>
+          <li>2는 리터럴</li>
+        </ul>
+      </li>
+      <li>“My name”
+        <ul>
+          <li>이런 문자열도 리터럴</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">연산자</code>
+    <ul>
+      <li>a + b
+        <ul>
+          <li>a,b는 피연산자</li>
+          <li>+는 연산자</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">단항</code> : 피연산자 1개</li>
+      <li><code class="language-plaintext highlighter-rouge">이항</code> : 피연산자 2개</li>
+      <li><code class="language-plaintext highlighter-rouge">삼항</code> : 피연산자 3개
+        <ul>
+          <li>(조건문) : 참 : 거짓</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="기본적인-서식-맞추기">기본적인 서식 맞추기</h2>
+<p>컴퓨터는 빈칸을 무시한다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/84491722-f10bfa80-acdf-11ea-8edf-56f0a0377b0c.png" alt="image" width="70%" height="70%" class="align-center" /></p>
+
+<p><br /></p>
+
+<h2 id="선언과-정의의-분리">선언과 정의의 분리</h2>
+
+<ul>
+  <li>컴퓨터는 순서대로 앞부터 읽어서
+    <ul>
+      <li>main안에서 쓰이는 함수의 정의가 main 뒤에 있으면
+        <ul>
+          <li>컴퓨터 입장에선 모른다.</li>
+        </ul>
+
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+  <span class="p">{</span>
+  	<span class="n">f</span><span class="p">();</span> <span class="c1">// 정의가 뒤에 있어서 main 입장에선 이 함수가 어떤 함수인지 모름 </span>
+  <span class="p">}</span>
+  <span class="kt">void</span> <span class="nf">f</span><span class="p">()</span>
+  <span class="p">{</span>
+  	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"love"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>따라서 함수의 프로토 타입을 앞에 적고 정의를 뒤에 적어주자.
+    <ul>
+      <li>void f() ;</li>
+    </ul>
+
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">void</span> <span class="nf">f</span><span class="p">();</span>
+  <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+  <span class="p">{</span>
+  	<span class="n">f</span><span class="p">();</span> <span class="c1">// 정의는 뒤에있더라도 이제 무슨 함수인지 앞에서 알게 됨</span>
+  <span class="p">}</span>
+  <span class="kt">void</span> <span class="nf">f</span><span class="p">()</span>
+  <span class="p">{</span>
+  	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"love"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

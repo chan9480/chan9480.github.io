@@ -1,0 +1,146 @@
+I"=<p class="notice--warning">인프런에 있는 홍정모 교수님의 <strong>홍정모의 게임 만들기 연습 문제 패키지</strong> 강의를 듣고 정리한 필기입니다.😀 <br />
+<a href="https://github.com/jmhong-simulation/GameDevPracticePackage">🌜 공부에 사용된 홍정모 교수님의 코드들 보러가기</a> <br />
+<a href="https://www.inflearn.com/course/c-2">🌜 [홍정모의 게임 만들기 연습 문제 패키지] 강의 들으러 가기!</a></p>
+
+<p><br /></p>
+
+<h1 id="chapter-3-게임-물리-맛보기--공-두-개를-충돌시켜보자">Chapter 3. 게임 물리 맛보기 : 공 두 개를 충돌시켜보자</h1>
+
+<blockquote>
+  <p>벡터, 상대 속도 등등, 해당 강의에서 다루었던 물리학적 개념들이 문과생인 나에겐 생소하고 잘 와닿지 않았던 개념이라 강의를 필기하기에 앞서 개인적으로 따로 공부하여 정리해보았다.</p>
+</blockquote>
+
+<ul>
+  <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-1/">벡터 개념</a></li>
+  <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-2/">벡터 내적</a></li>
+  <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-3/">노말 벡터</a></li>
+  <li><a href="https://ansohxxn.github.io/c++%20games/chapter3-2-4/">상대속도와 반발계수</a></li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-뉴턴의-제-3-법칙--작용-반작용">🔔 뉴턴의 제 3 법칙 : 작용, 반작용</h2>
+
+<blockquote>
+  <p>물체 A가 물체 B에 힘을 <code class="language-plaintext highlighter-rouge">작용</code>하면 물체 B는 물체A에게 <u>크기는 같고 방향은 반대</u>인 <code class="language-plaintext highlighter-rouge">반작용</code>의 힘을 동시에 가한다. 즉, 두 물체의 상호작용은 크기는 같고 방향은 반대다.</p>
+</blockquote>
+
+<p>\[F_{AB}=-F_{BA}\]</p>
+
+<ul>
+  <li>야구 방망이로 야구공에 10의 <code class="language-plaintext highlighter-rouge">작용</code>을 가하면 야구공도 야구방망이에 <u>똑같은 크기</u> 10에 <u>방향은 정반대</u>인 <code class="language-plaintext highlighter-rouge">반작용</code> 힘을 가한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-속도-변화량">🔔 속도 변화량</h2>
+
+<p>\[△\vec{v}={\vec{J}\over{m}}={j×\vec{n}\over{m}}\]</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">속도변화량</code>은 <code class="language-plaintext highlighter-rouge">충격 힘의 벡터 / 질량</code> 이다.
+    <ul>
+      <li>가속도 = 힘(벡터)/질량
+        <ul>
+          <li>\(F=ma\)</li>
+          <li>\(a={F\over{m}}\)</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">속도변화량</code>은 <code class="language-plaintext highlighter-rouge">가속도</code>나 마찬가지다. 위 공식에서 나온 것!</li>
+    </ul>
+  </li>
+  <li>충격의 방향은 \(\vec{n}\)(단위 벡터)이며</li>
+  <li>충격량, 즉 충격의 크기는 \(j\)가 된다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85219413-7711fa80-b3de-11ea-8329-9bc86da905a5.png" alt="image" width="90%" height="90%" class="align-center" /></p>
+
+<ul>
+  <li>🔴공의 중심을 \(p_0\), 질량을 \(m_0\)</li>
+  <li>🟡공의 중심을 \(p_1\), 질량을 \(m_1\) 이라고 할 때</li>
+</ul>
+
+<p>\[\vec{v_0}^{new}=\vec{v_0}^{old}+{j×\vec{n_1}\over{m_0}}\]</p>
+
+<p>\[\vec{v_1}^{new}=\vec{v_1}^{old}-{j×\vec{n_1}\over{m_1}}\]</p>
+
+<ul>
+  <li>✨\(\vec{n_1}\)✨ 방향을 가지는 <u>🟡공이 🔴공에게 충돌을 가했을 때</u>를 기준으로 삼아 생각해보자.
+    <ul>
+      <li>충돌시 🔴공은 🟡으로부터 <code class="language-plaintext highlighter-rouge">🟡의 작용</code>을 받고
+        <ul>
+          <li>작용 방향 👉 \(vec{n_1}\)</li>
+          <li>🔴공의 충돌 후 속도 = 🔴공의 충돌 전 속도 + <u>🔴공의 속도 변화량</u>
+            <ul>
+              <li>\[\vec{v_0}^{new}=\vec{v_0}^{old}+△\vec{v_0}\]
+                <ul>
+                  <li>🔴공의 속도 변화량
+                    <ul>
+                      <li>\[△\vec{v_0}={j×\vec{n_1}\over{m_0}}\]</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>충돌시 🟡공은 🔴으로부터 <code class="language-plaintext highlighter-rouge">🔴의 반작용</code>을 받는다.
+        <ul>
+          <li>반작용 방향 👉 \(-vec{n_1}\)</li>
+          <li>🟡공의 충돌 후 속도 = 🟡공의 충돌 전 속도 + <u>🟡공의 속도 변화량</u>
+            <ul>
+              <li>\[\vec{v_1}^{new}=\vec{v_1}^{old}+△\vec{v_1}\]
+                <ul>
+                  <li>🟡공의 속도 변화량
+                    <ul>
+                      <li>\[△\vec{v_1}={j×(-\vec{n_1})\over{m_1}}\]</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>뉴턴의 제 3 법칙에 따라 \(\vec{n_1}\) 방향으로 🟡공이 🔴공에게 충돌을 가했을 때
+    <ul>
+      <li>두 공이 받는 충격의 크기는 \(j\)로 같고</li>
+      <li>🔴공은 <code class="language-plaintext highlighter-rouge">작용</code>으로 \(\vec{n_1}\) 방향의 힘을 받고</li>
+      <li>🟡공은 <code class="language-plaintext highlighter-rouge">반작용</code>으로 \(-\vec{n_1}\) 방향의 힘을 받는다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-충격량-j-구하기">🔔 충격량 j 구하기</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/85220159-5187ef80-b3e4-11ea-9735-4dddee99f6ff.png" alt="image" width="90%" height="90%" class="align-center" /></p>
+
+<ul>
+  <li>두 공이 충돌 이후에 그 <u>충돌로 인한 속도 값을 업데이트 하려면</u> <code class="language-plaintext highlighter-rouge">충격량 j</code> 값을 알아야 한다.
+    <ul>
+      <li>속도 변화량의 공식은 \(△\vec{v}={j×\vec{n}\over{m}}\) 이기 때문이다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">충격량 j</code>구하는 공식은 <code class="language-plaintext highlighter-rouge">상대 속도</code>의 공식으로부터 도출된다.
+    <ul>
+      <li>도출 과정은 위 사진 참고</li>
+    </ul>
+  </li>
+</ul>
+
+<p>\[j={-(1+\epsilon)\vec{v_{0\vert{1}}}\cdot\vec{n_1}\over{1\over{m_0}}+{1\over{m_1}}}\]</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET
