@@ -1,233 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-01T22:17:14+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html"> 평생 공부 블로그 : Today I Learned‍ 🌙</title><subtitle>공부 &amp; 취미 블로그</subtitle><author><name>공부하는 식빵맘 👱‍♀️</name></author><entry><title type="html">[STL 알고리즘] upper_bound, lower_bound, equal_range, binary_search</title><link href="http://localhost:4000/stl/bound/" rel="alternate" type="text/html" title="[STL 알고리즘] upper_bound, lower_bound, equal_range, binary_search" /><published>2021-04-17T00:00:00+09:00</published><updated>2021-04-17T00:00:00+09:00</updated><id>http://localhost:4000/stl/bound</id><content type="html" xml:base="http://localhost:4000/stl/bound/"><![CDATA[<p class="notice--warning"><strong>아래 함수들을 사용하기 위해선 <u>원소들이 정렬되어 있다는 전제가 있어야 한다.</u></strong></p>
-
-<h2 id="-lower_bound">🚀 <code class="language-plaintext highlighter-rouge">lower_bound</code></h2>
-
-<blockquote>
-  <p>어떤 값의 <u>하한선</u></p>
-</blockquote>
-
-<ul>
-  <li><strong>이진 참색의 방법</strong>으로 어떤 값의 하한선을 찾는다.</li>
-  <li><em>lower_bound(v.begin(), v.end(), 150)</em>
-    <ul>
-      <li>👉 <code class="language-plaintext highlighter-rouge">v</code> 컨테이너에서 Key : <code class="language-plaintext highlighter-rouge">150</code> 과 <u>일치하면 그 Key의 반복자를 리턴하고 </u>, 일치 하는게 없다면 <code class="language-plaintext highlighter-rouge">150</code>을 <u>초과하는 것 중 가장 작은 것</u>의 반복자를 리턴한다.</li>
-    </ul>
-  </li>
-  <li>[1, 10, 20, 40, 50, 60, 70]
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">50</code>을 lower_bound 로 찾는다면 <code class="language-plaintext highlighter-rouge">50</code>의 반복자 리턴</li>
-      <li><code class="language-plaintext highlighter-rouge">65</code>을 lower_bound 로 찾는다면 <code class="language-plaintext highlighter-rouge">65</code>는 없으므로 <code class="language-plaintext highlighter-rouge">70</code>의 반복자 리턴</li>
-      <li><code class="language-plaintext highlighter-rouge">80</code>을 lower_bound 로 찾는다면 없으므로 <code class="language-plaintext highlighter-rouge">end()</code> 리턴</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lower</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">myVector</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">myVector</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">7</span><span class="p">);</span>
-</code></pre></div></div>
-
-<ul>
-  <li>두 반복자로 나타낸 해당 범위 안의 원소들 중 <u>세번째 인수 값보다 <u>크거나 같은</u> 첫번째 원소의 반복자를 리턴</u>한다.
-    <ul>
-      <li>없다면 범위의 끝을 나타내는 반복자를 리턴한다.</li>
-    </ul>
-  </li>
-  <li><code class="language-plaintext highlighter-rouge">sort</code>와 마찬가지로 비교를 위한 비교 함수 포인터도 인자로 넣어줄 수 있다.</li>
-  <li>예시
-    <ul>
-      <li>arr = [1, 2, 3, 4, 5, 6, 7] 일때</li>
-      <li><code class="language-plaintext highlighter-rouge">lower_bound(arr, arr + 10, 6)</code>은 <code class="language-plaintext highlighter-rouge">6을 가리키는 반복자</code> 이다.
-        <ul>
-          <li>6 보다 크거나 같은 첫번째 원소는 6</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="-lower_bound-를-직접-구현한-코드">🔥 <code class="language-plaintext highlighter-rouge">lower_bound</code> 를 직접 구현한 코드</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
- 
-<span class="k">while</span><span class="p">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">){</span>  
-    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>    
- 
-    <span class="k">if</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">key</span><span class="p">)</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">else</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>  
-<span class="p">}</span>
-
-<span class="k">return</span> <span class="n">end</span><span class="p">;</span> <span class="c1">// 시작 위치 == 끝 위치가 되면 빠져 나오며 이 위치가 바로 답이 된다. </span>
-</code></pre></div></div>
-
-<ul>
-  <li>Key 보다 <em>작은</em> 범위는 답이 될 수 없다. 👉 <em>start = mid + 1</em></li>
-  <li>Key 보다 <em>크거나 같은</em> 범위는 답이 될 수 있다. 그러므로 현재의 <code class="language-plaintext highlighter-rouge">mid</code>가 또 답 후보가 될 수 있다. 👉 <em>end = mid</em>
-    <ul>
-      <li>lower_bound 는 일치하는 것도 답이 될 수 있다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="-lower_bound-에-원하는-정렬-기준-적용하기">🔥 <code class="language-plaintext highlighter-rouge">lower_bound</code> 에 원하는 정렬 기준 적용하기</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">comp</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">())</span>
-        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">())</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="n">lower_bound</span><span class="p">(</span><span class="n">words</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">words</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">start</span><span class="p">,</span> <span class="n">comp</span><span class="p">);</span> <span class="c1">// comp 비교함수 기준으로 답을 찾게 됨</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">lower_bound</code>는 크기 비교를 통하여 이진 탐색으로 답을 도출하는데, 이 크기 비교 즉 정렬 기준 또한 원하는대로 적용할 수 있다. <u>sort 함수에 비교 함수 적용해주듯이 비교함수 적용해주면 된다!</u></p>
-
-<p>위 코드를 예로 들면 1 순위로 문자열 길이를 기준으로 정렬하고 2 순위로 사전 순서로 정렬하는 비교 함수를 만들어 이를 <code class="language-plaintext highlighter-rouge">lower_bound</code>에 적용한 모습이다. 이제 <code class="language-plaintext highlighter-rouge">lower_bound</code> 는 사전 순서로 비교하기에 앞서 길이가 더 짧은 것이 더 작다고 판단하고 답을 찾게 될 것이다.</p>
-
-<p>예를 들어 위 비교 함수를 적용시킨다면 이제 <code class="language-plaintext highlighter-rouge">lower_bound</code>는 “zzz” 가 “abcde” 보다 값이 작다고 판단할 것이다. 길이 비교가 더 우선되기 때문이다!</p>
-
-<p><br /></p>
-
-<h2 id="-upper_bound">🚀 <code class="language-plaintext highlighter-rouge">upper_bound</code></h2>
-
-<blockquote>
-  <p>어떤 값의 <u>상한선</u></p>
-</blockquote>
-
-<ul>
-  <li><strong>이진 참색의 방법</strong>으로 어떤 값의 상한선을 찾는다.</li>
-  <li><em>lower_bound(v.begin(), v.end(), 150)</em>
-    <ul>
-      <li>👉 <code class="language-plaintext highlighter-rouge">v</code> 컨테이너에서 <code class="language-plaintext highlighter-rouge">150</code>을 <u>초과하는 것 중 가장 작은 것</u>의 반복자를 리턴한다.</li>
-      <li><strong>uppder_bound 는 lower_bound 와는 다르게 일치하는건 찾지 않는다.</strong>
-        <ul>
-          <li>lower_bound 👉 일치 or 초과하는 것 중 가장 작은 것</li>
-          <li>upper_bound 👉 초과하는 것 중 가장 작은 것</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>[1, 10, 20, 40, 50, 60, 70]
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">50</code>을 upper_bound 로 찾는다면 <code class="language-plaintext highlighter-rouge">60</code>의 반복자 리턴 👉 <u>lower_bound 와의 차이!</u></li>
-      <li><code class="language-plaintext highlighter-rouge">65</code>을 upper_bound 로 찾는다면 <code class="language-plaintext highlighter-rouge">70</code>의 반복자 리턴</li>
-      <li><code class="language-plaintext highlighter-rouge">80</code>을 upper_bound 로 찾는다면 없으므로 <code class="language-plaintext highlighter-rouge">end()</code> 리턴</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">upper</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">myVector</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">myVector</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">7</span><span class="p">);</span>
-</code></pre></div></div>
-
-<ul>
-  <li>두 반복자로 나타낸 해당 범위 안의 원소들 중 <u>세번째 인수 값보다 <u>큰</u> 첫번째 원소의 반복자를 리턴</u>한다.
-    <ul>
-      <li>없다면 범위의 끝을 나타내는 반복자를 리턴한다.</li>
-    </ul>
-  </li>
-  <li><code class="language-plaintext highlighter-rouge">sort</code>와 마찬가지로 비교를 위한 비교 함수 포인터도 인자로 넣어줄 수 있다.</li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="-upper_bound-를-직접-구현한-코드">🔥 <code class="language-plaintext highlighter-rouge">upper_bound</code> 를 직접 구현한 코드</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
- 
-<span class="k">while</span><span class="p">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)){</span>  
-    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>    
- 
-    <span class="k">if</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">key</span><span class="p">)</span> <span class="c1">// ⭐lower_bound랑 다른점은 여기뿐!!!!!</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">else</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>  
-<span class="p">}</span>
-
-<span class="k">return</span> <span class="n">end</span><span class="p">;</span> <span class="c1">// 시작 위치 == 끝 위치가 되면 빠져 나오며 이 위치가 바로 답이 된다. </span>
-</code></pre></div></div>
-
-<ul>
-  <li>Key 보다 <em>작거나 같은</em> 범위는 답이 될 수 없다. 👉 <em>start = mid + 1</em>
-    <ul>
-      <li>uppder_bound 는 lower_bound 와 다르게 일치하는 것은 답이 될 수 없음</li>
-    </ul>
-  </li>
-  <li>Key 보다 <em>큰</em> 범위는 답이 될 수 있다. 그러므로 현재의 <code class="language-plaintext highlighter-rouge">mid</code>가 또 답 후보가 될 수 있다. 👉 <em>end = mid</em></li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="-upper_bound-에-원하는-정렬-기준-적용하기">🔥 <code class="language-plaintext highlighter-rouge">upper_bound</code> 에 원하는 정렬 기준 적용하기</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">upper_bound</span><span class="p">(</span><span class="n">words</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">words</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">start</span><span class="p">,</span> <span class="n">comp</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">lower_bound</code>와 똑같이 정의한 비교함수 파라미터로 넘겨주면 됨.</p>
-
-<p><br /></p>
-
-<h2 id="-equal_range">🚀 equal_range</h2>
-
-<blockquote>
-  <p><code class="language-plaintext highlighter-rouge">lower_bound</code> 와 <code class="language-plaintext highlighter-rouge">uppder_bound</code> 를 같이 묶어 리턴해줌</p>
-</blockquote>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">equal_range</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">3</span><span class="p">);</span>
-</code></pre></div></div>
-<ul>
-  <li><u>(lowerbound, uppderbound)</u>의 <code class="language-plaintext highlighter-rouge">std::pair</code> 객체를 리턴한다.
-    <ul>
-      <li>(해당 범위 내에서 처음으로 3과 같거나 큰 원소의 반복자, 해당 범위 내에서 처음으로 3보다큰 원소의 반복자)</li>
-    </ul>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h2 id="-binary_search">🚀 binary_search</h2>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 이렇게 구현되어 있다.</span>
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ForwardIterator</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
-  <span class="kt">bool</span> <span class="nf">binary_search</span> <span class="p">(</span><span class="n">ForwardIterator</span> <span class="n">first</span><span class="p">,</span> <span class="n">ForwardIterator</span> <span class="n">last</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">first</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">lower_bound</span><span class="p">(</span><span class="n">first</span><span class="p">,</span><span class="n">last</span><span class="p">,</span><span class="n">val</span><span class="p">);</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">first</span><span class="o">!=</span><span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">val</span><span class="o">&lt;*</span><span class="n">first</span><span class="p">));</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">binary_search</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">3</span><span class="p">);</span>
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">bool</code>타입을 리턴한다.
-    <ul>
-      <li>즉 세번째 인수가 해당 범위 내에 있다면 true, 없으면 false를 리턴한다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="-binary_search-에-원하는-정렬-기준-적용하기">🔥 <code class="language-plaintext highlighter-rouge">binary_search</code> 에 원하는 정렬 기준 적용하기</h3>
-
-<p>비교 함수를 파라미터로 넘기면 된다.</p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="STL" /><category term="Data Structure" /><category term="Coding Test" /><category term="Cpp" /><category term="STL" /><summary type="html"><![CDATA[아래 함수들을 사용하기 위해선 원소들이 정렬되어 있다는 전제가 있어야 한다.]]></summary></entry><entry><title type="html">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</title><link href="http://localhost:4000/cpp/freopen/" rel="alternate" type="text/html" title="C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)" /><published>2021-04-14T00:00:00+09:00</published><updated>2021-04-14T00:00:00+09:00</updated><id>http://localhost:4000/cpp/freopen</id><content type="html" xml:base="http://localhost:4000/cpp/freopen/"><![CDATA[<h2 id="-일일이-콘솔창에-입력하는-것은-너무-귀찮다">🚀 일일이 콘솔창에 입력하는 것은 너무 귀찮다</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-02T02:16:46+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱</name></author><entry><title type="html">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</title><link href="http://localhost:4000/cpp/freopen/" rel="alternate" type="text/html" title="C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)" /><published>2021-04-14T00:00:00+09:00</published><updated>2021-04-14T00:00:00+09:00</updated><id>http://localhost:4000/cpp/freopen</id><content type="html" xml:base="http://localhost:4000/cpp/freopen/"><![CDATA[<h2 id="-일일이-콘솔창에-입력하는-것은-너무-귀찮다">🚀 일일이 콘솔창에 입력하는 것은 너무 귀찮다</h2>
 
 <p>프로그래머스와 달리 백준 저지는 직접 입출력 함수를 사용하여 입출력을 받아야했기 때문에 IDE 에서 테스트 실행시에도, 디버깅시에도 문제에서 주어진 예제 테케를 일일이 콘솔창에 입력을 해주어야해서 너무 불편하다고 느꼈다. 일일이 타이핑하여 콘솔 창에 입력하지 않고</p>
 
@@ -265,7 +36,7 @@
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 일일이 콘솔창에 입력하는 것은 너무 귀찮다]]></summary></entry><entry><title type="html">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include &amp;lt;bits/stdc++.h&amp;gt;</title><link href="http://localhost:4000/cpp/stdc/" rel="alternate" type="text/html" title="C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include &amp;lt;bits/stdc++.h&amp;gt;" /><published>2021-04-14T00:00:00+09:00</published><updated>2021-04-14T00:00:00+09:00</updated><id>http://localhost:4000/cpp/stdc</id><content type="html" xml:base="http://localhost:4000/cpp/stdc/"><![CDATA[<h2 id="-include-bitsstdch">🚀 <code class="language-plaintext highlighter-rouge">#include &lt;bits/stdc++.h&gt;</code></h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 일일이 콘솔창에 입력하는 것은 너무 귀찮다]]></summary></entry><entry><title type="html">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include &amp;lt;bits/stdc++.h&amp;gt;</title><link href="http://localhost:4000/cpp/stdc/" rel="alternate" type="text/html" title="C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include &amp;lt;bits/stdc++.h&amp;gt;" /><published>2021-04-14T00:00:00+09:00</published><updated>2021-04-14T00:00:00+09:00</updated><id>http://localhost:4000/cpp/stdc</id><content type="html" xml:base="http://localhost:4000/cpp/stdc/"><![CDATA[<h2 id="-include-bitsstdch">🚀 <code class="language-plaintext highlighter-rouge">#include &lt;bits/stdc++.h&gt;</code></h2>
 
 <h3 id="-장점">🔥 장점</h3>
 
@@ -410,566 +181,7 @@
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 #include &lt;bits/stdc++.h&gt;]]></summary></entry><entry><title type="html">[STL 컨테이너] set, unordered_set (+ map)에 사용자 정의 구조체 혹은 객체 담기</title><link href="http://localhost:4000/stl/mapsetcustom/" rel="alternate" type="text/html" title="[STL 컨테이너] set, unordered_set (+ map)에 사용자 정의 구조체 혹은 객체 담기" /><published>2021-04-01T00:00:00+09:00</published><updated>2021-04-01T00:00:00+09:00</updated><id>http://localhost:4000/stl/mapsetcustom</id><content type="html" xml:base="http://localhost:4000/stl/mapsetcustom/"><![CDATA[<h2 id="-map-set-unordered_map-unordered_set-자세한-설명">🚀 map, set, unordered_map, unordered_set 자세한 설명</h2>
-
-<ul>
-  <li><a href="https://ansohxxn.github.io/stl/map/">[STL 컨테이너] map &amp; unordered_map &amp; multimap</a></li>
-  <li><a href="https://ansohxxn.github.io/stl/set/">[STL 컨테이너] set &amp; unordered_set &amp; multiset</a></li>
-  <li><a href="https://ansohxxn.github.io/stl/sortmapset/">[STL 컨테이너] map 과 set의 정렬</a></li>
-</ul>
-
-<p><br /></p>
-
-<h2 id="-map-set-에서-커스텀-구조체-or-객체-저장하기--정렬된-순서를-유지">🚀 <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">set</code> 에서 커스텀 구조체 or 객체 저장하기 (👉 정렬된 순서를 유지)</h2>
-
-<p><code class="language-plaintext highlighter-rouge">map</code>과 <code class="language-plaintext highlighter-rouge">set</code>은 정렬된 상태를 유지하기 때문에 <code class="language-plaintext highlighter-rouge">int</code> 같은 기본 자료형이 아닌, 우리가 직접 만든 구조체나 클래스와 같은 <strong>‘사용자 지정 자료형’을 저장하려할 때는 <u>operator &lt; 연산자를 const 함수로 오버로딩 해주어야 한다.</u></strong>(뒤에 <code class="language-plaintext highlighter-rouge">const</code> 붙여주어야 한다.) 즉, 같은 타입의 인스턴스끼리 크기를 비교할 수 있는 어떤 비교 기준을 마련해주어야 하는 것이다.</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">set</code> 👉 원소의 타입에 대한 비교기준</li>
-  <li><code class="language-plaintext highlighter-rouge">map</code> 👉 Key 의 타입에 대한 비교 기준 (map은 Key 를 기준으로 정렬한다. 즉, Key 가 사용자 지정 자료형일 때)</li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="-첫-번째-방법--멤버-함수로서--연산자-오버로딩-정의">🔥 첫 번째 방법 : 멤버 함수로서 &lt; 연산자 오버로딩 정의</h3>
-
-<p>구조체 혹은 클래스 내부에서 멤버 함수로서 <code class="language-plaintext highlighter-rouge">&lt;</code> 연산자를 오버로딩하여 구조체 혹은 클래스 자체에 비교 기준을 부여한다.</p>
-
-<h4 id="-set">✈ <code class="language-plaintext highlighter-rouge">set</code></h4>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Student</span> <span class="p">{</span>
-    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">grade</span><span class="p">;</span>
-
-    <span class="c1">// Student 구조체들은 name을 비교 기준으로 정렬하고자 한다. name 이 같다면 grade 로 비교하기로 약속함!</span>
-    <span class="c1">// 여기서 name 은 Student 구조체 인스턴스 입장에서 나의 name</span>
-    <span class="c1">// 여기서 other.name 은 비교 대상이 되는 다른 Student 구조체 인스턴스의 name (other은 비교 대상이 되는 다른 Student 구조체)</span>
-    <span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span> <span class="p">(</span><span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">grade</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">.</span><span class="n">grade</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">name</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">;</span> 
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">set</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="n">students</span><span class="p">;</span>
-    
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"ryan"</span><span class="p">,</span> <span class="mi">5</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"muzi"</span><span class="p">,</span> <span class="mi">3</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"muzi"</span><span class="p">,</span> <span class="mi">1</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"apeach"</span><span class="p">,</span> <span class="mi">1</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"apeach"</span><span class="p">,</span> <span class="mi">1</span> <span class="p">});</span> <span class="c1">// set은 중복을 허용하지 않으므로 이건 삽입되지 않는다.</span>
-
-    <span class="c1">// 출력을 통해 name 을 기준으로(name이 같다면 grade로) 정렬된 모습 확인 가능!</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">stu</span> <span class="o">:</span> <span class="n">students</span><span class="p">)</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">.</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">.</span><span class="n">grade</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
-
-apeach : 1
-muzi : 1
-muzi : 3
-ryan : 5
-</code></pre></div></div>
-
-<p><br /></p>
-
-<h4 id="-map">✈ <code class="language-plaintext highlighter-rouge">map</code></h4>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Student</span> <span class="p">{</span>
-    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">grade</span><span class="p">;</span>
-
-    <span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span> <span class="p">(</span><span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">grade</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">.</span><span class="n">grade</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">name</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">map</span><span class="o">&lt;</span><span class="n">Student</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span> <span class="n">students2</span><span class="p">;</span>
-    <span class="n">students2</span><span class="p">[{</span><span class="s">"prodo"</span><span class="p">,</span> <span class="mi">2</span><span class="p">}]</span> <span class="o">=</span> <span class="s">"착함"</span><span class="p">;</span>
-    <span class="n">students2</span><span class="p">[{</span><span class="s">"con"</span><span class="p">,</span> <span class="mi">4</span><span class="p">}]</span> <span class="o">=</span> <span class="s">"노래를 잘함"</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">stu</span> <span class="o">:</span> <span class="n">students2</span><span class="p">)</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
-
-노래를 잘함
-착함
-</code></pre></div></div>
-
-<p><br /></p>
-
-<h3 id="-두-번째-방법--비교-함수-만들기--연산자">🔥 두 번째 방법 : 비교 함수 만들기 () 연산자</h3>
-
-<p>따로 비교 전용 구조체를 만들어 <code class="language-plaintext highlighter-rouge">()</code> 연산자를 오버로딩한 후 그 안에 <u>"두 인스턴스"의 비교 기준</u> 을 정의해준다. 그리고 <code class="language-plaintext highlighter-rouge">set</code>은 구체화시 두 번째 파라미터로, <code class="language-plaintext highlighter-rouge">map</code>은 세 번째 파라미터로 해당 비교 전용 구조체를 넘겨주면 된다. <strong>이렇게 비교 함수를 두 파라미터를 받는 전역 함수 느낌으로 만들 경우, 구조체를 따로 만들어 이 안에다가 비교함수를 정의해준 후 STL 함수들에 이 구조체를 넘기는 식인듯 하다!</strong> <em>sort</em> 함수도 그랬고..!</p>
-
-<h4 id="-set-1">✈ set</h4>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Student</span> <span class="p">{</span>
-    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">grade</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="c1">// 구조체를 따로 만들어서 () 연산자를 오버로딩한 후 그 안에 비교 기준을 정의한다.</span>
-<span class="c1">// 멤버 함수로서 내부에 저장한 것이 아니기 때문에 파라미터가 2 개가 필요하다. 같은 타입의 두 인스턴스 비교!</span>
-<span class="c1">// stu1 가 참조하는 인스턴스와 stu2 가 참조하는 인스턴스의 비교</span>
-<span class="k">struct</span> <span class="nc">cmp</span> <span class="p">{</span>
-    <span class="kt">bool</span> <span class="k">operator</span> <span class="p">()</span> <span class="p">(</span><span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">stu1</span><span class="p">,</span> <span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">stu2</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">stu2</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">stu1</span><span class="p">.</span><span class="n">grade</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">grade</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">stu1</span><span class="p">.</span><span class="n">name</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">set</span><span class="o">&lt;</span><span class="n">Student</span><span class="p">,</span> <span class="n">cmp</span><span class="o">&gt;</span> <span class="n">students</span><span class="p">;</span> <span class="c1">// 비교함수를 안에 정의해준 cmp 구조체를 함께 넘긴다.</span>
-
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"ryan"</span><span class="p">,</span> <span class="mi">5</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"muzi"</span><span class="p">,</span> <span class="mi">3</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"muzi"</span><span class="p">,</span> <span class="mi">1</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"apeach"</span><span class="p">,</span> <span class="mi">1</span> <span class="p">});</span>
-    <span class="n">students</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="s">"apeach"</span><span class="p">,</span> <span class="mi">1</span> <span class="p">});</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">stu</span> <span class="o">:</span> <span class="n">students</span><span class="p">)</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">.</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" : "</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">.</span><span class="n">grade</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
-
-apeach : 1
-muzi : 1
-muzi : 3
-ryan : 5
-</code></pre></div></div>
-
-<p><br /></p>
-
-<h4 id="-map-1">✈ map</h4>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Student</span> <span class="p">{</span>
-    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">grade</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">struct</span> <span class="nc">cmp</span> <span class="p">{</span>
-    <span class="kt">bool</span> <span class="k">operator</span> <span class="p">()</span> <span class="p">(</span><span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">stu1</span><span class="p">,</span> <span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">stu2</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">stu2</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">stu1</span><span class="p">.</span><span class="n">grade</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">grade</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">stu1</span><span class="p">.</span><span class="n">name</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">map</span><span class="o">&lt;</span><span class="n">Student</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">cmp</span><span class="o">&gt;</span> <span class="n">students2</span><span class="p">;</span> <span class="c1">// 비교함수를 안에 정의해준 cmp 구조체를 함께 넘긴다.</span>
-    <span class="n">students2</span><span class="p">[{</span><span class="s">"prodo"</span><span class="p">,</span> <span class="mi">2</span><span class="p">}]</span> <span class="o">=</span> <span class="s">"착함"</span><span class="p">;</span>
-    <span class="n">students2</span><span class="p">[{</span><span class="s">"con"</span><span class="p">,</span> <span class="mi">4</span><span class="p">}]</span> <span class="o">=</span> <span class="s">"노래를 잘함"</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">stu</span> <span class="o">:</span> <span class="n">students2</span><span class="p">)</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
-
-노래를 잘함
-착함
-</code></pre></div></div>
-
-<h2 id="-unordered_map-unordered_set-에서-커스텀-구조체-or-객체-저장하기--정렬-안됨-해시-함수-사용">🚀 <code class="language-plaintext highlighter-rouge">unordered_map</code>, <code class="language-plaintext highlighter-rouge">unordered_set</code> 에서 커스텀 구조체 or 객체 저장하기 (👉 정렬 안됨, 해시 함수 사용)</h2>
-
-<ul>
-  <li>1️⃣ 해시 함수 만들기
-    <ul>
-      <li>해당 구조체 혹은 클래스 타입의 전용 해시 함수를 직접 만들어주어야 하는데
-        <ul>
-          <li><em>C++ 에서 제공하는 기본 자료형에 대한 해시 함수</em>를 사용하여 해시값을 만들어내도 되고</li>
-          <li><em>XOR 연산자</em> 를 사용하여 만드는 방법도 있다.</li>
-          <li>무슨 방법을 쓰던, <u>최대한!! 같은 해시값이 리턴되지 않도록, 즉 해시 충돌이 발생하지 않도록 해시 함수를 짜는게 좋다.</u> ✨✨ 최대한 파라미터에 따라 고유한 해시값이 나오도록 해야 한다.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>2️⃣ <code class="language-plaintext highlighter-rouge">==</code> 연산자 오버로딩이 필요하다.
-    <ul>
-      <li>해시 충돌(해시값 동일) 발생시 원소 비교가 가능해야하기 때문이다.
-        <ul>
-          <li>두 인스턴스가 같다고 판단할 수 있는 그 기준이 필요하다.</li>
-        </ul>
-      </li>
-      <li>해시 함수 값으로 저장된 데이터를 찾는 <code class="language-plaintext highlighter-rouge">unordered_map</code>, <code class="language-plaintext highlighter-rouge">unordered_set</code>는 정렬이 필요 없으므로 <code class="language-plaintext highlighter-rouge">&lt;</code> 연산자는 필요 없다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="1️⃣-해시함수">1️⃣ 해시함수</h3>
-
-<h4 id="첫-번째-방법">첫 번째 방법</h4>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">std</span> <span class="p">{</span>
-    <span class="k">template</span> <span class="o">&lt;</span><span class="p">&gt;</span>
-    <span class="k">struct</span> <span class="nc">hash</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">stu</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="n">hash</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">hash_func</span><span class="p">;</span> <span class="c1">// string 을 파라미터로 받아 해시 함수값을 리턴해주는 C++ 제공 해시 객체</span>
-
-            <span class="k">return</span> <span class="n">hash_func</span><span class="p">(</span><span class="n">stu</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="o">^</span> <span class="n">stu</span><span class="p">.</span><span class="n">grade</span><span class="p">;</span> <span class="c1">// 임의로 string 인 name 의 해시함수값과 int인 grade 값을 XOR 연산한 것을 해시 함수 값으로 하기로 정의!</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">namespace std</code> 안에 정의해야 한다.</li>
-  <li>구조체의 이름은 <code class="language-plaintext highlighter-rouge">hash&lt;사용자정의타입이름&gt;</code></li>
-  <li><code class="language-plaintext highlighter-rouge">()</code> 연산자를 오버로딩한다.
-    <ul>
-      <li>이 안에 해시 함수를 정의한다.</li>
-      <li>해시 함수 값을 리턴하기에 리턴 타입은 <code class="language-plaintext highlighter-rouge">size_t</code> (unsigend_int)</li>
-    </ul>
-  </li>
-  <li>C++은 <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">string</code> 등등 기본 타입의 인스턴스를 파라미터로 받아 어떤 해시 함수 값을 생성해주는 그런 객체를 제공하고 있다. <em>ex) hash&lt;string&gt; hash_func 👉 string 을 파라미터로 받아 해시 함수값을 리턴해주는 C++ 제공 해시 객체</em>
-    <ul>
-      <li>이 해시 객체를 이용하여 구조체 혹은 클래스의 멤버들과 <em>XOR</em> 연산도 좀 섞어보고.. 잘 짬뽕하여.. 해시 함수를 만들어주면 된다.</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="n">map1</span><span class="p">;</span> <span class="c1">// ⭕</span>
-<span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">Student</span><span class="p">,</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;&gt;</span> <span class="n">map1</span><span class="p">;</span> <span class="c1">// ⭕</span>
-</code></pre></div></div>
-
-<p>위와 같이 <code class="language-plaintext highlighter-rouge">std</code> 네임스페이스 안에서 <code class="language-plaintext highlighter-rouge">hash&lt;구조체이름&gt;</code> 사용하여 그 안에 정의하면 위와 같이 해시맵 자료구조를 선언할 때 파라미터로 <code class="language-plaintext highlighter-rouge">hash&lt;구조체이름&gt;</code>를 안넣어주어도 된다.</p>
-
-<p><br /></p>
-
-<h4 id="두-번째-방법">두 번째 방법</h4>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">struct</span> <span class="nc">MyHash</span> <span class="p">{</span>
-        <span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">stu</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="n">hash</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">hash_func</span><span class="p">;</span> <span class="c1">// string 을 파라미터로 받아 해시 함수값을 리턴해주는 C++ 제공 해시 객체</span>
-
-            <span class="k">return</span> <span class="n">hash_func</span><span class="p">(</span><span class="n">stu</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="o">^</span> <span class="n">stu</span><span class="p">.</span><span class="n">grade</span><span class="p">;</span> <span class="c1">// 임의로 string 인 name 의 해시함수값과 int인 grade 값을 XOR 연산한 것을 해시 함수 값으로 하기로 정의!</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-</code></pre></div></div>
-
-<p>이렇게 그냥 사용자 정의 구조체 안에서 <code class="language-plaintext highlighter-rouge">()</code> 연산자를 오버로딩하여 해시함수를 구현해주면</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span> <span class="n">map1</span><span class="p">;</span> <span class="c1">// ❌</span>
-<span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">Student</span><span class="p">,</span> <span class="n">MyHash</span><span class="o">&gt;</span> <span class="n">map1</span><span class="p">;</span> <span class="c1">// ⭕</span>
-</code></pre></div></div>
-
-<p>이땐 꼭 파라미터로 해당 구조체 이름을 함께 넘겨주어야 한다.</p>
-
-<p><br /></p>
-
-<h3 id="2️⃣--연산자-오버로딩">2️⃣ == 연산자 오버로딩</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Student</span> <span class="p">{</span>
-    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">grade</span><span class="p">;</span>
-
-    <span class="kt">bool</span> <span class="k">operator</span> <span class="o">==</span> <span class="p">(</span><span class="k">const</span> <span class="n">Student</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">name</span> <span class="o">&amp;&amp;</span> <span class="n">grade</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">grade</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>해시 충돌이 일어났을 때, 즉 이미 해시테이블 안에 있는 어떤 요소와 해시값이 동일하게 나왔을 때 버킷 안에 있는 원소들과 비교해야하기 때문에 <code class="language-plaintext highlighter-rouge">==</code> 연산자 오버로딩이 필요하다.</p>
-
-<p><br /></p>
-
-<h2 id="-출처-및-참고">🚀 출처 및 참고</h2>
-
-<ul>
-  <li>커스텀 해시 함수를 사용했던 코테 문제 <a href="https://ansohxxn.github.io/programmers/128/">[C++로 풀이] 블록 이동하기 (BFS)⭐⭐⭐</a></li>
-  <li>윗 내용 모두 <a href="https://modoocode.com/224">모두의 코드</a> 를 참고했습니다. :)</li>
-</ul>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="STL" /><category term="Data Structure" /><category term="Coding Test" /><category term="Cpp" /><category term="STL" /><summary type="html"><![CDATA[🚀 map, set, unordered_map, unordered_set 자세한 설명]]></summary></entry><entry><title type="html">[C] sprintf 로 원하는 형식대로 문자열 저장하기</title><link href="http://localhost:4000/c/2/" rel="alternate" type="text/html" title="[C] sprintf 로 원하는 형식대로 문자열 저장하기" /><published>2021-04-01T00:00:00+09:00</published><updated>2021-04-01T00:00:00+09:00</updated><id>http://localhost:4000/c/2</id><content type="html" xml:base="http://localhost:4000/c/2/"><![CDATA[<h2 id="-sprintf-소개">🚀 <code class="language-plaintext highlighter-rouge">sprintf</code> 소개</h2>
-
-<blockquote>
-  <p>#include &lt;stdio.h&gt;</p>
-</blockquote>
-
-<p><code class="language-plaintext highlighter-rouge">printf</code> 함수처럼 원하는 형식 포맷으로 문자열을 저장할 수 있다. <code class="language-plaintext highlighter-rouge">printf</code>는 콘솔창에 어떤 포맷으로 출력할 것인지를 다루는 함수라면, <code class="language-plaintext highlighter-rouge">sprintf</code>는 문자열(<u>C언어 함수이니 char 배열!</u>) 을 <strong>어떤 포맷으로 저장할 것인지</strong>를 다루는 함수이다.</p>
-
-<p>문자열을 다루는 코딩테스트 문제를 푸는데 있어 매우 유용하게 사용될 것 같아 정리한다. C++ 로 풀이를 할 때 <code class="language-plaintext highlighter-rouge">string</code>에 <code class="language-plaintext highlighter-rouge">char 배열</code>을 그냥 대입하면 자동 변환이 된다는 것을 기억하자.</p>
-
-<p><br /></p>
-
-<h2 id="-sprintf-예시">🚀 <code class="language-plaintext highlighter-rouge">sprintf</code> 예시</h2>
-
-<blockquote>
-  <p>%[플래그(flag)][폭(width)][.정밀도][크기(length)]서식 문자(specifier)</p>
-</blockquote>
-
-<h3 id="-예시-1">🔥 예시 1</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-    <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
-    <span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s">"%05d.png %f"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span> <span class="c1">// buf = "00123.png 3.140000"</span>
-
-    <span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="n">buf</span><span class="p">;</span> <span class="c1">// C++ string 변환</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">str</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
-
-00123.png 3.140000
-</code></pre></div></div>
-
-<p>위와 같이 <strong>sprintf</strong>를 사용하여, <code class="language-plaintext highlighter-rouge">int</code>인 i와 <code class="language-plaintext highlighter-rouge">double</code>인 d를 함께 사용하여 <u>char 배열인 문자열 buf에 "00123.png 3.140000" 형태로 저장할 수 있었다.</u></p>
-
-<p><br /></p>
-
-<h3 id="-예시-2">🔥 예시 2</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">seconds</span> <span class="o">=</span> <span class="mi">18768</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="n">c_time</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
-    <span class="n">sprintf</span><span class="p">(</span><span class="n">c_time</span><span class="p">,</span> <span class="s">"%02d시간 %02d분 %02d초"</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">%</span> <span class="mi">60</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">%</span> <span class="mi">60</span><span class="p">);</span>
-
-    <span class="n">string</span> <span class="n">time</span> <span class="o">=</span> <span class="n">c_time</span><span class="p">;</span> <span class="c1">// C++ string 변환</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💎출력💎
-
-5시간 12분 48초
-</code></pre></div></div>
-
-<p><br /></p>
-
-<h2 id="-참고">🚀 참고</h2>
-
-<ul>
-  <li><a href="https://modoocode.com/66">모두의 코드</a></li>
-  <li><a href="https://www.inflearn.com/course/following-c/dashboard">홍정모의 따라 배우는 C</a></li>
-</ul>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="C" /><category term="Programming" /><category term="Cpp" /><category term="C" /><summary type="html"><![CDATA[🚀 sprintf 소개]]></summary></entry><entry><title type="html">[C] C스타일 문자열의 차이 (char 포인터, char 배열) by 메모리 영역</title><link href="http://localhost:4000/c/1/" rel="alternate" type="text/html" title="[C] C스타일 문자열의 차이 (char 포인터, char 배열) by 메모리 영역" /><published>2021-03-22T00:00:00+09:00</published><updated>2021-03-22T00:00:00+09:00</updated><id>http://localhost:4000/c/1</id><content type="html" xml:base="http://localhost:4000/c/1/"><![CDATA[<h2 id="-메모리-구조와-문자열-리터럴">🚀 메모리 구조와 문자열 리터럴</h2>
-
-<p class="notice--warning"><strong>“Hello World” 같은 문자열 리터럴은 메모리의 <u>TEXT SEGMENT</u> 영역에 저장되며 이 영역은 <u>Read-Only</u> 영역이다.</strong></p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/111931296-46dac200-8afe-11eb-8ea9-7da9d9faff1a.png" alt="image" /></p>
-
-<p class="small">메모리는 위와 같은 영역들로 나눌 수 있다.</p>
-
-<ul>
-  <li>메모리 구조
-    <ul>
-      <li>TEXT SEGMENT
-        <ul>
-          <li>프로그램 파일의 내용이 저장된다. 즉, <code class="language-plaintext highlighter-rouge">.exe</code> 내용인 기계어. <u>그리고 3, 'a', "Hello" 같은 리터럴이 저장된다.</u></li>
-          <li><u>개발자가 절대 수정할 수 없는 Read-Only 영역이다.</u></li>
-        </ul>
-      </li>
-      <li>DATA SEGMENT
-        <ul>
-          <li>프로그램이 실행되자마자 전체가 0 으로 자동 초기화되고 프로그램 시작부터 종료때까지 유지되는 전역 변수(global), 정적 변수(static)가 저장되는 공간이다.</li>
-        </ul>
-      </li>
-      <li>STACK
-        <ul>
-          <li>우리가 main 함수를 비롯한 함수들 내에서 흔하게 사용하는 변수들은 모두 이 스택 메모리에 저장된다.</li>
-          <li>스택은 함수가 작업을 수행하는데 사용하는 메모리 공간이다.</li>
-          <li>모든 “지역 변수”는 이 스택 메모리에 저장된다. 지역 변수의 scope 가 끝나면 해제된다.</li>
-        </ul>
-      </li>
-      <li>HEAP
-        <ul>
-          <li>동적 할당 받는 메모리.</li>
-          <li>자동으로 해제 되지 않기 때문에 힙 메모리를 사용할 때는 메모리 누수가 발생하지 않도록 관리에 신경써야 한다.
-            <ul>
-              <li>개발자가 <code class="language-plaintext highlighter-rouge">free</code>(C), <code class="language-plaintext highlighter-rouge">delete</code>(C++)을 통해 직접 해제해주어야 한다.</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p>리터럴은 프로그램 코드(기계어)가 저장되는 메모리 영역인 <strong>TEXT SEGMENT</strong> 영역에 저장된다.(전역 변수, 정적 변수가 저장되는 <strong>DATA SEGMENT</strong> 영역에 저장된다는 이야기도 있는데 <a href="https://www.unix.com/programming/158776-data-segment-text-segment.html">컴파일러마다 다르다고 한다.</a>) 이 <strong>TEXT SEGMENT</strong> 영역은 프로그램 코드가 저장되는 공간이기 때문에 절대 수정할 수 없는 <u>Read-Only</u> 영역이다. 즉, 리터럴 그 자체는 수정할 수가 없다는 이야기이다.</p>
-
-<p>이 지식을 알고 있다면 <code class="language-plaintext highlighter-rouge">char *</code>와 <code class="language-plaintext highlighter-rouge">char []</code>의 차이를 알 수 있게 된다.</p>
-
-<p><br /></p>
-
-<h2 id="-char-포인터로-문자열-표현하기">🚀 char 포인터로 문자열 표현하기</h2>
-
-<h3 id="-char">🔥 <code class="language-plaintext highlighter-rouge">char*</code></h3>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/111931064-b69c7d00-8afd-11eb-859b-f653b47e3219.png" alt="image" /></p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kt">char</span><span class="o">*</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="p">;</span>
-	<span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str1</span><span class="p">);</span>
-
-	<span class="n">str1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'A'</span><span class="p">;</span> <span class="c1">// ❌ 📢"런타임"에러 발생!</span>
-	<span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str1</span><span class="p">);</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p>문자열 리터럴을 가리키는 <code class="language-plaintext highlighter-rouge">char 포인터</code>는 <u>Read-Only 한 TEXT SEGMENT 에 위치한 문자열 리터럴을 가리키는 것이다.</u></p>
-</blockquote>
-
-<p><strong>따라서 char 포인터로 문자열 리터럴을 가리키는 경우에는 <u>문자열 원소를 수정할 수가 없다.</u></strong> 컴파일 에러는 발생하지 않았지만 문자열 리터럴의 내용을 간접참조로 수정하려는 부분에서 런타임 에러가 발생한 것을 확인할 수 있었다.(str1[1]은 곧 *(str1 + 1) 과 같다.) char 포인터인 <code class="language-plaintext highlighter-rouge">str1</code>이 가리키는 <code class="language-plaintext highlighter-rouge">"Hello"</code>는 TEXT SEGMENT 에 저장되어 있어 절대 수정할 수 없는 영역이기 때문이다.</p>
-
-<p><br /></p>
-
-<h3 id="-const-char">🔥 <code class="language-plaintext highlighter-rouge">const char*</code></h3>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/111935688-54e11080-8b07-11eb-904a-31fd3a1ebeee.png" alt="image" /></p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="p">;</span>
-	<span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str1</span><span class="p">);</span>
-
-	<span class="n">str1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'A'</span><span class="p">;</span> <span class="c1">// ❌ 📢"컴파일"에러 발생!</span>
-	<span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str1</span><span class="p">);</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p><code class="language-plaintext highlighter-rouge">char*</code> 보단 <code class="language-plaintext highlighter-rouge">const char*</code> 사용을 권장한다.</p>
-</blockquote>
-
-<p><code class="language-plaintext highlighter-rouge">const</code> 포인터는 간접 참조로 수정하려는 행위를 막아준다. 그러므로 <u>char 포인터로 문자열을 표현할 땐 `const char *`를 사용하는 것을 권장한다.</u> 어차피 “Hello”는 절대 수정할 수 없기 때문에 <code class="language-plaintext highlighter-rouge">char *</code>로 참조 중이더라도 값을 수정할 수가 없다.(실행해봐야지만 에러가 난다는 것을 알 수 있는 런타임 에러가 발생하므로 더 치명적이다.) <code class="language-plaintext highlighter-rouge">const char *</code>로 선언하면, 리터럴 내용을 수정하려는 시도를 하자마자 컴파일 에러를 발생시키므로 실행 전부터 바로 막아주고 개발자에게 이게 문법적 오류라는 것을 알려줄 수 있기 때문이다.</p>
-
-<p><br /></p>
-
-<h2 id="-char-배열로-문자열-표현하기">🚀 char 배열로 문자열 표현하기</h2>
-
-<h3 id="-char-">🔥 <code class="language-plaintext highlighter-rouge">char []</code></h3>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/111935978-fec09d00-8b07-11eb-8866-e13dc5fc3375.png" alt="image" /></p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kt">char</span> <span class="n">str1</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="p">;</span>
-	<span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str1</span><span class="p">);</span>
-
-	<span class="n">str1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'A'</span><span class="p">;</span>
-	<span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str1</span><span class="p">);</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p><code class="language-plaintext highlighter-rouge">char []</code> 배열은 TEXT SEGMENT 에 있는 문자열 리터럴 <u>원본을 복사하여 STACK 메모리에 사본으로 만든 "char 문자의 배열"을 사용한다.</u> <strong>따라서 수정이 가능하다.</strong></p>
-</blockquote>
-
-<p>즉, TEXT SEGMENT 에 존재하는 “Hello” 가 원본이고, 이 원본을 복사하여 <u>STACK 스택 메모리에 가져온 사본을</u><code class="language-plaintext highlighter-rouge">char []</code> 배열인 <code class="language-plaintext highlighter-rouge">str1</code>에서 배열로서 관리하게 된다. 즉, 전체 메모리에 “Hello”가 2 개 있는 상태인 것이다.</p>
-
-<ul>
-  <li>in TEXT SEGMENT 👉 “Hello” (원본)</li>
-  <li>in STACK 👉 ‘H’ ‘e’ ‘l’ ‘l’ ‘o’ (사본)</li>
-</ul>
-
-<p>따라서 <code class="language-plaintext highlighter-rouge">char*</code> 포인터로 문자열 리터럴 원본(in TEXT SEGMENT)을 직접 가리키던 것과는 달리 <code class="language-plaintext highlighter-rouge">char []</code> 문자열 배열은 이 원본 “Hello”을 사본으로 복사하여 스택 메모리에서 관리를 하기 때문에 Read-Only 같은 규칙이 없어 자유롭게 수정할 수 있게 된다. <u>즉, 사본을 수정하는 것이다.</u></p>
-
-<p>문자열 리터럴이 아주아주 길고 크기가 큰데 수정할 일은 없다면 <code class="language-plaintext highlighter-rouge">const char*</code> 로서 직접 원본 리터럴을 가리키도록 하는게 메모리 효율성 면에서 나을 것 같다.</p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="C" /><category term="Programming" /><category term="Cpp" /><category term="C" /><summary type="html"><![CDATA[🚀 메모리 구조와 문자열 리터럴]]></summary></entry><entry><title type="html">[STL 컨테이너] deque (+ 다른 자료구조들과의 차이점)</title><link href="http://localhost:4000/stl/deque/" rel="alternate" type="text/html" title="[STL 컨테이너] deque (+ 다른 자료구조들과의 차이점)" /><published>2021-03-18T00:00:00+09:00</published><updated>2021-03-18T00:00:00+09:00</updated><id>http://localhost:4000/stl/deque</id><content type="html" xml:base="http://localhost:4000/stl/deque/"><![CDATA[<h2 id="-deque-컨테이너-소개">🚀 deque 컨테이너 소개</h2>
-
-<blockquote>
-  <p>#include &lt;deque&gt;</p>
-</blockquote>
-
-<p class="notice--warning"><strong><u>d</u>ouble <u>e</u>nded <u>que</u>ue</strong>
-컨테이너의 맨 앞과 맨 뒤에서 삽입/제거를 빠르게 할 수 있다는 것이 대표적 특징이다. 
-스택(LIFO)과 큐(FIFO)를 합쳐놓은 것이라고 생각하면 될 것 같다.</p>
-
-<p>맨 앞 원소와 맨 뒤 원소 삽입/제거가 빈번하다면 <code class="language-plaintext highlighter-rouge">deque</code>를 고려하는 것이 좋겠다.</p>
-
-<h3 id="-deque-의-특징-다른-자료구조들과의-비교">🔥 deque 의 특징 (다른 자료구조들과의 비교)</h3>
-
-<ul>
-  <li>vector 처럼 원소들을 <code class="language-plaintext highlighter-rouge">[]</code> 인덱스를 사용하여 <strong>Random Access</strong> 가 가능하다.
-    <ul>
-      <li>stack 과 queue 와 차별화된 강점</li>
-    </ul>
-  </li>
-  <li>vector 처럼 원소들을 어떤 순서로든 앞로든 뒤 원소들을 순회할 수 있다.</li>
-  <li>vector 가 capacity 가 고갈되면 전체 메모리 크기의 이상을 재할당 받는 것과 달리 deque 는 일정 크기를 가지는 chunk 단위로 메모리가 확장된다.
-    <ul>
-      <li>vector 보다 확장 비용이 절감된다.</li>
-    </ul>
-  </li>
-  <li>vector 와 달리 <strong>연속 메모리 공간이 아니다.</strong>
-    <ul>
-      <li>따라서 vector와 달리 포인터 연산이 불가능하다.</li>
-    </ul>
-  </li>
-  <li>list 처럼 <strong>연속 메모리 공간이 아니다.</strong></li>
-  <li>stack, vector, list 처럼 <strong>맨 뒤에서 삽입/제거</strong> 하는 것이 빠르다.
-    <ul>
-      <li>queue 은 오직 맨 앞에서만 제거가 가능하지만 deque 는 맨 뒤에서도 제거가 가능</li>
-      <li>stack 과 queue 가 deque 로 구현 가능한 이유.</li>
-    </ul>
-  </li>
-  <li>queue, list 처럼 <strong>맨 앞에서 삽입/제거</strong> 하는 것이 빠르다.
-    <ul>
-      <li>vector 와 차별화된 강점</li>
-      <li>stack 은 오직 맨 뒤에서만 제거가 가능하지만 deque 는 맨 앞에서도 제거가 가능</li>
-      <li>stack 과 queue 가 deque 로 구현 가능한 이유.</li>
-    </ul>
-  </li>
-  <li>list 와 달리 맨 뒤, 맨 앞이 아닌 **<u>중간 원소를 삽입/제거 하는 것은 느리다.&lt;/u**</u></li>
-</ul>
-
-<p><br /></p>
-
-<h2 id="-함수">🚀 함수</h2>
-
-<p>vector 와 다르게 맨 앞 원소를 삭제하는 <code class="language-plaintext highlighter-rouge">pop_front</code>, 맨 앞에 추가하는 <code class="language-plaintext highlighter-rouge">push_front</code> 함수가 있다. 이것 빼고는 vector 의 멤버들과 같다. <a href="https://ansohxxn.github.io/stl/vector/">[STL 컨테이너] vecto</a></p>
-
-<p><br /></p>
-
-<h2 id="-참고-및-출처">🚀 참고 및 출처</h2>
-
-<ul>
-  <li>수까락의 프로그래밍 이야기 <a href="http://egloos.zum.com/sweeper/v/2817817">http://egloos.zum.com/sweeper/v/2817817</a></li>
-  <li>한빛출판네트워크 <a href="https://www.hanbit.co.kr/channel/category/category_view.html?cms_code=CMS3942847236">https://www.hanbit.co.kr/channel/category/category_view.html?cms_code=CMS3942847236</a></li>
-</ul>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="STL" /><category term="Data Structure" /><category term="Coding Test" /><category term="Cpp" /><category term="STL" /><summary type="html"><![CDATA[🚀 deque 컨테이너 소개]]></summary></entry><entry><title type="html">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</title><link href="http://localhost:4000/cpp/iospeed/" rel="alternate" type="text/html" title="C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기" /><published>2021-03-18T00:00:00+09:00</published><updated>2021-03-18T00:00:00+09:00</updated><id>http://localhost:4000/cpp/iospeed</id><content type="html" xml:base="http://localhost:4000/cpp/iospeed/"><![CDATA[<h2 id="-c의-입출력-함수scanf-printf와-c의-입출력-함수cin-count">🚀 C의 입출력 함수(scanf, printf)와 C++의 입출력 함수(cin, count)</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 #include &lt;bits/stdc++.h&gt;]]></summary></entry><entry><title type="html">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</title><link href="http://localhost:4000/cpp/iospeed/" rel="alternate" type="text/html" title="C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기" /><published>2021-03-18T00:00:00+09:00</published><updated>2021-03-18T00:00:00+09:00</updated><id>http://localhost:4000/cpp/iospeed</id><content type="html" xml:base="http://localhost:4000/cpp/iospeed/"><![CDATA[<h2 id="-c의-입출력-함수scanf-printf와-c의-입출력-함수cin-count">🚀 C의 입출력 함수(scanf, printf)와 C++의 입출력 함수(cin, count)</h2>
 
 <p><strong>cin, cout 은 <u>scanf, printf</u> 보다 2 배 이상 느리다.</strong>
 따라서 입출력을 해야하는 코딩테스트 문제를 풀이할 때 이점을 염두해두고 풀이해야 한다.</p>
@@ -1083,51 +295,7 @@ ryan : 5
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 C의 입출력 함수(scanf, printf)와 C++의 입출력 함수(cin, count)]]></summary></entry><entry><title type="html">[STL 컨테이너] map 과 set의 정렬</title><link href="http://localhost:4000/stl/sortmapset/" rel="alternate" type="text/html" title="[STL 컨테이너] map 과 set의 정렬" /><published>2021-01-30T00:00:00+09:00</published><updated>2021-01-30T00:00:00+09:00</updated><id>http://localhost:4000/stl/sortmapset</id><content type="html" xml:base="http://localhost:4000/stl/sortmapset/"><![CDATA[<h2 id="-key에-의한-정렬">🚀 Key에 의한 정렬</h2>
-
-<p>map과 set은 자동으로 정렬된다. 이 map과 set의 정렬 기준은 선언할 때 결정할 수 있다. (디폴트는 Key를 기준으로한 오름차순 정렬)</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m1</span><span class="p">;</span>   <span class="c1">// Key 오름차순 정렬</span>
-<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">m2</span><span class="p">;</span> <span class="c1">// Key 내림차순 정렬</span>
-</code></pre></div></div>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">cmp</span> <span class="p">{</span>
-    <span class="kt">bool</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="c1">// ...</span>
-<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cmp</span><span class="o">&gt;</span> <span class="n">m3</span><span class="p">;</span>  <span class="c1">// Key 를 커스텀 비교 함수로 정렬 (priority_queue처럼 () 연산자 오버로드로 사용)</span>
-</code></pre></div></div>
-
-<p><br /></p>
-
-<h2 id="-value에-의한-정렬">🚀 Value에 의한 정렬</h2>
-
-<p>map은 Key를 기준으로 정렬하기 때문에 Value로 정렬하려면 map과 모든 원소들을 pair를 원소로 가지는 Vector로 복사한 후 이 Veter를 Value (second)기준으로 정렬하면 된다.</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">second</span><span class="p">;</span> <span class="c1">// Value로 정렬</span>
-<span class="p">}</span>
-
-<span class="c1">//...</span>
-<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">count</span><span class="p">;</span>
-
-<span class="c1">//...</span>
-
-<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">sortByValue</span><span class="p">(</span><span class="n">count</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">count</span><span class="p">.</span><span class="n">end</span><span class="p">());</span> <span class="c1">// count map을 vector sortByBalue에 복사</span>
-<span class="n">sort</span><span class="p">(</span><span class="n">sortByValue</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">sortByValue</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">compare</span><span class="p">);</span> <span class="c1">// Value로 정렬</span>
-</code></pre></div></div>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="STL" /><category term="Data Structure" /><category term="Coding Test" /><category term="Cpp" /><category term="STL" /><summary type="html"><![CDATA[🚀 Key에 의한 정렬]]></summary></entry><entry><title type="html">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</title><link href="http://localhost:4000/cpp/const/" rel="alternate" type="text/html" title="C++ const (컴파일 상수/런타임 상수) 그리고 constexpr" /><published>2021-01-21T00:00:00+09:00</published><updated>2021-01-21T00:00:00+09:00</updated><id>http://localhost:4000/cpp/const</id><content type="html" xml:base="http://localhost:4000/cpp/const/"><![CDATA[<h2 id="-c에서의-const">🚀 C에서의 const</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 C의 입출력 함수(scanf, printf)와 C++의 입출력 함수(cin, count)]]></summary></entry><entry><title type="html">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</title><link href="http://localhost:4000/cpp/const/" rel="alternate" type="text/html" title="C++ const (컴파일 상수/런타임 상수) 그리고 constexpr" /><published>2021-01-21T00:00:00+09:00</published><updated>2021-01-21T00:00:00+09:00</updated><id>http://localhost:4000/cpp/const</id><content type="html" xml:base="http://localhost:4000/cpp/const/"><![CDATA[<h2 id="-c에서의-const">🚀 C에서의 const</h2>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>  <span class="c1">// ❌ C에선 안된다.</span>
@@ -1187,4 +355,516 @@ ryan : 5
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>공부하는 식빵맘 👱‍♀️</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 C에서의 const]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 C에서의 const]]></summary></entry><entry><title type="html">C++ 포인터와 다차원 배열 (int[col] 배열을 가리키는 포인터)</title><link href="http://localhost:4000/cpp/2array/" rel="alternate" type="text/html" title="C++ 포인터와 다차원 배열 (int[col] 배열을 가리키는 포인터)" /><published>2021-01-16T00:00:00+09:00</published><updated>2021-01-16T00:00:00+09:00</updated><id>http://localhost:4000/cpp/2array</id><content type="html" xml:base="http://localhost:4000/cpp/2array/"><![CDATA[<p><img src="https://user-images.githubusercontent.com/42318591/104795521-67328b80-57f2-11eb-9e1e-d5edbadbc2e3.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/104795523-6c8fd600-57f2-11eb-9e98-69acbbdc4936.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/104795554-aeb91780-57f2-11eb-8740-d79ede73661a.png" alt="image" /></p>
+
+<p>내가 쓴 답변인데 정리할 겸..</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">UE4 Chapter 11-2. 시네마틱 : 게임에서 영상 플레이하기</title><link href="http://localhost:4000/ue4%20lesson%201/ch11-2/" rel="alternate" type="text/html" title="UE4 Chapter 11-2. 시네마틱 : 게임에서 영상 플레이하기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch11-2</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch11-2/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
+<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
+
+<h2 id="-게임에서-영상-플레이하기">🚖 게임에서 영상 플레이하기</h2>
+
+<p>플레이어가 보스 근처에 가면 자동으로 이전에 만든 시네마틱 영상이 플레이 되게끔 하기. 👉 보스가 있는 지점에 충돌 체크를 해야 함. 충돌이 일어나면 영상 플레이.</p>
+
+<blockquote>
+  <p>🚩 “BossCinematicTrigger” 액터 블루프린트</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100561188-6fdf0900-32fb-11eb-92b0-8a4a01283dde.png" alt="image" /></p>
+
+<p>Mesh가 없는 빈 액터 “BossCinematicTrigger” 블루프린트를 생성한 후 위와 같이 Box Collision 컴포넌트를 붙여주고 콜리전의 크기를 조정해준다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100561164-62c21a00-32fb-11eb-8e31-8260a4b5f850.png" alt="image" /></p>
+
+<p>이렇게 보스가 있는 곳 계단 즈음에 “BossCinematicTrigger” 블루프린트를 통해 액터를 레벨에 배치해준다. 이제 플레이어가 이 곳을 통과하면 시네마틱 영상이 플레이되게 할 것이다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100561128-42925b00-32fb-11eb-9137-447e8cd5c4dd.png" alt="image" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ActorBeginOverlap</code>
+    <ul>
+      <li>유니티에서의 <strong>Trigger 충돌 이벤트</strong>처럼 이 액터가 다른 액터와 겹칠 때 발생하는 이벤트. (물리적 충돌로 튕겨지는게 아니라 통과될 때, 즉 겹칠 때)</li>
+      <li>이 액터(“BossCinematicTrigger”)의 Collision 에 Trigger 충돌 이벤트가 발생하면 레벨 시퀀서를 생성하고(Create Level Sequence Play) 이를 재생한다.
+        <ul>
+          <li>생성할 레벨 시퀀서는 지난번에 만든 마스터 레벨 시퀀스인 <code class="language-plaintext highlighter-rouge">Master_Boss1</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="-영상-플레이-시작시-영상-끝날시-처리해줘야-할-작업">🚖 영상 플레이 시작시, 영상 끝날시 처리해줘야 할 작업</h2>
+
+<blockquote>
+  <p>🚩 “BossCinematicTrigger” 액터 블루프린트</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100570199-7e391f00-3313-11eb-923e-903722a6f60b.png" alt="image" /></p>
+
+<p>이렇게 많타…</p>
+
+<ul>
+  <li>이벤트
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">ActorBeginOverlap</code> 👉 영상이 시작될 때 처리해 줄 작업들</li>
+      <li><code class="language-plaintext highlighter-rouge">OnFinish_Boss1Sequence</code>(커스텀 이벤트 만듬) 👉 영상이 끝날 때 처리해 줄 작업들</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="영상-시작-할-때-해-줄-작업들">영상 시작 할 때 해 줄 작업들</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100570288-c9533200-3313-11eb-869b-c2aeea430945.png" alt="image" /></p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">ActorBeginOverlap</code> “BossCinematicTrigger” 액터의 Box Collision 과 겹쳐지면 발생</p>
+</blockquote>
+
+<ul>
+  <li>1️⃣ 마스터 레벨 시퀀스 플레이
+    <ul>
+      <li><em>Create Level Sequence Player</em>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Master_Boss1</code> 마스터 레벨 시퀀스를 재생시킬 시퀀서 생성</li>
+        </ul>
+      </li>
+      <li><em>Play</em>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Master_Boss1</code> 마스터 레벨 시퀀스를 재생</li>
+          <li>현재 위치로부터 재생한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>2️⃣ 영상 재생이 다 끝나고난 후에 영상 재생 끝 날 때 해 줄 작업들을 진행할 <code class="language-plaintext highlighter-rouge">OnFinish_Boss1Sequence</code> 커스텀 이벤트를 호출한다.
+    <ul>
+      <li><em>Get Length</em>
+        <ul>
+          <li>레벨 시퀀스 영상 길이 리턴</li>
+          <li><code class="language-plaintext highlighter-rouge">Master_Boss1</code> 마스터 레벨 시퀀스를 타겟으로 받아와 이의 영상 길이(Float)을 리턴</li>
+        </ul>
+      </li>
+      <li><em>Set Time by Event</em>
+        <ul>
+          <li>시간(Float)을 입력 받아, 해당 시간을 타이머로 하여 <strong>이 시간이 지나고난 후에 입력 받은 이벤트를 호출한다.</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>3️⃣ 플레이어 캐릭터의 움직임을 막기 위해 입력을 불가능하게 한다. 시네마틱 영상이 재생되는 중에 플레이어 캐릭터가 키보드 입력을 통해 카메라 앞을 가리면 안되기 때문에..
+    <ul>
+      <li><em>Disable Input</em>
+        <ul>
+          <li>입력을 받지 않는다. 타겟은 0 번째 <em>Player Character</em>의 <em>Player Controller</em> 입력을 받지 않음.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>4️⃣ “BossCinematicTrigger” 액터의 Collision 을 비활성화 시킨다.
+    <ul>
+      <li><em>Set Actor Enable Collision</em>
+        <ul>
+          <li>원인을 찾지 못했지만, 시네마틱 영상 재생 중에도 “BossCinematicTrigger” 액터에 플레이어 캐릭터 액터가 충돌을 일으켜 영상이 새로 다시 시작되고 다시 시작 되고 무한 반복하는; 그런 일이 생겼다. 캐릭터는 Collision 보다 한참 앞에 있는데 왜 자꾸 충돌됐던걸까. 아무튼 그래서 그냥 시퀀스 재생이 시작되면 “BossCinematicTrigger” 액터의 Collision 을 비활성화 시켜서 문제를 해결했다.</li>
+          <li>타겟은 self (“BossCinematicTrigger” 액터)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100574070-8cd80400-331c-11eb-9656-b807b1bc3f9a.png" alt="image" /></p>
+
+<ul>
+  <li>5️⃣ 모든 액터들을 검사하여 Character 클래스의 자식인 클래스들(플레이어, 몬스터, 보스 블루프린트 이렇게 3가지)타입을 가진 액터들을 보이지 않게 + Tick Event 를 돌리지 않게 한다.
+    <ul>
+      <li>설명
+        <ul>
+          <li>시퀀스 영상은 플레이어, 보스 액터로 찍는 것이 아닌 플레이어와 보스 Mesh 를 배치하여 찍었기 때문에(이전 포스트 참고) 영상이 재생되는 동안에는 실제 게임 로직에 사용되는 플레이어, 보스 액터는 1️⃣ 안보이게 해야 하고(렌더링 하지 않음), 2️⃣ 그들 각각의 블루프린트에서 Tick Event 를 돌리지 않도록, 즉 아무 기능도 하지 않도록 해야 한다.</li>
+          <li>몬스터 액터들도 마찬가지다. 플레이어를 추적하기 때문에 영상 재생 중에 플레이어를 공격하거나 영상에 뜻하지 않게 출연할 수 있으므로 1️⃣ 안보이게 해야 하고, 2️⃣ 그들 각각의 블루프린트에서 Tick Event 를 돌리지 않도록 해야 한다.</li>
+          <li>몬스터, 플레이어, 보스 블루프린트는 Character 클래스의 자식 클래스로 만들어진 블루프린트이다. 다형성에 의해 Character 타입인 액터만 찾으면 된다.</li>
+        </ul>
+      </li>
+      <li><em>Get All Actors Of Class</em>
+        <ul>
+          <li>특정 클래스 자식인, 해당 레벨의 모든 Actor 들을 찾아 배열에 담아 리턴한다.</li>
+          <li>유니티의 FindObjectOfType 같은 함수인듯 하다.</li>
+          <li>레벨에 액터가 많다면 성능에 부하가 생길 것이다.</li>
+        </ul>
+      </li>
+      <li><em>Foreach</em>
+        <ul>
+          <li>입력 받은 배열의 모든 원소들에 대해 반복을 진행한다. 배열의 모든 원소 순회가 끝나면 자연스레 종료 됨. Array Element 는 매 반복의 원소, Array Index 는 매 반복의 인덱스, Completed 는 foreach 문이 다 끝나면 실행 되는 핀. Loop Body 는 foreahc 문이 돌건 말건 반복 시켜 놓고 바로 다음 실행핀 실행.</li>
+          <li>해당 액터(원소)의 클래스가 “Character” 타입이거나(OR), “CharHpBarBP” 타입이라면(몬스터의 HP bar 액터, 얘도 사라져야 하므로)
+            <ul>
+              <li>1️⃣ <em>Set Actor Hidden In Scene</em>
+                <ul>
+                  <li>해당 원소를 안보이게 한다. New Hidden 에 체크</li>
+                </ul>
+              </li>
+              <li>2️⃣ <em>Set Actor Tick Enabled</em>
+                <ul>
+                  <li>해당 원소의 Tick Event 를 멈추고자 Enabled 는 체크 해제</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>6️⃣ 플레이어의 UI 도 영상 재생 중엔 안보이게
+    <ul>
+      <li><em>Get Game Instance</em>로 “SideScrollGameInstance” 게임 인스턴스를 가져와서 예전에 만들었던,  파라미터 값에 따라 플레이어 UI를 화면에 띄우거나 해제하는 <em>Show Game Play Main Widget</em> 함수를 호출. 플레이어 UI 를 화면에 그리지 않도록 파라미터는 False 로 넘김.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="영상-재생-끝-날-때-해-줄-작업들">영상 재생 끝 날 때 해 줄 작업들</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100570336-e7b92d80-3313-11eb-9c6f-52a9dd9b8c64.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100570382-015a7500-3314-11eb-804a-37da6c01c68e.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100570492-3c5ca880-3314-11eb-8084-48d8478b727e.png" alt="image" /></p>
+
+<ul>
+  <li>영상 재생이 다 끝나고난 후에 실행 될 <code class="language-plaintext highlighter-rouge">OnFinish_Boss1Sequence</code> 이벤트.</li>
+  <li>1️⃣ 영상에 출연했던 “mutant”, “root_sword_and_shield_idle” 메시를 안 보이게 한다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Actor</code> 타입의 <code class="language-plaintext highlighter-rouge">BossMesh</code>, <code class="language-plaintext highlighter-rouge">PladinMesh</code> 변수를 만들고 눈을 뜨게 해주면 에디터 상에서 보이게 된다. 언리얼 에디터 디테일 패널에서 변수에 각각 시퀀스 영상에 출연하기 위해 배치되어 있는 두 Mesh 를 각각 할당해준다.</li>
+      <li><em>Set Actor Hidden in Game</em> 으로 <code class="language-plaintext highlighter-rouge">BossMesh</code>, <code class="language-plaintext highlighter-rouge">PladinMesh</code> 두 메시를 New Hidden 체크</li>
+    </ul>
+  </li>
+  <li>2️⃣ 플레이어 키보드 입력 다시 활성화
+    <ul>
+      <li><em>Enable Input</em></li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100570356-f0116880-3313-11eb-8209-3a762f2a5039.png" alt="image" /></p>
+
+<ul>
+  <li>3️⃣ 모든 액터들을 검사하여 Character 클래스의 자식인 클래스들(플레이어, 몬스터, 보스 블루프린트 이렇게 3가지)타입을 가진 액터들을 다시 보이게 + Tick Event 를 다시 돌리게 한다.
+    <ul>
+      <li>New Hidden 체크 해제, Enabled 체크</li>
+    </ul>
+  </li>
+  <li>4️⃣ “BossCinematicTrigger” 액터는 이제 필요 없으므로 Foreach문이 끝나면 Destroy 한다.</li>
+  <li>5️⃣ 플레이어 UI 를 다시 활성화 한다. (IsShow : True)</li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 13. 버그 수정 : 공격시엔 180도로 회전시키기</title><link href="http://localhost:4000/ue4%20lesson%201/ch13/" rel="alternate" type="text/html" title="UE4 Chapter 13. 버그 수정 : 공격시엔 180도로 회전시키기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch13</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch13/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
+<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
+
+<h2 id="-정확히-180도-회전하게-만들기">🚖 정확히 180도 회전하게 만들기</h2>
+
+<p>플레이어 캐릭터가 A, D 키에 의하여 방향을 바꾸는데 횡스크롤 게임이므로 180도로 확 돌려야 한다. 근데 A, D 키를 조금만 누르면 90도쯤 밖에 회전이 안되서 앞 뒤 방향으로도 갈 수 있는 버그가 있다. 우선 회전 속도 값을 크게 올려주었다. 조금조금씩 회전 되는 일이 없게 (Character Movement Rotation Rate 회전 속도)</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100595657-91151900-333e-11eb-8cca-9f488096a4a2.png" alt="image" /></p>
+
+<ul>
+  <li>Z 축으로 회전해야 한다. (언리얼은 수직 축이 Z 축)
+    <ul>
+      <li>마지막에 <code class="language-plaintext highlighter-rouge">A</code> 키를 눌렀었으면 Z 축 회전 값을 <code class="language-plaintext highlighter-rouge">-90</code> 으로 만들어야 하고
+        <ul>
+          <li>Left Right 입력 축이 음수로 들어왔다면 <code class="language-plaintext highlighter-rouge">A</code></li>
+        </ul>
+      </li>
+      <li>마지막에 <code class="language-plaintext highlighter-rouge">D</code> 키를 눌렀었으면 Z 축 회전 값을 <code class="language-plaintext highlighter-rouge">90</code> 으로 만들어야 한다.
+        <ul>
+          <li>Left Right 입력 축이 양수로 들어왔다면 <code class="language-plaintext highlighter-rouge">D</code></li>
+        </ul>
+      </li>
+      <li>즉, 어떤 키를 마지막으로 눌렀는지 저장해 둘 필요가 있음.</li>
+    </ul>
+  </li>
+  <li>공격이나 콤보 공격 등을 할 때 Z 축 회전 값을 마지막으로 눌렀던 키에 따라 <code class="language-plaintext highlighter-rouge">-90</code>, <code class="language-plaintext highlighter-rouge">90</code>으로 만든 후에 공격 하도록 한다.</li>
+</ul>
+
+<p><br /></p>
+
+<blockquote>
+  <p>🚩 플레이어 블루프린트</p>
+</blockquote>
+
+<p>Boolean 타입의 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수 만들기.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100595854-d0dc0080-333e-11eb-927f-3063913256f2.png" alt="image" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Update Move Key</code> 함수 만들기
+    <ul>
+      <li>float 타입으로 Axis Value 를 입력 받는다. (Left Right 입력 축 이벤트에서 호출할 것이라서 음수면 <code class="language-plaintext highlighter-rouge">A</code>키, 양수면 <code class="language-plaintext highlighter-rouge">D</code>키다)</li>
+      <li>파라미터 값이 음수이면 👉 <code class="language-plaintext highlighter-rouge">A</code>키 👉 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수를 False 로 만들기</li>
+      <li>파라미터 값이 양수이면 👉 <code class="language-plaintext highlighter-rouge">D</code>키 👉 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수를 True 로 만들기</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100596237-48119480-333f-11eb-8170-a014ea797acd.png" alt="image" /></p>
+
+<p>Left Right 키보드 입력 발생시 Axis Value 를 파라미터로 받는 <code class="language-plaintext highlighter-rouge">Update Move Key</code> 함수를 호출 및 실행한다. 이 함수의 실행이 끝나면 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수 값이 정해진다. 즉 가장 마지막에 누른 키가 <code class="language-plaintext highlighter-rouge">A</code>, <code class="language-plaintext highlighter-rouge">D</code> 중 어떤 것이였는지 알 수 있다.</p>
+
+<p><br /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100595879-d89ba500-333e-11eb-88d1-4aa57ff77d8e.png" alt="image" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Update Rot By Move Key</code> 함수 만들기
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 가 True 이면, 즉 마지막 입력 키가 <code class="language-plaintext highlighter-rouge">D</code> 였다면 Z 축 회전값 <code class="language-plaintext highlighter-rouge">90</code></li>
+      <li><code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 가 False 이면, 즉 마지막 입력 키가 <code class="language-plaintext highlighter-rouge">A</code> 였다면 Z 축 회전값 <code class="language-plaintext highlighter-rouge">-90</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100596167-329c6a80-333f-11eb-9162-ae7f5b928177.png" alt="image" /></p>
+
+<p>공격시, 구르기시 덜 회전 되있었다면 제대로 회전하도록 <code class="language-plaintext highlighter-rouge">Update Rot By Move Key</code> 함수 실행시켜 Z 축 회전값 <code class="language-plaintext highlighter-rouge">90</code> or <code class="language-plaintext highlighter-rouge">-90</code> 도로 회전</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100596187-3a5c0f00-333f-11eb-88ba-1cb3c2f91fa3.png" alt="image" /></p>
+
+<p>콤보 공격시 덜 회전 되있었다면 제대로 회전하도록 <code class="language-plaintext highlighter-rouge">Update Rot By Move Key</code> 함수 실행시켜 Z 축 회전값 <code class="language-plaintext highlighter-rouge">90</code> or <code class="language-plaintext highlighter-rouge">-90</code> 도로 회전</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 14. 애니메이션 재생시 파티클 이펙트 효과</title><link href="http://localhost:4000/ue4%20lesson%201/ch14/" rel="alternate" type="text/html" title="UE4 Chapter 14. 애니메이션 재생시 파티클 이펙트 효과" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch14</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch14/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
+<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
+
+<h2 id="-검기-이펙트">🚖 검기 이펙트</h2>
+
+<blockquote>
+  <p>검을 휘두를 때마다 파티클 효과 재생시킬 것.</p>
+</blockquote>
+
+<ul>
+  <li>다운 받은 검기 이펙트 언리얼 프로젝트를 열어 사용할 폴더를 우클 - 이주(Migration) 하여 내 프로젝트로 복사.</li>
+</ul>
+
+<p><br /></p>
+
+<blockquote>
+  <p>🚩 플레이어 공격 애니메이션 애님 몽타주</p>
+</blockquote>
+
+<p>칼을 휘두르는 타임마다 노티파이를 발생시킨다. 이 타임마다 이펙트 효과를 넣기 위해.</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100601910-8e1e2680-3346-11eb-84b8-75a873fa884e.png" alt="image" /></p>
+
+<p>우클 하면 볼 수 있는 <code class="language-plaintext highlighter-rouge">Play Particle Effect</code> 노티파이를 추가 하면 아래와 같이 해당 노티파이에 파티클 에셋을 재생시킬 수 있게 된다. (다른 일반 사용자지정 노티파이는 파티클을 지정할 수 있는 아래 모듈이 나오지 않음.)</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100602081-c6be0000-3346-11eb-8981-684792307c5a.png" alt="image" /></p>
+
+<p>원하는 파티클 에셋을 지정하고 파티클의 위치와 회전 값도 조정해주면 된다!</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100602386-2c11f100-3347-11eb-8924-7006a70c6c9a.png" alt="image" /></p>
+
+<p>완성..ㅎ 다른 애님 몽타주들도 이런식으로 파티클 노티파이를 추가하여 원하는 지점에서 파티클을 재생시키면 된다. <u>이펙트 효과를 넣어 검의 범위가 더 넓어졌으니 이에 맞에 검의 콜리전 길이를 더 늘려주는 것이 좋을 것 같다.</u></p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 15. 장애물 만들기</title><link href="http://localhost:4000/ue4%20lesson%201/ch15/" rel="alternate" type="text/html" title="UE4 Chapter 15. 장애물 만들기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch15</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch15/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
+<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
+
+<h2 id="-장애물-만들기">🚖 장애물 만들기</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100608293-83b45a80-334f-11eb-85b9-6e56dd21b00f.png" alt="image" /></p>
+
+<p>장애물 액터를 여러개 복사하여 배치한 후 이를 모두 선택하여 우클 - <strong>액터-&gt;스태틱 메시로 변환</strong> 해주면 이 <u>여러개의 액터가 하나의 스태틱 메시가 된다.</u> 하나의 장애물 에셋이 됨.</p>
+
+<p><br /></p>
+
+<h2 id="-장애물에-닿으면-데미지-입게-하기">🚖 장애물에 닿으면 데미지 입게 하기</h2>
+
+<h3 id="장애물-블루프린트-만들기">장애물 블루프린트 만들기</h3>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100609648-ae071780-3351-11eb-8dcc-0b35614b082e.png" alt="image" /></p>
+
+<p>장애물 스태틱 메시를 블루프린트로 만들기 위해 장애물 스태틱 메시를 레벨에 배치한 후 오른쪽에 ‘블루프린트/스크립트 추가’ 파란색 버튼을 누르면 해당 장애물 스태틱 메시의 블루프린트를 작성할 수 있다. “ObstacleBP” 라는 이름의 블루프린트 만들어 줌</p>
+
+<p><br /></p>
+
+<blockquote>
+  <p>🚩 장애물 블루프린트</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100612555-86ff1480-3356-11eb-9793-404b7bf05613.png" alt="image" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code>라는 Actor 타입의 변수를 만들고 이 변수가 참조하는 액터(플레이어)에게 데미지를 지속적으로 가할 것이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Take Damage</code> 라는 함수를 만든다. 이 함수는 장애물 블루프린트 이벤트 그래프에서 <strong>Set Timer by Funcion Name</strong> 노드로 지속적으로, 반복적으로 실행시킬 것이다. 👉 플레이어가 장애물 안에 있는 동안 지속적으로 데미지를 주기 위해
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code> 변수가 None 이 아니라면 (Is Valid : True)
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code>를 플레이어 블루 프린트로 형변환 하고 플레이어가 죽은 상태가 아니라면 <strong>Apply Damage</strong>로 데미지를 가한다.</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code> 변수가 None 이라면 (Is Valid : False)
+        <ul>
+          <li>이 <code class="language-plaintext highlighter-rouge">Take Damage</code> 함수 Timer 를 없앤다. <strong>Clear Timer by Funcion Name</strong>이 블루프린트에서 실행 중이던 Timer by Funcion Name 가 있다면 이를 없앤다.</li>
+          <li>더 이상 지속적으로 데미지를 가하지 않는다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100612593-95e5c700-3356-11eb-84db-848a5e5b3270.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100612633-a1d18900-3356-11eb-9e30-939e67655cc6.png" alt="image" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">On Component Begin Overlap</code> 장애물의 Collision 에 무언가가 겹치기 시작했을 때 발생하는 이벤트.
+    <ul>
+      <li>겹친 액터의 태그가 PlayerHero 이고 겹친 컴포넌트의 태그가 Character 이라면 👉 <code class="language-plaintext highlighter-rouge">Damaged Actor</code>에 이 겹친 액터를 저장한다.</li>
+      <li>플레이어 액터가 죽은 상태가 아니라면 데미지를 가하고 <strong>Set Timer by Function Name</strong>으로 1.3초 주기마다 반복적으로 <code class="language-plaintext highlighter-rouge">Take Damage</code> 함수를 실행시킨다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100612662-ad24b480-3356-11eb-913d-e3f7f07679b8.png" alt="image" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">On Component End Overlap</code> 장애물의 Collision 에 겹치던 액터가 더 이상 겹치지 않고 빠져나갈 때 발생하는 이벤트
+    <ul>
+      <li>겹친 액터의 태그가 PlayerHero 이고 겹친 컴포넌트의 태그가 Character 이라면 👉 <code class="language-plaintext highlighter-rouge">Damaged Actor</code>를 None 으로 세팅한다.
+        <ul>
+          <li><u>아무것도 입력 값을 주지 않으면 None 으로 세팅된다.</u></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 12. 구르기</title><link href="http://localhost:4000/ue4%20lesson%201/ch12/" rel="alternate" type="text/html" title="UE4 Chapter 12. 구르기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch12</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch12/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
+<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
+
+<h2 id="-구르기-애니메이션">🚖 구르기 애니메이션</h2>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100587658-3676bf80-3334-11eb-9a7e-826f5d10087e.png" alt="image" /></p>
+
+<ul>
+  <li>구르기 애니메이션
+    <ul>
+      <li>Root Motion 을 활성화 한다. 구르는 동작이 플레이어의 위치 변화에 영향을 줄 수 있도록.</li>
+    </ul>
+  </li>
+  <li>구르기 애님 몽타주
+    <ul>
+      <li>위 애니메이션으로 애님 몽타주 생성</li>
+      <li>구르기 모션이 시작되는 재생 시점에 “Start” 이름의 섹션 추가</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>🚩 플레이어 블루프린트</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100587723-4ababc80-3334-11eb-9483-1048c1fef596.png" alt="image" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">Shift</code> 버튼 입력이 들어 오면 구르기 애니메이션을 재생하게 한다. “Start” 섹션부터 재생.</p>
+
+<p><br /></p>
+
+<h3 id="구르기가-중복되지-않도록-이미-구르기-중이면-구를-수가-없게">구르기가 중복되지 않도록 이미 구르기 중이면 구를 수가 없게</h3>
+
+<blockquote>
+  <p>🚩 플레이어 블루프린트</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100588576-64103880-3335-11eb-9eef-636c122918ae.png" alt="image" /></p>
+
+<p>구르기(Shift 키 입력)시 <code class="language-plaintext highlighter-rouge">IsRolling</code> flag 변수를 두어 <code class="language-plaintext highlighter-rouge">IsRolling</code>이 True라면, 즉 구르기 중이라면 구를 수 없게 한다. 그러므로 구르기 애니메이션이 끝나면 <code class="language-plaintext highlighter-rouge">IsRolling</code>을 다시 False 로 만들어줘야 한다. 커스텀 이벤트 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code>을 만들고 이 이벤트가 발생하면 <code class="language-plaintext highlighter-rouge">IsRolling</code>이 False가 되게 한다. 이 이벤트는 애니메이션이 끝나갈 때 쯤 발생하도록 할</p>
+
+<p><br /></p>
+
+<blockquote>
+  <p>🚩 구르기 애님 몽타주</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100588616-6f636400-3335-11eb-8cb4-4d9b2fc9bd34.png" alt="image" /></p>
+
+<p>구르기 애님 몽타주에서 애니메이션 끝 부분에서 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code> 노티파이를 발생시킨다.</p>
+
+<p><br /></p>
+
+<blockquote>
+  <p>🚩 플레이어 애니메이션 블루프린트</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100588656-79856280-3335-11eb-8b51-35df226fa0af.png" alt="image" /></p>
+
+<p>애니메이션 블루프린트에서 이 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code> 노티파이가 발생하면 플레이어 블루프린트의 커스텀 이벤트 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code>을 호출시켜 중개 역할을 한다.</p>
+
+<p><br /></p>
+
+<h3 id="구르기-중에는-공격--이동--점프-못-하게">구르기 중에는 공격 &amp; 이동 &amp; 점프 못 하게</h3>
+
+<blockquote>
+  <p>🚩 플레이어 애니메이션 블루프린트</p>
+</blockquote>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100588884-bb160d80-3335-11eb-9b2b-50efe4ce7264.png" alt="image" />
+것이다.</p>
+
+<p>구르기 중에는 공격 못 하게</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100589138-0f20f200-3336-11eb-8c2e-98d9d282022e.png" alt="image" /></p>
+
+<p>구르기 중에는 키보드 입력에 따른 움직임을 할 수 없게</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100589431-72ab1f80-3336-11eb-9cf3-4e24849116d0.png" alt="image" /></p>
+
+<p>구르기 중에는 점프할 수 없게</p>
+
+<p><img src="https://user-images.githubusercontent.com/42318591/100589937-11378080-3337-11eb-9b8d-d6ce2555e065.png" alt="image" /></p>
+
+<p>점프 중이 아닐 때, 공격 중이 아닐 때만 구를 수 있도록</p>
+
+<hr />
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry></feed>

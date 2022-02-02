@@ -8,7 +8,7 @@
             📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">{{sum}}</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
       </li>
       <li>
-        <span class="nav__sub-title">C/C++/C#</span>
+        <span class="nav__sub-title">Data</span>
             <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "Cpp" %}
@@ -18,40 +18,12 @@
             </ul>
             <ul>
                 {% for category in site.categories %}
-                    {% if category[0] == "STL" %}
-                        <li><a href="/categories/stl" class="">C++ STL & 표준 ({{category[1].size}})</a></li>
+                    {% if category[0] == "Cpp" %}
+                        <li><a href="/categories/cpp" class="">C ++ ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "C++ games" %}
-                        <li><a href="/categories/cpp-games" class="">C++ 연습 문제 패키지 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "Cpp Network" %}
-                        <li><a href="/categories/cpp-network" class="">C++ Boost.Asio 네트워크 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "C Sharp" %}
-                        <li><a href="/categories/csharp" class="">C # ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "C" %}
-                        <li><a href="/categories/c" class="">C ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        <span class="nav__sub-title">UE4</span>
+        <span class="nav__sub-title">Mini_Projects</span>
             <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "UE4 Lesson 1" %}
@@ -59,81 +31,11 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+        <span class="nav__sub-title">example</span>
             <ul>
                 {% for category in site.categories %}
-                    {% if category[0] == "UE4 Lesson 3" %}
-                        <li><a href="/categories/ue4-lesson-3" class="">언리얼 블루프린트 강의 2 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "UE4Cpp1" %}
-                        <li><a href="/categories/udemy-ue4-1" class="">언리얼 C++ 강의 1 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "UE4 Lesson 2" %}
-                        <li><a href="/categories/ue4-lesson-2" class="">언리얼 C++ 책 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "UE4Docs" %}
-                        <li><a href="/categories/ue4-docs" class="">내 언리얼 문서 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "UE4error" %}
-                        <li><a href="/categories/ue4error" class="">에러 메모 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        <span class="nav__sub-title">etc</span>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "Blog" %}
-                        <li><a href="/categories/blog" class="">Blog Dev ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "Design Pattern" %}
-                        <li><a href="/categories/design-pattern" class="">디자인 패턴 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "Blender" %}
-                        <li><a href="/categories/blender" class="">Blender ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "Git" %}
-                        <li><a href="/categories/git" class="">Git & Github ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "VS" %}
-                        <li><a href="/categories/vs" class="">비주얼 스튜디오 ({{category[1].size}})</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for category in site.categories %}
-                    {% if category[0] == "Bitcoin" %}
-                        <li><a href="/categories/bitcoin" class="">블록체인 암호화폐 ({{category[1].size}})</a></li>
+                    {% if category[0] == "Example_sub" %}
+                        <li><a href="/categories/example_sub" class="">Example_sub ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
