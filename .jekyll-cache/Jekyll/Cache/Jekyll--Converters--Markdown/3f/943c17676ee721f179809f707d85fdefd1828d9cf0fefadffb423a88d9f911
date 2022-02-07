@@ -1,5 +1,0 @@
-I"E<ul class="toc__menu">
-  <li><a href="#const-int--ptr--const가-맨-앞에-붙은-경우">const int * ptr : const가 맨 앞에 붙은 경우</a></li>
-  <li><a href="#int--const-ptr--const가-포인터-변수-이름-앞에-붙은-경우">int * const ptr : const가 포인터 변수 이름 앞에 붙은 경우</a></li>
-</ul>
-:ET

@@ -11,23 +11,30 @@
         <span class="nav__sub-title">Data</span>
             <ul>
                 {% for category in site.categories %}
-                    {% if category[0] == "Cpp" %}
-                        <li><a href="/categories/cpp" class="">C ++ ({{category[1].size}})</a></li>
+                    {% if category[0] == "ds" %}
+                        <li><a href="/categories/ds" class="">Data_science ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
             <ul>
                 {% for category in site.categories %}
-                    {% if category[0] == "Cpp" %}
-                        <li><a href="/categories/cpp" class="">C ++ ({{category[1].size}})</a></li>
+                    {% if category[0] == "de" %}
+                        <li><a href="/categories/de" class="">Data_engineering ({{category[1].size}})</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <ul>
+                {% for category in site.categories %}
+                    {% if category[0] == "Something_else" %}
+                        <li><a href="/categories/Something_else" class="">Something_else ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
         <span class="nav__sub-title">Mini_Projects</span>
             <ul>
                 {% for category in site.categories %}
-                    {% if category[0] == "UE4 Lesson 1" %}
-                        <li><a href="/categories/ue4-lesson-1" class="">언리얼 블루프린트 강의 1 ({{category[1].size}})</a></li>
+                    {% if category[0] == "pj" %}
+                        <li><a href="/categories/pj" class="">미니프로젝트 ({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>

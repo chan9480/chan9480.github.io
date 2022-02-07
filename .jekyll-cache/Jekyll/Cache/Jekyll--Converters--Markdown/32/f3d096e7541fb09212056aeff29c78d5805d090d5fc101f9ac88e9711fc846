@@ -1,15 +1,0 @@
-I"<ul class="toc__menu">
-  <li><a href="#chapter-2-객체-지향으로-가는-길--명령-패턴">Chapter 2. 객체 지향으로 가는 길 : 명령 패턴</a>
-    <ul>
-      <li><a href="#-전체-코드-및-구조">🔔 전체 코드 및 구조</a></li>
-      <li><a href="#-actor-클래스">🔔 Actor 클래스</a></li>
-      <li><a href="#-mytank-클래스">🔔 MyTank 클래스</a></li>
-      <li><a href="#-command-클래스">🔔 Command 클래스</a></li>
-      <li><a href="#-upcommand-클래스">🔔 UpCommand 클래스</a></li>
-      <li><a href="#-leftcommand-클래스">🔔 LeftCommand 클래스</a></li>
-      <li><a href="#-inputhandler-클래스">🔔 InputHandler 클래스</a></li>
-      <li><a href="#tankexample">TankExample</a></li>
-    </ul>
-  </li>
-</ul>
-:ET

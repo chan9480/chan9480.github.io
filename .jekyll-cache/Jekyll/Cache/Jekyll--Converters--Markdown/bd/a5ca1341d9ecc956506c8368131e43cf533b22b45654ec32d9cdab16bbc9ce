@@ -1,9 +1,0 @@
-I"%<ul class="toc__menu">
-  <li><a href="#chapter-12-가상-함수들--동적-형변환">chapter 12. 가상 함수들 : 동적 형변환</a>
-    <ul>
-      <li><a href="#-dynamic_cast">🔔 dynamic_cast</a></li>
-      <li><a href="#-static_cast">🔔 static_cast</a></li>
-    </ul>
-  </li>
-</ul>
-:ET

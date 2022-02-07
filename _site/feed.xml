@@ -1,870 +1,340 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-02T02:16:46+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱</name></author><entry><title type="html">C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)</title><link href="http://localhost:4000/cpp/freopen/" rel="alternate" type="text/html" title="C++ 코딩테스트 꿀팁! 테스트 케이스 한 번에 입력하기 (백준 저지에 유용)" /><published>2021-04-14T00:00:00+09:00</published><updated>2021-04-14T00:00:00+09:00</updated><id>http://localhost:4000/cpp/freopen</id><content type="html" xml:base="http://localhost:4000/cpp/freopen/"><![CDATA[<h2 id="-일일이-콘솔창에-입력하는-것은-너무-귀찮다">🚀 일일이 콘솔창에 입력하는 것은 너무 귀찮다</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-03T20:43:39+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱</name></author><entry><title type="html">openCV 이미지 읽기</title><link href="http://localhost:4000/ds/3rd/" rel="alternate" type="text/html" title="openCV 이미지 읽기" /><published>2021-11-18T00:00:00+09:00</published><updated>2022-02-03T00:00:00+09:00</updated><id>http://localhost:4000/ds/3rd</id><content type="html" xml:base="http://localhost:4000/ds/3rd/"><![CDATA[<h2 id="opencv-vs-pillowpil-vs-scikit-image">OpenCV vs pillow(PIL) vs scikit-image</h2>
+<blockquote>
+  <p>https://github.com/ethereon/lycon<br />
+위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데,<br />
+속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다.<br />
+만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.</p>
+</blockquote>
 
-<p>프로그래머스와 달리 백준 저지는 직접 입출력 함수를 사용하여 입출력을 받아야했기 때문에 IDE 에서 테스트 실행시에도, 디버깅시에도 문제에서 주어진 예제 테케를 일일이 콘솔창에 입력을 해주어야해서 너무 불편하다고 느꼈다. 일일이 타이핑하여 콘솔 창에 입력하지 않고</p>
-
-<p><u>텍스트 파일에 테스트 케이스 전체를 복사해두고 이로부터 파일 입력을 받도록 하면 된다!</u> Visual Studio 기준으로 설명하겠다.</p>
-
-<p><br /></p>
-
-<h3 id="1️⃣-같은-프로젝트-폴더에-inputtxt-텍스트-파일을-만든다">1️⃣ 같은 프로젝트 폴더에 <code class="language-plaintext highlighter-rouge">input.txt</code> 텍스트 파일을 만든다.</h3>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/114833998-1b9c7780-9e0b-11eb-9290-43b4bf92b7a5.png" alt="image" /></p>
-
-<p><em>프로젝트 우클 - 파일 탐색기에서 폴더 열기</em> 를 한 후 이 곳에 📄input.txt 텍스트 파일을 만든다. (이름은 꼭 input 아니어도 된다. 자유!)</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/114835293-61a60b00-9e0c-11eb-904c-72dae69559c6.png" alt="image" /></p>
-
-<p>📄input.txt 파일을 Visual Studio 의 프로젝트 안으로 드래그 하면 Visual Studio 안에서 📄input.txt 파일을 편집할 수 있게 된다. 정말 편하다 ㅠ ㅜ 콘솔 창에 일일이 입력할 필요 없이 백준에서 제공하는 입력 예제 복사해서 이 곳에 붙여넣으면 땡이다! 다양하게 테스트해보기 위해 테케 내용 바꾸기에도 아주 편했다.</p>
-
-<p><br /></p>
-
-<h3 id="2️⃣-freopeninputtxt-r-stdin">2️⃣ <code class="language-plaintext highlighter-rouge">freopen("input.txt", "r", stdin);</code></h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">freopen</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">,</span> <span class="n">stdin</span><span class="p">);</span>
-    <span class="c1">// ...</span>
-<span class="p">}</span>
+<h2 id="opencv-설치">openCV 설치</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda install -c anaconda opencv
 </code></pre></div></div>
-<p>📄input.txt 파일을 읽어 <code class="language-plaintext highlighter-rouge">stdin</code> 콘솔 입력을 할 수 있도록 위 코드를 적어주면 된다. 입력 함수를 쓰기 전에 이루어져야 하므로 main 함수 가장 위에 적어주는 것을 추천한다.</p>
 
-<p><u>주의해야할 점은!!!!!!!!!!!!!! 백준에 제출할 땐 위 코드를 지워야 한다는 것이다.</u> <del>실수로 저 코드 그대로 붙이고 제출했는데 자꾸 틀리다고 나오는데 이유를 자각하지 못해서.. 두시간을 고민한적이 있다. 개고생했다. 휴..ㅠㅠㅠㅋㅋㅋ</del></p>
+<h2 id="local-경로로-이미지열기">local 경로로 이미지열기</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import cv2
+cv2.imread('파일경로', flags) # ndarray형식으로 리턴.
+</code></pre></div></div>
+<blockquote>
+  <p>flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)</p>
+</blockquote>
 
-<hr />
+<h2 id="링크이미지jpeg-열기">링크이미지(.jpeg) 열기</h2>
+<blockquote>
+  <p>크롤링의 개념을 가져와서 사용한다.
+````
+import cv2
+from google.colab.patches import cv2_imshow
+import numpy as np
+import urllib.request</p>
+</blockquote>
+
+<p>def url_to_image(url):
+  ‘’’
+  jpg, png 이미지링크에서 numpy ndarray로 return
+  ‘’’
+  resp = urllib.request.urlopen(url)
+  image = np.asarray(bytearray(resp.read()), dtype=’uint8’)
+  image = cv2.imdecode(image, cv2.IMREAD_COLOR)</p>
+
+<p>return image</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; requests.urlopen : url 에서 request(응답) 객체르 리턴  
+&gt; -&gt; .read()로써 호출할 수 있음.  
+&gt; numpy.asarray : 배열로써 이미지르 읽음
+&gt; image를 cv2로 다시 읽어 리턴한다.(3차원)  
+
+## svg 파일 열기
+&gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원    
+&gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중
+## 이미지 확인하기  
+</code></pre></div></div>
+<p>img = 이미지의 ndarray형식
+cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름
+````</p>
+<blockquote>
+  <p>위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는<br />
+cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다!<br />
+cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴</p>
+</blockquote>
+
 <p><br /></p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 일일이 콘솔창에 입력하는 것은 너무 귀찮다]]></summary></entry><entry><title type="html">C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include &amp;lt;bits/stdc++.h&amp;gt;</title><link href="http://localhost:4000/cpp/stdc/" rel="alternate" type="text/html" title="C++ 코딩테스트 꿀팁! 헤더 인클루딩 타이핑이 귀찮을 때 : #include &amp;lt;bits/stdc++.h&amp;gt;" /><published>2021-04-14T00:00:00+09:00</published><updated>2021-04-14T00:00:00+09:00</updated><id>http://localhost:4000/cpp/stdc</id><content type="html" xml:base="http://localhost:4000/cpp/stdc/"><![CDATA[<h2 id="-include-bitsstdch">🚀 <code class="language-plaintext highlighter-rouge">#include &lt;bits/stdc++.h&gt;</code></h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="ds" /><category term="Image" /><category term="OpenCV" /><summary type="html"><![CDATA[OpenCV vs pillow(PIL) vs scikit-image https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다. openCV 설치 conda install -c anaconda opencv local 경로로 이미지열기 import cv2 cv2.imread('파일경로', flags) # ndarray형식으로 리턴. flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원) 링크이미지(.jpeg) 열기 크롤링의 개념을 가져와서 사용한다. ```` import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request def url_to_image(url): ‘’’ jpg, png 이미지링크에서 numpy ndarray로 return ‘’’ resp = urllib.request.urlopen(url) image = np.asarray(bytearray(resp.read()), dtype=’uint8’) image = cv2.imdecode(image, cv2.IMREAD_COLOR) return image &gt; requests.urlopen : url 에서 request(응답) 객체르 리턴 &gt; -&gt; .read()로써 호출할 수 있음. &gt; numpy.asarray : 배열로써 이미지르 읽음 &gt; image를 cv2로 다시 읽어 리턴한다.(3차원) ## svg 파일 열기 &gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원 &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중 ## 이미지 확인하기 img = 이미지의 ndarray형식 cv2.imshow(‘name’, img) # name은 이미지르 띄운 window 이름 ```` 위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">진짜 시작 그리고 m1맥북 세팅</title><link href="http://localhost:4000/something_else/setting/" rel="alternate" type="text/html" title="진짜 시작 그리고 m1맥북 세팅" /><published>2021-11-16T00:00:00+09:00</published><updated>2022-02-03T00:00:00+09:00</updated><id>http://localhost:4000/something_else/setting</id><content type="html" xml:base="http://localhost:4000/something_else/setting/"><![CDATA[<h2 id="반성">반성</h2>
+<p>지난 6월 코드스테이츠를 시작하면서 블로그를 개설했는데 꾸준히 쓰겠다고 했는데,<br />
+꾸준히는 개뿔 이게 테스트용 첫번째 글 이후 이게 5개월만에 두번째 글을 올리게 되었다.</p>
 
-<h3 id="-장점">🔥 장점</h3>
+<h2 id="왜-필요성을-느꼈는가">왜 필요성을 느꼈는가</h2>
+<p>사실 대학교를 다닐때도 기록보단 필기를 하였고, 시험공부를 위한 필기였기에 그 필요성을 느끼지 못하다가<br />
+이번에 section4 딥러닝 파트를 마무리하면서 그 필요성을 느끼게 되었다.<br />
+그 전환점으로 지난 2년간 쓴 아이폰에 용기를 얻어 맥북을 구매하면서, 개발세팅을 새로하게되었는데<br />
+m1 칩셋을 사용하다보니 세팅하는게 하나하나가 쉽지 않았다.<br />
+그와 동시에 이 과정들을 기록해두지 않으면 다시 찾아봐야한다는 공포가 엄습했고<br />
+이를 계기로 맥북을 사용하여 지금까지 해온 코드스테이츠<br />
+<strong>전체적인 복습</strong> 과<br />
+<strong>완성하지 못한 section 4 프로젝트를 마무리하는 과정을 불로깅</strong> <br />
+하는게 1차 목표다.</p>
 
+<h2 id="터미널-창-띄우기">터미널 창 띄우기</h2>
 <blockquote>
-  <p>헤더 인클루딩 일일이 쓰기가 귀찮을 때!</p>
+  <p>cmd + space를 눌러 spotlight에서 ‘터미널’을 검색하면 된다.</p>
 </blockquote>
 
-<p><img src="https://user-images.githubusercontent.com/42318591/114830481-34a32980-9e07-11eb-8bcf-7366f43e66fc.png" alt="image" /></p>
+<h2 id="맥북-m1-세팅">맥북 m1 세팅</h2>
+<h3 id="homebrew-설치">homebrew 설치</h3>
+<blockquote>
+  <p>macOS용 패키지 관리 어플리케이션!
+https://brew.sh
+위 공식 홈페이지를 참고한다면 어렵지 않게 설치가능하다.<br />
+단, m1의 경우 ㅜㅜ finder에서 터미널 어플을 찾아 우클릭하여 ‘정보가져오기’에서 ‘rossetta로 사용하여 열기’를 꼭! 체크해야한다.<br />
+로제타는 기존의 intel 프로세서에서 돌아가는 친구들을 m1 칩셋, 즉 apple silicon에서 돌아가게 변환해주는 에뮬이라고 보면 된다.</p>
+</blockquote>
 
-<p>나는 코딩테스트 답안 코드를 Visual Studio 에서 작성하고 있는데, 코드를 새로 작성할 때마다 <code class="language-plaintext highlighter-rouge">#include</code> 헤더를 인클루딩 하기가 귀찮으니 저렇게 내가 자주 사용하는 헤더들을 무더기로 미리 써놓고 사용하고 있었다.</p>
+<h3 id="miniforge-설치">miniforge 설치</h3>
+<blockquote>
+  <p>알아보니 아나콘다를 설치안하고 miniforge만 설치해도 되는거였다.. m1에서 conda 를 좀더 에러없게 실행하는 인스톨러이며, anaconda와 동급의 카테고리다.
+(conda의 인스톨러 종류 : 아나콘다, miniforge, miniconda) 이렇게<br />
+https://developer.apple.com/metal/tensorflow-plugin/<br />
+위에서 apple silicon 이라되어있는곳을 따라 진행하면 된다 ( 설치파일 받고 아래 코드 3줄)</p>
 
-<p>그러던 와중에 다른 분들의 코테 답안에서 <code class="language-plaintext highlighter-rouge">bits/stdc++.h</code> 이 헤더를 인클루딩 한게 자주 보여서 뭔가 싶어 알아보니 <strong>사람들이 많이 사용하는 헤더들을 인클루딩 하는 전처리문들을 전부 한 데 모아둔 헤더파일이라는 것을 알게되었다!</strong> 즉, 저런 무더기의 헤더 파일 인클루딩 전처리문을 <code class="language-plaintext highlighter-rouge">#include &lt;bits/stdc++.h&gt;</code> 한 문장으로 퉁칠 수 있게 된 것이다. 이 헤더 파일 한 곳에에 저 많은 인클루딩 문들이 들어있기 때문이다!</p>
+  <p>(brew install miniforge 로 설치해주면 된다고도 하는데 tensorfolw-deps (의존성)설치에서 에러가나더라)</p>
+</blockquote>
 
-<details>
-<summary>📜bits/stdc++.h 내용은 이와 같다. (클릭하여 펼치기)</summary>
-<div>
+<h3 id="아나콘다-가상환경-생성-삭제-패키지-설치">아나콘다 가상환경 생성, 삭제, 패키지 설치</h3>
+<blockquote>
+  <p>생성</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda create --name 이름 python=3.8
+</code></pre></div>  </div>
+  <p>삭제</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda env remove --namve 이름
+</code></pre></div>  </div>
+</blockquote>
 
-    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// C</span>
-<span class="cp">#ifndef _GLIBCXX_NO_ASSERT
-#include &lt;cassert&gt;
-#endif
-#include &lt;cctype&gt;
-#include &lt;cerrno&gt;
-#include &lt;cfloat&gt;
-#include &lt;ciso646&gt;
-#include &lt;climits&gt;
-#include &lt;clocale&gt;
-#include &lt;cmath&gt;
-#include &lt;csetjmp&gt;
-#include &lt;csignal&gt;
-#include &lt;cstdarg&gt;
-#include &lt;cstddef&gt;
-#include &lt;cstdio&gt;
-#include &lt;cstdlib&gt;
-#include &lt;cstring&gt;
-#include &lt;ctime&gt;
-</span>
-<span class="cp">#if __cplusplus &gt;= 201103L
-#include &lt;ccomplex&gt;
-#include &lt;cfenv&gt;
-#include &lt;cinttypes&gt;
-#include &lt;cstdalign&gt;
-#include &lt;cstdbool&gt;
-#include &lt;cstdint&gt;
-#include &lt;ctgmath&gt;
-#include &lt;cwchar&gt;
-#include &lt;cwctype&gt;
-#endif
-</span>
-<span class="c1">// C++</span>
-<span class="cp">#include &lt;algorithm&gt;
-#include &lt;bitset&gt;
-#include &lt;complex&gt;
-#include &lt;deque&gt;
-#include &lt;exception&gt;
-#include &lt;fstream&gt;
-#include &lt;functional&gt;
-#include &lt;iomanip&gt;
-#include &lt;ios&gt;
-#include &lt;iosfwd&gt;
-#include &lt;iostream&gt;
-#include &lt;istream&gt;
-#include &lt;iterator&gt;
-#include &lt;limits&gt;
-#include &lt;list&gt;
-#include &lt;locale&gt;
-#include &lt;map&gt;
-#include &lt;memory&gt;
-#include &lt;new&gt;
-#include &lt;numeric&gt;
-#include &lt;ostream&gt;
-#include &lt;queue&gt;
-#include &lt;set&gt;
-#include &lt;sstream&gt;
-#include &lt;stack&gt;
-#include &lt;stdexcept&gt;
-#include &lt;streambuf&gt;
-#include &lt;string&gt;
-#include &lt;typeinfo&gt;
-#include &lt;utility&gt;
-#include &lt;valarray&gt;
-#include &lt;vector&gt;
-</span>
-<span class="cp">#if __cplusplus &gt;= 201103L
-#include &lt;array&gt;
-#include &lt;atomic&gt;
-#include &lt;chrono&gt;
-#include &lt;condition_variable&gt;
-#include &lt;forward_list&gt;
-#include &lt;future&gt;
-#include &lt;initializer_list&gt;
-#include &lt;mutex&gt;
-#include &lt;random&gt;
-#include &lt;ratio&gt;
-#include &lt;regex&gt;
-#include &lt;scoped_allocator&gt;
-#include &lt;system_error&gt;
-#include &lt;thread&gt;
-#include &lt;tuple&gt;
-#include &lt;typeindex&gt;
-#include &lt;type_traits&gt;
-#include &lt;unordered_map&gt;
-#include &lt;unordered_set&gt;
-#endif
-</span></code></pre></div>    </div>
+<h3 id="git-설치">git 설치</h3>
+<blockquote>
+  <p>git에 기능이 많겠지만 본인은, github 레포와 연동하여 프로젝트들을 관리하기 위한 용도이다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    brew install git
+</code></pre></div>  </div>
+  <p>만으로 설치가 가능하다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    git --version
+</code></pre></div>  </div>
+  <p>으로 확인까지!</p>
+</blockquote>
 
-  </div>
-</details>
+<h1 id="가상환경-세팅">가상환경 세팅</h1>
+<h3 id="m1-tensorflow-gpu사용하기">m1 tensorflow-gpu사용하기</h3>
+<blockquote>
+  <p>m1은 gpu까지 하나로 싸잡아서 만든 칩셋이라 설정방법도 다르다..
+가상환경에서</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda install -c apple tensorflow-deps
+    pip install tensorflow-macos
+    pip install tensorflow-metal
+</code></pre></div>  </div>
+  <p>로 설치해준다.
+파이썬 내에서</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    import tensorflow as tf
+    print(len(tf.config.experimental.list_physical_devices('GPU')))
+</code></pre></div>  </div>
+  <p>위 결과가 1이 나오면 사용할 수 있다.
+단, 확인을 했으면 아래와같이 tensorflow 2.0을 사용하자.(혹시모르니)</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    import tensorflow.compat.v2 as tf
+</code></pre></div>  </div>
+  <h3 id="jupyter-notebook과-pandas-설치">jupyter notebook과 pandas 설치</h3>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda install -c conda-forge -y pandas jupyter
+</code></pre></div>  </div>
+  <p>로 설치해준다. pandas 필요없다면 pandas나 jupyter만 지우면 된다.</p>
+  <h3 id="그-외-패키지-설치">그 외 패키지 설치</h3>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    conda install 패키지이름
+</code></pre></div>  </div>
+  <p>단,conda 명령어로 설치가 되는지 안되는지는 잘 검색해보고 쓰는게 좋다. (pip으로만 설치가 되는 패키지도 있음)</p>
+</blockquote>
 
 <p><br /></p>
 
-<h3 id="--단점">🔥  단점</h3>
-
-<p>그러나 무수히 많은 헤더파일들을 전처리 과정에서 복사가 일어나게 되므로 컴파일 속도는 느려질 것 같다. 또한 많은 헤더 파일들이 복사되므로 <code class="language-plaintext highlighter-rouge">.cpp</code> 코드 파일의 용량도 매우 많아질 것이다.</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/114831587-839d8e80-9e08-11eb-95bd-0258b29ee4c3.png" alt="image" /></p>
-
-<p>채점 통과한 두 경우 중 위의 풀이는 <code class="language-plaintext highlighter-rouge">#include &lt;bits/stdc++.h&gt;</code> 을 사용하였고 아래는 필요한 헤더들만 인클루딩 직접 기재해준 풀이이다. <code class="language-plaintext highlighter-rouge">#include &lt;bits/stdc++.h&gt;</code> 때문인지 용량 차이가 큰 것을 확인할 수 있었다.</p>
-
-<p>코딩 테스트 풀이에 있어 <strong>용량 제한이 있다던가, 컴파일 속도까지 제한 하는 문제가 혹시나 있다면 사용하면 안될 것 같다!</strong></p>
-
-<p><br /></p>
-
-<h2 id="-설치-방법">🚀 설치 방법</h2>
-
-<ul>
-  <li>구글에 <code class="language-plaintext highlighter-rouge">bits/stdc++.h 다운로드</code> 하고 검색하면 <code class="language-plaintext highlighter-rouge">bits/stdc++.h</code> 헤더 파일을 쉽게 구할 수 있다.</li>
-  <li>이를 <em>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include</em> 경로에 📂<em>bits</em> 폴더를 만들고 그 안에 넣어주면 된다.
-    <ul>
-      <li>2017 버전을 사용하고 있다면 2017 폴더로!</li>
-      <li>그리고 Visual Studio 혹은 Visual Studio Code 를 껐다가 다시 실행시키면 이제 ``#include &lt;bits/stdc++.h&gt;` 코드에 에러가 안생기고 잘 인식 할 것이다!</li>
-    </ul>
-  </li>
-</ul>
-
-<p>위 경로에 한번 넣어주면  Visual Studio, Visual Studio Code 둘 다 적용 된다.</p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 #include &lt;bits/stdc++.h&gt;]]></summary></entry><entry><title type="html">C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기</title><link href="http://localhost:4000/cpp/iospeed/" rel="alternate" type="text/html" title="C++ scanf 와 cin 의 입출력 속도 비교, 입출력 속도 높이기" /><published>2021-03-18T00:00:00+09:00</published><updated>2021-03-18T00:00:00+09:00</updated><id>http://localhost:4000/cpp/iospeed</id><content type="html" xml:base="http://localhost:4000/cpp/iospeed/"><![CDATA[<h2 id="-c의-입출력-함수scanf-printf와-c의-입출력-함수cin-count">🚀 C의 입출력 함수(scanf, printf)와 C++의 입출력 함수(cin, count)</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Something_else" /><category term="setting" /><category term="M1" /><summary type="html"><![CDATA[반성 지난 6월 코드스테이츠를 시작하면서 블로그를 개설했는데 꾸준히 쓰겠다고 했는데, 꾸준히는 개뿔 이게 테스트용 첫번째 글 이후 이게 5개월만에 두번째 글을 올리게 되었다. 왜 필요성을 느꼈는가 사실 대학교를 다닐때도 기록보단 필기를 하였고, 시험공부를 위한 필기였기에 그 필요성을 느끼지 못하다가 이번에 section4 딥러닝 파트를 마무리하면서 그 필요성을 느끼게 되었다. 그 전환점으로 지난 2년간 쓴 아이폰에 용기를 얻어 맥북을 구매하면서, 개발세팅을 새로하게되었는데 m1 칩셋을 사용하다보니 세팅하는게 하나하나가 쉽지 않았다. 그와 동시에 이 과정들을 기록해두지 않으면 다시 찾아봐야한다는 공포가 엄습했고 이를 계기로 맥북을 사용하여 지금까지 해온 코드스테이츠 전체적인 복습 과 완성하지 못한 section 4 프로젝트를 마무리하는 과정을 불로깅 하는게 1차 목표다. 터미널 창 띄우기 cmd + space를 눌러 spotlight에서 ‘터미널’을 검색하면 된다. 맥북 m1 세팅 homebrew 설치 macOS용 패키지 관리 어플리케이션! https://brew.sh 위 공식 홈페이지를 참고한다면 어렵지 않게 설치가능하다. 단, m1의 경우 ㅜㅜ finder에서 터미널 어플을 찾아 우클릭하여 ‘정보가져오기’에서 ‘rossetta로 사용하여 열기’를 꼭! 체크해야한다. 로제타는 기존의 intel 프로세서에서 돌아가는 친구들을 m1 칩셋, 즉 apple silicon에서 돌아가게 변환해주는 에뮬이라고 보면 된다. miniforge 설치 알아보니 아나콘다를 설치안하고 miniforge만 설치해도 되는거였다.. m1에서 conda 를 좀더 에러없게 실행하는 인스톨러이며, anaconda와 동급의 카테고리다. (conda의 인스톨러 종류 : 아나콘다, miniforge, miniconda) 이렇게 https://developer.apple.com/metal/tensorflow-plugin/ 위에서 apple silicon 이라되어있는곳을 따라 진행하면 된다 ( 설치파일 받고 아래 코드 3줄) (brew install miniforge 로 설치해주면 된다고도 하는데 tensorfolw-deps (의존성)설치에서 에러가나더라) 아나콘다 가상환경 생성, 삭제, 패키지 설치 생성 conda create --name 이름 python=3.8 삭제 conda env remove --namve 이름 git 설치 git에 기능이 많겠지만 본인은, github 레포와 연동하여 프로젝트들을 관리하기 위한 용도이다. brew install git 만으로 설치가 가능하다. git --version 으로 확인까지! 가상환경 세팅 m1 tensorflow-gpu사용하기 m1은 gpu까지 하나로 싸잡아서 만든 칩셋이라 설정방법도 다르다.. 가상환경에서 conda install -c apple tensorflow-deps pip install tensorflow-macos pip install tensorflow-metal 로 설치해준다. 파이썬 내에서 import tensorflow as tf print(len(tf.config.experimental.list_physical_devices('GPU'))) 위 결과가 1이 나오면 사용할 수 있다. 단, 확인을 했으면 아래와같이 tensorflow 2.0을 사용하자.(혹시모르니) import tensorflow.compat.v2 as tf jupyter notebook과 pandas 설치 conda install -c conda-forge -y pandas jupyter 로 설치해준다. pandas 필요없다면 pandas나 jupyter만 지우면 된다. 그 외 패키지 설치 conda install 패키지이름 단,conda 명령어로 설치가 되는지 안되는지는 잘 검색해보고 쓰는게 좋다. (pip으로만 설치가 되는 패키지도 있음) 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">test게시물</title><link href="http://localhost:4000/example_sub/test/" rel="alternate" type="text/html" title="test게시물" /><published>2020-08-29T00:00:00+09:00</published><updated>2020-08-29T00:00:00+09:00</updated><id>http://localhost:4000/example_sub/test</id><content type="html" xml:base="http://localhost:4000/example_sub/test/"><![CDATA[<h2 id="test_제목">test_제목</h2>
+<p>test 게시물입니다.</p>
 
-<p><strong>cin, cout 은 <u>scanf, printf</u> 보다 2 배 이상 느리다.</strong>
-따라서 입출력을 해야하는 코딩테스트 문제를 풀이할 때 이점을 염두해두고 풀이해야 한다.</p>
-<ol class="notice--warning">
-  <li>그냥 scanf, printf 사용하기</li>
-  <li>cin, cout 을 사용할 것이라면 C와 C++ 사이의 버퍼 동기화를 끊는다.</li>
-</ol>
-
-<p>백준 문제들은 프로그래머스와 다르게 직접 입력을 받는 코드를 넣어야 하고 결과를 출력함으로써 채점이 된다. 그래서 풀이는 올바르더라도 어떤 입출력 함수를 썼느냐에 따라 시간 초과⏰ 결과가 나올 수도 있다.</p>
-
-<p>‘\n’가 endl 보다 훨씬 빠르다는 것은 알고 있었지만 cin, cout 이 scanf, printf 보다 느리다는 것은 처음 알게 되었다. scanf, printf 가 cin, cout 보다 실행 속도가 2 배 이상 빠르기 때문에 그냥 scanf, printf 를 쓰면 간단하지만 나는 cin 과 cout 이 더 가독성 좋게 느껴지고 편해서 더 선호하는 편이다. cin 과 cout 의 입출력 속도를 scanf, printf 의 속도에 가깝게 크게 향상시킬 수 있는 코드가 있다! C++로 백준 문제 풀이하시는 분들의 코드에 많이들 들어가는 코드여서 궁금했었는데 cin, cout 입출력을 향상시키는 코드였다니!!</p>
-
-<ul>
-  <li>속도 비교
-    <ul>
-      <li>getchar 👉 scanf 👉 cin</li>
-    </ul>
-  </li>
-</ul>
+<h2 id="test_제목-2">test_제목 2</h2>
+<p>test2 목차 테스트 입니다.</p>
 
 <p><br /></p>
 
-<h2 id="-cin-cout-의-입출력-속도-높이기">🚀 cin, cout 의 입출력 속도 높이기</h2>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> 
-<span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span> 
-<span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p class="notice--warning"><strong>C와 C++ 사이의 버퍼 동기화를 끊어 cin, cout이 독립적인 버퍼를 갖게하는 방식으로 입출력 속도를 scanf, printf 못지 않게 크게 향상시킨다.</strong></p>
-
-<p>cin, cout 을 사용하기 전 위 3 줄 코드를 앞서 넣어주면 된다. 다만 주의사항이 있다.</p>
-
-<ul>
-  <li>동기화를 끊기 때문에 생길 수 있는 문제점
-    <ul>
-      <li>1️⃣ C의 버퍼와 C++ 버퍼가 별개로 독립되기 때문에 scanf, printf, getchar 같은 C의 입출력 함수와 cin, cout 을 섞어쓰면 입출력의 순서가 올바르지 못하게 나올 수 있다.</li>
-      <li>2️⃣ 멀티 쓰레드 환경에선 예상하지 못한 결과가 도출될 수 있다. (동기화를 끊음으로써 Thread unsafe 상태가 되기 떄문에 race condition이 발생할 수 있음)</li>
-    </ul>
-  </li>
-</ul>
-
-<p>코딩 테스트를 풀이하는건 싱글 쓰레드 환경에서 하니 문제 없을 요소지만 현업에선 멀티 쓰레드 환경일 수 있을테니 scanf, printf 사용을 지향해야 할 것 같다.</p>
-
-<h3 id="-iossync_with_stdiofalse">🔥 ios::sync_with_stdio(false);</h3>
-
-<p>기본적으로 true 즉 동기화 상태가 디폴트 상태이다. 즉, 평소엔 C와 C++ 입출력 방식을 제한 없이 섞어쓸 수 있는 것이다. C++의 버퍼(iostream)와 C의 버퍼(stdio)를 모두 사용하고 동기화가 되어 있기 때문에 딜레이가 발생하는 것인데 위 코드로 동기화를 끊을 수 있다. 즉, C와 C++의 버퍼가 서로 독립되는 것이다. 이렇게 사용하는 버퍼 수가 줄어듬으로써 속도가 향상된다.</p>
-
-<ul>
-  <li>주의사항
-    <ul>
-      <li>C의 입출력 함수 쓰지 않기 (독립되어 섞어쓰면 안됨)</li>
-      <li>싱글 쓰레드 환경에서만 사용하기</li>
-    </ul>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="-cintienull-couttienull">🔥 cin.tie(NULL); cout.tie(NULL);</h3>
-
-<p class="notice--warning"><strong>cin 을 cout 으로부터 untie 하기</strong> 👉 동기화처럼 이 과정도 입출력 속도를 상승시킨다.</p>
-
-<p>cin, cout이 서로 tie 가 되어 있는 상태가 디폴트 상태라고 한다.</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter name:"</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">name</span><span class="p">;</span>
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">tie</code> cin과 cout이 묶여있으면
-    <ul>
-      <li>다른 스트림에서 입력 혹은 출력 작업을 하기 전에 자동으로 flush (콘솔에 표시 visible on the console) 되도록 한다.
-        <ul>
-          <li>예를 들어 입력 스트림(cin)에서 입력 작업을 하려면 그 전에 미리 출력 스트림(cout)에 있는 것들이 비워지면서 콘솔창에 표시(flush)된다는 이야기인 것 같다. 즉, “Enter name:”이 먼저 출력한 이후에 입력을 받도록</li>
-          <li>cout.tie(NULL);은 그 반대인가 그럼?</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><code class="language-plaintext highlighter-rouge">untie</code> cin과 cout이 묵여있지 않으면
-    <ul>
-      <li>다른 스트림에서 입력 혹은 출력 작업을 하기 전에 자동으로 flush (콘솔에 표시) 되도록 신경써주지 않는다.
-        <ul>
-          <li>untie 해주면 위 코드에서 이름을 먼저 입력받고난 후에 “Enter name:”이 출력될 수 있다. <strong>버퍼가 가득 차거나 수동적으로 flush 를 시켜주기 전까지는 출력이 되지 않는다.</strong></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p><a href="https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull">https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull</a></p>
-
-<p><br /></p>
-
-<h2 id="-참고-및-출처">🚀 참고 및 출처</h2>
-
-<ul>
-  <li>뽕뽑기님 블로그 <a href="https://codecollector.tistory.com/381">https://codecollector.tistory.com/381</a></li>
-  <li>쌍문동 믹서기님 블로그 <a href="https://cupjoo.tistory.com/97">https://cupjoo.tistory.com/97</a></li>
-  <li>숨창고님 블로그 <a href="https://su-m.tistory.com/7">https://su-m.tistory.com/7</a></li>
-  <li>hyunjin님 블로그 <a href="https://hegosumluxmundij.tistory.com/54">https://hegosumluxmundij.tistory.com/54</a></li>
-  <li>코딩친구님 블로그 <a href="https://codingfriend.tistory.com/21">https://codingfriend.tistory.com/21</a></li>
-  <li><a href="https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull">https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull</a></li>
-</ul>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 C의 입출력 함수(scanf, printf)와 C++의 입출력 함수(cin, count)]]></summary></entry><entry><title type="html">C++ const (컴파일 상수/런타임 상수) 그리고 constexpr</title><link href="http://localhost:4000/cpp/const/" rel="alternate" type="text/html" title="C++ const (컴파일 상수/런타임 상수) 그리고 constexpr" /><published>2021-01-21T00:00:00+09:00</published><updated>2021-01-21T00:00:00+09:00</updated><id>http://localhost:4000/cpp/const</id><content type="html" xml:base="http://localhost:4000/cpp/const/"><![CDATA[<h2 id="-c에서의-const">🚀 C에서의 const</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Example_sub" /><category term="Test" /><category term="Test_2" /><summary type="html"><![CDATA[test_제목 test 게시물입니다.]]></summary></entry><entry><title type="html">파이썬, 자료구조</title><link href="http://localhost:4000/something_else/4th/" rel="alternate" type="text/html" title="파이썬, 자료구조" /><published>2020-08-29T00:00:00+09:00</published><updated>2020-08-29T00:00:00+09:00</updated><id>http://localhost:4000/something_else/4th</id><content type="html" xml:base="http://localhost:4000/something_else/4th/"><![CDATA[<h2 id="서론">서론</h2>
+<blockquote>
+  <p>옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다.<br />
+스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다.
+물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다.
+오늘 각각을 구현해보면서 이해해보는 시간을 가졌다.</p>
+</blockquote>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>  <span class="c1">// ❌ C에선 안된다.</span>
+<h2 id="큐queue-를-연결리스트로-구현">큐(queue) 를 연결리스트로 구현</h2>
+<blockquote>
+  <p>연결리스트<br />
+<img src="https://user-images.githubusercontent.com/84547813/143422364-4784b7ad-46c9-48d0-9420-3a1d24d85e37.png" alt="image" />
+큐  <br />
+<img src="https://user-images.githubusercontent.com/84547813/143422687-a1fd91a0-2fe0-495a-a014-63f2b08096d8.png" alt="image" /></p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node():
+    def __init__(self, data):
+        self._data = data
+        self._next = None
 </code></pre></div></div>
-
 <blockquote>
-  <p>C 언어에서 <code class="language-plaintext highlighter-rouge">const</code>는 런타임 상수이다.</p>
+  <p>node 들을 선언했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Queue():
+    def __init__(self):
+        self._front = None
+        self._rear = None
+</code></pre></div>  </div>
+  <p>‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def enqueue(self,item):
+        new_node = Node(item)
+        if self._front == None: # 빈 큐 라면 '맨앞' '맨뒤'에 모두 같은 노드를 넣어준당.
+            self._front = new_node
+            self._rear = self._front
+        else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다.
+            self._rear._next = new_node           #기존 '맨뒤노드'의 next에 새로운 노드를 넣어준당. (연결!)
+            self._rear = self._rear._next         #큐의 '맨뒤' 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!)
+</code></pre></div>  </div>
+  <p>값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것)</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def dequeue(self):
+        if self._front == None: # 빈큐라면 None을 리턴
+            return None
+        else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + '맨앞' 업데이트
+            temp = self._front._data       # '맨앞'노드의 데이터를 잠깐 빼두자.
+            self._front = self._front._next  #'맨앞' 노드의 next 에 있는 노드를 큐의 '맨앞'으로 둔다.
+        if self._front ==None:
+            # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다.
+            self._rear = None           #그러면 '맨뒤'도 비워주자 (이거 안하면 '맨뒤'에 꺼낸 노드가 아직 남아있음)
+        return temp
+</code></pre></div>  </div>
+  <p>빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def return_queue(self):
+        result = []
+        temp = self._front      # 초기값은 '맨앞' node!
+        while temp!= None:      # temp에 None이 들어가버리면 다 끝난거다!
+            result.append(temp._data)
+            temp = temp._next   # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝)
+        return result
+</code></pre></div>  </div>
+  <p>현재 큐를 list로 리턴하는 함수를 정의했다.</p>
 </blockquote>
 
-<ul>
-  <li>런타임 상수라는 의미는 <code class="language-plaintext highlighter-rouge">const</code>인 <code class="language-plaintext highlighter-rouge">size</code> 공간 안에 2 가 할당 되는 것은 컴파일까지 다 마친 후 프로그램이 실행 될 때 이루어진다는 것이다.</li>
-  <li>C언어에서는 <code class="language-plaintext highlighter-rouge">const</code>가 오로지 런타임 상수이기 때문에 <code class="language-plaintext highlighter-rouge">const</code>로 배열의 크기를 결정할 수 없다.</li>
-</ul>
+<h2 id="스택stack을-list로-구현">스택(stack)을 list로 구현</h2>
+<blockquote>
+  <p>스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다.<br />
+그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다.<br />
+(물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.)  <br />
+<img src="https://user-images.githubusercontent.com/84547813/143422784-8eec4149-9d71-46b8-b76e-47da8dac1d63.png" alt="image" /></p>
+</blockquote>
 
-<p><br /></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Stack():
+    def __init__(self):
+        self._data = []
 
-<h2 id="-c에서의-const-1">🚀 C++에서의 const</h2>
+    def push(self, item):
+        self._data.append(item)
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>     <span class="c1">// 👉 이땐 컴파일 상수</span>
-<span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>          <span class="c1">// ⭕ C++ 에선 가능하다. </span>
 
-<span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">num</span><span class="p">;</span>   <span class="c1">// 👉 이땐 런타임 상수</span>
-<span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>          <span class="c1">// ❌ 불가능.</span>
+    def pop(self):
+        return self._data.pop() if self._data else None
+
+
+    def return_stack(self):
+        return self._data
 </code></pre></div></div>
-
 <blockquote>
-  <p>C++ 언어에서 <code class="language-plaintext highlighter-rouge">const</code>는 맥락에 따라 컴파일 상수도 될 수도 있고 런타임 상수도 될 수 있다.</p>
+  <p>간단해서 코드 리뷰는 생략했다.</p>
+  <h2 id="데크-구현">데크 구현</h2>
+  <p>동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분)
+양방향 연결리스트로 수정을 해서 업데이트를 해야겠다<br />
+https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png</p>
 </blockquote>
 
-<ul>
-  <li>C++에서는 초기화 될 때 그 Value 가 어떤 타임에 결정되는 것이냐에 따라 컴파일 상수가 될지 런타임 상수가 될지 결정 되는 듯하다.</li>
-  <li>아무튼 C++ 에서는 <code class="language-plaintext highlighter-rouge">const</code>가 런타임에도 결정될 수 있고 컴파일 타임에도 결정될 수 있다.</li>
-</ul>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node:
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
 
-<p><br /></p>
+class Deque:
+    def __init__(self):
+        self.top = None
+        self.bottom = None
 
-<h3 id="--constexpr">✈  constexpr</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">constexpr</span> <span class="kt">int</span> <span class="nf">my_const</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>    <span class="c1">// ⭕</span>
+    def append(self, item):
+        if self.top == None:        # self.top이 비어있다면
+            self.top = Node(item)   # self.top 에도 bottom에도 뉴 노드를 넣어준다.
+            self.bottom = self.top
+        else :
+            node = Node(item)
+            self.top.next = node    # 현재 top의 next에 뉴 노드를 넣어주고
+            self.top = node         # 이제 top은 뉴 노드로 한다.
 
-<span class="kt">int</span> <span class="n">number</span><span class="p">;</span>
-<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">number</span><span class="p">;</span>
-<span class="k">constexpr</span> <span class="kt">int</span> <span class="nf">my_const2</span><span class="p">(</span><span class="n">number</span><span class="p">);</span>  <span class="c1">// ❌ error !</span>
+
+    def appendleft(self, item):
+        node = Node(item)
+        if self.bottom == None :        # bottom이 비었다면 top, bottom에 둘다 넣어줘
+            self.top = node
+            self.bottom = node
+        else :
+            node.next = self.bottom     # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다!
+            self.bottom = node
+
 </code></pre></div></div>
-
 <blockquote>
-  <p>C++ 에서 <code class="language-plaintext highlighter-rouge">constexpr</code>을 사용하면 컴파일타임 상수라는 의미이다.</p>
+  <p>top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다.
+````
+    def pop(self):
+        # top 추출
+        if self.top == None:        # top이 None 이면 return None
+            return None
+        elif self.top == self.bottom:   # top과 bottom이 같다면(None은 아님)
+            result = self.top.value     # value를 리턴하고, top bottom을 비우자 (None)
+            self.top =None
+            self.bottom = None
+            return result
+        else :                          # 이제 정상적으로 길이 1이상의 데크라면
+            node = self.bottom          # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서
+            result = self.top.value     # (리턴값은 어쨋든 top value)
+            while node !=None:          # top을 업데이트해주자.
+                if node.next == self.top:
+                    self.top = node
+                node = node.next
+            return result</p>
 </blockquote>
 
-<p>그래서 C++ 에는 <code class="language-plaintext highlighter-rouge">constexpr</code>라는 것이 존재한다. <code class="language-plaintext highlighter-rouge">const</code>가 런타임에도 컴파일 타임에도 결정될 수 있기 때문에 얘가 등장한 것 같다. 컴파일 타임 상수라는 것을 확실히 할 수 있는 키워드다.</p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[🚀 C에서의 const]]></summary></entry><entry><title type="html">C++ 포인터와 다차원 배열 (int[col] 배열을 가리키는 포인터)</title><link href="http://localhost:4000/cpp/2array/" rel="alternate" type="text/html" title="C++ 포인터와 다차원 배열 (int[col] 배열을 가리키는 포인터)" /><published>2021-01-16T00:00:00+09:00</published><updated>2021-01-16T00:00:00+09:00</updated><id>http://localhost:4000/cpp/2array</id><content type="html" xml:base="http://localhost:4000/cpp/2array/"><![CDATA[<p><img src="https://user-images.githubusercontent.com/42318591/104795521-67328b80-57f2-11eb-9e1e-d5edbadbc2e3.png" alt="image" /></p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/104795523-6c8fd600-57f2-11eb-9e98-69acbbdc4936.png" alt="image" /></p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/104795554-aeb91780-57f2-11eb-8740-d79ede73661a.png" alt="image" /></p>
-
-<p>내가 쓴 답변인데 정리할 겸..</p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Cpp" /><category term="Programming" /><category term="Cpp" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">UE4 Chapter 11-2. 시네마틱 : 게임에서 영상 플레이하기</title><link href="http://localhost:4000/ue4%20lesson%201/ch11-2/" rel="alternate" type="text/html" title="UE4 Chapter 11-2. 시네마틱 : 게임에서 영상 플레이하기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch11-2</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch11-2/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
-<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
-
-<h2 id="-게임에서-영상-플레이하기">🚖 게임에서 영상 플레이하기</h2>
-
-<p>플레이어가 보스 근처에 가면 자동으로 이전에 만든 시네마틱 영상이 플레이 되게끔 하기. 👉 보스가 있는 지점에 충돌 체크를 해야 함. 충돌이 일어나면 영상 플레이.</p>
-
-<blockquote>
-  <p>🚩 “BossCinematicTrigger” 액터 블루프린트</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100561188-6fdf0900-32fb-11eb-92b0-8a4a01283dde.png" alt="image" /></p>
-
-<p>Mesh가 없는 빈 액터 “BossCinematicTrigger” 블루프린트를 생성한 후 위와 같이 Box Collision 컴포넌트를 붙여주고 콜리전의 크기를 조정해준다.</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100561164-62c21a00-32fb-11eb-8e31-8260a4b5f850.png" alt="image" /></p>
-
-<p>이렇게 보스가 있는 곳 계단 즈음에 “BossCinematicTrigger” 블루프린트를 통해 액터를 레벨에 배치해준다. 이제 플레이어가 이 곳을 통과하면 시네마틱 영상이 플레이되게 할 것이다.</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100561128-42925b00-32fb-11eb-9137-447e8cd5c4dd.png" alt="image" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">ActorBeginOverlap</code>
-    <ul>
-      <li>유니티에서의 <strong>Trigger 충돌 이벤트</strong>처럼 이 액터가 다른 액터와 겹칠 때 발생하는 이벤트. (물리적 충돌로 튕겨지는게 아니라 통과될 때, 즉 겹칠 때)</li>
-      <li>이 액터(“BossCinematicTrigger”)의 Collision 에 Trigger 충돌 이벤트가 발생하면 레벨 시퀀서를 생성하고(Create Level Sequence Play) 이를 재생한다.
-        <ul>
-          <li>생성할 레벨 시퀀서는 지난번에 만든 마스터 레벨 시퀀스인 <code class="language-plaintext highlighter-rouge">Master_Boss1</code></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h2 id="-영상-플레이-시작시-영상-끝날시-처리해줘야-할-작업">🚖 영상 플레이 시작시, 영상 끝날시 처리해줘야 할 작업</h2>
-
-<blockquote>
-  <p>🚩 “BossCinematicTrigger” 액터 블루프린트</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100570199-7e391f00-3313-11eb-923e-903722a6f60b.png" alt="image" /></p>
-
-<p>이렇게 많타…</p>
-
-<ul>
-  <li>이벤트
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">ActorBeginOverlap</code> 👉 영상이 시작될 때 처리해 줄 작업들</li>
-      <li><code class="language-plaintext highlighter-rouge">OnFinish_Boss1Sequence</code>(커스텀 이벤트 만듬) 👉 영상이 끝날 때 처리해 줄 작업들</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="영상-시작-할-때-해-줄-작업들">영상 시작 할 때 해 줄 작업들</h3>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100570288-c9533200-3313-11eb-869b-c2aeea430945.png" alt="image" /></p>
-
-<blockquote>
-  <p><code class="language-plaintext highlighter-rouge">ActorBeginOverlap</code> “BossCinematicTrigger” 액터의 Box Collision 과 겹쳐지면 발생</p>
-</blockquote>
-
-<ul>
-  <li>1️⃣ 마스터 레벨 시퀀스 플레이
-    <ul>
-      <li><em>Create Level Sequence Player</em>
-        <ul>
-          <li><code class="language-plaintext highlighter-rouge">Master_Boss1</code> 마스터 레벨 시퀀스를 재생시킬 시퀀서 생성</li>
-        </ul>
-      </li>
-      <li><em>Play</em>
-        <ul>
-          <li><code class="language-plaintext highlighter-rouge">Master_Boss1</code> 마스터 레벨 시퀀스를 재생</li>
-          <li>현재 위치로부터 재생한다.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>2️⃣ 영상 재생이 다 끝나고난 후에 영상 재생 끝 날 때 해 줄 작업들을 진행할 <code class="language-plaintext highlighter-rouge">OnFinish_Boss1Sequence</code> 커스텀 이벤트를 호출한다.
-    <ul>
-      <li><em>Get Length</em>
-        <ul>
-          <li>레벨 시퀀스 영상 길이 리턴</li>
-          <li><code class="language-plaintext highlighter-rouge">Master_Boss1</code> 마스터 레벨 시퀀스를 타겟으로 받아와 이의 영상 길이(Float)을 리턴</li>
-        </ul>
-      </li>
-      <li><em>Set Time by Event</em>
-        <ul>
-          <li>시간(Float)을 입력 받아, 해당 시간을 타이머로 하여 <strong>이 시간이 지나고난 후에 입력 받은 이벤트를 호출한다.</strong></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>3️⃣ 플레이어 캐릭터의 움직임을 막기 위해 입력을 불가능하게 한다. 시네마틱 영상이 재생되는 중에 플레이어 캐릭터가 키보드 입력을 통해 카메라 앞을 가리면 안되기 때문에..
-    <ul>
-      <li><em>Disable Input</em>
-        <ul>
-          <li>입력을 받지 않는다. 타겟은 0 번째 <em>Player Character</em>의 <em>Player Controller</em> 입력을 받지 않음.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>4️⃣ “BossCinematicTrigger” 액터의 Collision 을 비활성화 시킨다.
-    <ul>
-      <li><em>Set Actor Enable Collision</em>
-        <ul>
-          <li>원인을 찾지 못했지만, 시네마틱 영상 재생 중에도 “BossCinematicTrigger” 액터에 플레이어 캐릭터 액터가 충돌을 일으켜 영상이 새로 다시 시작되고 다시 시작 되고 무한 반복하는; 그런 일이 생겼다. 캐릭터는 Collision 보다 한참 앞에 있는데 왜 자꾸 충돌됐던걸까. 아무튼 그래서 그냥 시퀀스 재생이 시작되면 “BossCinematicTrigger” 액터의 Collision 을 비활성화 시켜서 문제를 해결했다.</li>
-          <li>타겟은 self (“BossCinematicTrigger” 액터)</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100574070-8cd80400-331c-11eb-9656-b807b1bc3f9a.png" alt="image" /></p>
-
-<ul>
-  <li>5️⃣ 모든 액터들을 검사하여 Character 클래스의 자식인 클래스들(플레이어, 몬스터, 보스 블루프린트 이렇게 3가지)타입을 가진 액터들을 보이지 않게 + Tick Event 를 돌리지 않게 한다.
-    <ul>
-      <li>설명
-        <ul>
-          <li>시퀀스 영상은 플레이어, 보스 액터로 찍는 것이 아닌 플레이어와 보스 Mesh 를 배치하여 찍었기 때문에(이전 포스트 참고) 영상이 재생되는 동안에는 실제 게임 로직에 사용되는 플레이어, 보스 액터는 1️⃣ 안보이게 해야 하고(렌더링 하지 않음), 2️⃣ 그들 각각의 블루프린트에서 Tick Event 를 돌리지 않도록, 즉 아무 기능도 하지 않도록 해야 한다.</li>
-          <li>몬스터 액터들도 마찬가지다. 플레이어를 추적하기 때문에 영상 재생 중에 플레이어를 공격하거나 영상에 뜻하지 않게 출연할 수 있으므로 1️⃣ 안보이게 해야 하고, 2️⃣ 그들 각각의 블루프린트에서 Tick Event 를 돌리지 않도록 해야 한다.</li>
-          <li>몬스터, 플레이어, 보스 블루프린트는 Character 클래스의 자식 클래스로 만들어진 블루프린트이다. 다형성에 의해 Character 타입인 액터만 찾으면 된다.</li>
-        </ul>
-      </li>
-      <li><em>Get All Actors Of Class</em>
-        <ul>
-          <li>특정 클래스 자식인, 해당 레벨의 모든 Actor 들을 찾아 배열에 담아 리턴한다.</li>
-          <li>유니티의 FindObjectOfType 같은 함수인듯 하다.</li>
-          <li>레벨에 액터가 많다면 성능에 부하가 생길 것이다.</li>
-        </ul>
-      </li>
-      <li><em>Foreach</em>
-        <ul>
-          <li>입력 받은 배열의 모든 원소들에 대해 반복을 진행한다. 배열의 모든 원소 순회가 끝나면 자연스레 종료 됨. Array Element 는 매 반복의 원소, Array Index 는 매 반복의 인덱스, Completed 는 foreach 문이 다 끝나면 실행 되는 핀. Loop Body 는 foreahc 문이 돌건 말건 반복 시켜 놓고 바로 다음 실행핀 실행.</li>
-          <li>해당 액터(원소)의 클래스가 “Character” 타입이거나(OR), “CharHpBarBP” 타입이라면(몬스터의 HP bar 액터, 얘도 사라져야 하므로)
-            <ul>
-              <li>1️⃣ <em>Set Actor Hidden In Scene</em>
-                <ul>
-                  <li>해당 원소를 안보이게 한다. New Hidden 에 체크</li>
-                </ul>
-              </li>
-              <li>2️⃣ <em>Set Actor Tick Enabled</em>
-                <ul>
-                  <li>해당 원소의 Tick Event 를 멈추고자 Enabled 는 체크 해제</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>6️⃣ 플레이어의 UI 도 영상 재생 중엔 안보이게
-    <ul>
-      <li><em>Get Game Instance</em>로 “SideScrollGameInstance” 게임 인스턴스를 가져와서 예전에 만들었던,  파라미터 값에 따라 플레이어 UI를 화면에 띄우거나 해제하는 <em>Show Game Play Main Widget</em> 함수를 호출. 플레이어 UI 를 화면에 그리지 않도록 파라미터는 False 로 넘김.</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="영상-재생-끝-날-때-해-줄-작업들">영상 재생 끝 날 때 해 줄 작업들</h3>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100570336-e7b92d80-3313-11eb-9c6f-52a9dd9b8c64.png" alt="image" /></p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100570382-015a7500-3314-11eb-804a-37da6c01c68e.png" alt="image" /></p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100570492-3c5ca880-3314-11eb-8084-48d8478b727e.png" alt="image" /></p>
-
-<ul>
-  <li>영상 재생이 다 끝나고난 후에 실행 될 <code class="language-plaintext highlighter-rouge">OnFinish_Boss1Sequence</code> 이벤트.</li>
-  <li>1️⃣ 영상에 출연했던 “mutant”, “root_sword_and_shield_idle” 메시를 안 보이게 한다.
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">Actor</code> 타입의 <code class="language-plaintext highlighter-rouge">BossMesh</code>, <code class="language-plaintext highlighter-rouge">PladinMesh</code> 변수를 만들고 눈을 뜨게 해주면 에디터 상에서 보이게 된다. 언리얼 에디터 디테일 패널에서 변수에 각각 시퀀스 영상에 출연하기 위해 배치되어 있는 두 Mesh 를 각각 할당해준다.</li>
-      <li><em>Set Actor Hidden in Game</em> 으로 <code class="language-plaintext highlighter-rouge">BossMesh</code>, <code class="language-plaintext highlighter-rouge">PladinMesh</code> 두 메시를 New Hidden 체크</li>
-    </ul>
-  </li>
-  <li>2️⃣ 플레이어 키보드 입력 다시 활성화
-    <ul>
-      <li><em>Enable Input</em></li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100570356-f0116880-3313-11eb-8209-3a762f2a5039.png" alt="image" /></p>
-
-<ul>
-  <li>3️⃣ 모든 액터들을 검사하여 Character 클래스의 자식인 클래스들(플레이어, 몬스터, 보스 블루프린트 이렇게 3가지)타입을 가진 액터들을 다시 보이게 + Tick Event 를 다시 돌리게 한다.
-    <ul>
-      <li>New Hidden 체크 해제, Enabled 체크</li>
-    </ul>
-  </li>
-  <li>4️⃣ “BossCinematicTrigger” 액터는 이제 필요 없으므로 Foreach문이 끝나면 Destroy 한다.</li>
-  <li>5️⃣ 플레이어 UI 를 다시 활성화 한다. (IsShow : True)</li>
-</ul>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 13. 버그 수정 : 공격시엔 180도로 회전시키기</title><link href="http://localhost:4000/ue4%20lesson%201/ch13/" rel="alternate" type="text/html" title="UE4 Chapter 13. 버그 수정 : 공격시엔 180도로 회전시키기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch13</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch13/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
-<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
-
-<h2 id="-정확히-180도-회전하게-만들기">🚖 정확히 180도 회전하게 만들기</h2>
-
-<p>플레이어 캐릭터가 A, D 키에 의하여 방향을 바꾸는데 횡스크롤 게임이므로 180도로 확 돌려야 한다. 근데 A, D 키를 조금만 누르면 90도쯤 밖에 회전이 안되서 앞 뒤 방향으로도 갈 수 있는 버그가 있다. 우선 회전 속도 값을 크게 올려주었다. 조금조금씩 회전 되는 일이 없게 (Character Movement Rotation Rate 회전 속도)</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100595657-91151900-333e-11eb-8cca-9f488096a4a2.png" alt="image" /></p>
-
-<ul>
-  <li>Z 축으로 회전해야 한다. (언리얼은 수직 축이 Z 축)
-    <ul>
-      <li>마지막에 <code class="language-plaintext highlighter-rouge">A</code> 키를 눌렀었으면 Z 축 회전 값을 <code class="language-plaintext highlighter-rouge">-90</code> 으로 만들어야 하고
-        <ul>
-          <li>Left Right 입력 축이 음수로 들어왔다면 <code class="language-plaintext highlighter-rouge">A</code></li>
-        </ul>
-      </li>
-      <li>마지막에 <code class="language-plaintext highlighter-rouge">D</code> 키를 눌렀었으면 Z 축 회전 값을 <code class="language-plaintext highlighter-rouge">90</code> 으로 만들어야 한다.
-        <ul>
-          <li>Left Right 입력 축이 양수로 들어왔다면 <code class="language-plaintext highlighter-rouge">D</code></li>
-        </ul>
-      </li>
-      <li>즉, 어떤 키를 마지막으로 눌렀는지 저장해 둘 필요가 있음.</li>
-    </ul>
-  </li>
-  <li>공격이나 콤보 공격 등을 할 때 Z 축 회전 값을 마지막으로 눌렀던 키에 따라 <code class="language-plaintext highlighter-rouge">-90</code>, <code class="language-plaintext highlighter-rouge">90</code>으로 만든 후에 공격 하도록 한다.</li>
-</ul>
-
-<p><br /></p>
-
-<blockquote>
-  <p>🚩 플레이어 블루프린트</p>
-</blockquote>
-
-<p>Boolean 타입의 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수 만들기.</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100595854-d0dc0080-333e-11eb-927f-3063913256f2.png" alt="image" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Update Move Key</code> 함수 만들기
-    <ul>
-      <li>float 타입으로 Axis Value 를 입력 받는다. (Left Right 입력 축 이벤트에서 호출할 것이라서 음수면 <code class="language-plaintext highlighter-rouge">A</code>키, 양수면 <code class="language-plaintext highlighter-rouge">D</code>키다)</li>
-      <li>파라미터 값이 음수이면 👉 <code class="language-plaintext highlighter-rouge">A</code>키 👉 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수를 False 로 만들기</li>
-      <li>파라미터 값이 양수이면 👉 <code class="language-plaintext highlighter-rouge">D</code>키 👉 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수를 True 로 만들기</li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100596237-48119480-333f-11eb-8170-a014ea797acd.png" alt="image" /></p>
-
-<p>Left Right 키보드 입력 발생시 Axis Value 를 파라미터로 받는 <code class="language-plaintext highlighter-rouge">Update Move Key</code> 함수를 호출 및 실행한다. 이 함수의 실행이 끝나면 <code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 변수 값이 정해진다. 즉 가장 마지막에 누른 키가 <code class="language-plaintext highlighter-rouge">A</code>, <code class="language-plaintext highlighter-rouge">D</code> 중 어떤 것이였는지 알 수 있다.</p>
-
-<p><br /></p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100595879-d89ba500-333e-11eb-88d1-4aa57ff77d8e.png" alt="image" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Update Rot By Move Key</code> 함수 만들기
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 가 True 이면, 즉 마지막 입력 키가 <code class="language-plaintext highlighter-rouge">D</code> 였다면 Z 축 회전값 <code class="language-plaintext highlighter-rouge">90</code></li>
-      <li><code class="language-plaintext highlighter-rouge">IsPressRightKey</code> 가 False 이면, 즉 마지막 입력 키가 <code class="language-plaintext highlighter-rouge">A</code> 였다면 Z 축 회전값 <code class="language-plaintext highlighter-rouge">-90</code></li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100596167-329c6a80-333f-11eb-9162-ae7f5b928177.png" alt="image" /></p>
-
-<p>공격시, 구르기시 덜 회전 되있었다면 제대로 회전하도록 <code class="language-plaintext highlighter-rouge">Update Rot By Move Key</code> 함수 실행시켜 Z 축 회전값 <code class="language-plaintext highlighter-rouge">90</code> or <code class="language-plaintext highlighter-rouge">-90</code> 도로 회전</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100596187-3a5c0f00-333f-11eb-88ba-1cb3c2f91fa3.png" alt="image" /></p>
-
-<p>콤보 공격시 덜 회전 되있었다면 제대로 회전하도록 <code class="language-plaintext highlighter-rouge">Update Rot By Move Key</code> 함수 실행시켜 Z 축 회전값 <code class="language-plaintext highlighter-rouge">90</code> or <code class="language-plaintext highlighter-rouge">-90</code> 도로 회전</p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 14. 애니메이션 재생시 파티클 이펙트 효과</title><link href="http://localhost:4000/ue4%20lesson%201/ch14/" rel="alternate" type="text/html" title="UE4 Chapter 14. 애니메이션 재생시 파티클 이펙트 효과" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch14</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch14/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
-<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
-
-<h2 id="-검기-이펙트">🚖 검기 이펙트</h2>
-
-<blockquote>
-  <p>검을 휘두를 때마다 파티클 효과 재생시킬 것.</p>
-</blockquote>
-
-<ul>
-  <li>다운 받은 검기 이펙트 언리얼 프로젝트를 열어 사용할 폴더를 우클 - 이주(Migration) 하여 내 프로젝트로 복사.</li>
-</ul>
-
-<p><br /></p>
-
-<blockquote>
-  <p>🚩 플레이어 공격 애니메이션 애님 몽타주</p>
-</blockquote>
-
-<p>칼을 휘두르는 타임마다 노티파이를 발생시킨다. 이 타임마다 이펙트 효과를 넣기 위해.</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100601910-8e1e2680-3346-11eb-84b8-75a873fa884e.png" alt="image" /></p>
-
-<p>우클 하면 볼 수 있는 <code class="language-plaintext highlighter-rouge">Play Particle Effect</code> 노티파이를 추가 하면 아래와 같이 해당 노티파이에 파티클 에셋을 재생시킬 수 있게 된다. (다른 일반 사용자지정 노티파이는 파티클을 지정할 수 있는 아래 모듈이 나오지 않음.)</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100602081-c6be0000-3346-11eb-8981-684792307c5a.png" alt="image" /></p>
-
-<p>원하는 파티클 에셋을 지정하고 파티클의 위치와 회전 값도 조정해주면 된다!</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100602386-2c11f100-3347-11eb-8924-7006a70c6c9a.png" alt="image" /></p>
-
-<p>완성..ㅎ 다른 애님 몽타주들도 이런식으로 파티클 노티파이를 추가하여 원하는 지점에서 파티클을 재생시키면 된다. <u>이펙트 효과를 넣어 검의 범위가 더 넓어졌으니 이에 맞에 검의 콜리전 길이를 더 늘려주는 것이 좋을 것 같다.</u></p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 15. 장애물 만들기</title><link href="http://localhost:4000/ue4%20lesson%201/ch15/" rel="alternate" type="text/html" title="UE4 Chapter 15. 장애물 만들기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch15</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch15/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
-<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
-
-<h2 id="-장애물-만들기">🚖 장애물 만들기</h2>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100608293-83b45a80-334f-11eb-85b9-6e56dd21b00f.png" alt="image" /></p>
-
-<p>장애물 액터를 여러개 복사하여 배치한 후 이를 모두 선택하여 우클 - <strong>액터-&gt;스태틱 메시로 변환</strong> 해주면 이 <u>여러개의 액터가 하나의 스태틱 메시가 된다.</u> 하나의 장애물 에셋이 됨.</p>
-
-<p><br /></p>
-
-<h2 id="-장애물에-닿으면-데미지-입게-하기">🚖 장애물에 닿으면 데미지 입게 하기</h2>
-
-<h3 id="장애물-블루프린트-만들기">장애물 블루프린트 만들기</h3>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100609648-ae071780-3351-11eb-8dcc-0b35614b082e.png" alt="image" /></p>
-
-<p>장애물 스태틱 메시를 블루프린트로 만들기 위해 장애물 스태틱 메시를 레벨에 배치한 후 오른쪽에 ‘블루프린트/스크립트 추가’ 파란색 버튼을 누르면 해당 장애물 스태틱 메시의 블루프린트를 작성할 수 있다. “ObstacleBP” 라는 이름의 블루프린트 만들어 줌</p>
-
-<p><br /></p>
-
-<blockquote>
-  <p>🚩 장애물 블루프린트</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100612555-86ff1480-3356-11eb-9793-404b7bf05613.png" alt="image" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code>라는 Actor 타입의 변수를 만들고 이 변수가 참조하는 액터(플레이어)에게 데미지를 지속적으로 가할 것이다.</li>
-  <li><code class="language-plaintext highlighter-rouge">Take Damage</code> 라는 함수를 만든다. 이 함수는 장애물 블루프린트 이벤트 그래프에서 <strong>Set Timer by Funcion Name</strong> 노드로 지속적으로, 반복적으로 실행시킬 것이다. 👉 플레이어가 장애물 안에 있는 동안 지속적으로 데미지를 주기 위해
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code> 변수가 None 이 아니라면 (Is Valid : True)
-        <ul>
-          <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code>를 플레이어 블루 프린트로 형변환 하고 플레이어가 죽은 상태가 아니라면 <strong>Apply Damage</strong>로 데미지를 가한다.</li>
-        </ul>
-      </li>
-      <li><code class="language-plaintext highlighter-rouge">Damaged Actor</code> 변수가 None 이라면 (Is Valid : False)
-        <ul>
-          <li>이 <code class="language-plaintext highlighter-rouge">Take Damage</code> 함수 Timer 를 없앤다. <strong>Clear Timer by Funcion Name</strong>이 블루프린트에서 실행 중이던 Timer by Funcion Name 가 있다면 이를 없앤다.</li>
-          <li>더 이상 지속적으로 데미지를 가하지 않는다.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100612593-95e5c700-3356-11eb-84db-848a5e5b3270.png" alt="image" /></p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100612633-a1d18900-3356-11eb-9e30-939e67655cc6.png" alt="image" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">On Component Begin Overlap</code> 장애물의 Collision 에 무언가가 겹치기 시작했을 때 발생하는 이벤트.
-    <ul>
-      <li>겹친 액터의 태그가 PlayerHero 이고 겹친 컴포넌트의 태그가 Character 이라면 👉 <code class="language-plaintext highlighter-rouge">Damaged Actor</code>에 이 겹친 액터를 저장한다.</li>
-      <li>플레이어 액터가 죽은 상태가 아니라면 데미지를 가하고 <strong>Set Timer by Function Name</strong>으로 1.3초 주기마다 반복적으로 <code class="language-plaintext highlighter-rouge">Take Damage</code> 함수를 실행시킨다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100612662-ad24b480-3356-11eb-913d-e3f7f07679b8.png" alt="image" /></p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">On Component End Overlap</code> 장애물의 Collision 에 겹치던 액터가 더 이상 겹치지 않고 빠져나갈 때 발생하는 이벤트
-    <ul>
-      <li>겹친 액터의 태그가 PlayerHero 이고 겹친 컴포넌트의 태그가 Character 이라면 👉 <code class="language-plaintext highlighter-rouge">Damaged Actor</code>를 None 으로 세팅한다.
-        <ul>
-          <li><u>아무것도 입력 값을 주지 않으면 None 으로 세팅된다.</u></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry><entry><title type="html">UE4 Chapter 12. 구르기</title><link href="http://localhost:4000/ue4%20lesson%201/ch12/" rel="alternate" type="text/html" title="UE4 Chapter 12. 구르기" /><published>2020-11-30T00:00:00+09:00</published><updated>2020-11-30T00:00:00+09:00</updated><id>http://localhost:4000/ue4%20lesson%201/ch12</id><content type="html" xml:base="http://localhost:4000/ue4%20lesson%201/ch12/"><![CDATA[<p class="notice--warning">인프런에 있는 황대희님의 <strong>언리얼 엔진4 3D 횡스크롤 게임 만들기</strong> 강의를 듣고 정리한 필기입니다. 😀<br />
-<strong>언리얼 엔진 공식 문서</strong> <a href="https://docs.unrealengine.com/ko/index.html">https://docs.unrealengine.com/ko/index.html</a></p>
-
-<h2 id="-구르기-애니메이션">🚖 구르기 애니메이션</h2>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100587658-3676bf80-3334-11eb-9a7e-826f5d10087e.png" alt="image" /></p>
-
-<ul>
-  <li>구르기 애니메이션
-    <ul>
-      <li>Root Motion 을 활성화 한다. 구르는 동작이 플레이어의 위치 변화에 영향을 줄 수 있도록.</li>
-    </ul>
-  </li>
-  <li>구르기 애님 몽타주
-    <ul>
-      <li>위 애니메이션으로 애님 몽타주 생성</li>
-      <li>구르기 모션이 시작되는 재생 시점에 “Start” 이름의 섹션 추가</li>
-    </ul>
-  </li>
-</ul>
-
-<blockquote>
-  <p>🚩 플레이어 블루프린트</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100587723-4ababc80-3334-11eb-9483-1048c1fef596.png" alt="image" /></p>
-
-<p><code class="language-plaintext highlighter-rouge">Shift</code> 버튼 입력이 들어 오면 구르기 애니메이션을 재생하게 한다. “Start” 섹션부터 재생.</p>
-
-<p><br /></p>
-
-<h3 id="구르기가-중복되지-않도록-이미-구르기-중이면-구를-수가-없게">구르기가 중복되지 않도록 이미 구르기 중이면 구를 수가 없게</h3>
-
-<blockquote>
-  <p>🚩 플레이어 블루프린트</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100588576-64103880-3335-11eb-9eef-636c122918ae.png" alt="image" /></p>
-
-<p>구르기(Shift 키 입력)시 <code class="language-plaintext highlighter-rouge">IsRolling</code> flag 변수를 두어 <code class="language-plaintext highlighter-rouge">IsRolling</code>이 True라면, 즉 구르기 중이라면 구를 수 없게 한다. 그러므로 구르기 애니메이션이 끝나면 <code class="language-plaintext highlighter-rouge">IsRolling</code>을 다시 False 로 만들어줘야 한다. 커스텀 이벤트 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code>을 만들고 이 이벤트가 발생하면 <code class="language-plaintext highlighter-rouge">IsRolling</code>이 False가 되게 한다. 이 이벤트는 애니메이션이 끝나갈 때 쯤 발생하도록 할</p>
-
-<p><br /></p>
-
-<blockquote>
-  <p>🚩 구르기 애님 몽타주</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100588616-6f636400-3335-11eb-8cb4-4d9b2fc9bd34.png" alt="image" /></p>
-
-<p>구르기 애님 몽타주에서 애니메이션 끝 부분에서 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code> 노티파이를 발생시킨다.</p>
-
-<p><br /></p>
-
-<blockquote>
-  <p>🚩 플레이어 애니메이션 블루프린트</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100588656-79856280-3335-11eb-8b51-35df226fa0af.png" alt="image" /></p>
-
-<p>애니메이션 블루프린트에서 이 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code> 노티파이가 발생하면 플레이어 블루프린트의 커스텀 이벤트 <code class="language-plaintext highlighter-rouge">OnAnimEnd_Rolling</code>을 호출시켜 중개 역할을 한다.</p>
-
-<p><br /></p>
-
-<h3 id="구르기-중에는-공격--이동--점프-못-하게">구르기 중에는 공격 &amp; 이동 &amp; 점프 못 하게</h3>
-
-<blockquote>
-  <p>🚩 플레이어 애니메이션 블루프린트</p>
-</blockquote>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100588884-bb160d80-3335-11eb-9b2b-50efe4ce7264.png" alt="image" />
-것이다.</p>
-
-<p>구르기 중에는 공격 못 하게</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100589138-0f20f200-3336-11eb-8c2e-98d9d282022e.png" alt="image" /></p>
-
-<p>구르기 중에는 키보드 입력에 따른 움직임을 할 수 없게</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100589431-72ab1f80-3336-11eb-9cf3-4e24849116d0.png" alt="image" /></p>
-
-<p>구르기 중에는 점프할 수 없게</p>
-
-<p><img src="https://user-images.githubusercontent.com/42318591/100589937-11378080-3337-11eb-9b8d-d6ce2555e065.png" alt="image" /></p>
-
-<p>점프 중이 아닐 때, 공격 중이 아닐 때만 구를 수 있도록</p>
-
-<hr />
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="UE4 Lesson 1" /><category term="Game Engine" /><category term="UE4" /><summary type="html"><![CDATA[인프런에 있는 황대희님의 언리얼 엔진4 3D 횡스크롤 게임 만들기 강의를 듣고 정리한 필기입니다. 😀 언리얼 엔진 공식 문서 https://docs.unrealengine.com/ko/index.html]]></summary></entry></feed>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def popleft(self):
+    # bottom 추출
+    if self.bottom == None:
+        return None
+    elif self.top == self.bottom:
+        self.top = None
+        result = self.bottom.value
+        self.bottom = None
+        return result
+    else :
+        result = self.bottom.value
+        self.bottom = self.bottom.next
+        return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ````
+
+def ord_desc(self):
+    node = self.bottom      # 초기값은 bottom 부터
+    result = []
+    while node != None :    # 노드에 None이 들어있다면 종료
+        result.append(node.value)
+        node = node.next
+    return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.
+</code></pre></div></div>]]></content><author><name>옹달샘👱</name></author><category term="Something_else" /><category term="algorithm" /><category term="data_structure" /><summary type="html"><![CDATA[서론 옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다. 스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다. 물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다. 오늘 각각을 구현해보면서 이해해보는 시간을 가졌다. 큐(queue) 를 연결리스트로 구현 연결리스트 큐 class Node(): def __init__(self, data): self._data = data self._next = None node 들을 선언했다. class Queue(): def __init__(self): self._front = None self._rear = None ‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다. def enqueue(self,item): new_node = Node(item) if self._front == None: # 빈 큐 라면 '맨앞' '맨뒤'에 모두 같은 노드를 넣어준당. self._front = new_node self._rear = self._front else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다. self._rear._next = new_node #기존 '맨뒤노드'의 next에 새로운 노드를 넣어준당. (연결!) self._rear = self._rear._next #큐의 '맨뒤' 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!) 값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것) def dequeue(self): if self._front == None: # 빈큐라면 None을 리턴 return None else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + '맨앞' 업데이트 temp = self._front._data # '맨앞'노드의 데이터를 잠깐 빼두자. self._front = self._front._next #'맨앞' 노드의 next 에 있는 노드를 큐의 '맨앞'으로 둔다. if self._front ==None: # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다. self._rear = None #그러면 '맨뒤'도 비워주자 (이거 안하면 '맨뒤'에 꺼낸 노드가 아직 남아있음) return temp 빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다. def return_queue(self): result = [] temp = self._front # 초기값은 '맨앞' node! while temp!= None: # temp에 None이 들어가버리면 다 끝난거다! result.append(temp._data) temp = temp._next # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝) return result 현재 큐를 list로 리턴하는 함수를 정의했다. 스택(stack)을 list로 구현 스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다. 그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다. (물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.) class Stack(): def __init__(self): self._data = [] def push(self, item): self._data.append(item) def pop(self): return self._data.pop() if self._data else None def return_stack(self): return self._data 간단해서 코드 리뷰는 생략했다. 데크 구현 동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분) 양방향 연결리스트로 수정을 해서 업데이트를 해야겠다 https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png class Node: def __init__(self, value, next=None): self.value = value self.next = next class Deque: def __init__(self): self.top = None self.bottom = None def append(self, item): if self.top == None: # self.top이 비어있다면 self.top = Node(item) # self.top 에도 bottom에도 뉴 노드를 넣어준다. self.bottom = self.top else : node = Node(item) self.top.next = node # 현재 top의 next에 뉴 노드를 넣어주고 self.top = node # 이제 top은 뉴 노드로 한다. def appendleft(self, item): node = Node(item) if self.bottom == None : # bottom이 비었다면 top, bottom에 둘다 넣어줘 self.top = node self.bottom = node else : node.next = self.bottom # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다! self.bottom = node top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다. ```` def pop(self): # top 추출 if self.top == None: # top이 None 이면 return None return None elif self.top == self.bottom: # top과 bottom이 같다면(None은 아님) result = self.top.value # value를 리턴하고, top bottom을 비우자 (None) self.top =None self.bottom = None return result else : # 이제 정상적으로 길이 1이상의 데크라면 node = self.bottom # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서 result = self.top.value # (리턴값은 어쨋든 top value) while node !=None: # top을 업데이트해주자. if node.next == self.top: self.top = node node = node.next return result def popleft(self): # bottom 추출 if self.bottom == None: return None elif self.top == self.bottom: self.top = None result = self.bottom.value self.bottom = None return result else : result = self.bottom.value self.bottom = self.bottom.next return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ```` def ord_desc(self): node = self.bottom # 초기값은 bottom 부터 result = [] while node != None : # 노드에 None이 들어있다면 종료 result.append(node.value) node = node.next return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.]]></summary></entry></feed>

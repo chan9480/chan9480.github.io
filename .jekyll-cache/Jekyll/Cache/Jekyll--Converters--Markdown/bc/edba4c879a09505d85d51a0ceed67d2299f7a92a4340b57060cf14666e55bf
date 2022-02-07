@@ -1,9 +1,0 @@
-I"<ul class="toc__menu">
-  <li><a href="#chapter-12-가상-함수들--derived-class-에서-출력-연산자-사용하기">chapter 12. 가상 함수들 : Derived Class 에서 출력 연산자 사용하기</a>
-    <ul>
-      <li><a href="#-출력-연산자-오버로딩은-전역-함수로만-구현-가능">🔔 출력 연산자 오버로딩은 전역 함수로만 구현 가능</a></li>
-      <li><a href="#-오버라이딩-하기-위한-대안">🔔 오버라이딩 하기 위한 대안</a></li>
-    </ul>
-  </li>
-</ul>
-:ET

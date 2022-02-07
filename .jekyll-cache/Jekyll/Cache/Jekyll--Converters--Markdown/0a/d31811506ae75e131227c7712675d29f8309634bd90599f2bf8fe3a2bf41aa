@@ -1,0 +1,17 @@
+I"�<ul class="toc__menu">
+  <li><a href="#반성">반성</a></li>
+  <li><a href="#왜-필요성을-느꼈는가">왜 필요성을 느꼈는가</a></li>
+  <li><a href="#터미널-창-띄우기">터미널 창 띄우기</a></li>
+  <li><a href="#맥북-m1-세팅">맥북 m1 세팅</a>
+    <ul>
+      <li><a href="#homebrew-설치">homebrew 설치</a></li>
+      <li><a href="#miniforge-설치">miniforge 설치</a></li>
+      <li><a href="#아나콘다-가상환경-생성-삭제-패키지-설치">아나콘다 가상환경 생성, 삭제, 패키지 설치</a></li>
+      <li><a href="#git-설치">git 설치</a></li>
+      <li><a href="#m1-tensorflow-gpu사용하기">m1 tensorflow-gpu사용하기</a></li>
+      <li><a href="#jupyter-notebook과-pandas-설치">jupyter notebook과 pandas 설치</a></li>
+      <li><a href="#그-외-패키지-설치">그 외 패키지 설치</a></li>
+    </ul>
+  </li>
+</ul>
+:ET

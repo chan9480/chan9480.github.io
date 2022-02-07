@@ -1,9 +1,0 @@
-I"�<ul class="toc__menu">
-  <li><a href="#chapter-11-상속--상속-받은-함수를-감추기">chapter 11. 상속 : 상속 받은 함수를 감추기</a>
-    <ul>
-      <li><a href="#-using--접근-지정자-바꾸기">🔔 using : 접근 지정자 바꾸기</a></li>
-      <li><a href="#-delete--상속-받은-함수-접근-막기">🔔 delete : 상속 받은 함수 접근 막기</a></li>
-    </ul>
-  </li>
-</ul>
-:ET

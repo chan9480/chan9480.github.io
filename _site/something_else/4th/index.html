@@ -1,0 +1,924 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>파이썬, 자료구조 - 배우자 그리고 써먹자</title>
+<meta name="description" content="서론    옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다. 스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다. 물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다. 오늘 각각을 구현해보면서 이해해보는 시간을 가졌다.   큐(queue) 를 연결리스트로 구현    연결리스트  큐      class Node():     def __init__(self, data):         self._data = data         self._next = None     node 들을 선언했다.   class Queue():     def __init__(self):         self._front = None         self._rear = None      ‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다.       def enqueue(self,item):         new_node = Node(item)         if self._front == None: # 빈 큐 라면 &#39;맨앞&#39; &#39;맨뒤&#39;에 모두 같은 노드를 넣어준당.             self._front = new_node             self._rear = self._front         else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다.             self._rear._next = new_node           #기존 &#39;맨뒤노드&#39;의 next에 새로운 노드를 넣어준당. (연결!)             self._rear = self._rear._next         #큐의 &#39;맨뒤&#39; 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!)      값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것)       def dequeue(self):         if self._front == None: # 빈큐라면 None을 리턴             return None         else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + &#39;맨앞&#39; 업데이트             temp = self._front._data       # &#39;맨앞&#39;노드의 데이터를 잠깐 빼두자.             self._front = self._front._next  #&#39;맨앞&#39; 노드의 next 에 있는 노드를 큐의 &#39;맨앞&#39;으로 둔다.         if self._front ==None:             # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다.             self._rear = None           #그러면 &#39;맨뒤&#39;도 비워주자 (이거 안하면 &#39;맨뒤&#39;에 꺼낸 노드가 아직 남아있음)         return temp      빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다.       def return_queue(self):         result = []         temp = self._front      # 초기값은 &#39;맨앞&#39; node!         while temp!= None:      # temp에 None이 들어가버리면 다 끝난거다!             result.append(temp._data)             temp = temp._next   # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝)         return result      현재 큐를 list로 리턴하는 함수를 정의했다.   스택(stack)을 list로 구현    스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다. 그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다. (물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.)      class Stack():     def __init__(self):         self._data = []      def push(self, item):         self._data.append(item)       def pop(self):         return self._data.pop() if self._data else None       def return_stack(self):         return self._data     간단해서 코드 리뷰는 생략했다.   데크 구현   동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분) 양방향 연결리스트로 수정을 해서 업데이트를 해야겠다 https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png   class Node:     def __init__(self, value, next=None):         self.value = value         self.next = next  class Deque:     def __init__(self):         self.top = None         self.bottom = None       def append(self, item):         if self.top == None:        # self.top이 비어있다면             self.top = Node(item)   # self.top 에도 bottom에도 뉴 노드를 넣어준다.             self.bottom = self.top         else :             node = Node(item)             self.top.next = node    # 현재 top의 next에 뉴 노드를 넣어주고             self.top = node         # 이제 top은 뉴 노드로 한다.       def appendleft(self, item):         node = Node(item)         if self.bottom == None :        # bottom이 비었다면 top, bottom에 둘다 넣어줘             self.top = node             self.bottom = node         else :             node.next = self.bottom     # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다!             self.bottom = node      top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다. ````     def pop(self):         # top 추출         if self.top == None:        # top이 None 이면 return None             return None         elif self.top == self.bottom:   # top과 bottom이 같다면(None은 아님)             result = self.top.value     # value를 리턴하고, top bottom을 비우자 (None)             self.top =None             self.bottom = None             return result         else :                          # 이제 정상적으로 길이 1이상의 데크라면             node = self.bottom          # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서             result = self.top.value     # (리턴값은 어쨋든 top value)             while node !=None:          # top을 업데이트해주자.                 if node.next == self.top:                     self.top = node                 node = node.next             return result   def popleft(self):     # bottom 추출     if self.bottom == None:         return None     elif self.top == self.bottom:         self.top = None         result = self.bottom.value         self.bottom = None         return result     else :         result = self.bottom.value         self.bottom = self.bottom.next         return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ````  def ord_desc(self):     node = self.bottom      # 초기값은 bottom 부터     result = []     while node != None :    # 노드에 None이 들어있다면 종료         result.append(node.value)         node = node.next     return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.  ">
+
+
+  <meta name="author" content="옹달샘👱">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="배우자 그리고 써먹자">
+<meta property="og:title" content="파이썬, 자료구조">
+<meta property="og:url" content="http://localhost:4000/something_else/4th/">
+
+
+  <meta property="og:description" content="서론    옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다. 스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다. 물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다. 오늘 각각을 구현해보면서 이해해보는 시간을 가졌다.   큐(queue) 를 연결리스트로 구현    연결리스트  큐      class Node():     def __init__(self, data):         self._data = data         self._next = None     node 들을 선언했다.   class Queue():     def __init__(self):         self._front = None         self._rear = None      ‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다.       def enqueue(self,item):         new_node = Node(item)         if self._front == None: # 빈 큐 라면 &#39;맨앞&#39; &#39;맨뒤&#39;에 모두 같은 노드를 넣어준당.             self._front = new_node             self._rear = self._front         else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다.             self._rear._next = new_node           #기존 &#39;맨뒤노드&#39;의 next에 새로운 노드를 넣어준당. (연결!)             self._rear = self._rear._next         #큐의 &#39;맨뒤&#39; 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!)      값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것)       def dequeue(self):         if self._front == None: # 빈큐라면 None을 리턴             return None         else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + &#39;맨앞&#39; 업데이트             temp = self._front._data       # &#39;맨앞&#39;노드의 데이터를 잠깐 빼두자.             self._front = self._front._next  #&#39;맨앞&#39; 노드의 next 에 있는 노드를 큐의 &#39;맨앞&#39;으로 둔다.         if self._front ==None:             # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다.             self._rear = None           #그러면 &#39;맨뒤&#39;도 비워주자 (이거 안하면 &#39;맨뒤&#39;에 꺼낸 노드가 아직 남아있음)         return temp      빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다.       def return_queue(self):         result = []         temp = self._front      # 초기값은 &#39;맨앞&#39; node!         while temp!= None:      # temp에 None이 들어가버리면 다 끝난거다!             result.append(temp._data)             temp = temp._next   # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝)         return result      현재 큐를 list로 리턴하는 함수를 정의했다.   스택(stack)을 list로 구현    스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다. 그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다. (물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.)      class Stack():     def __init__(self):         self._data = []      def push(self, item):         self._data.append(item)       def pop(self):         return self._data.pop() if self._data else None       def return_stack(self):         return self._data     간단해서 코드 리뷰는 생략했다.   데크 구현   동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분) 양방향 연결리스트로 수정을 해서 업데이트를 해야겠다 https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png   class Node:     def __init__(self, value, next=None):         self.value = value         self.next = next  class Deque:     def __init__(self):         self.top = None         self.bottom = None       def append(self, item):         if self.top == None:        # self.top이 비어있다면             self.top = Node(item)   # self.top 에도 bottom에도 뉴 노드를 넣어준다.             self.bottom = self.top         else :             node = Node(item)             self.top.next = node    # 현재 top의 next에 뉴 노드를 넣어주고             self.top = node         # 이제 top은 뉴 노드로 한다.       def appendleft(self, item):         node = Node(item)         if self.bottom == None :        # bottom이 비었다면 top, bottom에 둘다 넣어줘             self.top = node             self.bottom = node         else :             node.next = self.bottom     # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다!             self.bottom = node      top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다. ````     def pop(self):         # top 추출         if self.top == None:        # top이 None 이면 return None             return None         elif self.top == self.bottom:   # top과 bottom이 같다면(None은 아님)             result = self.top.value     # value를 리턴하고, top bottom을 비우자 (None)             self.top =None             self.bottom = None             return result         else :                          # 이제 정상적으로 길이 1이상의 데크라면             node = self.bottom          # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서             result = self.top.value     # (리턴값은 어쨋든 top value)             while node !=None:          # top을 업데이트해주자.                 if node.next == self.top:                     self.top = node                 node = node.next             return result   def popleft(self):     # bottom 추출     if self.bottom == None:         return None     elif self.top == self.bottom:         self.top = None         result = self.bottom.value         self.bottom = None         return result     else :         result = self.bottom.value         self.bottom = self.bottom.next         return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ````  def ord_desc(self):     node = self.bottom      # 초기값은 bottom 부터     result = []     while node != None :    # 노드에 None이 들어있다면 종료         result.append(node.value)         node = node.next     return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.  ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2020-08-29T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2020-08-29T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/something_else/4th/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "옹달샘🙉",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="배우자 그리고 써먹자 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          배우자 그리고 써먹자
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#something_else" itemprop="item"><span itemprop="name">Something_else</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">파이썬, 자료구조</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="https://user-images.githubusercontent.com/42318591/108615416-2e1bb580-7447-11eb-8a54-6338e53ce625.png" alt="옹달샘👱" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">옹달샘👱</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="chan9480@hanyang.ac.kr" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">4</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">Data</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ds" class="">Data_science (1)</a></li>
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/Something_else" class="">Something_else (2)</a></li>
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">Mini_Projects</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">example</span>
+            <ul>
+                
+                    
+                        <li><a href="/categories/example_sub" class="">Example_sub (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="파이썬, 자료구조">
+    <meta itemprop="description" content="서론  옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다.스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다.물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다.오늘 각각을 구현해보면서 이해해보는 시간을 가졌다.큐(queue) 를 연결리스트로 구현  연결리스트큐  class Node():    def __init__(self, data):        self._data = data        self._next = None  node 들을 선언했다.  class Queue():    def __init__(self):        self._front = None        self._rear = None    ‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다.      def enqueue(self,item):        new_node = Node(item)        if self._front == None: # 빈 큐 라면 &#39;맨앞&#39; &#39;맨뒤&#39;에 모두 같은 노드를 넣어준당.            self._front = new_node            self._rear = self._front        else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다.            self._rear._next = new_node           #기존 &#39;맨뒤노드&#39;의 next에 새로운 노드를 넣어준당. (연결!)            self._rear = self._rear._next         #큐의 &#39;맨뒤&#39; 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!)    값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것)      def dequeue(self):        if self._front == None: # 빈큐라면 None을 리턴            return None        else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + &#39;맨앞&#39; 업데이트            temp = self._front._data       # &#39;맨앞&#39;노드의 데이터를 잠깐 빼두자.            self._front = self._front._next  #&#39;맨앞&#39; 노드의 next 에 있는 노드를 큐의 &#39;맨앞&#39;으로 둔다.        if self._front ==None:            # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다.            self._rear = None           #그러면 &#39;맨뒤&#39;도 비워주자 (이거 안하면 &#39;맨뒤&#39;에 꺼낸 노드가 아직 남아있음)        return temp    빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다.      def return_queue(self):        result = []        temp = self._front      # 초기값은 &#39;맨앞&#39; node!        while temp!= None:      # temp에 None이 들어가버리면 다 끝난거다!            result.append(temp._data)            temp = temp._next   # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝)        return result    현재 큐를 list로 리턴하는 함수를 정의했다.스택(stack)을 list로 구현  스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다.그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다.(물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.)  class Stack():    def __init__(self):        self._data = []    def push(self, item):        self._data.append(item)    def pop(self):        return self._data.pop() if self._data else None    def return_stack(self):        return self._data  간단해서 코드 리뷰는 생략했다.  데크 구현  동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분)양방향 연결리스트로 수정을 해서 업데이트를 해야겠다https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.pngclass Node:    def __init__(self, value, next=None):        self.value = value        self.next = nextclass Deque:    def __init__(self):        self.top = None        self.bottom = None    def append(self, item):        if self.top == None:        # self.top이 비어있다면            self.top = Node(item)   # self.top 에도 bottom에도 뉴 노드를 넣어준다.            self.bottom = self.top        else :            node = Node(item)            self.top.next = node    # 현재 top의 next에 뉴 노드를 넣어주고            self.top = node         # 이제 top은 뉴 노드로 한다.    def appendleft(self, item):        node = Node(item)        if self.bottom == None :        # bottom이 비었다면 top, bottom에 둘다 넣어줘            self.top = node            self.bottom = node        else :            node.next = self.bottom     # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다!            self.bottom = node  top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다.````    def pop(self):        # top 추출        if self.top == None:        # top이 None 이면 return None            return None        elif self.top == self.bottom:   # top과 bottom이 같다면(None은 아님)            result = self.top.value     # value를 리턴하고, top bottom을 비우자 (None)            self.top =None            self.bottom = None            return result        else :                          # 이제 정상적으로 길이 1이상의 데크라면            node = self.bottom          # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서            result = self.top.value     # (리턴값은 어쨋든 top value)            while node !=None:          # top을 업데이트해주자.                if node.next == self.top:                    self.top = node                node = node.next            return resultdef popleft(self):    # bottom 추출    if self.bottom == None:        return None    elif self.top == self.bottom:        self.top = None        result = self.bottom.value        self.bottom = None        return result    else :        result = self.bottom.value        self.bottom = self.bottom.next        return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ````def ord_desc(self):    node = self.bottom      # 초기값은 bottom 부터    result = []    while node != None :    # 노드에 None이 들어있다면 종료        result.append(node.value)        node = node.next    return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.">
+    <meta itemprop="datePublished" content="2020-08-29T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2020-08-29T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">파이썬, 자료구조
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2020-08-29T00:00:00+09:00">2020.08.29</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-08-29">2020.08.29</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">data_structure</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#algorithm" class="page__taxonomy-item-tag" rel="tag">algorithm</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#서론">서론</a></li>
+  <li><a href="#큐queue-를-연결리스트로-구현">큐(queue) 를 연결리스트로 구현</a></li>
+  <li><a href="#스택stack을-list로-구현">스택(stack)을 list로 구현</a></li>
+  <li><a href="#데크-구현">데크 구현</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="서론">서론</h2>
+<blockquote>
+  <p>옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다.<br />
+스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다.
+물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다.
+오늘 각각을 구현해보면서 이해해보는 시간을 가졌다.</p>
+</blockquote>
+
+<h2 id="큐queue-를-연결리스트로-구현">큐(queue) 를 연결리스트로 구현</h2>
+<blockquote>
+  <p>연결리스트<br />
+<img src="https://user-images.githubusercontent.com/84547813/143422364-4784b7ad-46c9-48d0-9420-3a1d24d85e37.png" alt="image" />
+큐  <br />
+<img src="https://user-images.githubusercontent.com/84547813/143422687-a1fd91a0-2fe0-495a-a014-63f2b08096d8.png" alt="image" /></p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node():
+    def __init__(self, data):
+        self._data = data
+        self._next = None
+</code></pre></div></div>
+<blockquote>
+  <p>node 들을 선언했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Queue():
+    def __init__(self):
+        self._front = None
+        self._rear = None
+</code></pre></div>  </div>
+  <p>‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def enqueue(self,item):
+        new_node = Node(item)
+        if self._front == None: # 빈 큐 라면 '맨앞' '맨뒤'에 모두 같은 노드를 넣어준당.
+            self._front = new_node
+            self._rear = self._front
+        else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다.
+            self._rear._next = new_node           #기존 '맨뒤노드'의 next에 새로운 노드를 넣어준당. (연결!)
+            self._rear = self._rear._next         #큐의 '맨뒤' 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!)
+</code></pre></div>  </div>
+  <p>값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것)</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def dequeue(self):
+        if self._front == None: # 빈큐라면 None을 리턴
+            return None
+        else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + '맨앞' 업데이트
+            temp = self._front._data       # '맨앞'노드의 데이터를 잠깐 빼두자.
+            self._front = self._front._next  #'맨앞' 노드의 next 에 있는 노드를 큐의 '맨앞'으로 둔다.
+        if self._front ==None:
+            # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다.
+            self._rear = None           #그러면 '맨뒤'도 비워주자 (이거 안하면 '맨뒤'에 꺼낸 노드가 아직 남아있음)
+        return temp
+</code></pre></div>  </div>
+  <p>빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def return_queue(self):
+        result = []
+        temp = self._front      # 초기값은 '맨앞' node!
+        while temp!= None:      # temp에 None이 들어가버리면 다 끝난거다!
+            result.append(temp._data)
+            temp = temp._next   # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝)
+        return result
+</code></pre></div>  </div>
+  <p>현재 큐를 list로 리턴하는 함수를 정의했다.</p>
+</blockquote>
+
+<h2 id="스택stack을-list로-구현">스택(stack)을 list로 구현</h2>
+<blockquote>
+  <p>스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다.<br />
+그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다.<br />
+(물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.)  <br />
+<img src="https://user-images.githubusercontent.com/84547813/143422784-8eec4149-9d71-46b8-b76e-47da8dac1d63.png" alt="image" /></p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Stack():
+    def __init__(self):
+        self._data = []
+
+    def push(self, item):
+        self._data.append(item)
+
+
+    def pop(self):
+        return self._data.pop() if self._data else None
+
+
+    def return_stack(self):
+        return self._data
+</code></pre></div></div>
+<blockquote>
+  <p>간단해서 코드 리뷰는 생략했다.</p>
+  <h2 id="데크-구현">데크 구현</h2>
+  <p>동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분)
+양방향 연결리스트로 수정을 해서 업데이트를 해야겠다<br />
+https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node:
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
+
+class Deque:
+    def __init__(self):
+        self.top = None
+        self.bottom = None
+
+
+    def append(self, item):
+        if self.top == None:        # self.top이 비어있다면
+            self.top = Node(item)   # self.top 에도 bottom에도 뉴 노드를 넣어준다.
+            self.bottom = self.top
+        else :
+            node = Node(item)
+            self.top.next = node    # 현재 top의 next에 뉴 노드를 넣어주고
+            self.top = node         # 이제 top은 뉴 노드로 한다.
+
+
+    def appendleft(self, item):
+        node = Node(item)
+        if self.bottom == None :        # bottom이 비었다면 top, bottom에 둘다 넣어줘
+            self.top = node
+            self.bottom = node
+        else :
+            node.next = self.bottom     # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다!
+            self.bottom = node
+
+</code></pre></div></div>
+<blockquote>
+  <p>top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다.
+````
+    def pop(self):
+        # top 추출
+        if self.top == None:        # top이 None 이면 return None
+            return None
+        elif self.top == self.bottom:   # top과 bottom이 같다면(None은 아님)
+            result = self.top.value     # value를 리턴하고, top bottom을 비우자 (None)
+            self.top =None
+            self.bottom = None
+            return result
+        else :                          # 이제 정상적으로 길이 1이상의 데크라면
+            node = self.bottom          # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서
+            result = self.top.value     # (리턴값은 어쨋든 top value)
+            while node !=None:          # top을 업데이트해주자.
+                if node.next == self.top:
+                    self.top = node
+                node = node.next
+            return result</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def popleft(self):
+    # bottom 추출
+    if self.bottom == None:
+        return None
+    elif self.top == self.bottom:
+        self.top = None
+        result = self.bottom.value
+        self.bottom = None
+        return result
+    else :
+        result = self.bottom.value
+        self.bottom = self.bottom.next
+        return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ````
+
+def ord_desc(self):
+    node = self.bottom      # 초기값은 bottom 부터
+    result = []
+    while node != None :    # 노드에 None이 들어있다면 종료
+        result.append(node.value)
+        node = node.next
+    return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.
+</code></pre></div></div>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">Something_else</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/example_sub/test/" class="pagination--pager" title="test게시물
+">이전</a>
+    
+    
+      <a href="/something_else/setting/" class="pagination--pager" title="진짜 시작 그리고 m1맥북 세팅
+">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="#" class="pagination_prev_next--pager disabled-first-child">첫 번째 글입니다</a>
+    
+    
+      <a href="/something_else/setting/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>진짜 시작 그리고 m1맥북 세팅</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%ED%8C%8C%EC%9D%B4%EC%8D%AC%2C+%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0%20http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F4th%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F4th%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F4th%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/3rd/">openCV 이미지 읽기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#ds" class="page__taxonomy-item-category" rel="tag">ds</a>
+                    
+                    
+                    <a href="/tags/#image" class="page__taxonomy-item-tag" rel="tag">Image</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#opencv" class="page__taxonomy-item-tag" rel="tag">OpenCV</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/setting/">진짜 시작 그리고 m1맥북 세팅</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.16
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#m1" class="page__taxonomy-item-tag" rel="tag">M1</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#setting" class="page__taxonomy-item-tag" rel="tag">setting</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/example_sub/test/">test게시물</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#example-sub" class="page__taxonomy-item-category" rel="tag">Example_sub</a>
+                    
+                    
+                    <a href="/tags/#test-2" class="page__taxonomy-item-tag" rel="tag">Test_2</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#test" class="page__taxonomy-item-tag" rel="tag">Test</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 옹달샘🙉. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'chan9480/chan9480.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

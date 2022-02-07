@@ -1,9 +1,0 @@
-I"�<ul class="toc__menu">
-  <li><a href="#chapter-11-상속--derived-class-들의-생성과-초기화">chapter 11. 상속 : Derived Class 들의 생성과 초기화</a>
-    <ul>
-      <li><a href="#-크기-비교">🔔 크기 비교</a></li>
-      <li><a href="#-생성자-호출은-부모부터-소멸자-호출은-자식부터">🔔 생성자 호출은 부모부터, 소멸자 호출은 자식부터</a></li>
-    </ul>
-  </li>
-</ul>
-:ET

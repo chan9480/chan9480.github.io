@@ -1,16 +1,0 @@
-I"<ul class="toc__menu">
-  <li><a href="#포인터">포인터</a></li>
-  <li><a href="#포인터-변수의-선언">포인터 변수의 선언</a></li>
-  <li><a href="#포인터를-사용하는-이유">포인터를 사용하는 이유</a></li>
-  <li><a href="#포인터의-크기">포인터의 크기</a>
-    <ul>
-      <li><a href="#sizeofptr">sizeof(ptr)</a></li>
-    </ul>
-  </li>
-  <li><a href="#nullptr">nullptr</a>
-    <ul>
-      <li><a href="#cstddef-의-stdnullptr_t">&lt;cstddef&gt; 의 std::nullptr_t</a></li>
-    </ul>
-  </li>
-</ul>
-:ET

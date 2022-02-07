@@ -22,8 +22,8 @@
 
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>test게시물 - 배우자 그리고 써먹자</title>
-<meta name="description" content="test_제목 test 게시물입니다. ">
+<!-- begin _includes/seo.html --><title>openCV 이미지 읽기 - 배우자 그리고 써먹자</title>
+<meta name="description" content="OpenCV vs pillow(PIL) vs scikit-image    https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.   openCV 설치 conda install -c anaconda opencv   local 경로로 이미지열기 import cv2 cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.     flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)   링크이미지(.jpeg) 열기    크롤링의 개념을 가져와서 사용한다. ```` import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request   def url_to_image(url):   ‘’’   jpg, png 이미지링크에서 numpy ndarray로 return   ‘’’   resp = urllib.request.urlopen(url)   image = np.asarray(bytearray(resp.read()), dtype=’uint8’)   image = cv2.imdecode(image, cv2.IMREAD_COLOR)  return image  &gt; requests.urlopen : url 에서 request(응답) 객체르 리턴   &gt; -&gt; .read()로써 호출할 수 있음.   &gt; numpy.asarray : 배열로써 이미지르 읽음 &gt; image를 cv2로 다시 읽어 리턴한다.(3차원)    ## svg 파일 열기 &gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원     &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중 ## 이미지 확인하기    img = 이미지의 ndarray형식 cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름 ````    위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴     🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
 
 
   <meta name="author" content="옹달샘👱">
@@ -32,11 +32,11 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="배우자 그리고 써먹자">
-<meta property="og:title" content="test게시물">
-<meta property="og:url" content="http://localhost:4000/example_sub/test/">
+<meta property="og:title" content="openCV 이미지 읽기">
+<meta property="og:url" content="http://localhost:4000/ds/3rd/">
 
 
-  <meta property="og:description" content="test_제목 test 게시물입니다. ">
+  <meta property="og:description" content="OpenCV vs pillow(PIL) vs scikit-image    https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.   openCV 설치 conda install -c anaconda opencv   local 경로로 이미지열기 import cv2 cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.     flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)   링크이미지(.jpeg) 열기    크롤링의 개념을 가져와서 사용한다. ```` import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request   def url_to_image(url):   ‘’’   jpg, png 이미지링크에서 numpy ndarray로 return   ‘’’   resp = urllib.request.urlopen(url)   image = np.asarray(bytearray(resp.read()), dtype=’uint8’)   image = cv2.imdecode(image, cv2.IMREAD_COLOR)  return image  &gt; requests.urlopen : url 에서 request(응답) 객체르 리턴   &gt; -&gt; .read()로써 호출할 수 있음.   &gt; numpy.asarray : 배열로써 이미지르 읽음 &gt; image를 cv2로 다시 읽어 리턴한다.(3차원)    ## svg 파일 열기 &gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원     &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중 ## 이미지 확인하기    img = 이미지의 ndarray형식 cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름 ````    위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴     🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
 
 
 
@@ -46,11 +46,11 @@
 
 
 
-  <meta property="article:published_time" content="2020-08-29T00:00:00+09:00">
+  <meta property="article:published_time" content="2021-11-18T00:00:00+09:00">
 
 
 
-  <meta property="article:modified_time" content="2020-08-29T00:00:00+09:00">
+  <meta property="article:modified_time" content="2022-02-03T00:00:00+09:00">
 
 
 
@@ -59,7 +59,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/example_sub/test/">
+<link rel="canonical" href="http://localhost:4000/ds/3rd/">
 
 
 
@@ -207,7 +207,7 @@
       
         
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href="/categories/#example_sub" itemprop="item"><span itemprop="name">Example_sub</span></a>
+          <a href="/categories/#ds" itemprop="item"><span itemprop="name">Ds</span></a>
           <meta itemprop="position" content="2" />
         </li>
         <span class="sep">/</span>
@@ -215,7 +215,7 @@
     
       
       
-        <li class="current">test게시물</li>
+        <li class="current">openCV 이미지 읽기</li>
       
     
   </ol>
@@ -411,18 +411,18 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="test게시물">
-    <meta itemprop="description" content="test_제목test 게시물입니다.">
-    <meta itemprop="datePublished" content="2020-08-29T00:00:00+09:00">
-    <meta itemprop="dateModified" content="2020-08-29T00:00:00+09:00">
+    <meta itemprop="headline" content="openCV 이미지 읽기">
+    <meta itemprop="description" content="OpenCV vs pillow(PIL) vs scikit-image  https://github.com/ethereon/lycon위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데,속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다.만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.openCV 설치conda install -c anaconda opencvlocal 경로로 이미지열기import cv2cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.  flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)링크이미지(.jpeg) 열기  크롤링의 개념을 가져와서 사용한다.````import cv2from google.colab.patches import cv2_imshowimport numpy as npimport urllib.requestdef url_to_image(url):  ‘’’  jpg, png 이미지링크에서 numpy ndarray로 return  ‘’’  resp = urllib.request.urlopen(url)  image = np.asarray(bytearray(resp.read()), dtype=’uint8’)  image = cv2.imdecode(image, cv2.IMREAD_COLOR)return image&gt; requests.urlopen : url 에서 request(응답) 객체르 리턴  &gt; -&gt; .read()로써 호출할 수 있음.  &gt; numpy.asarray : 배열로써 이미지르 읽음&gt; image를 cv2로 다시 읽어 리턴한다.(3차원)  ## svg 파일 열기&gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원    &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중## 이미지 확인하기  img = 이미지의 ndarray형식cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름````  위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다!cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄맨 위로 이동하기">
+    <meta itemprop="datePublished" content="2021-11-18T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2022-02-03T00:00:00+09:00">
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">test게시물
+          <h1 id="page-title" class="page__title" itemprop="headline">openCV 이미지 읽기
 </h1>
           
-            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2020-08-29T00:00:00+09:00">2020.08.29</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-08-29">2020.08.29</time></p>
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2021-11-18T00:00:00+09:00">2021.11.18</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-02-03">2022.02.03</time></p>
           
           
             
@@ -438,7 +438,7 @@
     
       
       
-      <a href="/categories/#example-sub" class="page__taxonomy-item-category" rel="tag">Example_sub</a>
+      <a href="/categories/#ds" class="page__taxonomy-item-category" rel="tag">ds</a>
     
     </span>
   </p>
@@ -455,11 +455,11 @@
     
       
       
-      <a href="/tags/#test-2" class="page__taxonomy-item-tag" rel="tag">Test_2</a><span class="sep"> </span>
+      <a href="/tags/#opencv" class="page__taxonomy-item-tag" rel="tag">OpenCV</a><span class="sep"> </span>
     
       
       
-      <a href="/tags/#test" class="page__taxonomy-item-tag" rel="tag">Test</a>
+      <a href="/tags/#image" class="page__taxonomy-item-tag" rel="tag">Image</a>
     
     </span>
   </p>
@@ -474,18 +474,73 @@
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
               <ul class="toc__menu">
-  <li><a href="#test_제목">test_제목</a></li>
-  <li><a href="#test_제목-2">test_제목 2</a></li>
+  <li><a href="#opencv-vs-pillowpil-vs-scikit-image">OpenCV vs pillow(PIL) vs scikit-image</a></li>
+  <li><a href="#opencv-설치">openCV 설치</a></li>
+  <li><a href="#local-경로로-이미지열기">local 경로로 이미지열기</a></li>
+  <li><a href="#링크이미지jpeg-열기">링크이미지(.jpeg) 열기</a></li>
 </ul>
 
             </nav>
           </aside>
         
-        <h2 id="test_제목">test_제목</h2>
-<p>test 게시물입니다.</p>
+        <h2 id="opencv-vs-pillowpil-vs-scikit-image">OpenCV vs pillow(PIL) vs scikit-image</h2>
+<blockquote>
+  <p>https://github.com/ethereon/lycon<br />
+위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데,<br />
+속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다.<br />
+만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.</p>
+</blockquote>
 
-<h2 id="test_제목-2">test_제목 2</h2>
-<p>test2 목차 테스트 입니다.</p>
+<h2 id="opencv-설치">openCV 설치</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda install -c anaconda opencv
+</code></pre></div></div>
+
+<h2 id="local-경로로-이미지열기">local 경로로 이미지열기</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import cv2
+cv2.imread('파일경로', flags) # ndarray형식으로 리턴.
+</code></pre></div></div>
+<blockquote>
+  <p>flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)</p>
+</blockquote>
+
+<h2 id="링크이미지jpeg-열기">링크이미지(.jpeg) 열기</h2>
+<blockquote>
+  <p>크롤링의 개념을 가져와서 사용한다.
+````
+import cv2
+from google.colab.patches import cv2_imshow
+import numpy as np
+import urllib.request</p>
+</blockquote>
+
+<p>def url_to_image(url):
+  ‘’’
+  jpg, png 이미지링크에서 numpy ndarray로 return
+  ‘’’
+  resp = urllib.request.urlopen(url)
+  image = np.asarray(bytearray(resp.read()), dtype=’uint8’)
+  image = cv2.imdecode(image, cv2.IMREAD_COLOR)</p>
+
+<p>return image</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; requests.urlopen : url 에서 request(응답) 객체르 리턴  
+&gt; -&gt; .read()로써 호출할 수 있음.  
+&gt; numpy.asarray : 배열로써 이미지르 읽음
+&gt; image를 cv2로 다시 읽어 리턴한다.(3차원)  
+
+## svg 파일 열기
+&gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원    
+&gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중
+## 이미지 확인하기  
+</code></pre></div></div>
+<p>img = 이미지의 ndarray형식
+cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름
+````</p>
+<blockquote>
+  <p>위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는<br />
+cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다!<br />
+cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴</p>
+</blockquote>
 
 <p><br /></p>
 
@@ -499,16 +554,16 @@
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         
         <p></p>
-        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">Example_sub</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">ds</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
         <!--
 
   <nav class="pagination">
     
-      <a href="#" class="pagination--pager disabled">이전</a>
+      <a href="/something_else/setting/" class="pagination--pager" title="진짜 시작 그리고 m1맥북 세팅
+">이전</a>
     
     
-      <a href="/something_else/4th/" class="pagination--pager" title="파이썬, 자료구조
-">다음</a>
+      <a href="#" class="pagination--pager disabled">다음</a>
     
   </nav>
 
@@ -557,11 +612,11 @@
     <h4 class="page__share-title">공유하기</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=test%EA%B2%8C%EC%8B%9C%EB%AC%BC%20http%3A%2F%2Flocalhost%3A4000%2Fexample_sub%2Ftest%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=openCV+%EC%9D%B4%EB%AF%B8%EC%A7%80+%EC%9D%BD%EA%B8%B0%20http%3A%2F%2Flocalhost%3A4000%2Fds%2F3rd%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fexample_sub%2Ftest%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fds%2F3rd%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fexample_sub%2Ftest%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fds%2F3rd%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
       </footer>
@@ -575,34 +630,6 @@
   
     <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
       <h4 class="page__related-title">최근 글 10 개 :)</h4>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/ds/3rd/">openCV 이미지 읽기</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.18
-              <!--Archive page 용-: (post -> page)-->
-<!--page__taxonomy.html에서 가져 옴-->
-        
-        <span class="page__taxonomy">
-            <span itemprop="keywords"><a href="/categories/#ds" class="page__taxonomy-item-category" rel="tag">ds</a>
-                    
-                    
-                    <a href="/tags/#image" class="page__taxonomy-item-tag" rel="tag">Image</a><span class="sep"> </span>
-                
-                    
-                    
-                    <a href="/tags/#opencv" class="page__taxonomy-item-tag" rel="tag">OpenCV</a>
-                
-            </span>
-        </span>
-            </small>
-        </div>
-      </article>
-</div>
         
           <div class="list__item">
     <article class="archive-item">
@@ -652,6 +679,34 @@
                     
                     
                     <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">data_structure</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/example_sub/test/">test게시물</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#example-sub" class="page__taxonomy-item-category" rel="tag">Example_sub</a>
+                    
+                    
+                    <a href="/tags/#test-2" class="page__taxonomy-item-tag" rel="tag">Test_2</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#test" class="page__taxonomy-item-tag" rel="tag">Test</a>
                 
             </span>
         </span>

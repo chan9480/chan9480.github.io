@@ -15,5 +15,12 @@ main:
 # 카테고리 추가시
   # 1. _includes/nav_list_main 에서 코드를 추가한다.
     # sidebar.html 에서 머릿말에 sidebar_main = true 를 해주면 nav_list_main 을 불러오게끔 마지막 부분에 코딩이 되어있다.
+    # 단 주의할 점은 category[0] = 다음에 들어갈 것은 2번에서 만드는 md파일의 title 이름이고,
+    # category/~ 와 같은 폼으로 들어갈 것은 permalink인데.
+    # !!!!!! 헷갈리니까 일치시키자 !!!!!!!
+
   # 2. pages/catecory 에 연결할 카테고리 페이지를 추가한다.
+    # 파일이름은 뭘로 해도 상관 없지만, title과 permalink는 위 1번과 잘 연결지어서 만들어야 한다.
+
   # 3. 작성하고자 하는 post에서 categories를 넣어서 작성한다.
+    # 단, categories는 위 1,2번에서 title을 사용해야한다.
