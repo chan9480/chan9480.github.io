@@ -4,7 +4,7 @@ title:  "가설 검정"
 categories:
   - Something_else
 tags:
-  - [가설 검정, Test_2]
+  - [가설검정, Test_2]
 
 toc: true
 toc_sticky: true
