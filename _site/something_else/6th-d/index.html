@@ -22,8 +22,8 @@
 
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>가설 검정 - 배우자 그리고 써먹자</title>
-<meta name="description" content="가설 검정? ‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다. 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까? 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.) ">
+<!-- begin _includes/seo.html --><title>선형회귀 - 배우자 그리고 써먹자</title>
+<meta name="description" content="선형회귀    엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name&#39;] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = [[x] for x in df_test[&#39;feature_name&#39;]] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)  # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)  ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);   다중선형회귀    x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.(혹은 x1, x2 에 대하 y일 수도 있겠다.) 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = df_test[feature] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)   평가지표 ">
 
 
   <meta name="author" content="옹달샘👱">
@@ -32,11 +32,11 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="배우자 그리고 써먹자">
-<meta property="og:title" content="가설 검정">
-<meta property="og:url" content="http://localhost:4000/something_else/hypo/">
+<meta property="og:title" content="선형회귀">
+<meta property="og:url" content="http://localhost:4000/something_else/6th-d/">
 
 
-  <meta property="og:description" content="가설 검정? ‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다. 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까? 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.) ">
+  <meta property="og:description" content="선형회귀    엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name&#39;] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = [[x] for x in df_test[&#39;feature_name&#39;]] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)  # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)  ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);   다중선형회귀    x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.(혹은 x1, x2 에 대하 y일 수도 있겠다.) 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = df_test[feature] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)   평가지표 ">
 
 
 
@@ -46,11 +46,11 @@
 
 
 
-  <meta property="article:published_time" content="2022-02-14T00:00:00+09:00">
+  <meta property="article:published_time" content="2022-01-21T00:00:00+09:00">
 
 
 
-  <meta property="article:modified_time" content="2022-02-14T00:00:00+09:00">
+  <meta property="article:modified_time" content="2022-02-12T00:00:00+09:00">
 
 
 
@@ -59,7 +59,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/something_else/hypo/">
+<link rel="canonical" href="http://localhost:4000/something_else/6th-d/">
 
 
 
@@ -222,7 +222,7 @@
     
       
       
-        <li class="current">가설 검정</li>
+        <li class="current">선형회귀</li>
       
     
   </ol>
@@ -345,7 +345,7 @@
   <label for="ac-toc">카테고리 Click</label>
   <ul class="nav__items" id="category_tag_menu">
       <li>
-            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">10</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">11</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
       </li>
       <li>
         <span class="nav__sub-title">Data</span>
@@ -378,7 +378,7 @@
                     
                 
                     
-                        <li><a href="/categories/Something_else" class="">Something_else (5)</a></li>
+                        <li><a href="/categories/Something_else" class="">Something_else (6)</a></li>
                     
                 
                     
@@ -430,18 +430,18 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="가설 검정">
-    <meta itemprop="description" content="가설 검정?‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다.그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까?데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)">
-    <meta itemprop="datePublished" content="2022-02-14T00:00:00+09:00">
-    <meta itemprop="dateModified" content="2022-02-14T00:00:00+09:00">
+    <meta itemprop="headline" content="선형회귀">
+    <meta itemprop="description" content="선형회귀  엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다.이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다.y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.# 라이브러리 importfrom sklearn.linear_model import LinearRegression# 데이터 정의df = &#39;타겟을 포함한 데이터 프레임&#39;df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;# 모델 클래스 정의model = LinearRegression()# feature, target 정의feature = [&#39;feature_name&#39;]target = [&#39;target_name&#39;]X_train = df[feature]y_train = df[target]# 모델 학습model.fit(X_train, y_train)# 예측값.X_test = [[x] for x in df_test[&#39;feature_name&#39;]]y_pred = model.predict(X_test)# 계수확인print(&#39;절편&#39;, model.intercept_)print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)# 시각화.import matplotlib.pyplot as plt## train 데이터에 대한 그래프를 검정색 점으로.plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)## test 데이터에 대한 예측을 파란색 점으로.plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);다중선형회귀  x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.(혹은 x1, x2 에 대하 y일 수도 있겠다.)그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까?위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.# 라이브러리 importfrom sklearn.linear_model import LinearRegression# 데이터 정의df = &#39;타겟을 포함한 데이터 프레임&#39;df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;# 모델 클래스 정의model = LinearRegression()# feature, target 정의feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ]target = [&#39;target_name&#39;]X_train = df[feature]y_train = df[target]# 모델 학습model.fit(X_train, y_train)# 예측값.X_test = df_test[feature]y_pred = model.predict(X_test)# 계수확인print(&#39;절편&#39;, model.intercept_)print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)평가지표">
+    <meta itemprop="datePublished" content="2022-01-21T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2022-02-12T00:00:00+09:00">
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">가설 검정
+          <h1 id="page-title" class="page__title" itemprop="headline">선형회귀
 </h1>
           
-            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2022-02-14T00:00:00+09:00">2022.02.14</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-02-14">2022.02.14</time></p>
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2022-01-21T00:00:00+09:00">2022.01.21</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-02-12">2022.02.12</time></p>
           
           
             
@@ -474,11 +474,23 @@
     
       
       
-      <a href="/tags/#test-2" class="page__taxonomy-item-tag" rel="tag">Test_2</a><span class="sep"> </span>
+      <a href="/tags/#%EB%8B%A4%EC%A4%91%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">다중선형회귀</a><span class="sep"> </span>
     
       
       
-      <a href="/tags/#%EA%B0%80%EC%84%A4%EA%B2%80%EC%A0%95" class="page__taxonomy-item-tag" rel="tag">가설검정</a>
+      <a href="/tags/#%EB%A6%BF%EC%A7%80%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">릿지회귀</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#%EB%B3%91%ED%95%A9%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">병합정렬</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#%ED%80%B5%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">퀵정렬</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#%EB%8B%A8%EC%88%9C%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">단순선형회귀</a>
     
     </span>
   </p>
@@ -493,39 +505,95 @@
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
               <ul class="toc__menu">
-  <li><a href="#가설-검정">가설 검정?</a></li>
-  <li><a href="#귀무-가설">귀무 가설</a></li>
-  <li><a href="#t-test">T-Test</a></li>
+  <li><a href="#선형회귀">선형회귀</a></li>
+  <li><a href="#다중선형회귀">다중선형회귀</a></li>
+  <li><a href="#평가지표">평가지표</a></li>
 </ul>
 
             </nav>
           </aside>
         
-        <h2 id="가설-검정">가설 검정?</h2>
-<p>‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다.<br />
-그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까?<br />
-데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)</p>
-
-<h2 id="귀무-가설">귀무 가설</h2>
-<p>귀무 가설은 하나의 가설 검정이 하나만 갖는다. 이 가설이 기각되는지, 기각되지 않는지에 따라 통계적으로 어떤 의미를 갖는지 명확해지므로<br />
-처음 검정을 할 때, 귀무가설이 무엇인지 정확히 짚고 실행해야 할 것이다.</p>
-
-<h2 id="t-test">T-Test</h2>
+        <h2 id="선형회귀">선형회귀</h2>
 <blockquote>
-  <p>one_sample_t_test</p>
+  <p>엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다.<br />
+이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다.<br />
+y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.<br />
+<img width="677" alt="image" src="https://user-images.githubusercontent.com/84547813/150494749-1be8815a-3e36-416c-9ff7-62370f5c540f.png" /></p>
 </blockquote>
 
-<blockquote>
-  <p>two_sample_t_test</p>
-</blockquote>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 라이브러리 import
+from sklearn.linear_model import LinearRegression
 
-<p><br /></p>
+# 데이터 정의
+df = '타겟을 포함한 데이터 프레임'
+df_test = '타겟 미포함 "테스트" 데이터 프레임'
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+# 모델 클래스 정의
+model = LinearRegression()
+
+# feature, target 정의
+feature = ['feature_name']
+target = ['target_name']
+X_train = df[feature]
+y_train = df[target]
+
+# 모델 학습
+model.fit(X_train, y_train)
+
+# 예측값.
+X_test = [[x] for x in df_test['feature_name']]
+y_pred = model.predict(X_test)
+
+# 계수확인
+print('절편', model.intercept_)
+print('계수(여러개일 수 있기때문에 array)', model.coef_)
+
+# 시각화.
+import matplotlib.pyplot as plt
+## train 데이터에 대한 그래프를 검정색 점으로.
+plt.scatter(X_train, y_train, color='black', linewidth=1)
+
+## test 데이터에 대한 예측을 파란색 점으로.
+plt.scatter(X_test, y_pred, color='blue', linewidth=1);
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+<h2 id="다중선형회귀">다중선형회귀</h2>
+<blockquote>
+  <p>x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.(혹은 x1, x2 에 대하 y일 수도 있겠다.)<br />
+그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까?<br />
+위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.<br />
+<img width="102" alt="image" src="https://user-images.githubusercontent.com/84547813/150503177-644087c1-f1a0-4bb3-bc41-203cb552d7ec.png" /></p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 라이브러리 import
+from sklearn.linear_model import LinearRegression
+
+# 데이터 정의
+df = '타겟을 포함한 데이터 프레임'
+df_test = '타겟 미포함 "테스트" 데이터 프레임'
+
+# 모델 클래스 정의
+model = LinearRegression()
+
+# feature, target 정의
+feature = ['feature_name_1', 'feature_name_2 ]
+target = ['target_name']
+X_train = df[feature]
+y_train = df[target]
+
+# 모델 학습
+model.fit(X_train, y_train)
+
+# 예측값.
+X_test = df_test[feature]
+y_pred = model.predict(X_test)
+
+# 계수확인
+print('절편', model.intercept_)
+print('계수(여러개일 수 있기때문에 array)', model.coef_)
+</code></pre></div></div>
+
+<h2 id="평가지표">평가지표</h2>
 
         
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -536,11 +604,12 @@
 
   <nav class="pagination">
     
-      <a href="/ds/Data/" class="pagination--pager" title="데이터 다루기
+      <a href="/something_else/5th/" class="pagination--pager" title="정렬
 ">이전</a>
     
     
-      <a href="#" class="pagination--pager disabled">다음</a>
+      <a href="/something_else/6th/" class="pagination--pager" title="선형회귀
+">다음</a>
     
   </nav>
 
@@ -548,6 +617,10 @@
 
 
 
+
+  
+
+  
 
   
   	
@@ -559,10 +632,10 @@
 
   <nav class="pagination_prev_next">
     
-      <a href="/something_else/6th/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>선형회귀</a>
+      <a href="/something_else/5th/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>정렬</a>
     
     
-      <a href="#" class="pagination_prev_next--pager disabled-last-child ">가장 최근 글입니다</a>
+      <a href="/something_else/6th/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>선형회귀</a>
     
   </nav>
 
@@ -595,11 +668,11 @@
     <h4 class="page__share-title">공유하기</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=%EA%B0%80%EC%84%A4+%EA%B2%80%EC%A0%95%20http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2Fhypo%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80%20http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F6th-d%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2Fhypo%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F6th-d%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2Fhypo%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F6th-d%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
       </footer>
@@ -613,6 +686,34 @@
   
     <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
       <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/hypoo/">가설 검정</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#t-test" class="page__taxonomy-item-tag" rel="tag">t_test</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EA%B0%80%EC%84%A4%EA%B2%80%EC%A0%95" class="page__taxonomy-item-tag" rel="tag">가설검정</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
         
           <div class="list__item">
     <article class="archive-item">

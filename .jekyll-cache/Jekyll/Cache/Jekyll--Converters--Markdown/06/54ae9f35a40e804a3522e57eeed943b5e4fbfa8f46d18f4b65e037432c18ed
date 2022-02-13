@@ -1,0 +1,168 @@
+I"<<!-- 공백이 포함되어 있는 카테고리 이름의 경우 site.categories['a b c'] 이런식으로! -->
+
+<hr />
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/hypoo/">가설 검정</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#test-2" class="page__taxonomy-item-tag" rel="tag">Test_2</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EA%B0%80%EC%84%A4%EA%B2%80%EC%A0%95" class="page__taxonomy-item-tag" rel="tag">가설검정</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/6th/">선형회귀</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.01.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#%EB%8B%A4%EC%A4%91%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">다중선형회귀</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EB%8B%A8%EC%88%9C%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">단순선형회귀</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EB%A6%BF%EC%A7%80%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">릿지회귀</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EB%B3%91%ED%95%A9%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">병합정렬</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%ED%80%B5%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">퀵정렬</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/5th/">정렬</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.27
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#%EB%B2%84%EB%B8%94%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">버블정렬</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EB%B3%91%ED%95%A9%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">병합정렬</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EC%82%BD%EC%9E%85%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">삽입정렬</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EC%84%A0%ED%83%9D%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">선택정렬</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%ED%80%B5%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">퀵정렬</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/setting/">진짜 시작 그리고 m1맥북 세팅</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.16
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#m1" class="page__taxonomy-item-tag" rel="tag">M1</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#setting" class="page__taxonomy-item-tag" rel="tag">setting</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/4th/">파이썬, 자료구조</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#algorithm" class="page__taxonomy-item-tag" rel="tag">algorithm</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">data_structure</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+:ET

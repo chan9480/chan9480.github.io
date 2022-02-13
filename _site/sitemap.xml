@@ -29,6 +29,10 @@
 <lastmod>2022-02-12T00:00:00+09:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/something_else/6th-d/</loc>
+<lastmod>2022-02-12T00:00:00+09:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/something_else/6th/</loc>
 <lastmod>2022-02-12T00:00:00+09:00</lastmod>
 </url>
@@ -37,7 +41,7 @@
 <lastmod>2022-02-14T00:00:00+09:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/something_else/hypo/</loc>
+<loc>http://localhost:4000/something_else/hypoo/</loc>
 <lastmod>2022-02-14T00:00:00+09:00</lastmod>
 </url>
 <url>
@@ -69,6 +73,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/page2/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page3/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/google8a97825fdbe4bbc7.html</loc>
