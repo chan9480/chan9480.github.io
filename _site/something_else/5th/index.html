@@ -1,0 +1,1071 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>정렬 - 배우자 그리고 써먹자</title>
+<meta name="description" content="선택정렬         제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬. n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교 (비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2)      def selection_sort(li):     n = len(li)     for i in range(n):      # i번쨰가 주체         for j in range(i,n):# i번째 뒤로 쭉             if li[i] &gt; li[j]:                 li[i], li[j] = li[j], li[i]     # 교환             else :                 pass     return li          삽입정렬     순서대로 자리를 찾아서 끼워 넣어주는 정렬 n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2) 아래 사진은 31의 자리를 찾아 넣어주고있다.      def insertion_sort(li):     n=len(li)     if n ==0:         return None     for i in range(1,n): # 두번째부터 끝까지 수행하면 댐.         temp = li[i]         for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐.             if li[j] &gt; temp:                 li[j+1] = li[j]       # j에서 temp보다 크다면 옆으로복사                 if j==0:              # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입                     li[0] = temp             else:                 li[j+1] = temp        # j보다 temp가 크다면 그 오른쪽에 temp넣고 break                 break     return li          버블정렬     계속해서 옆과 비교,교환을 하는 방식. (오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번) 그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다.       def bubble_sort(li):     n = len(li)     for i in range(n):      # 0부터 n-1까지         for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복             if j==(n-1):      # indexError 방지.                 pass             elif li[j] &gt; li[j+1]:                 li[j], li[j+1] = li[j+1], li[j]     # 교환             else :                 pass     return li     퀵정렬         특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지. 이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn)   그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2)       def quick_sort(li):     if len(li)&lt;=1:         return li     else:         L1, L2 = [], []         for x in li[1:]:             if x&lt;=li[0]:                 L1.append(x)             else :                 L2.append(x)         return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 )  병합정렬 ">
+
+
+  <meta name="author" content="옹달샘👱">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="배우자 그리고 써먹자">
+<meta property="og:title" content="정렬">
+<meta property="og:url" content="http://localhost:4000/something_else/5th/">
+
+
+  <meta property="og:description" content="선택정렬         제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬. n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교 (비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2)      def selection_sort(li):     n = len(li)     for i in range(n):      # i번쨰가 주체         for j in range(i,n):# i번째 뒤로 쭉             if li[i] &gt; li[j]:                 li[i], li[j] = li[j], li[i]     # 교환             else :                 pass     return li          삽입정렬     순서대로 자리를 찾아서 끼워 넣어주는 정렬 n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2) 아래 사진은 31의 자리를 찾아 넣어주고있다.      def insertion_sort(li):     n=len(li)     if n ==0:         return None     for i in range(1,n): # 두번째부터 끝까지 수행하면 댐.         temp = li[i]         for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐.             if li[j] &gt; temp:                 li[j+1] = li[j]       # j에서 temp보다 크다면 옆으로복사                 if j==0:              # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입                     li[0] = temp             else:                 li[j+1] = temp        # j보다 temp가 크다면 그 오른쪽에 temp넣고 break                 break     return li          버블정렬     계속해서 옆과 비교,교환을 하는 방식. (오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번) 그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다.       def bubble_sort(li):     n = len(li)     for i in range(n):      # 0부터 n-1까지         for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복             if j==(n-1):      # indexError 방지.                 pass             elif li[j] &gt; li[j+1]:                 li[j], li[j+1] = li[j+1], li[j]     # 교환             else :                 pass     return li     퀵정렬         특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지. 이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn)   그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2)       def quick_sort(li):     if len(li)&lt;=1:         return li     else:         L1, L2 = [], []         for x in li[1:]:             if x&lt;=li[0]:                 L1.append(x)             else :                 L2.append(x)         return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 )  병합정렬 ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2021-11-27T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2022-02-12T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/something_else/5th/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "옹달샘🙉",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="배우자 그리고 써먹자 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          배우자 그리고 써먹자
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#something_else" itemprop="item"><span itemprop="name">Something_else</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">정렬</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/my-cat.jpg" alt="옹달샘👱" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">옹달샘👱</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:chan9480@hanyang.ac.kr" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">10</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">Data</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ds" class="">Data_science (2)</a></li>
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/Something_else" class="">Something_else (5)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">Mini_Projects</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/pj" class="">미니프로젝트 (2)</a></li>
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">example</span>
+            <ul>
+                
+                    
+                        <li><a href="/categories/example_sub" class="">Example_sub (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="정렬">
+    <meta itemprop="description" content="선택정렬      제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬.n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교(비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2)    def selection_sort(li):    n = len(li)    for i in range(n):      # i번쨰가 주체        for j in range(i,n):# i번째 뒤로 쭉            if li[i] &gt; li[j]:                li[i], li[j] = li[j], li[i]     # 교환            else :                pass    return li        삽입정렬    순서대로 자리를 찾아서 끼워 넣어주는 정렬n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2)아래 사진은 31의 자리를 찾아 넣어주고있다.    def insertion_sort(li):    n=len(li)    if n ==0:        return None    for i in range(1,n): # 두번째부터 끝까지 수행하면 댐.        temp = li[i]        for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐.            if li[j] &gt; temp:                li[j+1] = li[j]       # j에서 temp보다 크다면 옆으로복사                if j==0:              # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입                    li[0] = temp            else:                li[j+1] = temp        # j보다 temp가 크다면 그 오른쪽에 temp넣고 break                break    return li        버블정렬    계속해서 옆과 비교,교환을 하는 방식.(오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번)그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다.  def bubble_sort(li):    n = len(li)    for i in range(n):      # 0부터 n-1까지        for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복            if j==(n-1):      # indexError 방지.                pass            elif li[j] &gt; li[j+1]:                li[j], li[j+1] = li[j+1], li[j]     # 교환            else :                pass    return li   퀵정렬      특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지.이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn) 그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2)  def quick_sort(li):    if len(li)&lt;=1:        return li    else:        L1, L2 = [], []        for x in li[1:]:            if x&lt;=li[0]:                L1.append(x)            else :                L2.append(x)        return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 )병합정렬">
+    <meta itemprop="datePublished" content="2021-11-27T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2022-02-12T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">정렬
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2021-11-27T00:00:00+09:00">2021.11.27</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-02-12">2022.02.12</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#%EB%B2%84%EB%B8%94%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">버블정렬</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#%EB%B3%91%ED%95%A9%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">병합정렬</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#%EC%82%BD%EC%9E%85%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">삽입정렬</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#%ED%80%B5%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">퀵정렬</a><span class="sep"> </span>
+    
+      
+      
+      <a href="/tags/#%EC%84%A0%ED%83%9D%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">선택정렬</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#선택정렬">선택정렬</a></li>
+  <li><a href="#삽입정렬">삽입정렬</a></li>
+  <li><a href="#버블정렬">버블정렬</a></li>
+  <li><a href="#퀵정렬">퀵정렬</a></li>
+  <li><a href="#병합정렬">병합정렬</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="선택정렬">선택정렬</h2>
+<blockquote>
+  <blockquote>
+    <p>제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬.<br />
+n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교<br />
+(비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2)<br />
+<img src="https://user-images.githubusercontent.com/84547813/145223514-1b92d47c-4204-4890-8ab3-07af49e0894b.png" alt="image" /></p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def selection_sort(li):
+    n = len(li)
+    for i in range(n):      # i번쨰가 주체
+        for j in range(i,n):# i번째 뒤로 쭉
+            if li[i] &gt; li[j]:
+                li[i], li[j] = li[j], li[i]     # 교환
+            else :
+                pass
+    return li
+</code></pre></div>    </div>
+    <h2 id="삽입정렬">삽입정렬</h2>
+    <p>순서대로 자리를 찾아서 끼워 넣어주는 정렬<br />
+n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2)<br />
+아래 사진은 31의 자리를 찾아 넣어주고있다.<br />
+<img src="https://user-images.githubusercontent.com/84547813/145224534-3f5b9130-8641-48b6-9151-53a91695617f.png" alt="image" /></p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def insertion_sort(li):
+    n=len(li)
+    if n ==0:
+        return None
+    for i in range(1,n): # 두번째부터 끝까지 수행하면 댐.
+        temp = li[i]
+        for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐.
+            if li[j] &gt; temp:
+                li[j+1] = li[j]       # j에서 temp보다 크다면 옆으로복사
+                if j==0:              # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입
+                    li[0] = temp
+            else:
+                li[j+1] = temp        # j보다 temp가 크다면 그 오른쪽에 temp넣고 break
+                break
+    return li
+</code></pre></div>    </div>
+    <h2 id="버블정렬">버블정렬</h2>
+    <p>계속해서 옆과 비교,교환을 하는 방식.<br />
+(오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번)<br />
+그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다.<br />
+<img src="https://user-images.githubusercontent.com/84547813/145225965-b9c07b7f-44b5-438e-9d6b-487b99eb5863.png" alt="image" /></p>
+  </blockquote>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def bubble_sort(li):
+    n = len(li)
+    for i in range(n):      # 0부터 n-1까지
+        for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복
+            if j==(n-1):      # indexError 방지.
+                pass
+            elif li[j] &gt; li[j+1]:
+                li[j], li[j+1] = li[j+1], li[j]     # 교환
+            else :
+                pass
+    return li   
+</code></pre></div></div>
+<h2 id="퀵정렬">퀵정렬</h2>
+<blockquote>
+  <blockquote>
+    <p>특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지.<br />
+이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn) <br />
+<img src="https://user-images.githubusercontent.com/84547813/145229539-66ac03f9-ff21-451a-b60d-262e8b4d09ca.png" alt="image" /><br />
+그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2)
+<img src="https://user-images.githubusercontent.com/84547813/145229599-9731477a-81d1-4bda-9e28-3ca1a4e62241.png" alt="image" /></p>
+  </blockquote>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def quick_sort(li):
+    if len(li)&lt;=1:
+        return li
+    else:
+        L1, L2 = [], []
+        for x in li[1:]:
+            if x&lt;=li[0]:
+                L1.append(x)
+            else :
+                L2.append(x)
+        return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 )
+</code></pre></div></div>
+<h2 id="병합정렬">병합정렬</h2>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">Something_else</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/ds/image/" class="pagination--pager" title="openCV 이미지 읽기
+">이전</a>
+    
+    
+      <a href="/something_else/6th/" class="pagination--pager" title="선형회귀
+">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+
+  
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/something_else/setting/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>진짜 시작 그리고 m1맥북 세팅</a>
+    
+    
+      <a href="/something_else/6th/" class="pagination_prev_next--pager"><span class="prev_next">다음 글  &nbsp  </span>선형회귀</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%EC%A0%95%EB%A0%AC%20http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F5th%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F5th%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2F5th%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/hypothesis/">가설 검정</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.14
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#test-2" class="page__taxonomy-item-tag" rel="tag">Test_2</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EA%B0%80%EC%84%A4-%EA%B2%80%EC%A0%95" class="page__taxonomy-item-tag" rel="tag">가설 검정</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/Data/">데이터 다루기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.12
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#ds" class="page__taxonomy-item-category" rel="tag">ds</a>
+                    
+                    
+                    <a href="/tags/#pandas" class="page__taxonomy-item-tag" rel="tag">Pandas</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/6th/">선형회귀</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.01.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#%EB%8B%A4%EC%A4%91%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">다중선형회귀</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EB%8B%A8%EC%88%9C%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">단순선형회귀</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EB%A6%BF%EC%A7%80%ED%9A%8C%EA%B7%80" class="page__taxonomy-item-tag" rel="tag">릿지회귀</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EB%B3%91%ED%95%A9%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">병합정렬</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%ED%80%B5%EC%A0%95%EB%A0%AC" class="page__taxonomy-item-tag" rel="tag">퀵정렬</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/image/">openCV 이미지 읽기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.18
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#ds" class="page__taxonomy-item-category" rel="tag">ds</a>
+                    
+                    
+                    <a href="/tags/#image" class="page__taxonomy-item-tag" rel="tag">Image</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#opencv" class="page__taxonomy-item-tag" rel="tag">OpenCV</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/setting/">진짜 시작 그리고 m1맥북 세팅</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.16
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#m1" class="page__taxonomy-item-tag" rel="tag">M1</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#setting" class="page__taxonomy-item-tag" rel="tag">setting</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/section_2/">대출 승인 시스템의 승인 기준 머신러닝 예측</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#gridsearch" class="page__taxonomy-item-tag" rel="tag">GridSearch</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#ml" class="page__taxonomy-item-tag" rel="tag">ML</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#xgboost" class="page__taxonomy-item-tag" rel="tag">XGboost</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/section_1/">게임 데이터 분석 기초</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.07.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#pandas" class="page__taxonomy-item-tag" rel="tag">pandas</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EA%B0%80%EC%84%A4%EA%B2%80%EC%A0%95" class="page__taxonomy-item-tag" rel="tag">가설검정</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EC%8B%9C%EA%B0%81%ED%99%94" class="page__taxonomy-item-tag" rel="tag">시각화</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/4th/">파이썬, 자료구조</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#something-else" class="page__taxonomy-item-category" rel="tag">Something_else</a>
+                    
+                    
+                    <a href="/tags/#algorithm" class="page__taxonomy-item-tag" rel="tag">algorithm</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#data-structure" class="page__taxonomy-item-tag" rel="tag">data_structure</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/example_sub/test/">test게시물</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#example-sub" class="page__taxonomy-item-category" rel="tag">Example_sub</a>
+                    
+                    
+                    <a href="/tags/#test-2" class="page__taxonomy-item-tag" rel="tag">Test_2</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#test" class="page__taxonomy-item-tag" rel="tag">Test</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 옹달샘🙉. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'chan9480/chan9480.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

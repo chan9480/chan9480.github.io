@@ -1,0 +1,83 @@
+I"�<h2 id="pandas-document">pandas document</h2>
+
+<p>pandas 의 모든것이 들어있는 공식문서<br />
+https://pandas.pydata.org/docs/reference/index.html</p>
+
+<h2 id="dataframe-">DataFrame ?</h2>
+
+<p>데이터프레임을 먼저 알아야 하는데, 열(특성)과 행(단일데이터) 들로 이루어진 2차원 표라고 생각하면 된다.</p>
+
+<h2 id="데이터-불러오기">데이터 불러오기</h2>
+<blockquote>
+  <p>csv 불러오기</p>
+</blockquote>
+
+<p>정확히는 csv 파일을 dataFrame의 객체타입으로 변환하는 것</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
+path = #csv의 경로
+df = pd.read_csv(path)
+#tsv 파일이라면 comma(',')로 구분되는 것이 아닌 tab('\t')으로 구분되기때문에 sep을 설정해줘야함.
+df = pd.read_csv(path, sep='\t')
+
+#csv 파일의 첫번째 줄은 feature의 이름인 경우가 많다. 그땐 index_col=0 으로 하면 0번째 행을 설정하는것
+df = pd.read_csv(path, index_col=0)
+
+# 내가 딱 필요한 feature를 정해서 불러온다. 아주 애용한다.
+df = pd.read_csv(path, usecols=['A', 'B'])  
+
+# skiprows를 이용하면 1,2번째 행은 제외할 수 있다.
+df = pd.read_csv(path, skiprows = [1, 2])
+
+# nrows를 5로 하면 위에서 5개 데이터만 불러온다.
+df = pd.read_csv(path, nrows = 5)
+
+#na_values를 이용해서 결측값을 제외하고 부를 수 있지만 dataframe의 내장함수를 사용하는 걸 개인적으로 선호한다.
+df = pd.read_csv(path, na_values = [0, '?', 'N/A', 'NA', 'nan', 'NaN', 'null'])
+</code></pre></div></div>
+
+<h2 id="데이터-프레임-객체의-내장함수">데이터 프레임 객체의 내장함수</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
+df = pd.dataFrame(data)
+
+#데이터프레임 모양확인
+df.shape
+
+#데이터 타입 확인
+df.dtypes
+
+#인덱스 객체 반환 (인덱스는 각 행들의 이름)
+df.index
+
+#features 의 인덱스 객체 반환
+df.columns
+
+#전치형태의 데이터프레임객체 반환 (전치는 행열 반전)
+df.T
+
+</code></pre></div></div>
+<h2 id="데이터-프레임의-데이터-슬라이싱">데이터 프레임의 데이터 슬라이싱</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 열접근
+df.NAME
+df['NAME'] # 둘은 같은 결과를 도출한다.
+
+# loc 사용
+# feature의 '이름' 으로 추출
+df.loc[:,['NAME','GENDER']]
+
+# iloc 사용
+# 행과 열의 번호(순서)로 추출
+df.iloc[2:4, 0:3]     # 이 예시에서 2이상 4미만 행, 0이상 3미만의 열을 추출
+
+# 조건부 슬라이싱
+df[df.GENDER == 'M']  # 이 예시에서 'GENDER' 라는 features 가 'M'인 행들을 추출
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

@@ -1,0 +1,1330 @@
+I"�%<p><a href="https://colab.research.google.com/github/codestates/ds-sc11x/blob/master/ds_sc11x%20(2).ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" /></a></p>
+
+<h1 id="목차">목차</h1>
+<h2 id="1-샘플데이터-불러오기">1. 샘플데이터 불러오기</h2>
+<h2 id="2-데이터-전처리">2. 데이터 전처리</h2>
+<h2 id="3-필수포함-주제">3. 필수포함 주제</h2>
+<h2 id="4-다음-분기에-어떤-게임을-설계해야-할까">4. 다음 분기에 어떤 게임을 설계해야 할까</h2>
+
+<h1 id="1-샘플-데이터-불러오기">1. 샘플 데이터 불러오기</h1>
+<h3 id="링크--httpsds-lecture-datas3ap-northeast-2amazonawscomdatasetsvgames2csv">링크 : https://ds-lecture-data.s3.ap-northeast-2.amazonaws.com/datasets/vgames2.csv</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'https://ds-lecture-data.s3.ap-northeast-2.amazonaws.com/datasets/vgames2.csv'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+<span class="c1"># 의미가 있을만한 feature : 년도, 플랫폼. 장르. 제작한 회사??, 출고량
+</span>
+
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Index(['Unnamed: 0', 'Name', 'Platform', 'Year', 'Genre', 'Publisher',
+       'NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales'],
+      dtype='object')
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Name</th>
+      <th>Platform</th>
+      <th>Year</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>NA_Sales</th>
+      <th>EU_Sales</th>
+      <th>JP_Sales</th>
+      <th>Other_Sales</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>Candace Kane's Candy Factory</td>
+      <td>DS</td>
+      <td>2008.0</td>
+      <td>Action</td>
+      <td>Destineer</td>
+      <td>0.04</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>The Munchables</td>
+      <td>Wii</td>
+      <td>2009.0</td>
+      <td>Action</td>
+      <td>Namco Bandai Games</td>
+      <td>0.17</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Otome wa Oanesama Boku ni Koi Shiteru Portable</td>
+      <td>PSP</td>
+      <td>2010.0</td>
+      <td>Adventure</td>
+      <td>Alchemist</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Deal or No Deal: Special Edition</td>
+      <td>DS</td>
+      <td>2010.0</td>
+      <td>Misc</td>
+      <td>Zoo Games</td>
+      <td>0.04</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>Ben 10 Ultimate Alien: Cosmic Destruction</td>
+      <td>PS3</td>
+      <td>2010.0</td>
+      <td>Platform</td>
+      <td>D3Publisher</td>
+      <td>0.12</td>
+      <td>0.09</td>
+      <td>0</td>
+      <td>0.04</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="2-데이터-전처리-eda">2. 데이터 전처리, EDA</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="c1"># 첫번째 열 삭제
+</span><span class="k">try</span><span class="p">:</span>
+  <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Unnamed: 0'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+  <span class="k">pass</span>
+
+<span class="c1"># 출고량 numerical value 화 (전부 (M이 있을 수 있음) 1000을 곱해주되, K가 들어가면 안곱해줌, )
+</span><span class="k">def</span> <span class="nf">to_int</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">x</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">if</span> <span class="s">'K'</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'K'</span><span class="p">,</span><span class="s">''</span><span class="p">)</span>
+    <span class="n">x</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'M'</span><span class="p">,</span><span class="s">''</span><span class="p">)</span>
+    <span class="n">x</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">x</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">df</span><span class="p">[</span><span class="s">'NA_Sales'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'NA_Sales'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">to_int</span><span class="p">)</span>
+  <span class="n">df</span><span class="p">[</span><span class="s">'EU_Sales'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'EU_Sales'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">to_int</span><span class="p">)</span>
+  <span class="n">df</span><span class="p">[</span><span class="s">'JP_Sales'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'JP_Sales'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">to_int</span><span class="p">)</span>
+  <span class="n">df</span><span class="p">[</span><span class="s">'Other_Sales'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'Other_Sales'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">to_int</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+  <span class="k">pass</span>
+<span class="c1"># 각 판매량을 각게임의 전체판매량의 비중으로 계산하여 feature 추가( 예를 들어 30, 30, 20 , 20 이면 0.3, 0.3, 0.2, 0.2)
+# 이유 : 특정 게임의 흥행을 고려하지 않는 feature 필요.
+</span><span class="n">df</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'NA_Sales'</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s">'EU_Sales'</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s">'JP_Sales'</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s">'Other_Sales'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'NA_Sales(rate)'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'NA_Sales'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'EU_Sales(rate)'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'EU_Sales'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'JP_Sales(rate)'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'JP_Sales'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'Other_Sales(rate)'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'Other_Sales'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">]</span>
+
+<span class="c1"># 년도가 이상하게 표기되어있는 경우. 수정 (0 이면 2000년, 98이면 1998년 등)
+</span><span class="k">def</span> <span class="nf">re_year</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">1900</span> <span class="ow">and</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">2100</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span>
+  <span class="k">elif</span> <span class="n">x</span><span class="o">&lt;=</span><span class="mi">21</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">2000</span><span class="o">+</span><span class="n">x</span>
+  <span class="k">elif</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">21</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">1900</span><span class="o">+</span><span class="n">x</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'Year'</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s">'Year'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">re_year</span><span class="p">)</span>
+<span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Platform</th>
+      <th>Year</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>NA_Sales</th>
+      <th>EU_Sales</th>
+      <th>JP_Sales</th>
+      <th>Other_Sales</th>
+      <th>Game_sales</th>
+      <th>NA_Sales(rate)</th>
+      <th>EU_Sales(rate)</th>
+      <th>JP_Sales(rate)</th>
+      <th>Other_Sales(rate)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Candace Kane's Candy Factory</td>
+      <td>DS</td>
+      <td>2008.0</td>
+      <td>Action</td>
+      <td>Destineer</td>
+      <td>40</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>1.000000</td>
+      <td>0.00</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>The Munchables</td>
+      <td>Wii</td>
+      <td>2009.0</td>
+      <td>Action</td>
+      <td>Namco Bandai Games</td>
+      <td>170</td>
+      <td>0</td>
+      <td>0</td>
+      <td>10</td>
+      <td>180</td>
+      <td>0.944444</td>
+      <td>0.00</td>
+      <td>0.0</td>
+      <td>0.055556</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Otome wa Oanesama Boku ni Koi Shiteru Portable</td>
+      <td>PSP</td>
+      <td>2010.0</td>
+      <td>Adventure</td>
+      <td>Alchemist</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20</td>
+      <td>0</td>
+      <td>20</td>
+      <td>0.000000</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Deal or No Deal: Special Edition</td>
+      <td>DS</td>
+      <td>2010.0</td>
+      <td>Misc</td>
+      <td>Zoo Games</td>
+      <td>40</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>1.000000</td>
+      <td>0.00</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Ben 10 Ultimate Alien: Cosmic Destruction</td>
+      <td>PS3</td>
+      <td>2010.0</td>
+      <td>Platform</td>
+      <td>D3Publisher</td>
+      <td>120</td>
+      <td>90</td>
+      <td>0</td>
+      <td>40</td>
+      <td>250</td>
+      <td>0.480000</td>
+      <td>0.36</td>
+      <td>0.0</td>
+      <td>0.160000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="3-1-지역에-따라서-선호하는-게임-장르가-다를까">3-1 지역에 따라서 선호하는 게임 장르가 다를까</h1>
+
+<ul>
+  <li>가정1 : 지역에 따른 ‘전체 게임 출고량’은 오직 인구수에만 종속된다. (선호도 이외의 영향은 없다)</li>
+  <li>가정2 : 게임의 전지역 출고량은 지역 장르선호도와 독립적이다. (특정 게임의 흥행은 선호도에 가중치를 주지않는다.)</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2_contingency</span>
+
+<span class="c1"># 년도에 상관없이 지역별로 각 장르 게임들의 출고량 rate 합을 그룹화 grouped_df1
+</span><span class="n">grouped_df1</span><span class="o">=</span><span class="n">df</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'Genre'</span><span class="p">).</span><span class="nb">sum</span><span class="p">()[[</span><span class="s">'NA_Sales(rate)'</span><span class="p">,</span><span class="s">'EU_Sales(rate)'</span><span class="p">,</span><span class="s">'JP_Sales(rate)'</span><span class="p">,</span> <span class="s">'Other_Sales(rate)'</span><span class="p">]]</span>
+<span class="n">grouped_df1_T</span><span class="o">=</span><span class="n">grouped_df1</span><span class="p">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">grouped_df1_T</span><span class="p">[</span><span class="s">'Total_sales'</span><span class="p">]</span><span class="o">=</span><span class="n">grouped_df1_T</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">grouped_df1_T</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Genre</th>
+      <th>Action</th>
+      <th>Adventure</th>
+      <th>Fighting</th>
+      <th>Misc</th>
+      <th>Platform</th>
+      <th>Puzzle</th>
+      <th>Racing</th>
+      <th>Role-Playing</th>
+      <th>Shooter</th>
+      <th>Simulation</th>
+      <th>Sports</th>
+      <th>Strategy</th>
+      <th>Total_sales</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>NA_Sales(rate)</th>
+      <td>1525.619292</td>
+      <td>342.188702</td>
+      <td>348.445844</td>
+      <td>807.461452</td>
+      <td>501.594820</td>
+      <td>319.931602</td>
+      <td>675.419334</td>
+      <td>432.557585</td>
+      <td>692.748044</td>
+      <td>409.577643</td>
+      <td>1210.555555</td>
+      <td>195.972163</td>
+      <td>7462.072036</td>
+    </tr>
+    <tr>
+      <th>EU_Sales(rate)</th>
+      <td>823.705975</td>
+      <td>208.330453</td>
+      <td>143.982251</td>
+      <td>327.132529</td>
+      <td>211.535672</td>
+      <td>120.129892</td>
+      <td>375.877842</td>
+      <td>232.452620</td>
+      <td>379.688596</td>
+      <td>196.063888</td>
+      <td>538.379128</td>
+      <td>207.948389</td>
+      <td>3765.227234</td>
+    </tr>
+    <tr>
+      <th>JP_Sales(rate)</th>
+      <td>658.357007</td>
+      <td>669.495053</td>
+      <td>294.008705</td>
+      <td>436.876869</td>
+      <td>106.652981</td>
+      <td>99.585575</td>
+      <td>72.600294</td>
+      <td>725.787645</td>
+      <td>108.868986</td>
+      <td>185.525061</td>
+      <td>388.643571</td>
+      <td>224.475923</td>
+      <td>3970.877670</td>
+    </tr>
+    <tr>
+      <th>Other_Sales(rate)</th>
+      <td>232.317726</td>
+      <td>47.985792</td>
+      <td>48.563200</td>
+      <td>109.529150</td>
+      <td>53.216527</td>
+      <td>26.352931</td>
+      <td>94.102530</td>
+      <td>74.202151</td>
+      <td>98.694374</td>
+      <td>54.833408</td>
+      <td>161.421746</td>
+      <td>40.603524</td>
+      <td>1041.823060</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 2 sample 카이제곱검정을 통해 두변수가 독립적이라는 귀무가설을 검정.
+</span><span class="n">chi2</span> <span class="o">=</span> <span class="n">chi2_contingency</span><span class="p">(</span><span class="n">grouped_df1_T</span><span class="p">[</span><span class="n">grouped_df1_T</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">difference</span><span class="p">([</span><span class="s">'Total_sales'</span><span class="p">])])</span>
+<span class="n">chi2</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(1834.559710433277,
+ 0.0,
+ 33,
+ array([[1488.73850969,  582.62976243,  383.67180728,  772.3979737 ,
+          401.13232067,  260.069752  ,  559.65540272,  673.14873972,
+          588.14360876,  388.72616642, 1056.3610598 ,  307.39693302],
+        [ 751.19065507,  293.98449093,  193.59388796,  389.73811456,
+          202.40414873,  131.22651567,  282.39204255,  339.65873755,
+          296.76667854,  196.1442266 ,  533.02077654,  155.10695933],
+        [ 792.21943666,  310.04143385,  204.16766346,  411.02496081,
+          213.45912599,  138.39388924,  297.81582526,  358.2103317 ,
+          312.97557992,  206.85729735,  562.13348299,  163.57864294],
+        [ 207.85139859,   81.34431278,   53.5666413 ,  107.83895093,
+           56.00440462,   36.30984309,   78.13672947,   93.98219103,
+           82.11413278,   54.27230963,  147.48468066,   42.91746471]]))
+</code></pre></div></div>
+
+<h3 id="p값이-0-이므로-지역에-따른-장르는-독립적이지-않다">p값이 0 이므로 지역에 따른 장르는 독립적이지 않다.</h3>
+<h3 id="즉-지역에-따라-선호하는-게임이-유의미하게-다르다">즉, 지역에 따라 선호하는 게임이 유의미하게 다르다.</h3>
+
+<h1 id="3-2-연도별-게임의-트렌드가-있을까">3-2 연도별 게임의 트렌드가 있을까</h1>
+
+<hr />
+
+<h4 id="트렌드-게임의-흥망을-고려해야-하는가"><strong>트렌드</strong>? 게임의 <strong>흥망</strong>을 고려해야 하는가?</h4>
+<h4 id="--어떤-게임이-대박이-났다면-대박난-게임은-트렌드를-잘탔기때문인가-아니면-그저-잘-만들어졌기-때문인가">-&gt; 어떤 게임이 대박이 났다면 대박난 게임은 트렌드를 잘탔기때문인가? 아니면 그저 잘 만들어졌기 때문인가?</h4>
+<h3 id="예시"><em>예시</em></h3>
+
+<h4 id="2000년도에-a라는-게임이-대박을-쳤고-action-장르라고-해보자"><strong>2000년도에 A라는 게임이 대박을 쳤고 action 장르라고 해보자.</strong></h4>
+<h4 id="데이터-분석을-할-때-이-a-게임으로인한-2000년-action-장르-트렌드영향도를">데이터 분석을 할 때, 이 A 게임으로인한 <strong>2000년 action 장르 트렌드영향도</strong>를</h4>
+<h4 id="더-크게-"><strong>더 크게 ?</strong></h4>
+<h5 id="--대답--영향을-더-크게-고려해야함-즉-rate-가-아닌-출고량으로-분석하겠다">-&gt; 대답 : 영향을 더 크게 고려해야함. (즉 rate 가 아닌 출고량으로 분석하겠다)</h5>
+<hr />
+<ul>
+  <li>
+    <p>가정1 : 각 년도에 나오는 각 장르당 게임수는 트렌드와 독립적이다.</p>
+
+    <p>( 매년 무조건 1만가지의 게임만 출시할수 있다는 제한이 있는 경우와 없는경우를 생각해보면 편할 것)</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 년도와 장르별로 게임 판매량을 그룹화함
+</span><span class="n">grouped_df2</span><span class="o">=</span><span class="n">df</span><span class="p">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">'Year'</span><span class="p">,</span> <span class="s">'Genre'</span><span class="p">]).</span><span class="nb">sum</span><span class="p">()[[</span><span class="s">'Game_sales'</span><span class="p">]]</span>
+
+<span class="c1"># 년도별 출시게임의 갯수를 저장
+</span><span class="n">count</span><span class="o">=</span><span class="n">df</span><span class="p">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">'Year'</span><span class="p">]).</span><span class="n">count</span><span class="p">()</span>
+<span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="p">.</span><span class="n">reset_index</span><span class="p">()[</span><span class="s">'Game_sales'</span><span class="p">]</span>
+
+<span class="c1"># 년도index, 장르columns 대하여 정리
+</span><span class="n">grouped_df2</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="s">'Game_sales'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s">'Year'</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s">'Genre'</span><span class="p">)</span>
+<span class="n">grouped_df2</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">grouped_df2</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Count'</span><span class="p">]</span><span class="o">=</span><span class="n">count</span>
+<span class="n">grouped_df2</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Action</th>
+      <th>Adventure</th>
+      <th>Fighting</th>
+      <th>Misc</th>
+      <th>Platform</th>
+      <th>Puzzle</th>
+      <th>Racing</th>
+      <th>Role-Playing</th>
+      <th>Shooter</th>
+      <th>Simulation</th>
+      <th>Sports</th>
+      <th>Strategy</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1980.0</td>
+      <td>340.0</td>
+      <td>0.0</td>
+      <td>770.0</td>
+      <td>2700.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7070.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1981.0</td>
+      <td>14790.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6920.0</td>
+      <td>2250.0</td>
+      <td>480.0</td>
+      <td>0.0</td>
+      <td>10020.0</td>
+      <td>440.0</td>
+      <td>780.0</td>
+      <td>0.0</td>
+      <td>46</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1982.0</td>
+      <td>6500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>870.0</td>
+      <td>5030.0</td>
+      <td>10040.0</td>
+      <td>1570.0</td>
+      <td>0.0</td>
+      <td>3810.0</td>
+      <td>0.0</td>
+      <td>1060.0</td>
+      <td>0.0</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1983.0</td>
+      <td>2860.0</td>
+      <td>400.0</td>
+      <td>0.0</td>
+      <td>2140.0</td>
+      <td>6930.0</td>
+      <td>780.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>490.0</td>
+      <td>0.0</td>
+      <td>3200.0</td>
+      <td>0.0</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1984.0</td>
+      <td>1850.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1450.0</td>
+      <td>690.0</td>
+      <td>3140.0</td>
+      <td>5950.0</td>
+      <td>0.0</td>
+      <td>31100.0</td>
+      <td>0.0</td>
+      <td>6170.0</td>
+      <td>0.0</td>
+      <td>14</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 특정 년도는 게임수가 적어 묶어주겠음 (A개 이상으로)
+</span><span class="n">A</span><span class="o">=</span><span class="mi">1200</span>
+<span class="n">temp</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">grouped_df2</span><span class="p">.</span><span class="n">T</span><span class="p">.</span><span class="n">columns</span><span class="p">:</span>
+  <span class="n">grouped_df2</span><span class="p">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">temp</span>
+  <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Count'</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">A</span> <span class="p">:</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">grouped_df2</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">T</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="n">i</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">T</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">temp</span><span class="o">=</span><span class="mi">0</span>
+<span class="c1">#마지막에도 80개이하면 버려지게됨. 끝에 붙여줌
+</span><span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">index</span><span class="o">==</span><span class="s">'Count'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">:</span>
+  <span class="n">grouped_df2</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">temp</span>
+
+<span class="c1">#년도도 더해져버림... 적절히 평균으로 만들어줌.
+</span><span class="k">def</span> <span class="nf">qq</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">i</span><span class="o">=</span><span class="mi">1</span>
+  <span class="k">while</span> <span class="n">x</span><span class="o">/</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">2021</span> <span class="p">:</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+  <span class="k">return</span> <span class="n">x</span><span class="o">/</span><span class="n">i</span>
+<span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">]</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">qq</span><span class="p">)</span>
+<span class="n">grouped_df2</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Action</th>
+      <th>Adventure</th>
+      <th>Fighting</th>
+      <th>Misc</th>
+      <th>Platform</th>
+      <th>Puzzle</th>
+      <th>Racing</th>
+      <th>Role-Playing</th>
+      <th>Shooter</th>
+      <th>Simulation</th>
+      <th>Sports</th>
+      <th>Strategy</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>17</th>
+      <td>1988.5</td>
+      <td>123220.0</td>
+      <td>32930.0</td>
+      <td>84759.0</td>
+      <td>39350.0</td>
+      <td>280500.0</td>
+      <td>94000.0</td>
+      <td>96939.0</td>
+      <td>122690.0</td>
+      <td>106629.0</td>
+      <td>33980.0</td>
+      <td>106290.0</td>
+      <td>25550.0</td>
+      <td>1255.0</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>1999.5</td>
+      <td>157599.0</td>
+      <td>28570.0</td>
+      <td>84349.0</td>
+      <td>64460.0</td>
+      <td>106010.0</td>
+      <td>19460.0</td>
+      <td>139800.0</td>
+      <td>126390.0</td>
+      <td>53669.0</td>
+      <td>41480.0</td>
+      <td>164670.0</td>
+      <td>48020.0</td>
+      <td>1541.0</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>2002.5</td>
+      <td>154630.0</td>
+      <td>13190.0</td>
+      <td>48710.0</td>
+      <td>39420.0</td>
+      <td>88770.0</td>
+      <td>7040.0</td>
+      <td>82330.0</td>
+      <td>75380.0</td>
+      <td>74740.0</td>
+      <td>32029.0</td>
+      <td>121270.0</td>
+      <td>13460.0</td>
+      <td>1600.0</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>2004.5</td>
+      <td>161670.0</td>
+      <td>16980.0</td>
+      <td>36440.0</td>
+      <td>85790.0</td>
+      <td>70150.0</td>
+      <td>28670.0</td>
+      <td>102009.0</td>
+      <td>82460.0</td>
+      <td>88490.0</td>
+      <td>60170.0</td>
+      <td>120639.0</td>
+      <td>12480.0</td>
+      <td>1674.0</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>2006.5</td>
+      <td>172480.0</td>
+      <td>35920.0</td>
+      <td>40160.0</td>
+      <td>158300.0</td>
+      <td>85230.0</td>
+      <td>34570.0</td>
+      <td>73010.0</td>
+      <td>95650.0</td>
+      <td>109230.0</td>
+      <td>70580.0</td>
+      <td>234359.0</td>
+      <td>13610.0</td>
+      <td>2200.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 각 출시년도에 대하여 Count로 나누어줌. (가정1)
+</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">grouped_df2</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">difference</span><span class="p">([</span><span class="s">'Year'</span><span class="p">,</span><span class="s">'Count'</span><span class="p">]):</span>
+  <span class="n">grouped_df2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">grouped_df2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Count'</span><span class="p">]</span>
+<span class="n">grouped_df2</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Action</th>
+      <th>Adventure</th>
+      <th>Fighting</th>
+      <th>Misc</th>
+      <th>Platform</th>
+      <th>Puzzle</th>
+      <th>Racing</th>
+      <th>Role-Playing</th>
+      <th>Shooter</th>
+      <th>Simulation</th>
+      <th>Sports</th>
+      <th>Strategy</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>17</th>
+      <td>1988.5</td>
+      <td>98.183267</td>
+      <td>26.239044</td>
+      <td>67.537052</td>
+      <td>31.354582</td>
+      <td>223.505976</td>
+      <td>74.900398</td>
+      <td>77.242231</td>
+      <td>97.760956</td>
+      <td>84.963347</td>
+      <td>27.075697</td>
+      <td>84.693227</td>
+      <td>20.358566</td>
+      <td>1255.0</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>1999.5</td>
+      <td>102.270604</td>
+      <td>18.539909</td>
+      <td>54.736535</td>
+      <td>41.829981</td>
+      <td>68.792992</td>
+      <td>12.628164</td>
+      <td>90.720311</td>
+      <td>82.018170</td>
+      <td>34.827385</td>
+      <td>26.917586</td>
+      <td>106.859182</td>
+      <td>31.161583</td>
+      <td>1541.0</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>2002.5</td>
+      <td>96.643750</td>
+      <td>8.243750</td>
+      <td>30.443750</td>
+      <td>24.637500</td>
+      <td>55.481250</td>
+      <td>4.400000</td>
+      <td>51.456250</td>
+      <td>47.112500</td>
+      <td>46.712500</td>
+      <td>20.018125</td>
+      <td>75.793750</td>
+      <td>8.412500</td>
+      <td>1600.0</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>2004.5</td>
+      <td>96.577061</td>
+      <td>10.143369</td>
+      <td>21.768220</td>
+      <td>51.248507</td>
+      <td>41.905615</td>
+      <td>17.126643</td>
+      <td>60.937276</td>
+      <td>49.259259</td>
+      <td>52.861410</td>
+      <td>35.943847</td>
+      <td>72.066308</td>
+      <td>7.455197</td>
+      <td>1674.0</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>2006.5</td>
+      <td>78.400000</td>
+      <td>16.327273</td>
+      <td>18.254545</td>
+      <td>71.954545</td>
+      <td>38.740909</td>
+      <td>15.713636</td>
+      <td>33.186364</td>
+      <td>43.477273</td>
+      <td>49.650000</td>
+      <td>32.081818</td>
+      <td>106.526818</td>
+      <td>6.186364</td>
+      <td>2200.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">chi2_1</span><span class="o">=</span><span class="n">chi2_contingency</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="n">grouped_df2</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">difference</span><span class="p">([</span><span class="s">'Count'</span><span class="p">])])</span>
+<span class="n">chi2_1</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(1279.7439040830805,
+ 1.724383653993331e-199,
+ 108,
+ array([[ 118.47019129,   16.78986204,   32.5745123 ,   54.55699306,
+           62.97423775,   18.65798994,   52.46450991,   64.28669272,
+           70.50976375,   27.45568949,   91.15531716,   12.84964063,
+         2279.56894258],
+        [ 109.02005572,   15.45056757,   29.97610713,   50.20508837,
+           57.95090591,   17.16967856,   48.27951852,   59.15866891,
+           64.88533773,   25.26560281,   83.8840357 ,   11.82464991,
+         2097.73218419],
+        [ 100.89920463,   14.29966228,   27.74320144,   46.46533568,
+           53.63417102,   15.89071753,   44.68320059,   54.75196835,
+           60.05206038,   23.38358031,   77.63555455,   10.94383748,
+         1941.47313078],
+        [ 102.93759729,   14.58854787,   28.303677  ,   47.40404079,
+           54.71770286,   16.21174604,   45.58590253,   55.85808222,
+           61.26524813,   23.85598164,   79.20396875,   11.1649278 ,
+         1980.69528914],
+        [ 102.74194399,   14.56081945,   28.24988025,   47.31394002,
+           54.61370102,   16.18093241,   45.4992575 ,   55.75191287,
+           61.14880139,   23.81063862,   79.05342591,   11.14370664,
+         1976.93058537],
+        [ 101.38163783,   14.3680338 ,   27.87585106,   46.68750216,
+           53.89061412,   15.96669642,   44.89684607,   55.01375601,
+           60.33918958,   23.49538511,   78.00675638,   10.99616366,
+         1950.75597005],
+        [ 101.03873223,   14.31943644,   27.78156589,   46.52958987,
+           53.70833858,   15.91269187,   44.74499037,   54.82768164,
+           60.13510286,   23.41591609,   77.74291222,   10.95897107,
+         1944.15788038],
+        [ 101.30462451,   14.3571193 ,   27.85467552,   46.65203657,
+           53.84967678,   15.95456751,   44.86274074,   54.97196549,
+           60.29335365,   23.47753713,   77.94749951,   10.98781056,
+         1949.27410224],
+        [ 102.16087759,   14.47846941,   28.09011049,   47.04635174,
+           54.30482828,   16.08941967,   45.24193231,   55.43660286,
+           60.80296879,   23.67597539,   78.60633208,   11.0806824 ,
+         1965.74987477],
+        [ 102.35553281,   14.50605638,   28.1436328 ,   47.13599288,
+           54.40829957,   16.12007612,   45.32813535,   55.54223062,
+           60.9188215 ,   23.7210871 ,   78.75610695,   11.1017953 ,
+         1969.49537382]]))
+</code></pre></div></div>
+
+<h3 id="p값-거의-0으로-년도와-장르는-독립적이지않다-즉-유의미한-연관이-있으며-연도별-트랜드는-존재한다"><strong>p값 거의 0으로 년도와 장르는 독립적이지않다. 즉, 유의미한 연관이 있으며 연도별 트랜드는 존재한다.</strong></h3>
+
+<h4 id="심지어-게임-갯수를-2000개이상씩-묶어도-결과는-같다">심지어 게임 갯수를 2000개이상씩 묶어도 결과는 같다</h4>
+
+<h1 id="3-3-출고량이-높은-게임에-대한-분석-및-시각화-프로세스">3-3 출고량이 높은 게임에 대한 분석 및 시각화 프로세스</h1>
+<hr />
+<p>출고량 10000이상의 것으로 하겠다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sorted_df</span><span class="o">=</span><span class="n">df</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">sorted_df</span><span class="o">=</span><span class="n">sorted_df</span><span class="p">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">while</span> <span class="n">sorted_df</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">].</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">10000</span><span class="p">:</span>
+  <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+<span class="n">sorted_df</span><span class="o">=</span><span class="n">sorted_df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
+<span class="n">sorted_df</span>
+<span class="c1">#61개임.
+</span></code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Platform</th>
+      <th>Year</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>NA_Sales</th>
+      <th>EU_Sales</th>
+      <th>JP_Sales</th>
+      <th>Other_Sales</th>
+      <th>Game_sales</th>
+      <th>NA_Sales(rate)</th>
+      <th>EU_Sales(rate)</th>
+      <th>JP_Sales(rate)</th>
+      <th>Other_Sales(rate)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Wii Sports</td>
+      <td>Wii</td>
+      <td>2006.0</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>41490</td>
+      <td>29020</td>
+      <td>3770</td>
+      <td>8460</td>
+      <td>82740</td>
+      <td>0.501450</td>
+      <td>0.350737</td>
+      <td>0.045564</td>
+      <td>0.102248</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Super Mario Bros.</td>
+      <td>NES</td>
+      <td>1985.0</td>
+      <td>Platform</td>
+      <td>Nintendo</td>
+      <td>29080</td>
+      <td>3580</td>
+      <td>6810</td>
+      <td>770</td>
+      <td>40240</td>
+      <td>0.722664</td>
+      <td>0.088966</td>
+      <td>0.169235</td>
+      <td>0.019135</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Mario Kart Wii</td>
+      <td>Wii</td>
+      <td>2008.0</td>
+      <td>Racing</td>
+      <td>Nintendo</td>
+      <td>15850</td>
+      <td>12880</td>
+      <td>3790</td>
+      <td>3310</td>
+      <td>35830</td>
+      <td>0.442367</td>
+      <td>0.359475</td>
+      <td>0.105777</td>
+      <td>0.092381</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Wii Sports Resort</td>
+      <td>Wii</td>
+      <td>2009.0</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>15750</td>
+      <td>11010</td>
+      <td>3280</td>
+      <td>2960</td>
+      <td>33000</td>
+      <td>0.477273</td>
+      <td>0.333636</td>
+      <td>0.099394</td>
+      <td>0.089697</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Pokemon Red/Pokemon Blue</td>
+      <td>GB</td>
+      <td>1996.0</td>
+      <td>Role-Playing</td>
+      <td>Nintendo</td>
+      <td>11270</td>
+      <td>8890</td>
+      <td>10220</td>
+      <td>1000</td>
+      <td>31380</td>
+      <td>0.359146</td>
+      <td>0.283301</td>
+      <td>0.325685</td>
+      <td>0.031867</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>Super Mario All-Stars</td>
+      <td>SNES</td>
+      <td>1993.0</td>
+      <td>Platform</td>
+      <td>Nintendo</td>
+      <td>5990</td>
+      <td>2150</td>
+      <td>2120</td>
+      <td>290</td>
+      <td>10550</td>
+      <td>0.567773</td>
+      <td>0.203791</td>
+      <td>0.200948</td>
+      <td>0.027488</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>Pokemon FireRed/Pokemon LeafGreen</td>
+      <td>GBA</td>
+      <td>2004.0</td>
+      <td>Role-Playing</td>
+      <td>Nintendo</td>
+      <td>4340</td>
+      <td>2650</td>
+      <td>3150</td>
+      <td>350</td>
+      <td>10490</td>
+      <td>0.413727</td>
+      <td>0.252622</td>
+      <td>0.300286</td>
+      <td>0.033365</td>
+    </tr>
+    <tr>
+      <th>58</th>
+      <td>Super Mario 64</td>
+      <td>DS</td>
+      <td>2004.0</td>
+      <td>Platform</td>
+      <td>Nintendo</td>
+      <td>5080</td>
+      <td>3110</td>
+      <td>1250</td>
+      <td>980</td>
+      <td>10420</td>
+      <td>0.487524</td>
+      <td>0.298464</td>
+      <td>0.119962</td>
+      <td>0.094050</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>Just Dance 3</td>
+      <td>Wii</td>
+      <td>2011.0</td>
+      <td>Misc</td>
+      <td>Ubisoft</td>
+      <td>6050</td>
+      <td>3150</td>
+      <td>0</td>
+      <td>1070</td>
+      <td>10270</td>
+      <td>0.589094</td>
+      <td>0.306719</td>
+      <td>0.000000</td>
+      <td>0.104187</td>
+    </tr>
+    <tr>
+      <th>60</th>
+      <td>Call of Duty: Ghosts</td>
+      <td>X360</td>
+      <td>2013.0</td>
+      <td>Shooter</td>
+      <td>Activision</td>
+      <td>6720</td>
+      <td>2630</td>
+      <td>40</td>
+      <td>820</td>
+      <td>10210</td>
+      <td>0.658178</td>
+      <td>0.257591</td>
+      <td>0.003918</td>
+      <td>0.080313</td>
+    </tr>
+  </tbody>
+</table>
+<p>61 rows × 14 columns</p>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">pie</span><span class="p">(</span><span class="n">sorted_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">].</span><span class="n">value_counts</span><span class="p">(),</span> <span class="n">labels</span><span class="o">=</span><span class="n">sorted_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">].</span><span class="n">value_counts</span><span class="p">().</span><span class="n">index</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s">'%.1f%%'</span><span class="p">);</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Publisher'</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">pie</span><span class="p">(</span><span class="n">sorted_df</span><span class="p">[</span><span class="s">'Platform'</span><span class="p">].</span><span class="n">value_counts</span><span class="p">(),</span> <span class="n">labels</span><span class="o">=</span><span class="n">sorted_df</span><span class="p">[</span><span class="s">'Platform'</span><span class="p">].</span><span class="n">value_counts</span><span class="p">().</span><span class="n">index</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s">'%.1f%%'</span><span class="p">);</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Platform'</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
+
+<span class="c1">#plt.bar(sorted_df['Genre'].value_counts(), labels=sorted_df['Platform'].value_counts().index, autopct='%.1f%%');
+</span><span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Genre'</span><span class="p">);</span>
+<span class="n">grouped_df3</span><span class="o">=</span><span class="n">sorted_df</span><span class="p">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">'Genre'</span><span class="p">]).</span><span class="n">count</span><span class="p">()</span>
+<span class="n">grouped_df3</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">bar</span><span class="p">(</span><span class="n">grouped_df3</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">grouped_df3</span><span class="p">[</span><span class="s">'Name'</span><span class="p">]);</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_1.png" width="90%" height="90%" title="제목" alt="아무거나" /></p>
+
+<h1 id="4-다음-분기에-어떤-게임을-설계해야-할까-1">4. 다음 분기에 어떤 게임을 설계해야 할까</h1>
+
+<h3 id="4-1-장르는-트렌드와-시장규모-측면에서-유리한-것으로-선정">4-1. <strong>장르</strong>는 트렌드와 시장규모 측면에서 유리한 것으로 선정</h3>
+<h3 id="4-2-퍼블리셔는-그-장르의-큰-규모-게임-사례가-있으면-좋겠다-운영-노하우가-있을거라-가정">4-2. <strong>퍼블리셔</strong>는 그 장르의 큰 규모 게임 사례가 있으면 좋겠다. (운영 노하우가 있을거라 가정)</h3>
+<h3 id="4-3-플랫폼은-퍼블리셔가-가장-많이-사용하는-플랫폼을-우선으로--장르에-상관없이-큰-규모의-게임-사례가-있으면-좋겠다">4-3. <strong>플랫폼</strong>은 퍼블리셔가 가장 많이 사용하는 플랫폼을 우선으로 (+ 장르에 상관없이 큰 규모의 게임 사례가 있으면 좋겠다.)</h3>
+
+<blockquote>
+  <h2 id="4-1-장르의-트렌드"><strong>4-1. 장르의 트렌드</strong></h2>
+  <h3 id="트렌드와-시장의-크기를-고려하여-action-장르로-선정-그외-후보-sports-shooting">트렌드와 시장의 크기를 고려하여 Action 장르로 선정. (그외 후보 sports, shooting)</h3>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">'y축은 출고량'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Action'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Action'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Adventure'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Adventure'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Fighting'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Fighting'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Misc'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Misc'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Platform'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Platform'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Puzzle'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Puzzle'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Racing'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Racing'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Role-Playing'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Role'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Shooter'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Shooter'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Simulation'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Simulation'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Sports'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Sports'</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Year'</span><span class="p">],</span><span class="n">grouped_df2</span><span class="p">[</span><span class="s">'Strategy'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Strategy'</span><span class="p">);</span>
+
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">colspan</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">bar</span><span class="p">(</span><span class="n">grouped_df1</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">grouped_df1</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Genre market size'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>y축은 출고량
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_2.png" width="90%" height="90%" title="제목" alt="아무거나" /></p>
+
+<blockquote>
+  <h2 id="4-2-퍼블리셔-별-action-게임-데이터"><strong>4-2. 퍼블리셔 별 Action 게임 데이터</strong></h2>
+</blockquote>
+
+<h3 id="action-게임중에서-총-출고량-2000-이상인-것들-중-각-퍼블리셔의-빈도수을-봄">action 게임중에서 총 출고량 2000 이상인 것들 중 각 퍼블리셔의 빈도수을 봄.</h3>
+<h3 id="ubisoft-nintendo-take-two-interactive-세개의-퍼블리셔가-후보였는데">Ubisoft, Nintendo, Take-Two Interactive 세개의 퍼블리셔가 후보였는데</h3>
+<h3 id="출고량이-가장-많은-게임을-운영했던-take-two-interactive-를-채택-게임명--grand-theft-auto-v">출고량이 가장 많은 게임을 운영했던 Take-Two Interactive 를 채택. (게임명 : Grand Theft Auto V)</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">action_df</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'Genre'</span><span class="p">]</span><span class="o">==</span><span class="s">'Action'</span><span class="p">].</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">while</span> <span class="n">action_df</span><span class="p">[</span><span class="s">'Game_sales'</span><span class="p">].</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">:</span>
+  <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+<span class="n">action_df</span><span class="o">=</span><span class="n">action_df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">action_df</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'Publisher'</span><span class="p">).</span><span class="n">count</span><span class="p">()[</span><span class="s">'Name'</span><span class="p">].</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">action_df</span><span class="p">[</span><span class="n">action_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Ubisoft'</span><span class="p">][</span><span class="s">'Year'</span><span class="p">],</span> <span class="n">action_df</span><span class="p">[</span><span class="n">action_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Ubisoft'</span><span class="p">][</span><span class="s">'Game_sales'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">action_df</span><span class="p">[</span><span class="n">action_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Nintendo'</span><span class="p">][</span><span class="s">'Year'</span><span class="p">],</span> <span class="n">action_df</span><span class="p">[</span><span class="n">action_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Nintendo'</span><span class="p">][</span><span class="s">'Game_sales'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">action_df</span><span class="p">[</span><span class="n">action_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Take-Two Interactive'</span><span class="p">][</span><span class="s">'Year'</span><span class="p">],</span> <span class="n">action_df</span><span class="p">[</span><span class="n">action_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Take-Two Interactive'</span><span class="p">][</span><span class="s">'Game_sales'</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">action_df</span><span class="p">[</span><span class="n">action_df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Take-Two Interactive'</span><span class="p">][[</span><span class="s">'Year'</span><span class="p">,</span><span class="s">'Game_sales'</span><span class="p">]][</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Publisher
+Ubisoft                 22
+Nintendo                21
+Take-Two Interactive    20
+Name: Name, dtype: int64
+         Year  Game_sales
+3483   2013.0       21390
+14669  2004.0       20810
+10913  2013.0       16380
+5340   2002.0       16150
+9786   2001.0       13100
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_3.png" width="90%" height="90%" title="제목" alt="아무거나" /></p>
+
+<blockquote>
+  <h2 id="4-3-플랫폼--퍼블리셔와-밀접한-플랫폼"><strong>4-3. 플랫폼 : 퍼블리셔와 밀접한 플랫폼</strong></h2>
+</blockquote>
+
+<h3 id="take-two-interactive-가-사용했던-플랫폼-中">‘Take-Two Interactive’ 가 사용했던 플랫폼 中</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span><span class="o">==</span><span class="s">'Take-Two Interactive'</span><span class="p">].</span><span class="n">groupby</span><span class="p">([</span><span class="s">'Platform'</span><span class="p">]).</span><span class="n">count</span><span class="p">()).</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'Name'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)[</span><span class="s">'Name'</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'Publisher'</span><span class="p">]</span><span class="o">==</span><span class="s">'Take-Two Interactive'</span><span class="p">][</span><span class="n">df</span><span class="p">[</span><span class="s">'Platform'</span><span class="p">]</span><span class="o">==</span><span class="s">'PS3'</span><span class="p">].</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'Year'</span><span class="p">).</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">'Year'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Platform
+X360    70
+PS2     60
+PS3     53
+Name: Name, dtype: int64
+2016.0
+
+
+/usr/local/lib/python3.7/dist-packages/ipykernel_launcher.py:3: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  This is separate from the ipykernel package so we can avoid doing imports until
+</code></pre></div></div>
+
+<h1 id="결론--action-게임을take-two-interactive-퍼블리셔와-함께-x360-혹은-ps3-플랫폼에서-설계할것이다">결론 : Action 게임을,Take-Two Interactive 퍼블리셔와 함께, X360 혹은 PS3 플랫폼에서 설계할것이다.</h1>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

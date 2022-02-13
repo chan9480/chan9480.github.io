@@ -1,0 +1,43 @@
+I"�	<ul class="toc__menu">
+  <li><a href="#ai-section2-project">AI SECTION2 PROJECT</a>
+      - {:.} <a href="#목차">목차</a>
+    <ul>
+      <li><a href="#1-데이터-선정-이유-및-문제-정의">1. 데이터 선정 이유 및 문제 정의</a>
+      - {:.} <a href="#대출승인시스템을-선정하였다">대출승인시스템을 선정하였다.</a>
+      - {:.} <a href="#kaggle-url--httpswwwkagglecomcaiocampiaoloan-approval-systemlas">(kaggle url : https://www.kaggle.com/caiocampiao/loan-approval-systemlas)</a>
+      - {:.} <a href="#이유">이유</a>
+      - {:.} <a href="#문제">문제</a></li>
+      <li><a href="#2-데이터를-이용한-가설-및-평가지표-선택">2. 데이터를 이용한 가설 및 평가지표 선택</a>
+        <ul>
+          <li><a href="#target">target</a></li>
+          <li><a href="#baseline-model">Baseline model</a></li>
+        </ul>
+      </li>
+      <li><a href="#3-eda와-데이터-전처리">3. EDA와 데이터 전처리</a>
+        <ul>
+          <li><a href="#eda">EDA</a></li>
+          <li><a href="#데이터-전처리">데이터 전처리</a></li>
+          <li><a href="#feature-enginnering">feature enginnering</a></li>
+          <li><a href="#data-leakage-는-없는-것으로-보임-일단-profilereport-상-high-correlation은-없음">Data Leakage 는 없는 것으로 보임. (일단 profileReport 상 high correlation은 없음)</a></li>
+          <li><a href="#모델의-한계">모델의 한계</a></li>
+        </ul>
+      </li>
+      <li><a href="#4-머신러닝-방식-적용-및-교차검증">4. 머신러닝 방식 적용 및 교차검증</a>
+        <ul>
+          <li><a href="#baseline-model-1">Baseline model</a></li>
+          <li><a href="#main-model">main model</a></li>
+        </ul>
+      </li>
+      <li><a href="#5-머신러닝-모델-해석">5) 머신러닝 모델 해석</a>
+        <ul>
+          <li><a href="#feature-importances">feature importances</a></li>
+          <li><a href="#예측결과는-true-예측이-성공한-경우">예측결과는 True 예측이 성공한 경우</a></li>
+          <li><a href="#예측결과는-false-예측이-성공한-경우">예측결과는 False 예측이 성공한 경우</a></li>
+          <li><a href="#예측결과는-true-예측이-잘못된-경우">예측결과는 True 예측이 잘못된 경우</a></li>
+          <li><a href="#예측결과는-false-예측이-잘못된-경우">예측결과는 False 예측이 잘못된 경우</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET
