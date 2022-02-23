@@ -29,7 +29,7 @@
 <lastmod>2022-02-12T00:00:00+09:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/something_else/6th/</loc>
+<loc>http://localhost:4000/something_else/regression/</loc>
 <lastmod>2022-02-12T00:00:00+09:00</lastmod>
 </url>
 <url>
@@ -39,6 +39,14 @@
 <url>
 <loc>http://localhost:4000/ds/Data/</loc>
 <lastmod>2022-02-14T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/ds/pca/</loc>
+<lastmod>2022-02-21T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/pj/Credit_Card_Cluster/</loc>
+<lastmod>2022-02-23T00:00:00+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/categories/</loc>
@@ -69,6 +77,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/page2/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page3/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/google8a97825fdbe4bbc7.html</loc>

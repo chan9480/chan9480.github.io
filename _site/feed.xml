@@ -1,4 +1,715 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-18T06:19:42+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱</name></author><entry><title type="html">데이터 다루기</title><link href="http://localhost:4000/ds/Data/" rel="alternate" type="text/html" title="데이터 다루기" /><published>2022-02-12T00:00:00+09:00</published><updated>2022-02-14T00:00:00+09:00</updated><id>http://localhost:4000/ds/Data</id><content type="html" xml:base="http://localhost:4000/ds/Data/"><![CDATA[<h2 id="pandas-document">pandas document</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-23T15:19:35+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">신용카드 데이터로 k-means-cluster, pca 연습</title><link href="http://localhost:4000/pj/Credit_Card_Cluster/" rel="alternate" type="text/html" title="신용카드 데이터로 k-means-cluster, pca 연습" /><published>2022-02-21T00:00:00+09:00</published><updated>2022-02-23T00:00:00+09:00</updated><id>http://localhost:4000/pj/Credit_Card_Cluster</id><content type="html" xml:base="http://localhost:4000/pj/Credit_Card_Cluster/"><![CDATA[<h1 id="데이터-선정-">데이터 선정 :</h1>
+<p>kaggle credit customer dataset  (https://www.kaggle.com/arjunbhasin2013/ccdata)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="p">.</span><span class="n">mount</span><span class="p">(</span><span class="s">'/content/drive'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount("/content/drive", force_remount=True).
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'/content/drive/MyDrive/dataset/CC GENERAL.csv.xls'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(8950, 18)
+</code></pre></div></div>
+
+<div id="df-0239163e-fb5c-444a-8b2b-314b7f2a8a42">
+    <div class="colab-df-container">
+      <div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CUST_ID</th>
+      <th>BALANCE</th>
+      <th>BALANCE_FREQUENCY</th>
+      <th>PURCHASES</th>
+      <th>ONEOFF_PURCHASES</th>
+      <th>INSTALLMENTS_PURCHASES</th>
+      <th>CASH_ADVANCE</th>
+      <th>PURCHASES_FREQUENCY</th>
+      <th>ONEOFF_PURCHASES_FREQUENCY</th>
+      <th>PURCHASES_INSTALLMENTS_FREQUENCY</th>
+      <th>CASH_ADVANCE_FREQUENCY</th>
+      <th>CASH_ADVANCE_TRX</th>
+      <th>PURCHASES_TRX</th>
+      <th>CREDIT_LIMIT</th>
+      <th>PAYMENTS</th>
+      <th>MINIMUM_PAYMENTS</th>
+      <th>PRC_FULL_PAYMENT</th>
+      <th>TENURE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>C10001</td>
+      <td>40.900749</td>
+      <td>0.818182</td>
+      <td>95.40</td>
+      <td>0.00</td>
+      <td>95.4</td>
+      <td>0.000000</td>
+      <td>0.166667</td>
+      <td>0.000000</td>
+      <td>0.083333</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1000.0</td>
+      <td>201.802084</td>
+      <td>139.509787</td>
+      <td>0.000000</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>C10002</td>
+      <td>3202.467416</td>
+      <td>0.909091</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.0</td>
+      <td>6442.945483</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.250000</td>
+      <td>4</td>
+      <td>0</td>
+      <td>7000.0</td>
+      <td>4103.032597</td>
+      <td>1072.340217</td>
+      <td>0.222222</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>C10003</td>
+      <td>2495.148862</td>
+      <td>1.000000</td>
+      <td>773.17</td>
+      <td>773.17</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>12</td>
+      <td>7500.0</td>
+      <td>622.066742</td>
+      <td>627.284787</td>
+      <td>0.000000</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>C10004</td>
+      <td>1666.670542</td>
+      <td>0.636364</td>
+      <td>1499.00</td>
+      <td>1499.00</td>
+      <td>0.0</td>
+      <td>205.788017</td>
+      <td>0.083333</td>
+      <td>0.083333</td>
+      <td>0.000000</td>
+      <td>0.083333</td>
+      <td>1</td>
+      <td>1</td>
+      <td>7500.0</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>C10005</td>
+      <td>817.714335</td>
+      <td>1.000000</td>
+      <td>16.00</td>
+      <td>16.00</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.083333</td>
+      <td>0.083333</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1200.0</td>
+      <td>678.334763</td>
+      <td>244.791237</td>
+      <td>0.000000</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-0239163e-fb5c-444a-8b2b-314b7f2a8a42')" title="Convert this dataframe to an interactive table." style="display:none;">
+
+  &lt;svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px"&gt;
+    <path d="M0 0h24v24H0V0z" fill="none" />
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z" /><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z" />
+  &lt;/svg&gt;
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-0239163e-fb5c-444a-8b2b-314b7f2a8a42 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-0239163e-fb5c-444a-8b2b-314b7f2a8a42');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+
+<h1 id="데이터-확인">데이터 확인</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 결측치 확인
+</span><span class="n">df</span><span class="p">.</span><span class="n">isnull</span><span class="p">().</span><span class="nb">sum</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CUST_ID                               0
+BALANCE                               0
+BALANCE_FREQUENCY                     0
+PURCHASES                             0
+ONEOFF_PURCHASES                      0
+INSTALLMENTS_PURCHASES                0
+CASH_ADVANCE                          0
+PURCHASES_FREQUENCY                   0
+ONEOFF_PURCHASES_FREQUENCY            0
+PURCHASES_INSTALLMENTS_FREQUENCY      0
+CASH_ADVANCE_FREQUENCY                0
+CASH_ADVANCE_TRX                      0
+PURCHASES_TRX                         0
+CREDIT_LIMIT                          1
+PAYMENTS                              0
+MINIMUM_PAYMENTS                    313
+PRC_FULL_PAYMENT                      0
+TENURE                                0
+dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 데이터 타입 확인
+</span><span class="n">df</span><span class="p">.</span><span class="n">dtypes</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CUST_ID                              object
+BALANCE                             float64
+BALANCE_FREQUENCY                   float64
+PURCHASES                           float64
+ONEOFF_PURCHASES                    float64
+INSTALLMENTS_PURCHASES              float64
+CASH_ADVANCE                        float64
+PURCHASES_FREQUENCY                 float64
+ONEOFF_PURCHASES_FREQUENCY          float64
+PURCHASES_INSTALLMENTS_FREQUENCY    float64
+CASH_ADVANCE_FREQUENCY              float64
+CASH_ADVANCE_TRX                      int64
+PURCHASES_TRX                         int64
+CREDIT_LIMIT                        float64
+PAYMENTS                            float64
+MINIMUM_PAYMENTS                    float64
+PRC_FULL_PAYMENT                    float64
+TENURE                                int64
+dtype: object
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 결측치 처리 (5%이하의 갯수이므로 드랍하겠다.)
+</span><span class="n">df</span><span class="p">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">df</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(8636, 18)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="p">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s">'ignore'</span><span class="p">)</span> <span class="c1">#경고문을 무시한다.
+</span>
+<span class="n">i</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'CUST_ID'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">sns</span><span class="p">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+    <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_11.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 상관 계수 (correlation coefficient) 확인
+</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">annot</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'coolwarm'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7ff838ba2890&gt;
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_12.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<h1 id="표준화-및-pca">표준화 및 PCA</h1>
+<p>+축소할 차원 수 결정.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 상관관계가 어느정도 있는 feature가 보이므로 PCA 사용이 유의미할 것으로 판단.
+</span><span class="n">df</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'CUST_ID'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="c1"># PCA전 표준화
+</span><span class="n">ss</span><span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">df</span><span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1">#PCA 진행
+</span><span class="n">pca</span><span class="o">=</span> <span class="n">PCA</span><span class="p">()</span>
+<span class="n">pca</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PCA()
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># PCA 의 축소 차원갯수에 대한 정확도 차이 (기존 차원수를 유지하는게 당연히 100%일것임..)
+</span><span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pca</span><span class="p">.</span><span class="n">explained_variance_ratio_</span><span class="p">.</span><span class="n">cumsum</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[&lt;matplotlib.lines.Line2D at 0x7ff8393998d0&gt;]
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_13.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 차원 축소 7개로 하겠다!
+</span><span class="n">pca</span><span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">df_pca</span><span class="o">=</span> <span class="n">pca</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df_pca</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(8636, 7)
+</code></pre></div></div>
+
+<h1 id="k-means-clustering">K-means Clustering</h1>
+<p>+K-means 와 실루엣 스코어(silhouette_score)</p>
+
+<ul>
+  <li>k-means : 각 데이터들과 해당 centroid까지 거리 합</li>
+  <li>sil_score : 1에 가까울수록 군집과 군집이 잘 분리되어있다는 뜻<br />
+  기본적으로 0이상이고 만약 음수라면 군집끼리 겹쳤다는 의미</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">silhouette_score</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">distortions</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">sil_scores</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">30</span><span class="p">):</span>
+    <span class="c1"># n_cluster : 군집 갯수, n_iter : 중심점 업데이트의 최소 횟수
+</span>    <span class="n">kmeans</span><span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span> <span class="s">'k-means++'</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">'full'</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">kmeans</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_pca</span><span class="p">)</span>
+    <span class="c1"># inertia_ : k-means 구하는 중에 centroid로부터 데이터들의 거리 데이터 (클 수록 중심점으로부터 멀다는 거겟쥐)
+</span>    <span class="n">distortions</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans</span><span class="p">.</span><span class="n">inertia_</span><span class="p">)</span>
+    <span class="n">label</span><span class="o">=</span> <span class="n">kmeans</span><span class="p">.</span><span class="n">labels_</span>
+    <span class="n">sil_scores</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">silhouette_score</span><span class="p">(</span><span class="n">df_pca</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">distortions</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">distortions</span><span class="p">,</span><span class="s">'o'</span> <span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_14.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="c1"># sil_scores 확인
+</span><span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">sil_scores</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">sil_scores</span><span class="p">,</span><span class="s">'o'</span> <span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_15.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sil_scores</span>
+<span class="c1"># k-means 는 군집을 늘릴수록 감소 (이상적)
+# 실루엣 계수는 3에서 0.28정도로 그나마 크나, 전체적으로는 0.25근처로 별로 크게 나오진 않음.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[0.24692450845604266,
+ 0.28065750721461125,
+ 0.2507007863496503,
+ 0.2408710781955889,
+ 0.25789671860000646,
+ 0.25543152274952236,
+ 0.26596171359898996,
+ 0.25980372706530475,
+ 0.2606025124276636,
+ 0.24195602184083095,
+ 0.25144013095228146,
+ 0.23962807370519182,
+ 0.23713138793264468,
+ 0.23981648640294187,
+ 0.2199707245532794,
+ 0.2259075081873923,
+ 0.23446181289456078,
+ 0.21832255569020825,
+ 0.24002990422966186,
+ 0.23109689399081063,
+ 0.22381807371604162,
+ 0.21453215289991348,
+ 0.21537478705286658,
+ 0.21174420647359052,
+ 0.2161573025700017,
+ 0.21208142071199876,
+ 0.2196422007478946,
+ 0.20723949847328374]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># k-means 는 군집 3개로(실루엣계수 따라), PCA는 2개로하여 시각화.
+</span>
+<span class="n">kmeans</span><span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span> <span class="s">'k-means++'</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s">'full'</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">kmeans</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_pca</span><span class="p">)</span>
+<span class="n">labels</span><span class="o">=</span> <span class="n">kmeans</span><span class="p">.</span><span class="n">labels_</span>
+
+<span class="n">pca</span><span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="n">pca</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df_pca2</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">temp</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'pca1'</span><span class="p">,</span><span class="s">'pca2'</span><span class="p">])</span>
+<span class="n">df_pca2</span><span class="p">[</span><span class="s">'labels'</span><span class="p">]</span><span class="o">=</span> <span class="n">labels</span>
+<span class="n">df_pca2</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div id="df-ed39b30d-40d0-4339-9588-39e85728f5f0">
+    <div class="colab-df-container">
+      <div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pca1</th>
+      <th>pca2</th>
+      <th>labels</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1.696397</td>
+      <td>-1.122594</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.215688</td>
+      <td>2.435597</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.935860</td>
+      <td>-0.385170</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-1.614640</td>
+      <td>-0.724592</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.223706</td>
+      <td>-0.783584</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-ed39b30d-40d0-4339-9588-39e85728f5f0')" title="Convert this dataframe to an interactive table." style="display:none;">
+
+  &lt;svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px"&gt;
+    <path d="M0 0h24v24H0V0z" fill="none" />
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z" /><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z" />
+  &lt;/svg&gt;
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-ed39b30d-40d0-4339-9588-39e85728f5f0 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-ed39b30d-40d0-4339-9588-39e85728f5f0');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="p">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'pca1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'pca2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'labels'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_pca2</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s">'bright'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/source_16.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="pj" /><category term="cluster" /><category term="pca" /><summary type="html"><![CDATA[데이터 선정 : kaggle credit customer dataset (https://www.kaggle.com/arjunbhasin2013/ccdata)]]></summary></entry><entry><title type="html">정규화, 표준화 그리고 PCA</title><link href="http://localhost:4000/ds/pca/" rel="alternate" type="text/html" title="정규화, 표준화 그리고 PCA" /><published>2022-02-20T00:00:00+09:00</published><updated>2022-02-21T00:00:00+09:00</updated><id>http://localhost:4000/ds/pca</id><content type="html" xml:base="http://localhost:4000/ds/pca/"><![CDATA[<h2 id="정규화와-표준화">정규화와 표준화</h2>
+<blockquote>
+  <p>정규화 (normalization)</p>
+</blockquote>
+
+<p>정규화는 모든 값들을 0과 1사이의 값으로 단순하게 축소한다.<br />
+예를 들어 0~100까지의 값중 35 는 0.35가 될 뿐이다. <br />
+식 : x = (원래값 - 최댓값) / (최댓값 - 최솟값)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+
+df_scaled = scaler.fit_transform(df)
+</code></pre></div></div>
+
+<blockquote>
+  <p>표준화 (standardization)</p>
+</blockquote>
+
+<p>표준화는 데이터를 0을 중심으로 양쪽으로 데이터를 분포시킨다.<br />
+정확히는 0의 평균을 갖고, 1의 표준편차를 갖도록 변환하는 것.</p>
+
+<p>식 : x = (원래값 - 평균) / 표준편차</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.preprocessing import StandardScaler
+sclaer = StandardScaler()
+
+df_scaled = scaler.fit_transform(df)
+</code></pre></div></div>
+
+<blockquote>
+  <p>fit 과 fit transform 의 차이</p>
+</blockquote>
+
+<p>fit은 해당 데이터에 맞춤으로 모델(객체)을 설정해주는 것.<br />
+fit_transform 은 fit함과 동시에 해당 데이터를 모델을 사용해서 변형해주어 return함.</p>
+
+<h2 id="분산과-공분산">분산과 공분산</h2>
+
+<blockquote>
+  <p>분산 (variance)</p>
+</blockquote>
+
+<p>하나의 feature가 갖는 ‘평균으로 부터 퍼져있는 정도’ 이다.<br />
+식 : Var(x) = E [(X-X평균)^2]</p>
+
+<p>분산의 양의 제곱근이 표준편차(Standard Deviation)</p>
+
+<blockquote>
+  <p>공분산 (Covariance)</p>
+</blockquote>
+
+<p>두 feature가 갖는 공동 변화량이다. 직관적으로는 이해하기 힘들더라.. 그 의미를 파악하자면<br />
+<strong>0보다크면 X가 증가할때 Y도 증가한다.(양의 상관관계)</strong><br />
+<strong>0보 작으면 서로 음의 상관관계</strong><br />
+식 : Cov(X,Y) = E[(X-X평균)(Y-Y평균)]</p>
+
+<blockquote>
+  <p>상관계수 (Correlation coefficient)</p>
+</blockquote>
+
+<p>공분산과 자연스럽게 이어지는데, 상관계수는 <strong>얼만큼</strong> 상관관계를 갖는지도 알려준다.</p>
+
+<p>식 : Corr(X,Y) = Cov(X,Y) / (sd(X)*sd(Y))  (sd는 표준편차)</p>
+
+<h2 id="pca">PCA</h2>
+<p><strong>표준화or정규화 필수!!!!</strong><br />
+PCA는 고 차원(feature 종류가 많을 때)의 데이터셋을 차원축소 하고자 할 때 사용한다.<br />
+여기서 중요한건 PCA는 특정한 feature를 선택(selection)하는 것이 아니라<br />
+모든 feature의 특징을 담아내는 feature로 추출(Extraction) 한다는 것이다.</p>
+
+<p>어떻게 Extraction할 것이냐 !!
+바로 <strong>축을 고르는 것</strong> 이다.</p>
+
+<p>어떠한 축에 모든 feature들을 projection시켰을 때, ‘가장 그 정보들을 많이 담는다’면 그 축은 모든 feature의 특징을<br />
+잘 담고 있는 축이 될 것이다.<br />
+‘정보를 많이 담는다’는 것은 공분산이 가장 큰 것이다라고 이해했으며,<br />
+그 축에 projection시킨 값들의 집합하나가 하나의 차원이 될 것이다.<br />
+그리고 그 다음 축은 첫번째 축과 직교인 축으로 고르게 될 것이다.<br />
+<img src="/assets/images/source_10.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>features = df.loc[:,'bill_length_mm':'body_mass_g']
+species = df['species']
+</code></pre></div></div>
+<p>↪️ df에서 ‘bill_length_mm’부터 ‘body_mass_g’ 까지의 feature의 데이터만 가져오고, ‘species’만 가져온다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+features = pd.DataFrame(scaler.fit_transform(features), columns=['bill_length_mm','bill_depth_mm','flipper_length_mm','body_mass_g'])
+</code></pre></div></div>
+<p>↪️ 표준화를 진행한다. (<strong>필수!!!!!</strong>)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import numpy as np
+from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+extracted_df = pd.DataFrame(pca.fit_transform(features), columns=['PC1', 'PC2'])
+</code></pre></div></div>
+<p>↪️ pca를 실행한 후 ‘PC1’, ‘PC2’로 저장된(자동으로 이름 이렇게 지음) 두 차원만 불러온다.<br />
+두 차원으로 차원축소 성공 !
+<br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[정규화와 표준화 정규화 (normalization)]]></summary></entry><entry><title type="html">데이터 다루기</title><link href="http://localhost:4000/ds/Data/" rel="alternate" type="text/html" title="데이터 다루기" /><published>2022-02-12T00:00:00+09:00</published><updated>2022-02-14T00:00:00+09:00</updated><id>http://localhost:4000/ds/Data</id><content type="html" xml:base="http://localhost:4000/ds/Data/"><![CDATA[<h2 id="pandas-document">pandas document</h2>
 
 <p>pandas 의 모든것이 들어있는 공식문서<br />
 https://pandas.pydata.org/docs/reference/index.html</p>
@@ -99,7 +810,7 @@ df['GENDER_AGE'] = df['GENDER'] + df['AGE'].apply(str)  # GENDER가 'M'이고 �
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="ds" /><summary type="html"><![CDATA[pandas document]]></summary></entry><entry><title type="html">가설검정</title><link href="http://localhost:4000/something_else/hypoo/" rel="alternate" type="text/html" title="가설검정" /><published>2022-02-11T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/hypoo</id><content type="html" xml:base="http://localhost:4000/something_else/hypoo/"><![CDATA[<h2 id="가설-검정">가설 검정?</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[pandas document]]></summary></entry><entry><title type="html">가설검정</title><link href="http://localhost:4000/something_else/hypoo/" rel="alternate" type="text/html" title="가설검정" /><published>2022-02-11T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/hypoo</id><content type="html" xml:base="http://localhost:4000/something_else/hypoo/"><![CDATA[<h2 id="가설-검정">가설 검정?</h2>
 <p>‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다.<br />
 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까?<br />
 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)</p>
@@ -213,7 +924,7 @@ chi2
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Something_else" /><summary type="html"><![CDATA[가설 검정? ‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다. 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까? 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)]]></summary></entry><entry><title type="html">선형회귀</title><link href="http://localhost:4000/something_else/6th/" rel="alternate" type="text/html" title="선형회귀" /><published>2022-01-21T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/6th</id><content type="html" xml:base="http://localhost:4000/something_else/6th/"><![CDATA[<h2 id="선형회귀">선형회귀</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[가설 검정? ‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다. 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까? 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)]]></summary></entry><entry><title type="html">선형회귀와 모델의 적합</title><link href="http://localhost:4000/something_else/regression/" rel="alternate" type="text/html" title="선형회귀와 모델의 적합" /><published>2022-01-21T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/regression</id><content type="html" xml:base="http://localhost:4000/something_else/regression/"><![CDATA[<h2 id="선형회귀">선형회귀</h2>
 <blockquote>
   <p>엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다.<br />
 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다.<br />
@@ -259,21 +970,14 @@ plt.scatter(X_test, y_pred, color='blue', linewidth=1);
 
 <h2 id="다중선형회귀">다중선형회귀</h2>
 <blockquote>
-  <p>x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.(혹은 x1, x2 에 대하 y일 수도 있겠다.)<br />
+  <p>x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. <br />
 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까?<br />
-위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.<br />
+위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만<br />
+ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.<br />
 <img width="102" alt="image" src="https://user-images.githubusercontent.com/84547813/150503177-644087c1-f1a0-4bb3-bc41-203cb552d7ec.png" /></p>
 </blockquote>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 라이브러리 import
-from sklearn.linear_model import LinearRegression
-
-# 데이터 정의
-df = '타겟을 포함한 데이터 프레임'
-df_test = '타겟 미포함 "테스트" 데이터 프레임'
-
-# 모델 클래스 정의
-model = LinearRegression()
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)
 
 # feature, target 정의
 feature = ['feature_name_1', 'feature_name_2 ]
@@ -281,19 +985,19 @@ target = ['target_name']
 X_train = df[feature]
 y_train = df[target]
 
-# 모델 학습
-model.fit(X_train, y_train)
-
-# 예측값.
-X_test = df_test[feature]
-y_pred = model.predict(X_test)
-
-# 계수확인
-print('절편', model.intercept_)
-print('계수(여러개일 수 있기때문에 array)', model.coef_)
+# 나머지는 동일!!
 </code></pre></div></div>
 
 <h2 id="평가지표">평가지표</h2>
+<blockquote>
+  <p>MSE (Mean Square Error),<br />
+MAE(Mean Absolute Error),<br />
+RMSE (Root Mean Square Error)
+R-score</p>
+</blockquote>
+
+<h2 id="과적합--과소적합">과적합 &amp; 과소적합</h2>
+<p>사진이랑 편향 분산 얘기 넣어놓자.</p>
 
 <p><br /></p>
 
@@ -301,7 +1005,7 @@ print('계수(여러개일 수 있기때문에 array)', model.coef_)
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Something_else" /><summary type="html"><![CDATA[선형회귀 엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값) y^는 예측값 즉 ax+b, y평균은 y전체의 평균. # 라이브러리 import from sklearn.linear_model import LinearRegression # 데이터 정의 df = '타겟을 포함한 데이터 프레임' df_test = '타겟 미포함 "테스트" 데이터 프레임' # 모델 클래스 정의 model = LinearRegression() # feature, target 정의 feature = ['feature_name'] target = ['target_name'] X_train = df[feature] y_train = df[target] # 모델 학습 model.fit(X_train, y_train) # 예측값. X_test = [[x] for x in df_test['feature_name']] y_pred = model.predict(X_test) # 계수확인 print('절편', model.intercept_) print('계수(여러개일 수 있기때문에 array)', model.coef_) # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color='black', linewidth=1) ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color='blue', linewidth=1); 다중선형회귀 x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.(혹은 x1, x2 에 대하 y일 수도 있겠다.) 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다. # 라이브러리 import from sklearn.linear_model import LinearRegression # 데이터 정의 df = '타겟을 포함한 데이터 프레임' df_test = '타겟 미포함 "테스트" 데이터 프레임' # 모델 클래스 정의 model = LinearRegression() # feature, target 정의 feature = ['feature_name_1', 'feature_name_2 ] target = ['target_name'] X_train = df[feature] y_train = df[target] # 모델 학습 model.fit(X_train, y_train) # 예측값. X_test = df_test[feature] y_pred = model.predict(X_test) # 계수확인 print('절편', model.intercept_) print('계수(여러개일 수 있기때문에 array)', model.coef_) 평가지표 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">정렬</title><link href="http://localhost:4000/something_else/5th/" rel="alternate" type="text/html" title="정렬" /><published>2021-11-27T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/5th</id><content type="html" xml:base="http://localhost:4000/something_else/5th/"><![CDATA[<h2 id="선택정렬">선택정렬</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[선형회귀 엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값) y^는 예측값 즉 ax+b, y평균은 y전체의 평균. # 라이브러리 import from sklearn.linear_model import LinearRegression # 데이터 정의 df = '타겟을 포함한 데이터 프레임' df_test = '타겟 미포함 "테스트" 데이터 프레임' # 모델 클래스 정의 model = LinearRegression() # feature, target 정의 feature = ['feature_name'] target = ['target_name'] X_train = df[feature] y_train = df[target] # 모델 학습 model.fit(X_train, y_train) # 예측값. X_test = [[x] for x in df_test['feature_name']] y_pred = model.predict(X_test) # 계수확인 print('절편', model.intercept_) print('계수(여러개일 수 있기때문에 array)', model.coef_) # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color='black', linewidth=1) ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color='blue', linewidth=1); 다중선형회귀 x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다. # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일) # feature, target 정의 feature = ['feature_name_1', 'feature_name_2 ] target = ['target_name'] X_train = df[feature] y_train = df[target] # 나머지는 동일!! 평가지표 MSE (Mean Square Error), MAE(Mean Absolute Error), RMSE (Root Mean Square Error) R-score 과적합 &amp; 과소적합 사진이랑 편향 분산 얘기 넣어놓자. 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">정렬</title><link href="http://localhost:4000/something_else/5th/" rel="alternate" type="text/html" title="정렬" /><published>2021-11-27T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/5th</id><content type="html" xml:base="http://localhost:4000/something_else/5th/"><![CDATA[<h2 id="선택정렬">선택정렬</h2>
 <blockquote>
   <blockquote>
     <p>제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬.<br />
@@ -382,7 +1086,7 @@ n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길�
                 L2.append(x)
         return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 )
 </code></pre></div></div>
-<h2 id="병합정렬">병합정렬</h2>]]></content><author><name>옹달샘👱</name></author><category term="Something_else" /><summary type="html"><![CDATA[선택정렬 제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬. n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교 (비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2) def selection_sort(li): n = len(li) for i in range(n): # i번쨰가 주체 for j in range(i,n):# i번째 뒤로 쭉 if li[i] &gt; li[j]: li[i], li[j] = li[j], li[i] # 교환 else : pass return li 삽입정렬 순서대로 자리를 찾아서 끼워 넣어주는 정렬 n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2) 아래 사진은 31의 자리를 찾아 넣어주고있다. def insertion_sort(li): n=len(li) if n ==0: return None for i in range(1,n): # 두번째부터 끝까지 수행하면 댐. temp = li[i] for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐. if li[j] &gt; temp: li[j+1] = li[j] # j에서 temp보다 크다면 옆으로복사 if j==0: # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입 li[0] = temp else: li[j+1] = temp # j보다 temp가 크다면 그 오른쪽에 temp넣고 break break return li 버블정렬 계속해서 옆과 비교,교환을 하는 방식. (오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번) 그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다. def bubble_sort(li): n = len(li) for i in range(n): # 0부터 n-1까지 for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복 if j==(n-1): # indexError 방지. pass elif li[j] &gt; li[j+1]: li[j], li[j+1] = li[j+1], li[j] # 교환 else : pass return li 퀵정렬 특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지. 이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn) 그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2) def quick_sort(li): if len(li)&lt;=1: return li else: L1, L2 = [], [] for x in li[1:]: if x&lt;=li[0]: L1.append(x) else : L2.append(x) return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 ) 병합정렬]]></summary></entry><entry><title type="html">openCV 이미지 읽기</title><link href="http://localhost:4000/ds/image/" rel="alternate" type="text/html" title="openCV 이미지 읽기" /><published>2021-11-18T00:00:00+09:00</published><updated>2022-02-03T00:00:00+09:00</updated><id>http://localhost:4000/ds/image</id><content type="html" xml:base="http://localhost:4000/ds/image/"><![CDATA[<h2 id="opencv-vs-pillowpil-vs-scikit-image">OpenCV vs pillow(PIL) vs scikit-image</h2>
+<h2 id="병합정렬">병합정렬</h2>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[선택정렬 제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬. n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교 (비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2) def selection_sort(li): n = len(li) for i in range(n): # i번쨰가 주체 for j in range(i,n):# i번째 뒤로 쭉 if li[i] &gt; li[j]: li[i], li[j] = li[j], li[i] # 교환 else : pass return li 삽입정렬 순서대로 자리를 찾아서 끼워 넣어주는 정렬 n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2) 아래 사진은 31의 자리를 찾아 넣어주고있다. def insertion_sort(li): n=len(li) if n ==0: return None for i in range(1,n): # 두번째부터 끝까지 수행하면 댐. temp = li[i] for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐. if li[j] &gt; temp: li[j+1] = li[j] # j에서 temp보다 크다면 옆으로복사 if j==0: # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입 li[0] = temp else: li[j+1] = temp # j보다 temp가 크다면 그 오른쪽에 temp넣고 break break return li 버블정렬 계속해서 옆과 비교,교환을 하는 방식. (오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번) 그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다. def bubble_sort(li): n = len(li) for i in range(n): # 0부터 n-1까지 for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복 if j==(n-1): # indexError 방지. pass elif li[j] &gt; li[j+1]: li[j], li[j+1] = li[j+1], li[j] # 교환 else : pass return li 퀵정렬 특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지. 이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn) 그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2) def quick_sort(li): if len(li)&lt;=1: return li else: L1, L2 = [], [] for x in li[1:]: if x&lt;=li[0]: L1.append(x) else : L2.append(x) return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 ) 병합정렬]]></summary></entry><entry><title type="html">openCV 이미지 읽기</title><link href="http://localhost:4000/ds/image/" rel="alternate" type="text/html" title="openCV 이미지 읽기" /><published>2021-11-18T00:00:00+09:00</published><updated>2022-02-03T00:00:00+09:00</updated><id>http://localhost:4000/ds/image</id><content type="html" xml:base="http://localhost:4000/ds/image/"><![CDATA[<h2 id="opencv-vs-pillowpil-vs-scikit-image">OpenCV vs pillow(PIL) vs scikit-image</h2>
 <blockquote>
   <p>https://github.com/ethereon/lycon<br />
 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데,<br />
@@ -447,7 +1151,7 @@ cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴</p>
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="ds" /><summary type="html"><![CDATA[OpenCV vs pillow(PIL) vs scikit-image https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다. openCV 설치 conda install -c anaconda opencv local 경로로 이미지열기 import cv2 cv2.imread('파일경로', flags) # ndarray형식으로 리턴. flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원) 링크이미지(.jpeg) 열기 크롤링의 개념을 가져와서 사용한다. ```` import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request def url_to_image(url): ‘’’ jpg, png 이미지링크에서 numpy ndarray로 return ‘’’ resp = urllib.request.urlopen(url) image = np.asarray(bytearray(resp.read()), dtype=’uint8’) image = cv2.imdecode(image, cv2.IMREAD_COLOR) return image &gt; requests.urlopen : url 에서 request(응답) 객체르 리턴 &gt; -&gt; .read()로써 호출할 수 있음. &gt; numpy.asarray : 배열로써 이미지르 읽음 &gt; image를 cv2로 다시 읽어 리턴한다.(3차원) ## svg 파일 열기 &gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원 &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중 ## 이미지 확인하기 img = 이미지의 ndarray형식 cv2.imshow(‘name’, img) # name은 이미지르 띄운 window 이름 ```` 위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">진짜 시작 그리고 m1맥북 세팅</title><link href="http://localhost:4000/something_else/setting/" rel="alternate" type="text/html" title="진짜 시작 그리고 m1맥북 세팅" /><published>2021-11-16T00:00:00+09:00</published><updated>2022-02-03T00:00:00+09:00</updated><id>http://localhost:4000/something_else/setting</id><content type="html" xml:base="http://localhost:4000/something_else/setting/"><![CDATA[<h2 id="반성">반성</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[OpenCV vs pillow(PIL) vs scikit-image https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다. openCV 설치 conda install -c anaconda opencv local 경로로 이미지열기 import cv2 cv2.imread('파일경로', flags) # ndarray형식으로 리턴. flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원) 링크이미지(.jpeg) 열기 크롤링의 개념을 가져와서 사용한다. ```` import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request def url_to_image(url): ‘’’ jpg, png 이미지링크에서 numpy ndarray로 return ‘’’ resp = urllib.request.urlopen(url) image = np.asarray(bytearray(resp.read()), dtype=’uint8’) image = cv2.imdecode(image, cv2.IMREAD_COLOR) return image &gt; requests.urlopen : url 에서 request(응답) 객체르 리턴 &gt; -&gt; .read()로써 호출할 수 있음. &gt; numpy.asarray : 배열로써 이미지르 읽음 &gt; image를 cv2로 다시 읽어 리턴한다.(3차원) ## svg 파일 열기 &gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원 &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중 ## 이미지 확인하기 img = 이미지의 ndarray형식 cv2.imshow(‘name’, img) # name은 이미지르 띄운 window 이름 ```` 위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">진짜 시작 그리고 m1맥북 세팅</title><link href="http://localhost:4000/something_else/setting/" rel="alternate" type="text/html" title="진짜 시작 그리고 m1맥북 세팅" /><published>2021-11-16T00:00:00+09:00</published><updated>2022-02-03T00:00:00+09:00</updated><id>http://localhost:4000/something_else/setting</id><content type="html" xml:base="http://localhost:4000/something_else/setting/"><![CDATA[<h2 id="반성">반성</h2>
 <p>지난 6월 코드스테이츠를 시작하면서 블로그를 개설했는데 꾸준히 쓰겠다고 했는데,<br />
 꾸준히는 개뿔 이게 테스트용 첫번째 글 이후 이게 5개월만에 두번째 글을 올리게 되었다.</p>
 
@@ -542,7 +1246,7 @@ https://developer.apple.com/metal/tensorflow-plugin/<br />
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Something_else" /><summary type="html"><![CDATA[반성 지난 6월 코드스테이츠를 시작하면서 블로그를 개설했는데 꾸준히 쓰겠다고 했는데, 꾸준히는 개뿔 이게 테스트용 첫번째 글 이후 이게 5개월만에 두번째 글을 올리게 되었다. 왜 필요성을 느꼈는가 사실 대학교를 다닐때도 기록보단 필기를 하였고, 시험공부를 위한 필기였기에 그 필요성을 느끼지 못하다가 이번에 section4 딥러닝 파트를 마무리하면서 그 필요성을 느끼게 되었다. 그 전환점으로 지난 2년간 쓴 아이폰에 용기를 얻어 맥북을 구매하면서, 개발세팅을 새로하게되었는데 m1 칩셋을 사용하다보니 세팅하는게 하나하나가 쉽지 않았다. 그와 동시에 이 과정들을 기록해두지 않으면 다시 찾아봐야한다는 공포가 엄습했고 이를 계기로 맥북을 사용하여 지금까지 해온 코드스테이츠 전체적인 복습 과 완성하지 못한 section 4 프로젝트를 마무리하는 과정을 불로깅 하는게 1차 목표다. 터미널 창 띄우기 cmd + space를 눌러 spotlight에서 ‘터미널’을 검색하면 된다. 맥북 m1 세팅 homebrew 설치 macOS용 패키지 관리 어플리케이션! https://brew.sh 위 공식 홈페이지를 참고한다면 어렵지 않게 설치가능하다. 단, m1의 경우 ㅜㅜ finder에서 터미널 어플을 찾아 우클릭하여 ‘정보가져오기’에서 ‘rossetta로 사용하여 열기’를 꼭! 체크해야한다. 로제타는 기존의 intel 프로세서에서 돌아가는 친구들을 m1 칩셋, 즉 apple silicon에서 돌아가게 변환해주는 에뮬이라고 보면 된다. miniforge 설치 알아보니 아나콘다를 설치안하고 miniforge만 설치해도 되는거였다.. m1에서 conda 를 좀더 에러없게 실행하는 인스톨러이며, anaconda와 동급의 카테고리다. (conda의 인스톨러 종류 : 아나콘다, miniforge, miniconda) 이렇게 https://developer.apple.com/metal/tensorflow-plugin/ 위에서 apple silicon 이라되어있는곳을 따라 진행하면 된다 ( 설치파일 받고 아래 코드 3줄) (brew install miniforge 로 설치해주면 된다고도 하는데 tensorfolw-deps (의존성)설치에서 에러가나더라) 아나콘다 가상환경 생성, 삭제, 패키지 설치 생성 conda create --name 이름 python=3.8 삭제 conda env remove --namve 이름 git 설치 git에 기능이 많겠지만 본인은, github 레포와 연동하여 프로젝트들을 관리하기 위한 용도이다. brew install git 만으로 설치가 가능하다. git --version 으로 확인까지! 가상환경 세팅 m1 tensorflow-gpu사용하기 m1은 gpu까지 하나로 싸잡아서 만든 칩셋이라 설정방법도 다르다.. 가상환경에서 conda install -c apple tensorflow-deps pip install tensorflow-macos pip install tensorflow-metal 로 설치해준다. 파이썬 내에서 import tensorflow as tf print(len(tf.config.experimental.list_physical_devices('GPU'))) 위 결과가 1이 나오면 사용할 수 있다. 단, 확인을 했으면 아래와같이 tensorflow 2.0을 사용하자.(혹시모르니) import tensorflow.compat.v2 as tf jupyter notebook과 pandas 설치 conda install -c conda-forge -y pandas jupyter 로 설치해준다. pandas 필요없다면 pandas나 jupyter만 지우면 된다. 그 외 패키지 설치 conda install 패키지이름 단,conda 명령어로 설치가 되는지 안되는지는 잘 검색해보고 쓰는게 좋다. (pip으로만 설치가 되는 패키지도 있음) 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">대출 승인 시스템의 승인 기준 머신러닝 예측</title><link href="http://localhost:4000/pj/section_2/" rel="alternate" type="text/html" title="대출 승인 시스템의 승인 기준 머신러닝 예측" /><published>2021-08-29T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/pj/section_2</id><content type="html" xml:base="http://localhost:4000/pj/section_2/"><![CDATA[<h1 id="ai-section2-project">AI SECTION2 PROJECT</h1>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[반성 지난 6월 코드스테이츠를 시작하면서 블로그를 개설했는데 꾸준히 쓰겠다고 했는데, 꾸준히는 개뿔 이게 테스트용 첫번째 글 이후 이게 5개월만에 두번째 글을 올리게 되었다. 왜 필요성을 느꼈는가 사실 대학교를 다닐때도 기록보단 필기를 하였고, 시험공부를 위한 필기였기에 그 필요성을 느끼지 못하다가 이번에 section4 딥러닝 파트를 마무리하면서 그 필요성을 느끼게 되었다. 그 전환점으로 지난 2년간 쓴 아이폰에 용기를 얻어 맥북을 구매하면서, 개발세팅을 새로하게되었는데 m1 칩셋을 사용하다보니 세팅하는게 하나하나가 쉽지 않았다. 그와 동시에 이 과정들을 기록해두지 않으면 다시 찾아봐야한다는 공포가 엄습했고 이를 계기로 맥북을 사용하여 지금까지 해온 코드스테이츠 전체적인 복습 과 완성하지 못한 section 4 프로젝트를 마무리하는 과정을 불로깅 하는게 1차 목표다. 터미널 창 띄우기 cmd + space를 눌러 spotlight에서 ‘터미널’을 검색하면 된다. 맥북 m1 세팅 homebrew 설치 macOS용 패키지 관리 어플리케이션! https://brew.sh 위 공식 홈페이지를 참고한다면 어렵지 않게 설치가능하다. 단, m1의 경우 ㅜㅜ finder에서 터미널 어플을 찾아 우클릭하여 ‘정보가져오기’에서 ‘rossetta로 사용하여 열기’를 꼭! 체크해야한다. 로제타는 기존의 intel 프로세서에서 돌아가는 친구들을 m1 칩셋, 즉 apple silicon에서 돌아가게 변환해주는 에뮬이라고 보면 된다. miniforge 설치 알아보니 아나콘다를 설치안하고 miniforge만 설치해도 되는거였다.. m1에서 conda 를 좀더 에러없게 실행하는 인스톨러이며, anaconda와 동급의 카테고리다. (conda의 인스톨러 종류 : 아나콘다, miniforge, miniconda) 이렇게 https://developer.apple.com/metal/tensorflow-plugin/ 위에서 apple silicon 이라되어있는곳을 따라 진행하면 된다 ( 설치파일 받고 아래 코드 3줄) (brew install miniforge 로 설치해주면 된다고도 하는데 tensorfolw-deps (의존성)설치에서 에러가나더라) 아나콘다 가상환경 생성, 삭제, 패키지 설치 생성 conda create --name 이름 python=3.8 삭제 conda env remove --namve 이름 git 설치 git에 기능이 많겠지만 본인은, github 레포와 연동하여 프로젝트들을 관리하기 위한 용도이다. brew install git 만으로 설치가 가능하다. git --version 으로 확인까지! 가상환경 세팅 m1 tensorflow-gpu사용하기 m1은 gpu까지 하나로 싸잡아서 만든 칩셋이라 설정방법도 다르다.. 가상환경에서 conda install -c apple tensorflow-deps pip install tensorflow-macos pip install tensorflow-metal 로 설치해준다. 파이썬 내에서 import tensorflow as tf print(len(tf.config.experimental.list_physical_devices('GPU'))) 위 결과가 1이 나오면 사용할 수 있다. 단, 확인을 했으면 아래와같이 tensorflow 2.0을 사용하자.(혹시모르니) import tensorflow.compat.v2 as tf jupyter notebook과 pandas 설치 conda install -c conda-forge -y pandas jupyter 로 설치해준다. pandas 필요없다면 pandas나 jupyter만 지우면 된다. 그 외 패키지 설치 conda install 패키지이름 단,conda 명령어로 설치가 되는지 안되는지는 잘 검색해보고 쓰는게 좋다. (pip으로만 설치가 되는 패키지도 있음) 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">대출 승인 시스템의 승인 기준 머신러닝 예측</title><link href="http://localhost:4000/pj/section_2/" rel="alternate" type="text/html" title="대출 승인 시스템의 승인 기준 머신러닝 예측" /><published>2021-08-29T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/pj/section_2</id><content type="html" xml:base="http://localhost:4000/pj/section_2/"><![CDATA[<h1 id="ai-section2-project">AI SECTION2 PROJECT</h1>
 
 <h3 id="목차">목차</h3>
 <p>1) 데이터 선정 이유 및 문제 정의</p>
@@ -4621,7 +5325,7 @@ n===t._wrapperState.initialValue&&(e.value=n)}});t.exports=l},function(t,e,n){"u
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="pj" /><category term="ML" /><category term="XGboost" /><category term="GridSearch" /><summary type="html"><![CDATA[AI SECTION2 PROJECT]]></summary></entry><entry><title type="html">게임 데이터 분석 기초</title><link href="http://localhost:4000/pj/section_1/" rel="alternate" type="text/html" title="게임 데이터 분석 기초" /><published>2021-07-29T00:00:00+09:00</published><updated>2022-02-10T00:00:00+09:00</updated><id>http://localhost:4000/pj/section_1</id><content type="html" xml:base="http://localhost:4000/pj/section_1/"><![CDATA[<p><a href="https://colab.research.google.com/github/codestates/ds-sc11x/blob/master/ds_sc11x%20(2).ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" /></a></p>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="pj" /><category term="ML" /><category term="XGboost" /><category term="GridSearch" /><summary type="html"><![CDATA[AI SECTION2 PROJECT]]></summary></entry><entry><title type="html">게임 데이터 분석 기초</title><link href="http://localhost:4000/pj/section_1/" rel="alternate" type="text/html" title="게임 데이터 분석 기초" /><published>2021-07-29T00:00:00+09:00</published><updated>2022-02-10T00:00:00+09:00</updated><id>http://localhost:4000/pj/section_1</id><content type="html" xml:base="http://localhost:4000/pj/section_1/"><![CDATA[<p><a href="https://colab.research.google.com/github/codestates/ds-sc11x/blob/master/ds_sc11x%20(2).ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" /></a></p>
 
 <h1 id="목차">목차</h1>
 <h2 id="1-샘플데이터-불러오기">1. 샘플데이터 불러오기</h2>
@@ -5949,183 +6653,4 @@ Name: Name, dtype: int64
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="pj" /><category term="pandas" /><category term="시각화" /><category term="가설검정" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">파이썬, 자료구조</title><link href="http://localhost:4000/something_else/4th/" rel="alternate" type="text/html" title="파이썬, 자료구조" /><published>2020-08-29T00:00:00+09:00</published><updated>2020-08-29T00:00:00+09:00</updated><id>http://localhost:4000/something_else/4th</id><content type="html" xml:base="http://localhost:4000/something_else/4th/"><![CDATA[<h2 id="서론">서론</h2>
-<blockquote>
-  <p>옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다.<br />
-스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다.
-물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다.
-오늘 각각을 구현해보면서 이해해보는 시간을 가졌다.</p>
-</blockquote>
-
-<h2 id="큐queue-를-연결리스트로-구현">큐(queue) 를 연결리스트로 구현</h2>
-<blockquote>
-  <p>연결리스트<br />
-<img src="https://user-images.githubusercontent.com/84547813/143422364-4784b7ad-46c9-48d0-9420-3a1d24d85e37.png" alt="image" />
-큐  <br />
-<img src="https://user-images.githubusercontent.com/84547813/143422687-a1fd91a0-2fe0-495a-a014-63f2b08096d8.png" alt="image" /></p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node():
-    def __init__(self, data):
-        self._data = data
-        self._next = None
-</code></pre></div></div>
-<blockquote>
-  <p>node 들을 선언했다.</p>
-  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Queue():
-    def __init__(self):
-        self._front = None
-        self._rear = None
-</code></pre></div>  </div>
-  <p>‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다.</p>
-  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def enqueue(self,item):
-        new_node = Node(item)
-        if self._front == None: # 빈 큐 라면 '맨앞' '맨뒤'에 모두 같은 노드를 넣어준당.
-            self._front = new_node
-            self._rear = self._front
-        else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다.
-            self._rear._next = new_node           #기존 '맨뒤노드'의 next에 새로운 노드를 넣어준당. (연결!)
-            self._rear = self._rear._next         #큐의 '맨뒤' 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!)
-</code></pre></div>  </div>
-  <p>값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것)</p>
-  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def dequeue(self):
-        if self._front == None: # 빈큐라면 None을 리턴
-            return None
-        else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + '맨앞' 업데이트
-            temp = self._front._data       # '맨앞'노드의 데이터를 잠깐 빼두자.
-            self._front = self._front._next  #'맨앞' 노드의 next 에 있는 노드를 큐의 '맨앞'으로 둔다.
-        if self._front ==None:
-            # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다.
-            self._rear = None           #그러면 '맨뒤'도 비워주자 (이거 안하면 '맨뒤'에 꺼낸 노드가 아직 남아있음)
-        return temp
-</code></pre></div>  </div>
-  <p>빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다.</p>
-  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def return_queue(self):
-        result = []
-        temp = self._front      # 초기값은 '맨앞' node!
-        while temp!= None:      # temp에 None이 들어가버리면 다 끝난거다!
-            result.append(temp._data)
-            temp = temp._next   # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝)
-        return result
-</code></pre></div>  </div>
-  <p>현재 큐를 list로 리턴하는 함수를 정의했다.</p>
-</blockquote>
-
-<h2 id="스택stack을-list로-구현">스택(stack)을 list로 구현</h2>
-<blockquote>
-  <p>스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다.<br />
-그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다.<br />
-(물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.)  <br />
-<img src="https://user-images.githubusercontent.com/84547813/143422784-8eec4149-9d71-46b8-b76e-47da8dac1d63.png" alt="image" /></p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Stack():
-    def __init__(self):
-        self._data = []
-
-    def push(self, item):
-        self._data.append(item)
-
-
-    def pop(self):
-        return self._data.pop() if self._data else None
-
-
-    def return_stack(self):
-        return self._data
-</code></pre></div></div>
-<blockquote>
-  <p>간단해서 코드 리뷰는 생략했다.</p>
-  <h2 id="데크-구현">데크 구현</h2>
-  <p>동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분)
-양방향 연결리스트로 수정을 해서 업데이트를 해야겠다<br />
-https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png</p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node:
-    def __init__(self, value, next=None):
-        self.value = value
-        self.next = next
-
-class Deque:
-    def __init__(self):
-        self.top = None
-        self.bottom = None
-
-
-    def append(self, item):
-        if self.top == None:        # self.top이 비어있다면
-            self.top = Node(item)   # self.top 에도 bottom에도 뉴 노드를 넣어준다.
-            self.bottom = self.top
-        else :
-            node = Node(item)
-            self.top.next = node    # 현재 top의 next에 뉴 노드를 넣어주고
-            self.top = node         # 이제 top은 뉴 노드로 한다.
-
-
-    def appendleft(self, item):
-        node = Node(item)
-        if self.bottom == None :        # bottom이 비었다면 top, bottom에 둘다 넣어줘
-            self.top = node
-            self.bottom = node
-        else :
-            node.next = self.bottom     # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다!
-            self.bottom = node
-
-</code></pre></div></div>
-<blockquote>
-  <p>top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다.
-````
-    def pop(self):
-        # top 추출
-        if self.top == None:        # top이 None 이면 return None
-            return None
-        elif self.top == self.bottom:   # top과 bottom이 같다면(None은 아님)
-            result = self.top.value     # value를 리턴하고, top bottom을 비우자 (None)
-            self.top =None
-            self.bottom = None
-            return result
-        else :                          # 이제 정상적으로 길이 1이상의 데크라면
-            node = self.bottom          # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서
-            result = self.top.value     # (리턴값은 어쨋든 top value)
-            while node !=None:          # top을 업데이트해주자.
-                if node.next == self.top:
-                    self.top = node
-                node = node.next
-            return result</p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def popleft(self):
-    # bottom 추출
-    if self.bottom == None:
-        return None
-    elif self.top == self.bottom:
-        self.top = None
-        result = self.bottom.value
-        self.bottom = None
-        return result
-    else :
-        result = self.bottom.value
-        self.bottom = self.bottom.next
-        return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ````
-
-def ord_desc(self):
-    node = self.bottom      # 초기값은 bottom 부터
-    result = []
-    while node != None :    # 노드에 None이 들어있다면 종료
-        result.append(node.value)
-        node = node.next
-    return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.
-</code></pre></div></div>]]></content><author><name>옹달샘👱</name></author><category term="Something_else" /><summary type="html"><![CDATA[서론 옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다. 스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다. 물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다. 오늘 각각을 구현해보면서 이해해보는 시간을 가졌다. 큐(queue) 를 연결리스트로 구현 연결리스트 큐 class Node(): def __init__(self, data): self._data = data self._next = None node 들을 선언했다. class Queue(): def __init__(self): self._front = None self._rear = None ‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다. def enqueue(self,item): new_node = Node(item) if self._front == None: # 빈 큐 라면 '맨앞' '맨뒤'에 모두 같은 노드를 넣어준당. self._front = new_node self._rear = self._front else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다. self._rear._next = new_node #기존 '맨뒤노드'의 next에 새로운 노드를 넣어준당. (연결!) self._rear = self._rear._next #큐의 '맨뒤' 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!) 값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것) def dequeue(self): if self._front == None: # 빈큐라면 None을 리턴 return None else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + '맨앞' 업데이트 temp = self._front._data # '맨앞'노드의 데이터를 잠깐 빼두자. self._front = self._front._next #'맨앞' 노드의 next 에 있는 노드를 큐의 '맨앞'으로 둔다. if self._front ==None: # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다. self._rear = None #그러면 '맨뒤'도 비워주자 (이거 안하면 '맨뒤'에 꺼낸 노드가 아직 남아있음) return temp 빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다. def return_queue(self): result = [] temp = self._front # 초기값은 '맨앞' node! while temp!= None: # temp에 None이 들어가버리면 다 끝난거다! result.append(temp._data) temp = temp._next # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝) return result 현재 큐를 list로 리턴하는 함수를 정의했다. 스택(stack)을 list로 구현 스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다. 그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다. (물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.) class Stack(): def __init__(self): self._data = [] def push(self, item): self._data.append(item) def pop(self): return self._data.pop() if self._data else None def return_stack(self): return self._data 간단해서 코드 리뷰는 생략했다. 데크 구현 동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분) 양방향 연결리스트로 수정을 해서 업데이트를 해야겠다 https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png class Node: def __init__(self, value, next=None): self.value = value self.next = next class Deque: def __init__(self): self.top = None self.bottom = None def append(self, item): if self.top == None: # self.top이 비어있다면 self.top = Node(item) # self.top 에도 bottom에도 뉴 노드를 넣어준다. self.bottom = self.top else : node = Node(item) self.top.next = node # 현재 top의 next에 뉴 노드를 넣어주고 self.top = node # 이제 top은 뉴 노드로 한다. def appendleft(self, item): node = Node(item) if self.bottom == None : # bottom이 비었다면 top, bottom에 둘다 넣어줘 self.top = node self.bottom = node else : node.next = self.bottom # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다! self.bottom = node top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다. ```` def pop(self): # top 추출 if self.top == None: # top이 None 이면 return None return None elif self.top == self.bottom: # top과 bottom이 같다면(None은 아님) result = self.top.value # value를 리턴하고, top bottom을 비우자 (None) self.top =None self.bottom = None return result else : # 이제 정상적으로 길이 1이상의 데크라면 node = self.bottom # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서 result = self.top.value # (리턴값은 어쨋든 top value) while node !=None: # top을 업데이트해주자. if node.next == self.top: self.top = node node = node.next return result def popleft(self): # bottom 추출 if self.bottom == None: return None elif self.top == self.bottom: self.top = None result = self.bottom.value self.bottom = None return result else : result = self.bottom.value self.bottom = self.bottom.next return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ```` def ord_desc(self): node = self.bottom # 초기값은 bottom 부터 result = [] while node != None : # 노드에 None이 들어있다면 종료 result.append(node.value) node = node.next return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.]]></summary></entry><entry><title type="html">test게시물</title><link href="http://localhost:4000/example_sub/test/" rel="alternate" type="text/html" title="test게시물" /><published>2020-08-29T00:00:00+09:00</published><updated>2020-08-29T00:00:00+09:00</updated><id>http://localhost:4000/example_sub/test</id><content type="html" xml:base="http://localhost:4000/example_sub/test/"><![CDATA[<h2 id="test_제목">test_제목</h2>
-<p>test 게시물입니다.</p>
-
-<h2 id="test_제목-2">test_제목 2</h2>
-<p>test2 목차 테스트 입니다.</p>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱</name></author><category term="Example_sub" /><category term="Test" /><category term="Test_2" /><summary type="html"><![CDATA[test_제목 test 게시물입니다.]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="pj" /><category term="pandas" /><category term="시각화" /><category term="가설검정" /><summary type="html"><![CDATA[]]></summary></entry></feed>
