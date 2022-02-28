@@ -1,0 +1,22 @@
+I"�<p>특성을 줄이는데에는 어떤 방법이 있을까.<br />
+첫번째로 영향도 높은 특성을 <strong>‘고르는 것’</strong> 과<br />
+두번째는 특성 모두 특정 축에 <strong>‘투영시키는 것’</strong> 이 있다.</p>
+
+<h2 id="특성-선택-feature-selection">특성 선택 (feature selection)</h2>
+<p>특성을 줄이는데, <br />
+영향도가 큰 특성을 골라야<br />
+모델의 정확도를 유지하면서 복잡도를 줄이거나 일반화를 할 수 있을 것이다.</p>
+
+<h2 id="특성-추출-feature-extraction">특성 추출 (feature extraction)</h2>
+<p>대표적으로 pca와 같이 특성들을 <br />
+특정 축( 특성들의 특징을 잘 나타내야 한다는 이유로 보통 분산을 최대로하는 축을 선택한다. )에<br />
+투영(projection)시켜 차원을 축소하는 방식이 있다.</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

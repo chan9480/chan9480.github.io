@@ -1,0 +1,6 @@
+I"<h2 id="cv-교차-검증-cross-validation">CV (교차 검증, cross validation)</h2>
+<p>먼저 데이터라고 하면 용도에 따라 3가지로 분류할 수 있다.<br />
+학습데이터(training_data),<br />
+검증데이터(validation_data),<br />
+테스트데이터(test_data)</p>
+:ET

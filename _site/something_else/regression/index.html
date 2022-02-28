@@ -22,8 +22,8 @@
 
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>선형회귀와 모델의 적합 - 배우자 그리고 써먹자</title>
-<meta name="description" content="선형회귀    엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name&#39;] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = [[x] for x in df_test[&#39;feature_name&#39;]] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)  # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)  ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);   다중선형회귀    x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.  그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.    # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)  # feature, target 정의 feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 나머지는 동일!!   평가지표    MSE (Mean Square Error), MAE(Mean Absolute Error), RMSE (Root Mean Square Error) R-score   과적합 &amp; 과소적합 사진이랑 편향 분산 얘기 넣어놓자.    🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
+<!-- begin _includes/seo.html --><title>단순선형회귀와 모델의 적합 - 배우자 그리고 써먹자</title>
+<meta name="description" content="선형회귀    엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name&#39;] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = [[x] for x in df_test[&#39;feature_name&#39;]] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)  # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)  ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);   다중선형회귀    x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.  그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.    # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)  # feature, target 정의 feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 나머지는 동일!!   평가지표    MSE (Mean Square Error), MAE(Mean Absolute Error), RMSE (Root Mean Square Error) R-score   과적합 &amp; 과소적합 사진이랑 편향 분산 얘기 넣어놓자.  편향은 잘못된 가정을 했을 때 발생하는 오차, 과소적합 문제를 야기. 분산은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜  과적합 문제 야기.   분산과 편향은 트레이드오프(trade-off)관계이다. 예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다. 고편향은 지나친 일반화를 하여 과소적합이 되는 것. 즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다.    위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능. 즉, 가로축은 고편향에서 고분산으로 향한다.  복잡도 up! -&gt; 트레이닝셋 score up! 너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.) best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것.    🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
 
 
   <meta name="author" content="옹달샘👱🏼‍♂️">
@@ -32,11 +32,11 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="배우자 그리고 써먹자">
-<meta property="og:title" content="선형회귀와 모델의 적합">
+<meta property="og:title" content="단순선형회귀와 모델의 적합">
 <meta property="og:url" content="http://localhost:4000/something_else/regression/">
 
 
-  <meta property="og:description" content="선형회귀    엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name&#39;] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = [[x] for x in df_test[&#39;feature_name&#39;]] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)  # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)  ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);   다중선형회귀    x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.  그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.    # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)  # feature, target 정의 feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 나머지는 동일!!   평가지표    MSE (Mean Square Error), MAE(Mean Absolute Error), RMSE (Root Mean Square Error) R-score   과적합 &amp; 과소적합 사진이랑 편향 분산 얘기 넣어놓자.    🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
+  <meta property="og:description" content="선형회귀    엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.    # 라이브러리 import from sklearn.linear_model import LinearRegression  # 데이터 정의 df = &#39;타겟을 포함한 데이터 프레임&#39; df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;  # 모델 클래스 정의 model = LinearRegression()  # feature, target 정의 feature = [&#39;feature_name&#39;] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 모델 학습 model.fit(X_train, y_train)  # 예측값. X_test = [[x] for x in df_test[&#39;feature_name&#39;]] y_pred = model.predict(X_test)  # 계수확인 print(&#39;절편&#39;, model.intercept_) print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)  # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)  ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);   다중선형회귀    x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다.  그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.    # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)  # feature, target 정의 feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ] target = [&#39;target_name&#39;] X_train = df[feature] y_train = df[target]  # 나머지는 동일!!   평가지표    MSE (Mean Square Error), MAE(Mean Absolute Error), RMSE (Root Mean Square Error) R-score   과적합 &amp; 과소적합 사진이랑 편향 분산 얘기 넣어놓자.  편향은 잘못된 가정을 했을 때 발생하는 오차, 과소적합 문제를 야기. 분산은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜  과적합 문제 야기.   분산과 편향은 트레이드오프(trade-off)관계이다. 예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다. 고편향은 지나친 일반화를 하여 과소적합이 되는 것. 즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다.    위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능. 즉, 가로축은 고편향에서 고분산으로 향한다.  복잡도 up! -&gt; 트레이닝셋 score up! 너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.) best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것.    🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
 
 
 
@@ -222,7 +222,7 @@
     
       
       
-        <li class="current">선형회귀와 모델의 적합</li>
+        <li class="current">단순선형회귀와 모델의 적합</li>
       
     
   </ol>
@@ -345,7 +345,7 @@
   <label for="ac-toc">카테고리 Click</label>
   <ul class="nav__items" id="category_tag_menu">
       <li>
-            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">12</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">16</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
       </li>
       <li>
         <span class="nav__sub-title">Data</span>
@@ -358,7 +358,7 @@
                     
                 
                     
-                        <li><a href="/categories/ds" class="">Data_science (3)</a></li>
+                        <li><a href="/categories/ds" class="">Data_science (6)</a></li>
                     
                 
             </ul>
@@ -378,7 +378,7 @@
                     
                 
                     
-                        <li><a href="/categories/Something_else" class="">Something_else (5)</a></li>
+                        <li><a href="/categories/Something_else" class="">Something_else (6)</a></li>
                     
                 
                     
@@ -430,15 +430,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="선형회귀와 모델의 적합">
-    <meta itemprop="description" content="선형회귀  엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다.이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다.y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.# 라이브러리 importfrom sklearn.linear_model import LinearRegression# 데이터 정의df = &#39;타겟을 포함한 데이터 프레임&#39;df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;# 모델 클래스 정의model = LinearRegression()# feature, target 정의feature = [&#39;feature_name&#39;]target = [&#39;target_name&#39;]X_train = df[feature]y_train = df[target]# 모델 학습model.fit(X_train, y_train)# 예측값.X_test = [[x] for x in df_test[&#39;feature_name&#39;]]y_pred = model.predict(X_test)# 계수확인print(&#39;절편&#39;, model.intercept_)print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)# 시각화.import matplotlib.pyplot as plt## train 데이터에 대한 그래프를 검정색 점으로.plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)## test 데이터에 대한 예측을 파란색 점으로.plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);다중선형회귀  x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까?위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.# 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)# feature, target 정의feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ]target = [&#39;target_name&#39;]X_train = df[feature]y_train = df[target]# 나머지는 동일!!평가지표  MSE (Mean Square Error),MAE(Mean Absolute Error),RMSE (Root Mean Square Error)R-score과적합 &amp; 과소적합사진이랑 편향 분산 얘기 넣어놓자.🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄맨 위로 이동하기">
+    <meta itemprop="headline" content="단순선형회귀와 모델의 적합">
+    <meta itemprop="description" content="선형회귀  엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다.이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다.y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.# 라이브러리 importfrom sklearn.linear_model import LinearRegression# 데이터 정의df = &#39;타겟을 포함한 데이터 프레임&#39;df_test = &#39;타겟 미포함 &quot;테스트&quot; 데이터 프레임&#39;# 모델 클래스 정의model = LinearRegression()# feature, target 정의feature = [&#39;feature_name&#39;]target = [&#39;target_name&#39;]X_train = df[feature]y_train = df[target]# 모델 학습model.fit(X_train, y_train)# 예측값.X_test = [[x] for x in df_test[&#39;feature_name&#39;]]y_pred = model.predict(X_test)# 계수확인print(&#39;절편&#39;, model.intercept_)print(&#39;계수(여러개일 수 있기때문에 array)&#39;, model.coef_)# 시각화.import matplotlib.pyplot as plt## train 데이터에 대한 그래프를 검정색 점으로.plt.scatter(X_train, y_train, color=&#39;black&#39;, linewidth=1)## test 데이터에 대한 예측을 파란색 점으로.plt.scatter(X_test, y_pred, color=&#39;blue&#39;, linewidth=1);다중선형회귀  x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까?위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.# 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)# feature, target 정의feature = [&#39;feature_name_1&#39;, &#39;feature_name_2 ]target = [&#39;target_name&#39;]X_train = df[feature]y_train = df[target]# 나머지는 동일!!평가지표  MSE (Mean Square Error),MAE(Mean Absolute Error),RMSE (Root Mean Square Error)R-score과적합 &amp; 과소적합사진이랑 편향 분산 얘기 넣어놓자.편향은 잘못된 가정을 했을 때 발생하는 오차,과소적합 문제를 야기.분산은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜 과적합 문제 야기.분산과 편향은 트레이드오프(trade-off)관계이다.예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다.고편향은 지나친 일반화를 하여 과소적합이 되는 것.즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다. 위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능.즉, 가로축은 고편향에서 고분산으로 향한다.복잡도 up! -&gt; 트레이닝셋 score up!너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.)best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것.🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄맨 위로 이동하기">
     <meta itemprop="datePublished" content="2022-01-21T00:00:00+09:00">
     <meta itemprop="dateModified" content="2022-02-12T00:00:00+09:00">
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">선형회귀와 모델의 적합
+          <h1 id="page-title" class="page__title" itemprop="headline">단순선형회귀와 모델의 적합
 </h1>
           
             <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2022-01-21T00:00:00+09:00">2022.01.21</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-02-12">2022.02.12</time></p>
@@ -556,6 +556,25 @@ R-score</p>
 <h2 id="과적합--과소적합">과적합 &amp; 과소적합</h2>
 <p>사진이랑 편향 분산 얘기 넣어놓자.</p>
 
+<p><strong>편향</strong>은 잘못된 가정을 했을 때 발생하는 오차,<br />
+<strong>과소적합</strong> 문제를 야기.<br />
+<strong>분산</strong>은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜 <br />
+<strong>과적합</strong> 문제 야기.<br />
+<img src="/assets/images/source_17.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+
+<p>분산과 편향은 트레이드오프(trade-off)관계이다.<br />
+예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다.<br />
+고편향은 지나친 일반화를 하여 과소적합이 되는 것.<br />
+즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다. <br />
+<img src="/assets/images/source_18.png" width="40%" height="40%" title="제목" alt="아무거나" /></p>
+
+<p>위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능.<br />
+즉, 가로축은 고편향에서 고분산으로 향한다.</p>
+
+<p>복잡도 up! -&gt; 트레이닝셋 score up!<br />
+너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.)<br />
+best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것.</p>
+
 <p><br /></p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
@@ -586,6 +605,8 @@ R-score</p>
 
 
 
+
+  
 
   
 
@@ -635,7 +656,7 @@ R-score</p>
     <h4 class="page__share-title">공유하기</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80%EC%99%80+%EB%AA%A8%EB%8D%B8%EC%9D%98+%EC%A0%81%ED%95%A9%20http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2Fregression%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=%EB%8B%A8%EC%88%9C%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80%EC%99%80+%EB%AA%A8%EB%8D%B8%EC%9D%98+%EC%A0%81%ED%95%A9%20http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2Fregression%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
   <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fsomething_else%2Fregression%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
@@ -653,6 +674,62 @@ R-score</p>
   
     <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
       <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/random_forest/">랜덤포레스트(Random Forest)와 ...</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.28
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/decision_tree/">파이프라인(PipeLine)과 결정트리모델(Decision Tree)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.26
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/feature_Selection_Extraction/">특성 선택과 특성 추출</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/ridge_logistic/">Ridge 회귀와 로지스틱 회귀</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
+              
+            </small>
+        </div>
+      </article>
+</div>
         
           <div class="list__item">
     <article class="archive-item">
@@ -746,98 +823,6 @@ R-score</p>
             </span>
             <small> 
               <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.18
-              
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/something_else/setting/">진짜 시작 그리고 m1맥북 세팅</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.16
-              
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/pj/section_2/">대출 승인 시스템의 승인 기준 머신러닝 예측</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.08.29
-              <!--Archive page 용-: (post -> page)-->
-<!--page__taxonomy.html에서 가져 옴-->
-        
-        <span class="page__taxonomy">
-            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
-                    
-                    
-                    <a href="/tags/#gridsearch" class="page__taxonomy-item-tag" rel="tag">GridSearch</a><span class="sep"> </span>
-                
-                    
-                    
-                    <a href="/tags/#ml" class="page__taxonomy-item-tag" rel="tag">ML</a><span class="sep"> </span>
-                
-                    
-                    
-                    <a href="/tags/#xgboost" class="page__taxonomy-item-tag" rel="tag">XGboost</a>
-                
-            </span>
-        </span>
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/pj/section_1/">게임 데이터 분석 기초</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.07.29
-              <!--Archive page 용-: (post -> page)-->
-<!--page__taxonomy.html에서 가져 옴-->
-        
-        <span class="page__taxonomy">
-            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
-                    
-                    
-                    <a href="/tags/#pandas" class="page__taxonomy-item-tag" rel="tag">pandas</a><span class="sep"> </span>
-                
-                    
-                    
-                    <a href="/tags/#%EA%B0%80%EC%84%A4%EA%B2%80%EC%A0%95" class="page__taxonomy-item-tag" rel="tag">가설검정</a><span class="sep"> </span>
-                
-                    
-                    
-                    <a href="/tags/#%EC%8B%9C%EA%B0%81%ED%99%94" class="page__taxonomy-item-tag" rel="tag">시각화</a>
-                
-            </span>
-        </span>
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/something_else/4th/">파이썬, 자료구조</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2020.08.29
               
             </small>
         </div>
