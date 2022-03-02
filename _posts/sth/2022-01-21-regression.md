@@ -1,5 +1,5 @@
 ---
-title:  "단순선형회귀와 모델의 적합"
+title:  "단순선형회귀, 회귀의 평가지표 그리고, 모델의 적합"
 
 categories:
   - Something_else
@@ -78,12 +78,10 @@ y_train = df[target]
 ## 평가지표
 > MSE (Mean Square Error),  
 > MAE(Mean Absolute Error),  
-> RMSE (Root Mean Square Error)
+> RMS or RMSE (Root Mean Square Error)  
 > R-score
 
 ## 과적합 & 과소적합
-사진이랑 편향 분산 얘기 넣어놓자.
-
 **편향**은 잘못된 가정을 했을 때 발생하는 오차,  
 **과소적합** 문제를 야기.  
 **분산**은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜   

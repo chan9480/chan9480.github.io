@@ -1,0 +1,21 @@
+I"�<h2 id="이진분류-모델의-종류">이진분류 모델의 종류</h2>
+<p>로지스틱 회귀,<br />
+Decision_Tree(base model),<br />
+RandomForest,<br />
+Gradient_boost,<br />
+KNN(K-Nearest-Neighbors),<br />
+그외 딥러닝 모델도 될 수 있겠다.</p>
+
+<h2 id="평가지표의-종류">평가지표의 종류</h2>
+<p>위와 같은 이진분류 모델 (군집x, 지도학습의 분류o) 의 평가지표는</p>
+<h2 id="test_제목-2">test_제목 2</h2>
+<p>test2 목차 테스트 입니다.</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

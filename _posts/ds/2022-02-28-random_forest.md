@@ -46,7 +46,7 @@ y_pred = classifier.predict(X_test)
 print("정확도 : {}".format(accuracy_score(y_test, y_pred))
 ~~~
 
-> CV(cross validation)은 gridsearch 등을 이용.  
+> CV(cross validation)은 GridsearchCV, RandomizedSearchCV 등을 이용.  
 
 ~~~
 # CV(cross validation)은 gridsearch 등을 이용.

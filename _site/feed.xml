@@ -1,4 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-28T17:52:24+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">랜덤포레스트(Random Forest)와 …</title><link href="http://localhost:4000/ds/random_forest/" rel="alternate" type="text/html" title="랜덤포레스트(Random Forest)와 …" /><published>2022-02-28T00:00:00+09:00</published><updated>2022-02-28T00:00:00+09:00</updated><id>http://localhost:4000/ds/random_forest</id><content type="html" xml:base="http://localhost:4000/ds/random_forest/"><![CDATA[<h2 id="랜덤-포레스트-모델">랜덤 포레스트 모델</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-02T19:58:46+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">이진분류의 평가지표</title><link href="http://localhost:4000/something_else/_classfication_metrics/" rel="alternate" type="text/html" title="이진분류의 평가지표" /><published>2022-03-02T00:00:00+09:00</published><updated>2022-03-02T00:00:00+09:00</updated><id>http://localhost:4000/something_else/_classfication_metrics</id><content type="html" xml:base="http://localhost:4000/something_else/_classfication_metrics/"><![CDATA[<h2 id="이진분류-모델의-종류">이진분류 모델의 종류</h2>
+<p>로지스틱 회귀,<br />
+Decision_Tree(base model),<br />
+RandomForest,<br />
+Gradient_boost,<br />
+KNN(K-Nearest-Neighbors),<br />
+그외 딥러닝 모델도 될 수 있겠다.</p>
+
+<h2 id="평가지표의-종류">평가지표의 종류</h2>
+<p>위와 같은 이진분류 모델 (군집x, 지도학습의 분류o) 의 평가지표는 어떤 게 있을까.<br />
+(회귀에서는 MSE, MAE, RMS, R-score 등이 있었쥬!)</p>
+
+<p>가장 단순하게 볼 수 있는 것은 validation 데이터에 대해서 얼마나 많이 맞춘 비율(0~1)이 있을 것이다.<br />
+바로 정확도(Accuracy)!  <br />
+그러나 모델을 하나의 값으로 평가하면 안될 것이다.</p>
+
+<blockquote>
+  <p>정확도 (Accuracy)<br />
+먼저 정확도를 체크할 때에도 베이스 모델은 반드시 필요하다.<br />
+그 이유를 예로 들어보자면,  암을 예측하는 모델의 학습데이터에서 암에 걸린 데이터(1)가 5%, 나머지 95%가 건강(0)하다면,<br />
+입력에 상관없이 항상 출력을 ‘0’으로만 한다면 그 모델은<br />
+CV나 hold-out 으로 비슷한 비율로 생성된 validation 데이터에서도 정확도를 대략 0.95로 가질 것이다..!<br />
+이러한 모델은 정확도 검증에 있어서 0.95는 최소한 넘는 것으로 고려해야 할 것이다.</p>
+</blockquote>
+
+<blockquote>
+  <p>TP, TN, FP, FN<br />
+(T,F는 True, False,   P,N은 Positive, Negative,)<br />
+True는 맞춘거, False는 못맞춘거.<br />
+P와 N은 예측한 거 기준. (FP는 실제 Negative인데 모델이 Positive로 예측한거야)</p>
+</blockquote>
+
+<blockquote>
+  <p>정밀도(precision)와 재현율(recall, sensitivity), specificity(TN-rate), Fall-out<br />
+precision = TP/(TP+FP) = Positive로 예측한 것들중 맞춘비율<br />
+recall = TP/(TP+FN) = 실제 Positive 중 맞춘비율  (TPRate)
+specificity = TN/(TN+FP) = 실제 Negative 중 맞춘비율 (TNR)
+Fall-out = FP/(FP+TN) = 실제 Negative 중 틀린비율 (FPR)</p>
+</blockquote>
+
+<blockquote>
+  <p>confusion Metrics<br />
+TP, TN, FP, FN 을 한번에 나타낸 행렬<br />
+아래 사진을 참고하면 한번에 이해될것.ㅎㅎ</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.metrics import plot_confusion_matrix
+import matplotlib.pyplot as plt
+
+# pipe는 파이프라인
+fig, ax = plt.subplots()
+matrix = plot_confusion_matrix(pipe, X_val_cleaned, y_val,
+                            cmap = plt.cm.Blues,
+                            ax = ax);
+</code></pre></div></div>
+<p><img src="/assets/images/source_23.png" width="30%" height="30%" title="제목" alt="아무거나" /></p>
+
+<blockquote>
+  <p>AUC, ROC 와 임계값(Threshold)<br />
+ROC 커브는 임계값에 따른 FPR과 TPR 값이 그리는 커브인데. 모두 일대일 관계이다. <br />
+AOC수치는 ROC curve의 아래 면적을 뜻한다.<br />
+AOC는 클수록 좋은 모델인 것은 사실이다.<br />
+이유 : FPR (틀린비율, 낮을수록 좋음) 이 낮음에도 TPR(맞춘비율, 높을수록 좋음)은 높아야 AOC가 높은 것이기 때문.<br />
+결과적으로 tpr-fpr이 최대가 되는 점의 임계점을 고르는게 최선이라고 할 수 있다.</p>
+</blockquote>
+
+<p><img src="/assets/images/source_24.png" width="30%" height="30%" title="제목" alt="아무거나" /><br />
+<img src="/assets/images/source_25.png" width="30%" height="30%" title="제목" alt="아무거나" /></p>
+
+<h2 id="test_제목-2">test_제목 2</h2>
+<p>test2 목차 테스트 입니다.</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[이진분류 모델의 종류 로지스틱 회귀, Decision_Tree(base model), RandomForest, Gradient_boost, KNN(K-Nearest-Neighbors), 그외 딥러닝 모델도 될 수 있겠다.]]></summary></entry><entry><title type="html">랜덤포레스트(Random Forest)와 …</title><link href="http://localhost:4000/ds/random_forest/" rel="alternate" type="text/html" title="랜덤포레스트(Random Forest)와 …" /><published>2022-02-28T00:00:00+09:00</published><updated>2022-02-28T00:00:00+09:00</updated><id>http://localhost:4000/ds/random_forest</id><content type="html" xml:base="http://localhost:4000/ds/random_forest/"><![CDATA[<h2 id="랜덤-포레스트-모델">랜덤 포레스트 모델</h2>
 <p>단순 선형회귀와 릿지(Ridge) 회귀가 있었다면,<br />
 결정트리와 랜덤포레스트가 있다.</p>
 
@@ -35,7 +113,7 @@ print("정확도 : {}".format(accuracy_score(y_test, y_pred))
 </code></pre></div></div>
 
 <blockquote>
-  <p>CV(cross validation)은 gridsearch 등을 이용.</p>
+  <p>CV(cross validation)은 GridsearchCV, RandomizedSearchCV 등을 이용.</p>
 </blockquote>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># CV(cross validation)은 gridsearch 등을 이용.
@@ -148,7 +226,27 @@ importances = pd.Series(model_dt.feature_importances_, encoded_columns)
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[사이킷런(sklearn) 파이프라인 (PipeLine) 사이킷런에서 제공하는 파이프라인은 각 기능을 하는 모델들을 한번에 묶는 기능과 하이퍼 파라미터를 연결시키는 기능이 있다.]]></summary></entry><entry><title type="html">Ridge 회귀와 로지스틱 회귀</title><link href="http://localhost:4000/ds/ridge_logistic/" rel="alternate" type="text/html" title="Ridge 회귀와 로지스틱 회귀" /><published>2022-02-25T00:00:00+09:00</published><updated>2022-02-25T00:00:00+09:00</updated><id>http://localhost:4000/ds/ridge_logistic</id><content type="html" xml:base="http://localhost:4000/ds/ridge_logistic/"><![CDATA[<h2 id="cv-교차-검증-cross-validation">CV (교차 검증, cross validation)</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[사이킷런(sklearn) 파이프라인 (PipeLine) 사이킷런에서 제공하는 파이프라인은 각 기능을 하는 모델들을 한번에 묶는 기능과 하이퍼 파라미터를 연결시키는 기능이 있다.]]></summary></entry><entry><title type="html">특성 선택과 특성 추출</title><link href="http://localhost:4000/something_else/feature_Selection_Extraction/" rel="alternate" type="text/html" title="특성 선택과 특성 추출" /><published>2022-02-25T00:00:00+09:00</published><updated>2022-02-25T00:00:00+09:00</updated><id>http://localhost:4000/something_else/feature_Selection_Extraction</id><content type="html" xml:base="http://localhost:4000/something_else/feature_Selection_Extraction/"><![CDATA[<p>특성을 줄이는데에는 어떤 방법이 있을까.<br />
+첫번째로 영향도 높은 특성을 <strong>‘고르는 것’</strong> 과<br />
+두번째는 특성 모두 특정 축에 <strong>‘투영시키는 것’</strong> 이 있다.</p>
+
+<h2 id="특성-선택-feature-selection">특성 선택 (feature selection)</h2>
+<p>특성을 줄이는데, <br />
+영향도가 큰 특성을 골라야<br />
+모델의 정확도를 유지하면서 복잡도를 줄이거나 일반화를 할 수 있을 것이다.</p>
+
+<h2 id="특성-추출-feature-extraction">특성 추출 (feature extraction)</h2>
+<p>대표적으로 pca와 같이 특성들을 <br />
+특정 축( 특성들의 특징을 잘 나타내야 한다는 이유로 보통 분산을 최대로하는 축을 선택한다. )에<br />
+투영(projection)시켜 차원을 축소하는 방식이 있다.</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[특성을 줄이는데에는 어떤 방법이 있을까. 첫번째로 영향도 높은 특성을 ‘고르는 것’ 과 두번째는 특성 모두 특정 축에 ‘투영시키는 것’ 이 있다.]]></summary></entry><entry><title type="html">Ridge 회귀와 로지스틱 회귀</title><link href="http://localhost:4000/ds/ridge_logistic/" rel="alternate" type="text/html" title="Ridge 회귀와 로지스틱 회귀" /><published>2022-02-25T00:00:00+09:00</published><updated>2022-02-25T00:00:00+09:00</updated><id>http://localhost:4000/ds/ridge_logistic</id><content type="html" xml:base="http://localhost:4000/ds/ridge_logistic/"><![CDATA[<h2 id="cv-교차-검증-cross-validation">CV (교차 검증, cross validation)</h2>
 <p>먼저 데이터라고 하면 용도에 따라 3가지로 분류할 수 있다.<br />
 학습데이터(training_data),<br />
 검증데이터(validation_data),<br />
@@ -234,27 +332,7 @@ coefficients    # 계수가 -1부터 1사이의 값을 갖는데 -1에 가까운
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[CV (교차 검증, cross validation) 먼저 데이터라고 하면 용도에 따라 3가지로 분류할 수 있다. 학습데이터(training_data), 검증데이터(validation_data), 테스트데이터(test_data)]]></summary></entry><entry><title type="html">특성 선택과 특성 추출</title><link href="http://localhost:4000/something_else/feature_Selection_Extraction/" rel="alternate" type="text/html" title="특성 선택과 특성 추출" /><published>2022-02-25T00:00:00+09:00</published><updated>2022-02-25T00:00:00+09:00</updated><id>http://localhost:4000/something_else/feature_Selection_Extraction</id><content type="html" xml:base="http://localhost:4000/something_else/feature_Selection_Extraction/"><![CDATA[<p>특성을 줄이는데에는 어떤 방법이 있을까.<br />
-첫번째로 영향도 높은 특성을 <strong>‘고르는 것’</strong> 과<br />
-두번째는 특성 모두 특정 축에 <strong>‘투영시키는 것’</strong> 이 있다.</p>
-
-<h2 id="특성-선택-feature-selection">특성 선택 (feature selection)</h2>
-<p>특성을 줄이는데, <br />
-영향도가 큰 특성을 골라야<br />
-모델의 정확도를 유지하면서 복잡도를 줄이거나 일반화를 할 수 있을 것이다.</p>
-
-<h2 id="특성-추출-feature-extraction">특성 추출 (feature extraction)</h2>
-<p>대표적으로 pca와 같이 특성들을 <br />
-특정 축( 특성들의 특징을 잘 나타내야 한다는 이유로 보통 분산을 최대로하는 축을 선택한다. )에<br />
-투영(projection)시켜 차원을 축소하는 방식이 있다.</p>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[특성을 줄이는데에는 어떤 방법이 있을까. 첫번째로 영향도 높은 특성을 ‘고르는 것’ 과 두번째는 특성 모두 특정 축에 ‘투영시키는 것’ 이 있다.]]></summary></entry><entry><title type="html">신용카드 데이터로 k-means-cluster, pca 연습</title><link href="http://localhost:4000/pj/Credit_Card_Cluster/" rel="alternate" type="text/html" title="신용카드 데이터로 k-means-cluster, pca 연습" /><published>2022-02-21T00:00:00+09:00</published><updated>2022-02-23T00:00:00+09:00</updated><id>http://localhost:4000/pj/Credit_Card_Cluster</id><content type="html" xml:base="http://localhost:4000/pj/Credit_Card_Cluster/"><![CDATA[<h1 id="데이터-선정-">데이터 선정 :</h1>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[CV (교차 검증, cross validation) 먼저 데이터라고 하면 용도에 따라 3가지로 분류할 수 있다. 학습데이터(training_data), 검증데이터(validation_data), 테스트데이터(test_data)]]></summary></entry><entry><title type="html">신용카드 데이터로 k-means-cluster, pca 연습</title><link href="http://localhost:4000/pj/Credit_Card_Cluster/" rel="alternate" type="text/html" title="신용카드 데이터로 k-means-cluster, pca 연습" /><published>2022-02-21T00:00:00+09:00</published><updated>2022-02-23T00:00:00+09:00</updated><id>http://localhost:4000/pj/Credit_Card_Cluster</id><content type="html" xml:base="http://localhost:4000/pj/Credit_Card_Cluster/"><![CDATA[<h1 id="데이터-선정-">데이터 선정 :</h1>
 <p>kaggle credit customer dataset  (https://www.kaggle.com/arjunbhasin2013/ccdata)</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
@@ -1184,7 +1262,7 @@ chi2
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[가설 검정? ‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다. 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까? 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)]]></summary></entry><entry><title type="html">단순선형회귀와 모델의 적합</title><link href="http://localhost:4000/something_else/regression/" rel="alternate" type="text/html" title="단순선형회귀와 모델의 적합" /><published>2022-01-21T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/regression</id><content type="html" xml:base="http://localhost:4000/something_else/regression/"><![CDATA[<h2 id="선형회귀">선형회귀</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[가설 검정? ‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다. 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까? 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)]]></summary></entry><entry><title type="html">단순선형회귀, 회귀의 평가지표 그리고, 모델의 적합</title><link href="http://localhost:4000/something_else/regression/" rel="alternate" type="text/html" title="단순선형회귀, 회귀의 평가지표 그리고, 모델의 적합" /><published>2022-01-21T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/regression</id><content type="html" xml:base="http://localhost:4000/something_else/regression/"><![CDATA[<h2 id="선형회귀">선형회귀</h2>
 <blockquote>
   <p>엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다.<br />
 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다.<br />
@@ -1252,13 +1330,11 @@ y_train = df[target]
 <blockquote>
   <p>MSE (Mean Square Error),<br />
 MAE(Mean Absolute Error),<br />
-RMSE (Root Mean Square Error)
+RMS or RMSE (Root Mean Square Error)<br />
 R-score</p>
 </blockquote>
 
 <h2 id="과적합--과소적합">과적합 &amp; 과소적합</h2>
-<p>사진이랑 편향 분산 얘기 넣어놓자.</p>
-
 <p><strong>편향</strong>은 잘못된 가정을 했을 때 발생하는 오차,<br />
 <strong>과소적합</strong> 문제를 야기.<br />
 <strong>분산</strong>은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜 <br />
@@ -1284,85 +1360,4 @@ best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[선형회귀 엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값) y^는 예측값 즉 ax+b, y평균은 y전체의 평균. # 라이브러리 import from sklearn.linear_model import LinearRegression # 데이터 정의 df = '타겟을 포함한 데이터 프레임' df_test = '타겟 미포함 "테스트" 데이터 프레임' # 모델 클래스 정의 model = LinearRegression() # feature, target 정의 feature = ['feature_name'] target = ['target_name'] X_train = df[feature] y_train = df[target] # 모델 학습 model.fit(X_train, y_train) # 예측값. X_test = [[x] for x in df_test['feature_name']] y_pred = model.predict(X_test) # 계수확인 print('절편', model.intercept_) print('계수(여러개일 수 있기때문에 array)', model.coef_) # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color='black', linewidth=1) ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color='blue', linewidth=1); 다중선형회귀 x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다. # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일) # feature, target 정의 feature = ['feature_name_1', 'feature_name_2 ] target = ['target_name'] X_train = df[feature] y_train = df[target] # 나머지는 동일!! 평가지표 MSE (Mean Square Error), MAE(Mean Absolute Error), RMSE (Root Mean Square Error) R-score 과적합 &amp; 과소적합 사진이랑 편향 분산 얘기 넣어놓자. 편향은 잘못된 가정을 했을 때 발생하는 오차, 과소적합 문제를 야기. 분산은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜 과적합 문제 야기. 분산과 편향은 트레이드오프(trade-off)관계이다. 예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다. 고편향은 지나친 일반화를 하여 과소적합이 되는 것. 즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다. 위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능. 즉, 가로축은 고편향에서 고분산으로 향한다. 복잡도 up! -&gt; 트레이닝셋 score up! 너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.) best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것. 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry><entry><title type="html">정렬</title><link href="http://localhost:4000/something_else/5th/" rel="alternate" type="text/html" title="정렬" /><published>2021-11-27T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/5th</id><content type="html" xml:base="http://localhost:4000/something_else/5th/"><![CDATA[<h2 id="선택정렬">선택정렬</h2>
-<blockquote>
-  <blockquote>
-    <p>제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬.<br />
-n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교<br />
-(비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2)<br />
-<img src="https://user-images.githubusercontent.com/84547813/145223514-1b92d47c-4204-4890-8ab3-07af49e0894b.png" alt="image" /></p>
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def selection_sort(li):
-    n = len(li)
-    for i in range(n):      # i번쨰가 주체
-        for j in range(i,n):# i번째 뒤로 쭉
-            if li[i] &gt; li[j]:
-                li[i], li[j] = li[j], li[i]     # 교환
-            else :
-                pass
-    return li
-</code></pre></div>    </div>
-    <h2 id="삽입정렬">삽입정렬</h2>
-    <p>순서대로 자리를 찾아서 끼워 넣어주는 정렬<br />
-n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2)<br />
-아래 사진은 31의 자리를 찾아 넣어주고있다.<br />
-<img src="https://user-images.githubusercontent.com/84547813/145224534-3f5b9130-8641-48b6-9151-53a91695617f.png" alt="image" /></p>
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def insertion_sort(li):
-    n=len(li)
-    if n ==0:
-        return None
-    for i in range(1,n): # 두번째부터 끝까지 수행하면 댐.
-        temp = li[i]
-        for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐.
-            if li[j] &gt; temp:
-                li[j+1] = li[j]       # j에서 temp보다 크다면 옆으로복사
-                if j==0:              # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입
-                    li[0] = temp
-            else:
-                li[j+1] = temp        # j보다 temp가 크다면 그 오른쪽에 temp넣고 break
-                break
-    return li
-</code></pre></div>    </div>
-    <h2 id="버블정렬">버블정렬</h2>
-    <p>계속해서 옆과 비교,교환을 하는 방식.<br />
-(오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번)<br />
-그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다.<br />
-<img src="https://user-images.githubusercontent.com/84547813/145225965-b9c07b7f-44b5-438e-9d6b-487b99eb5863.png" alt="image" /></p>
-  </blockquote>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def bubble_sort(li):
-    n = len(li)
-    for i in range(n):      # 0부터 n-1까지
-        for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복
-            if j==(n-1):      # indexError 방지.
-                pass
-            elif li[j] &gt; li[j+1]:
-                li[j], li[j+1] = li[j+1], li[j]     # 교환
-            else :
-                pass
-    return li   
-</code></pre></div></div>
-<h2 id="퀵정렬">퀵정렬</h2>
-<blockquote>
-  <blockquote>
-    <p>특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지.<br />
-이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn) <br />
-<img src="https://user-images.githubusercontent.com/84547813/145229539-66ac03f9-ff21-451a-b60d-262e8b4d09ca.png" alt="image" /><br />
-그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2)
-<img src="https://user-images.githubusercontent.com/84547813/145229599-9731477a-81d1-4bda-9e28-3ca1a4e62241.png" alt="image" /></p>
-  </blockquote>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def quick_sort(li):
-    if len(li)&lt;=1:
-        return li
-    else:
-        L1, L2 = [], []
-        for x in li[1:]:
-            if x&lt;=li[0]:
-                L1.append(x)
-            else :
-                L2.append(x)
-        return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 )
-</code></pre></div></div>
-<h2 id="병합정렬">병합정렬</h2>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[선택정렬 제일 작은걸 차례대로 찾아서, 맨앞부터 계속 교체해주는 정렬. n개에 대해서 교환을 하며, 그 과정에서 최솟값을 찾기위해 n번 비교 (비교대상이 1씩 줄긴하지만 n이 최고차항이긴함.)를 하므로 O(n^2) def selection_sort(li): n = len(li) for i in range(n): # i번쨰가 주체 for j in range(i,n):# i번째 뒤로 쭉 if li[i] &gt; li[j]: li[i], li[j] = li[j], li[i] # 교환 else : pass return li 삽입정렬 순서대로 자리를 찾아서 끼워 넣어주는 정렬 n개에 대해서 하며, 최악의 경우 탐색을 계속 n개에 대해 길게하게 되기때문에 O(n^2) 아래 사진은 31의 자리를 찾아 넣어주고있다. def insertion_sort(li): n=len(li) if n ==0: return None for i in range(1,n): # 두번째부터 끝까지 수행하면 댐. temp = li[i] for j in range(i-1, -1 , -1): # i-1부터 0까지 비교를 해야댐. if li[j] &gt; temp: li[j+1] = li[j] # j에서 temp보다 크다면 옆으로복사 if j==0: # 그와중에 0에 도착햇다면 그냥 0(맨앞)에 temp대입 li[0] = temp else: li[j+1] = temp # j보다 temp가 크다면 그 오른쪽에 temp넣고 break break return li 버블정렬 계속해서 옆과 비교,교환을 하는 방식. (오름차순에서) 만약 맨앞에 제일큰숫자가 있다면, 끊임없이 교환을 거듭하여 끝까지 갈 것이다.(n번) 그 과정을 (1번부터 n까지), (1번부터 n-1까지) … (1과 2) 반복하면 (n번) O(n^2)이다. def bubble_sort(li): n = len(li) for i in range(n): # 0부터 n-1까지 for j in range(0,n-i):# j는 항상 0부터이되, n-i까지만반복 if j==(n-1): # indexError 방지. pass elif li[j] &gt; li[j+1]: li[j], li[j+1] = li[j+1], li[j] # 교환 else : pass return li 퀵정렬 특정값을 잡아 그보다 큰값과 작은값으로 계속해서 반으로 쪼갠다 1개짜리 리스트가 될때까지. 이상적으로 쪼개어진다면 아래그림에서 한층에 대해 모든수를 비교하므로 n , 그 층은 2^x의 해 이므로 log n 이므로 O(nlogn) 그러나 아래처럼 계속 최악의 경우로 된다면 층은 n층이 되기때문에 최악의 경우 O(n^2) def quick_sort(li): if len(li)&lt;=1: return li else: L1, L2 = [], [] for x in li[1:]: if x&lt;=li[0]: L1.append(x) else : L2.append(x) return quick_sort( L1 ) + quick_sort([ li[0] ]) + quick_sort( L2 ) 병합정렬]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[선형회귀 엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값) y^는 예측값 즉 ax+b, y평균은 y전체의 평균. # 라이브러리 import from sklearn.linear_model import LinearRegression # 데이터 정의 df = '타겟을 포함한 데이터 프레임' df_test = '타겟 미포함 "테스트" 데이터 프레임' # 모델 클래스 정의 model = LinearRegression() # feature, target 정의 feature = ['feature_name'] target = ['target_name'] X_train = df[feature] y_train = df[target] # 모델 학습 model.fit(X_train, y_train) # 예측값. X_test = [[x] for x in df_test['feature_name']] y_pred = model.predict(X_test) # 계수확인 print('절편', model.intercept_) print('계수(여러개일 수 있기때문에 array)', model.coef_) # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color='black', linewidth=1) ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color='blue', linewidth=1); 다중선형회귀 x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다. # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일) # feature, target 정의 feature = ['feature_name_1', 'feature_name_2 ] target = ['target_name'] X_train = df[feature] y_train = df[target] # 나머지는 동일!! 평가지표 MSE (Mean Square Error), MAE(Mean Absolute Error), RMS or RMSE (Root Mean Square Error) R-score 과적합 &amp; 과소적합 편향은 잘못된 가정을 했을 때 발생하는 오차, 과소적합 문제를 야기. 분산은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜 과적합 문제 야기. 분산과 편향은 트레이드오프(trade-off)관계이다. 예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다. 고편향은 지나친 일반화를 하여 과소적합이 되는 것. 즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다. 위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능. 즉, 가로축은 고편향에서 고분산으로 향한다. 복잡도 up! -&gt; 트레이닝셋 score up! 너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.) best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것. 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry></feed>

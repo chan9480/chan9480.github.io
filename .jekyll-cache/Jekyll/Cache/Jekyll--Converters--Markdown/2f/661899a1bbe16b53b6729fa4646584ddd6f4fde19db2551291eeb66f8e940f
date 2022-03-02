@@ -1,0 +1,8 @@
+I"<h2 id="이진분류-모델의-종류">이진분류 모델의 종류</h2>
+<p>로지스틱 회귀,<br />
+Decision_Tree(base model),<br />
+RandomForest,<br />
+Gradient_boost,<br />
+KNN(K-Nearest-Neighbors),<br />
+그외 딥러닝 모델도 될 수 있겠다.</p>
+:ET
