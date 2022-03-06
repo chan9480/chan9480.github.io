@@ -1,0 +1,131 @@
+I"<h2 id="크롤링이란-">크롤링이란 ?</h2>
+<p>web에 있는 데이터들을 긁어모으는 것을 말한다.<br />
+크게 두 종류로 먼저 나눌 수 있다.</p>
+<ol>
+  <li>정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링.</li>
+  <li>동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 값들을 크롤링.</li>
+</ol>
+
+<p>정적크롤링은 멈춰있는 페이지에서 정보를 찾아 긁어모은다면,<br />
+동적크롤링은 검색, 스크롤, 페이지 클릭 등을 해서 나오는 정보를 긁어모을 수 있다.</p>
+
+<p>대표적으로 정적크롤링 관련 라이브러리로 beautifulsoup(bs4)가 있다.<br />
+그리고 동적크롤링의 방법에도 여러 종류가 있는데 그 중 2가지를 적어보자면 다음과 같다.</p>
+<ol>
+  <li>openAPI를 이용하여 명령 후, response된 정보로부터 크롤링.</li>
+  <li>selenium을 통해 webdriver (크롬, 사파리 등)를 제어한 후 나온 페이지(HTML)로부터 크롤링.</li>
+</ol>
+
+<h2 id="크롤링-예시">크롤링 예시</h2>
+<p>먼저 아래 함수 두개를 지정하겠다.</p>
+<ol>
+  <li>createDirectory : 입력값으로 받은 문자열(경로)에 해당하는 폴더를 생성한다.</li>
+  <li>crawling_img : 입력값으로 받은 문자열을 크롬에서 검색해서 함수내에 지정되어 있는(직접변경) 경로로 이미지를 저장. (이름은 번호순으로 증가)</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+import urllib.request
+import os
+
+
+def createDirectory(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print("Error: Failed to create the directory.")
+
+def crawling_img(name):
+    ## 입력값 name 문자열을 검색하여 나오는 이미지를 저장하는 함수.
+    ## 저장하는 경로는 함수 내에서 별도로 지정해야함.
+
+    # 크롬을 드라이버로 채택. 버전오류가 날 수 있다.
+    driver = webdriver.Chrome()
+    driver.get("https://www.google.co.kr/imghp?hl=ko&amp;tab=wi&amp;authuser=0&amp;ogbl")
+
+    # q로 태그되어 있는 곳이 구글홈페이지의 검색창이다.
+    elem = driver.find_element_by_name("q")
+    elem.send_keys(name)
+    elem.send_keys(Keys.RETURN)
+
+
+    SCROLL_PAUSE_TIME = 1   # 1초씩 기다렸다가 내렸다를 반복할거임.  
+    # Get scroll height
+    last_height = driver.execute_script("return document.body.scrollHeight")  # 브라우저의 높이를 자바스크립트로 찾음
+    while True:
+        # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")  # 브라우저 끝까지 스크롤을 내림
+        # Wait to load page
+        time.sleep(SCROLL_PAUSE_TIME)
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            try:
+                # 더보기 버튼을 클릭할 거임.
+                driver.find_element_by_css_selector(".mye4qd").click()
+            except:
+                # 더보기 버튼이 없어서 클릭을 못하면 끝.
+                break
+        last_height = new_height
+
+    imgs = driver.find_elements_by_css_selector(".rg_i.Q4LuWd")
+
+    # 경로와 폴더 명 지정.
+    dir = ".\tree_flower_dog_cat" + "\\" + name
+
+    createDirectory(dir) #폴더 생성
+    count = 1
+    for img in imgs:
+        try:
+            img.click()
+            time.sleep(3)
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[2]/div/a/img').get_attribute(
+                "src")
+            path = ".\idols\\" + name + "\\"
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + ".jpg")
+
+            # 이 아래는 관련이미지 저장
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[1]/a[1]/div[1]/img').get_attribute(
+                "src")
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_1" + ".jpg")
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[2]/a[1]/div[1]/img').get_attribute(
+                "src")
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_2" + ".jpg")
+
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[3]/a[1]/div[1]/img').get_attribute(
+                "src")
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_3" + ".jpg")
+
+            count = count + 1
+            if count &gt;= 500:
+                break
+        except:
+            pass
+    driver.close()
+</code></pre></div></div>
+
+<p>이제 위 함수를 사용하여 for문을통해 검색 및 저장을 동시에 해주면 된다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>searching_keyword = ["나무", "꽃", "강아지얼굴", "고양이얼굴"]
+
+for i in range(len(searching_keyword)) :
+    searching_keyword[i] += '_사진' # 사진을 뒤에 붙이면 검색이 잘될 것 같아!
+
+for keyword in searching_keyword:
+    crawling_img(keyword)
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

@@ -1,4 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-02T19:58:46+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">이진분류의 평가지표</title><link href="http://localhost:4000/something_else/_classfication_metrics/" rel="alternate" type="text/html" title="이진분류의 평가지표" /><published>2022-03-02T00:00:00+09:00</published><updated>2022-03-02T00:00:00+09:00</updated><id>http://localhost:4000/something_else/_classfication_metrics</id><content type="html" xml:base="http://localhost:4000/something_else/_classfication_metrics/"><![CDATA[<h2 id="이진분류-모델의-종류">이진분류 모델의 종류</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-06T17:01:48+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">데이터 인코딩(encoding)</title><link href="http://localhost:4000/ds/encoding/" rel="alternate" type="text/html" title="데이터 인코딩(encoding)" /><published>2022-03-06T00:00:00+09:00</published><updated>2022-03-06T00:00:00+09:00</updated><id>http://localhost:4000/ds/encoding</id><content type="html" xml:base="http://localhost:4000/ds/encoding/"><![CDATA[<h2 id="인코딩은-왜-하는거">인코딩은 왜 하는거?</h2>
+<p>데이터에는 연속적인 숫자만 있는게 아니다.<br />
+문자열의 카테고리형 feature일 수도,<br />
+숫자라 하더라도 비연속적인 카테고리형 feature도 있다.<br />
+(예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))</p>
+
+<p>인코딩은 이러한 카테고리형 feature들에 대하여 ‘데이터’로써 유의미하도록 숫자로 바꿔주는 역할을 한다.</p>
+
+<h2 id="인코딩의-종류와-간단-정리">인코딩의 종류와 간단 정리</h2>
+<ol>
+  <li>
+    <p>One Hot Encoding<br />
+하나의 feature가 갖는 범주 전체에 대하여 ‘이다’, ‘아니다’로 분류하여 0, 1을 갖는 feature를 생성.</p>
+  </li>
+  <li>Label Encoding</li>
+  <li>Ordinal Encoding</li>
+  <li>Helmert Encoding</li>
+  <li>Binary Encoding</li>
+  <li>Frequency Encoding</li>
+  <li>Mean Encoding</li>
+  <li>Weight of Evidence Encoding</li>
+  <li>Probability Ratio Encoding</li>
+</ol>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[인코딩은 왜 하는거? 데이터에는 연속적인 숫자만 있는게 아니다. 문자열의 카테고리형 feature일 수도, 숫자라 하더라도 비연속적인 카테고리형 feature도 있다. (예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))]]></summary></entry><entry><title type="html">크롤링(Crawling)</title><link href="http://localhost:4000/de/crawling/" rel="alternate" type="text/html" title="크롤링(Crawling)" /><published>2022-03-05T00:00:00+09:00</published><updated>2022-03-05T00:00:00+09:00</updated><id>http://localhost:4000/de/crawling</id><content type="html" xml:base="http://localhost:4000/de/crawling/"><![CDATA[<h2 id="크롤링이란-">크롤링이란 ?</h2>
+<p>web에 있는 데이터들을 긁어모으는 것을 말한다.<br />
+크게 두 종류로 먼저 나눌 수 있다.</p>
+<ol>
+  <li>정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링.</li>
+  <li>동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 상태에서 데이터들을 크롤링.</li>
+</ol>
+
+<p>정적크롤링은 멈춰있는 페이지에서 정보를 찾아 긁어모은다면,<br />
+동적크롤링은 검색, 스크롤, 페이지 클릭 등을 해서 나오는 정보를 긁어모을 수 있다.</p>
+
+<p>대표적으로 정적크롤링 관련 라이브러리로 beautifulsoup(bs4)가 있다.<br />
+그리고 동적크롤링의 방법에도 여러 종류가 있는데 그 중 2가지를 적어보자면 다음과 같다.</p>
+<ol>
+  <li>openAPI를 이용하여 명령 후, response된 정보로부터 크롤링.</li>
+  <li>selenium을 통해 webdriver (크롬, 사파리 등)를 제어한 후 나온 페이지(HTML)로부터 크롤링.</li>
+</ol>
+
+<h2 id="크롤링-예시">크롤링 예시</h2>
+<p>먼저 아래 함수 두개를 지정하겠다.</p>
+<ol>
+  <li>createDirectory : 입력값으로 받은 문자열(경로)에 해당하는 폴더를 생성한다.</li>
+  <li>crawling_img : 입력값으로 받은 문자열을 크롬에서 검색해서 함수내에 지정되어 있는(직접변경) 경로로 이미지를 저장. (이름은 번호순으로 증가)</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+import urllib.request
+import os
+
+
+def createDirectory(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print("Error: Failed to create the directory.")
+
+def crawling_img(name):
+    ## 입력값 name 문자열을 검색하여 나오는 이미지를 저장하는 함수.
+    ## 저장하는 경로는 함수 내에서 별도로 지정해야함.
+
+    # 크롬을 드라이버로 채택. 버전오류가 날 수 있다.
+    driver = webdriver.Chrome()
+    driver.get("https://www.google.co.kr/imghp?hl=ko&amp;tab=wi&amp;authuser=0&amp;ogbl")
+
+    # q로 태그되어 있는 곳이 구글홈페이지의 검색창이다.
+    elem = driver.find_element_by_name("q")
+    elem.send_keys(name)
+    elem.send_keys(Keys.RETURN)
+
+
+    SCROLL_PAUSE_TIME = 1   # 1초씩 기다렸다가 내렸다를 반복할거임.  
+    # Get scroll height
+    last_height = driver.execute_script("return document.body.scrollHeight")  # 브라우저의 높이를 자바스크립트로 찾음
+    while True:
+        # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")  # 브라우저 끝까지 스크롤을 내림
+        # Wait to load page
+        time.sleep(SCROLL_PAUSE_TIME)
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            try:
+                # 더보기 버튼을 클릭할 거임.
+                driver.find_element_by_css_selector(".mye4qd").click()
+            except:
+                # 더보기 버튼이 없어서 클릭을 못하면 끝.
+                break
+        last_height = new_height
+
+    imgs = driver.find_elements_by_css_selector(".rg_i.Q4LuWd")
+
+    # 경로와 폴더 명 지정.
+    dir = ".\tree_flower_dog_cat" + "\\" + name
+
+    createDirectory(dir) #폴더 생성
+    count = 1
+    for img in imgs:
+        try:
+            img.click()
+            time.sleep(3)
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[2]/div/a/img').get_attribute(
+                "src")
+            path = ".\idols\\" + name + "\\"
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + ".jpg")
+
+            # 이 아래는 관련이미지 저장
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[1]/a[1]/div[1]/img').get_attribute(
+                "src")
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_1" + ".jpg")
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[2]/a[1]/div[1]/img').get_attribute(
+                "src")
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_2" + ".jpg")
+
+            imgUrl = driver.find_element_by_xpath(
+                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[3]/a[1]/div[1]/img').get_attribute(
+                "src")
+            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_3" + ".jpg")
+
+            count = count + 1
+            if count &gt;= 500:
+                break
+        except:
+            pass
+    driver.close()
+</code></pre></div></div>
+
+<p>이제 위 함수를 사용하여 for문을통해 검색 및 저장을 동시에 해주면 된다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>searching_keyword = ["나무", "꽃", "강아지얼굴", "고양이얼굴"]
+
+for i in range(len(searching_keyword)) :
+    searching_keyword[i] += '_사진' # 사진을 뒤에 붙이면 검색이 잘될 것 같아!
+
+for keyword in searching_keyword:
+    crawling_img(keyword)
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="de" /><summary type="html"><![CDATA[크롤링이란 ? web에 있는 데이터들을 긁어모으는 것을 말한다. 크게 두 종류로 먼저 나눌 수 있다. 정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링. 동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 상태에서 데이터들을 크롤링.]]></summary></entry><entry><title type="html">이진분류의 평가지표</title><link href="http://localhost:4000/something_else/_classfication_metrics/" rel="alternate" type="text/html" title="이진분류의 평가지표" /><published>2022-03-02T00:00:00+09:00</published><updated>2022-03-02T00:00:00+09:00</updated><id>http://localhost:4000/something_else/_classfication_metrics</id><content type="html" xml:base="http://localhost:4000/something_else/_classfication_metrics/"><![CDATA[<h2 id="이진분류-모델의-종류">이진분류 모델의 종류</h2>
 <p>로지스틱 회귀,<br />
 Decision_Tree(base model),<br />
 RandomForest,<br />
@@ -66,9 +225,6 @@ AOC는 클수록 좋은 모델인 것은 사실이다.<br />
 
 <p><img src="/assets/images/source_24.png" width="30%" height="30%" title="제목" alt="아무거나" /><br />
 <img src="/assets/images/source_25.png" width="30%" height="30%" title="제목" alt="아무거나" /></p>
-
-<h2 id="test_제목-2">test_제목 2</h2>
-<p>test2 목차 테스트 입니다.</p>
 
 <p><br /></p>
 
@@ -1148,216 +1304,4 @@ df['GENDER_AGE'] = df['GENDER'] + df['AGE'].apply(str)  # GENDER가 'M'이고 �
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[pandas document]]></summary></entry><entry><title type="html">가설검정</title><link href="http://localhost:4000/something_else/hypoo/" rel="alternate" type="text/html" title="가설검정" /><published>2022-02-11T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/hypoo</id><content type="html" xml:base="http://localhost:4000/something_else/hypoo/"><![CDATA[<h2 id="가설-검정">가설 검정?</h2>
-<p>‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다.<br />
-그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까?<br />
-데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)</p>
-
-<h2 id="귀무-가설">귀무 가설</h2>
-<p>귀무 가설은 하나의 가설 검정이 하나만 갖는다. 이 가설이 기각되는지, 기각되지 않는지에 따라 통계적으로 어떤 의미를 갖는지 명확해지므로<br />
-처음 검정을 할 때, 귀무가설이 무엇인지 정확히 짚고 실행해야 할 것이다.</p>
-
-<h2 id="p-value">p-value</h2>
-<p>pvalue &lt; 0.01 : 귀무가설이 옳을 확률이 1%이하 -&gt; 틀렸다 (깐깐한 기준)<br />
-pvalue &lt; 0.05 (5%) : 귀무가설이 옳을 확률이 5%이하 -&gt; 틀렸다 (일반적인 기준)<br />
-0.05 ~ pvalue ~ 0.1 사이인 경우: (애매함)<br />
-pvalue &gt; 0.1 (10%) : 귀무가설이 옳을 확률이 10%이상인데 -&gt; 귀무가설이 맞다 ~ 틀리지 않았을것이다.<br />
-p-value : 0.85 –&gt; 귀무가설은 틀리지 않았다. (귀무가설이 옳다와 톤이 약간 다름)</p>
-
-<h2 id="독립표본-t-test">독립표본 T-Test</h2>
-<blockquote>
-  <p>one_sample_t_test</p>
-  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from scipy import stats
-pv1=stats.ttest_1samp(df['AGE'],35).pvalue
-</code></pre></div>  </div>
-</blockquote>
-
-<p>귀무가설 : df데이터의 사람들의 나이는 평균이 35라고 할 수 있다.<br />
-예) pv1이 0.05 보다 작다면 ‘사람들의 나이 평균은 35라는 가설은 기각한다.’ 즉 ‘신뢰도 95%에서 평균은 35라고 할 수는 없다.’ <br />
-예) pv1이 0.85 정도가 나왔다면 ‘신뢰도 95%에서 사람들의 나이평균은 35이다’</p>
-
-<blockquote>
-  <p>two_sample_t_test</p>
-  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pv2=stats.ttest_ind(df1['AGE'],df2['AGE']).pvalue
-pv3=stats.ttest_ind(df1['AGE'],df2['AGE'], alternative='greater').pvalue
-pv4=stats.ttest_ind(df1['AGE'],df2['AGE'], alternative='less').pvalue
-</code></pre></div>  </div>
-</blockquote>
-
-<p>pv2 귀무가설 : df1 나이평균과 df2나이평균은 통계적으로 같다. (나이에 있어서 두 샘플은 같은 통계적 분포를 가진다)<br />
-pv3 귀무가설 : df2 나이평균은 df1나이평균보다 통계적으로 크다.<br />
-pv4 귀무가설 : df2 나이평균은 df1나이평균보다 통계적으로 작다.</p>
-
-<h2 id="대응표본쌍체표본-t-test">대응표본(쌍체표본) t-Test</h2>
-<p>데이터 수가 같은 두 표본 (같은 집단에 대한 약물의 전후 효과 비교 등) 의 평균을 비교한다.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import scipy.stats
-scipy.stats.ttest_rel(dat_M, dat_F)
-# dat_M과 dat_F는 쌍이되는 두 표본의 어떤 feature값들,
-</code></pre></div></div>
-
-<p>귀무가설 : dat_M 과 dat_F 의 평균은 통계적으로 같다.</p>
-
-<h2 id="chi-square-test">chi-square-Test</h2>
-<p>카이제곱 검정은 두 다른 feature에 대한 검정을 하는데 사용하거나<br />
-두 독립 표본이 통계적으로 차이가 있는지를 검정하는데 사용.</p>
-
-<blockquote>
-  <p>적합도 검정 (일원카이제곱)</p>
-</blockquote>
-
-<p>두 표본이 통계적으로 같은 결과라고 볼 수 있는지 검정한다.<br />
-예 : 주사위를 실제로 던져 나온 숫자 데이터셋 vs 같은 횟수만큼 3.5를 적은 데이터셋<br />
-혹은 실제 관측 데이터 vs 기대 데이터<br />
-혹은 표본이 모집단을 대표할 수 있는지에 대한 검정도 가능 ( 적합도 라는 단어가 이제야 어울린다.. )</p>
-
-<p>귀무가설 : 두 데이터는 통계적으로 같은 데이터이다.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from scipy.stats import chi2_contingency
-chi_res  = chi2_contingency(pd.crosstab(df['실제관측'], df['기댓값']))
-</code></pre></div></div>
-
-<blockquote>
-  <p>행과 열의 독립성 검정 (이원카이제)</p>
-</blockquote>
-
-<p><img src="/assets/images/source_7.png" width="50%" height="50%" title="제목" alt="아무거나" /></p>
-
-<p>df가 위와같은 데이터셋일 때,<br />
-귀무가설 : cut(품질)과 color(색상)은 독립적이다.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from scipy.stats import chi2_contingency
-
-chi2 = chi2_contingency(df)
-chi2
-</code></pre></div></div>
-<p>chi2의 첫번째 값 : chi suare, 두번째 값 : p-value<br />
-만약 p-value가 0.05아래라면 신뢰도 95%에서 귀무가설은 기각, 품질과 색상은 관련이 있다.<br />
-만약 큰 값을 가진다면 품질과 색상은 독립적이다.</p>
-
-<blockquote>
-  <p>동질성 검정 (이원카이제곱)</p>
-</blockquote>
-
-<p>두 표본이 같은 모집단에서 나온 것인지 아닌지 판단할 수 있는지 검정<br />
-이는 위 독립성 검정의 방법을 그대로 따라하되<br />
-그 데이터가 어떤 구성인지의 차이 + 해석의 차이를 두면 된다.</p>
-
-<p>좋은 예시가 있어서 가져와봤다. (출처 : https://hsm-edu.tistory.com/1213)<br />
-<img src="/assets/images/source_8.png" width="50%" height="50%" title="제목" alt="아무거나" />
-<img src="/assets/images/source_9.png" width="50%" height="50%" title="제목" alt="아무거나" /></p>
-
-<p>위와 아래의 차이는 아무런 코멘트가 없다면 ‘모른다’가 정답이다.<br />
-그러나 위 데이터는, 한번에 200명의 표본을 추출한것이고.<br />
-아래 데이터는 모집단에서 A 데이터 100명과 B 데이터 100명을 추출했다고 하면 차이가 느껴질 것이다.</p>
-
-<p>위 데이터에서 이원카이제곱을 한다면<br />
-귀무가설 : 성별과 흡연유무는 독립적이다.</p>
-
-<p>아래 데이터에서 이원카이제곱을 한다면<br />
-귀무가설 : A데이터와 B데이터는 다른 모집단에서 왔다. (독립적이다.)</p>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[가설 검정? ‘서울시는 사람이 많이 산다.’ 는 사실확인이 가능할까? 안된다. ‘많이’는 너무 주관적이기 때문이다. 그렇지만 ‘사람의 머리카락은 평균 11만 가닥이다.’ 는 사실확인을 할 수 있을까? 데이터 직군에서는 이를 통계학을 기반으로하여 p value 값을 통해 ‘통계적으로 유의하다.’ or ‘통계적으로 유의하지않다’ 를 결정한다. (고 약속했다.)]]></summary></entry><entry><title type="html">단순선형회귀, 회귀의 평가지표 그리고, 모델의 적합</title><link href="http://localhost:4000/something_else/regression/" rel="alternate" type="text/html" title="단순선형회귀, 회귀의 평가지표 그리고, 모델의 적합" /><published>2022-01-21T00:00:00+09:00</published><updated>2022-02-12T00:00:00+09:00</updated><id>http://localhost:4000/something_else/regression</id><content type="html" xml:base="http://localhost:4000/something_else/regression/"><![CDATA[<h2 id="선형회귀">선형회귀</h2>
-<blockquote>
-  <p>엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다.<br />
-이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다.<br />
-y는 실제값(관측값, 측정값)     y^는 예측값 즉 ax+b, y평균은 y전체의 평균.<br />
-<img width="677" alt="image" src="https://user-images.githubusercontent.com/84547813/150494749-1be8815a-3e36-416c-9ff7-62370f5c540f.png" /></p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 라이브러리 import
-from sklearn.linear_model import LinearRegression
-
-# 데이터 정의
-df = '타겟을 포함한 데이터 프레임'
-df_test = '타겟 미포함 "테스트" 데이터 프레임'
-
-# 모델 클래스 정의
-model = LinearRegression()
-
-# feature, target 정의
-feature = ['feature_name']
-target = ['target_name']
-X_train = df[feature]
-y_train = df[target]
-
-# 모델 학습
-model.fit(X_train, y_train)
-
-# 예측값.
-X_test = [[x] for x in df_test['feature_name']]
-y_pred = model.predict(X_test)
-
-# 계수확인
-print('절편', model.intercept_)
-print('계수(여러개일 수 있기때문에 array)', model.coef_)
-
-# 시각화.
-import matplotlib.pyplot as plt
-## train 데이터에 대한 그래프를 검정색 점으로.
-plt.scatter(X_train, y_train, color='black', linewidth=1)
-
-## test 데이터에 대한 예측을 파란색 점으로.
-plt.scatter(X_test, y_pred, color='blue', linewidth=1);
-</code></pre></div></div>
-
-<h2 id="다중선형회귀">다중선형회귀</h2>
-<blockquote>
-  <p>x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. <br />
-그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까?<br />
-위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만<br />
-ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다.<br />
-<img width="102" alt="image" src="https://user-images.githubusercontent.com/84547813/150503177-644087c1-f1a0-4bb3-bc41-203cb552d7ec.png" /></p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일)
-
-# feature, target 정의
-feature = ['feature_name_1', 'feature_name_2 ]
-target = ['target_name']
-X_train = df[feature]
-y_train = df[target]
-
-# 나머지는 동일!!
-</code></pre></div></div>
-
-<h2 id="평가지표">평가지표</h2>
-<blockquote>
-  <p>MSE (Mean Square Error),<br />
-MAE(Mean Absolute Error),<br />
-RMS or RMSE (Root Mean Square Error)<br />
-R-score</p>
-</blockquote>
-
-<h2 id="과적합--과소적합">과적합 &amp; 과소적합</h2>
-<p><strong>편향</strong>은 잘못된 가정을 했을 때 발생하는 오차,<br />
-<strong>과소적합</strong> 문제를 야기.<br />
-<strong>분산</strong>은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜 <br />
-<strong>과적합</strong> 문제 야기.<br />
-<img src="/assets/images/source_17.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
-
-<p>분산과 편향은 트레이드오프(trade-off)관계이다.<br />
-예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다.<br />
-고편향은 지나친 일반화를 하여 과소적합이 되는 것.<br />
-즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다. <br />
-<img src="/assets/images/source_18.png" width="40%" height="40%" title="제목" alt="아무거나" /></p>
-
-<p>위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능.<br />
-즉, 가로축은 고편향에서 고분산으로 향한다.</p>
-
-<p>복잡도 up! -&gt; 트레이닝셋 score up!<br />
-너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.)<br />
-best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것.</p>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[선형회귀 엑셀에서 점들의 추세선을 그어본적이 있다. 거기서 R값을 표시할 수도 있었는데, 이게 단순 선형회귀의 예시가 아닌가 싶다. 이 또한, 머신러닝이다. 특정 평가지표가 최소가 되도록 모델에 학습데이터를 fit을 시켜주는 데, 평가지표의 종류는 아래와 같다. y는 실제값(관측값, 측정값) y^는 예측값 즉 ax+b, y평균은 y전체의 평균. # 라이브러리 import from sklearn.linear_model import LinearRegression # 데이터 정의 df = '타겟을 포함한 데이터 프레임' df_test = '타겟 미포함 "테스트" 데이터 프레임' # 모델 클래스 정의 model = LinearRegression() # feature, target 정의 feature = ['feature_name'] target = ['target_name'] X_train = df[feature] y_train = df[target] # 모델 학습 model.fit(X_train, y_train) # 예측값. X_test = [[x] for x in df_test['feature_name']] y_pred = model.predict(X_test) # 계수확인 print('절편', model.intercept_) print('계수(여러개일 수 있기때문에 array)', model.coef_) # 시각화. import matplotlib.pyplot as plt ## train 데이터에 대한 그래프를 검정색 점으로. plt.scatter(X_train, y_train, color='black', linewidth=1) ## test 데이터에 대한 예측을 파란색 점으로. plt.scatter(X_test, y_pred, color='blue', linewidth=1); 다중선형회귀 x에 대해서 y의 추세선을 그으면 단순선형회귀, x와 y에 대해서 z의 추세선을 그으면 다중선형회귀가 될 것이다. 그렇다면 4개이상 n개의 특성(feature)에 대해서 target의 추세선을 그릴 수 있을까? 위 평가지표(MSE, MAE, R square)에서 예측값 y^ 는 ax+b일수도 있지만 ax+bw+c의 형태로도 될 수있고 일반화하면 아래와 같다. # 위 단순 선형회귀에서 X만 여러개 넣어주면 된다! (model도 동일) # feature, target 정의 feature = ['feature_name_1', 'feature_name_2 ] target = ['target_name'] X_train = df[feature] y_train = df[target] # 나머지는 동일!! 평가지표 MSE (Mean Square Error), MAE(Mean Absolute Error), RMS or RMSE (Root Mean Square Error) R-score 과적합 &amp; 과소적합 편향은 잘못된 가정을 했을 때 발생하는 오차, 과소적합 문제를 야기. 분산은 트레이닝 셋의 복잡도에 의해 발생하는 오차, 큰 노이즈 까지 모델링에 포함시켜 과적합 문제 야기. 분산과 편향은 트레이드오프(trade-off)관계이다. 예를 들어, 고분산 모델은 트레이닝 셋의 특성을 잘 담는다고도 할 수 있지만, 일반화에 실패했다고도 할 수 있다. 고편향은 지나친 일반화를 하여 과소적합이 되는 것. 즉 적절한 일반화는 편향과 분산의 적절한 분배를 의미하기도 한다. 위 표에서 가로축은 모델의 복잡도, 세로축은 score 성능. 즉, 가로축은 고편향에서 고분산으로 향한다. 복잡도 up! -&gt; 트레이닝셋 score up! 너무 복잡해지면 고분산, 즉 과적합 ( 트레이닝셋에만 과하게 학습됨.) best model은 트레이닝셋과 독립적인 검증데이터에서 의 score로 찾아야 할 것. 🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄 맨 위로 이동하기]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[pandas document]]></summary></entry></feed>

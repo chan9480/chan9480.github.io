@@ -1,0 +1,103 @@
+I"�
+<!-- 공백이 포함되어 있는 카테고리 이름의 경우 site.categories['a b c'] 이런식으로! -->
+
+<hr />
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/encoding/">데이터 인코딩(encoding)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.06
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/random_forest/">랜덤포레스트(Random Forest)와 ...</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.28
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/decision_tree/">파이프라인(PipeLine)과 결정트리모델(Decision Tree)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.26
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/ridge_logistic/">Ridge 회귀와 로지스틱 회귀</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/pca/">정규화, 표준화 그리고 PCA</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.20
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/Data/">데이터 다루기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.12
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/image/">openCV 이미지 읽기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.11.18
+              
+            </small>
+        </div>
+      </article>
+</div>
+:ET

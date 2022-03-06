@@ -1,0 +1,877 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>데이터 인코딩(encoding) - 배우자 그리고 써먹자</title>
+<meta name="description" content="인코딩은 왜 하는거? 데이터에는 연속적인 숫자만 있는게 아니다. 문자열의 카테고리형 feature일 수도, 숫자라 하더라도 비연속적인 카테고리형 feature도 있다. (예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”)) ">
+
+
+  <meta name="author" content="옹달샘👱🏼‍♂️">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="배우자 그리고 써먹자">
+<meta property="og:title" content="데이터 인코딩(encoding)">
+<meta property="og:url" content="http://localhost:4000/ds/encoding/">
+
+
+  <meta property="og:description" content="인코딩은 왜 하는거? 데이터에는 연속적인 숫자만 있는게 아니다. 문자열의 카테고리형 feature일 수도, 숫자라 하더라도 비연속적인 카테고리형 feature도 있다. (예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”)) ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-03-06T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2022-03-06T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/ds/encoding/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "옹달샘🙉",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="배우자 그리고 써먹자 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          배우자 그리고 써먹자
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#ds" itemprop="item"><span itemprop="name">Ds</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">데이터 인코딩(encoding)</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/my-cat.jpg" alt="옹달샘👱🏼‍♂️" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">옹달샘👱🏼‍♂️</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:chan9480@hanyang.ac.kr" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">19</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">Data</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ds" class="">Data_science (7)</a></li>
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/de" class="">Data_engineering (1)</a></li>
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/Something_else" class="">Something_else (7)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">Mini_Projects</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/pj" class="">미니프로젝트 (3)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">example</span>
+            <ul>
+                
+                    
+                        <li><a href="/categories/example_sub" class="">Example_sub (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="데이터 인코딩(encoding)">
+    <meta itemprop="description" content="인코딩은 왜 하는거?데이터에는 연속적인 숫자만 있는게 아니다.문자열의 카테고리형 feature일 수도,숫자라 하더라도 비연속적인 카테고리형 feature도 있다.(예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))">
+    <meta itemprop="datePublished" content="2022-03-06T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2022-03-06T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">데이터 인코딩(encoding)
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2022-03-06T00:00:00+09:00">2022.03.06</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-06">2022.03.06</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#ds" class="page__taxonomy-item-category" rel="tag">ds</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#인코딩은-왜-하는거">인코딩은 왜 하는거?</a></li>
+  <li><a href="#인코딩의-종류와-간단-정리">인코딩의 종류와 간단 정리</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="인코딩은-왜-하는거">인코딩은 왜 하는거?</h2>
+<p>데이터에는 연속적인 숫자만 있는게 아니다.<br />
+문자열의 카테고리형 feature일 수도,<br />
+숫자라 하더라도 비연속적인 카테고리형 feature도 있다.<br />
+(예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))</p>
+
+<p>인코딩은 이러한 카테고리형 feature들에 대하여 ‘데이터’로써 유의미하도록 숫자로 바꿔주는 역할을 한다.</p>
+
+<h2 id="인코딩의-종류와-간단-정리">인코딩의 종류와 간단 정리</h2>
+<ol>
+  <li>
+    <p>One Hot Encoding<br />
+하나의 feature가 갖는 범주 전체에 대하여 ‘이다’, ‘아니다’로 분류하여 0, 1을 갖는 feature를 생성.</p>
+  </li>
+  <li>Label Encoding</li>
+  <li>Ordinal Encoding</li>
+  <li>Helmert Encoding</li>
+  <li>Binary Encoding</li>
+  <li>Frequency Encoding</li>
+  <li>Mean Encoding</li>
+  <li>Weight of Evidence Encoding</li>
+  <li>Probability Ratio Encoding</li>
+</ol>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">ds</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/de/crawling/" class="pagination--pager" title="크롤링(Crawling)
+">이전</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/ds/random_forest/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>랜덤포레스트(Random Forest)와 ...</a>
+    
+    
+      <a href="#" class="pagination_prev_next--pager disabled-last-child ">가장 최근 글입니다</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%EB%8D%B0%EC%9D%B4%ED%84%B0+%EC%9D%B8%EC%BD%94%EB%94%A9%28encoding%29%20http%3A%2F%2Flocalhost%3A4000%2Fds%2Fencoding%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fds%2Fencoding%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fds%2Fencoding%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/de/crawling/">크롤링(Crawling)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.05
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/_classfication_metrics/">이진분류의 평가지표</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.02
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/random_forest/">랜덤포레스트(Random Forest)와 ...</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.28
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/decision_tree/">파이프라인(PipeLine)과 결정트리모델(Decision Tree)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.26
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/feature_Selection_Extraction/">특성 선택과 특성 추출</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/ridge_logistic/">Ridge 회귀와 로지스틱 회귀</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/Credit_Card_Cluster/">신용카드 데이터로 k-means-cluster, pca 연습 </a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#cluster" class="page__taxonomy-item-tag" rel="tag">cluster</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#pca" class="page__taxonomy-item-tag" rel="tag">pca</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/pca/">정규화, 표준화 그리고 PCA</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.20
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/Data/">데이터 다루기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.12
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/hypoo/">가설검정</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.11
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 옹달샘🙉. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'chan9480/chan9480.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>

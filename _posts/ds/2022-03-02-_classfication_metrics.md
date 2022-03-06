@@ -74,9 +74,6 @@ AOC는 클수록 좋은 모델인 것은 사실이다.
 <img src="/assets/images/source_25.png" width="30%" height="30%" title="제목" alt="아무거나"/>  
 
 
-## test_제목 2
-test2 목차 테스트 입니다.  
-
 
 <br>
 
