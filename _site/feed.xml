@@ -1,4 +1,87 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-06T17:01:48+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">데이터 인코딩(encoding)</title><link href="http://localhost:4000/ds/encoding/" rel="alternate" type="text/html" title="데이터 인코딩(encoding)" /><published>2022-03-06T00:00:00+09:00</published><updated>2022-03-06T00:00:00+09:00</updated><id>http://localhost:4000/ds/encoding</id><content type="html" xml:base="http://localhost:4000/ds/encoding/"><![CDATA[<h2 id="인코딩은-왜-하는거">인코딩은 왜 하는거?</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-15T01:36:29+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">사람얼굴에 스타일 바꿔보기</title><link href="http://localhost:4000/pj/stylegan/" rel="alternate" type="text/html" title="사람얼굴에 스타일 바꿔보기" /><published>2022-03-10T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/pj/stylegan</id><content type="html" xml:base="http://localhost:4000/pj/stylegan/"><![CDATA[<h2 id="목표">목표</h2>
+<p>임의의 초상권 없는 얼굴을 특정 스타일을 입혀 만들기.</p>
+
+<h2 id="방법">방법</h2>
+<p>임시로 생성한 사람얼굴(실존x) 이미지에 원하는 특정 스타일을 가진 사람(실존o)의 이미지를 적용하여 새롭게 생성.</p>
+
+<ol>
+  <li>styleGAN2-ada 모델의 ffhq preTrained 가중치를 사용하여 얼굴생성.</li>
+  <li>원하는 스타일의 사람사진의 스타일 벡터들을 추출 (PSP 모델의 일부 사용)</li>
+  <li>1번에서 생성한 이미지를 inversion하여 다시 이미지를 생성하는 과정에서 2번의 스타일 벡터들을 inject하여 최종 생성.</li>
+</ol>
+
+<p><img src="/assets/images/source_26.png" width="100%" height="60%" title="제목" alt="아무거나" /></p>
+
+<h2 id="stylegan2---ada-간단-요약">StyleGAN2 - ada 간단 요약</h2>
+<p>GAN (latent vector로 부터 이미지 생성) 모델 중에서<br />
+styleGAN (latent vector를 style 별로 생성된 여러 w-vector로 만들어 이미지 생성) 이 있다.</p>
+
+<p>ada는 데이터 증강기법(적은 데이터로 다양한 데이터생성, 일반화 효과 + 데이터 수 늘리는 효과)</p>
+
+<h2 id="psppixel2style2pixel-간단-요약">PSP(pixel2style2pixel) 간단 요약</h2>
+<p>구조를 두 부분으로 나눌 수 있는데,</p>
+<ol>
+  <li>psp encoder : 이미지를 매핑하여 w-vector를 생성함.</li>
+  <li>styleGAN generator  : w-vector를 사용하여 이미지를 생성(styleGAN 방식과 같이 해상도를 올리면서 이미지 생성.)</li>
+</ol>
+
+<p>이 구조를 이용해서 여러 기능으로 사용가능 (ffhq_encode, celeb_seg_to_face, toonify 등)</p>
+
+<h2 id="test-이미지">test 이미지</h2>
+<p>styleGAN2-ada, ffhq-pretrained 로 생성한 이미지 들<br />
+<img src="/assets/images/project/test_img0.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/test_img10.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/test_img19.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/test_img4.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/test_img12.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/test_img16.png" width="20%" height="60%" title="제목" alt="아무거나" /></p>
+
+<h2 id="결과-이미지">결과 이미지</h2>
+<blockquote>
+  <p>스타일이미지</p>
+</blockquote>
+
+<p><img src="/assets/images/project/단발.png" width="20%" height="60%" title="제목" alt="아무거나" /></p>
+<blockquote>
+  <p>결과 이미지<br />
+순서대로 <strong>“스타일 적용전”</strong> ::::::: <strong>“w벡터 중 랜덤으로 1 개만 적용”</strong> ::::::: <strong>“모든 w벡터를 적용한 경우”</strong></p>
+</blockquote>
+
+<p><img src="/assets/images/project/test_img0.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/0/mask_some.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/0/mask_all.png" width="20%" height="60%" title="제목" alt="아무거나" /></p>
+
+<p><img src="/assets/images/project/test_img10.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/10/mask_some.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/10/mask_all.png" width="20%" height="60%" title="제목" alt="아무거나" /></p>
+
+<p><img src="/assets/images/project/test_img19.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/19/mask_some.png" width="20%" height="60%" title="제목" alt="아무거나" />
+<img src="/assets/images/project/19/mask_all.png" width="20%" height="60%" title="제목" alt="아무거나" /></p>
+
+<h2 id="결론">결론</h2>
+
+<p>결과를 해석하자면</p>
+<ol>
+  <li>스타일이미지의 얼굴형, 머리스타일 등에 원본이미지의 눈코입, 피부 등을 적용시켜 이미지를 생성한다.</li>
+  <li>랜덤한 w벡터를 적용했을 때, 스타일 이미지의 정확히 어떤 특징을 담은 w벡터가 적용된 것인지 알기 힘들다..<br />
+(물론 스타일이미지와 무언가 닮아지긴 한다.)</li>
+</ol>
+
+<p>성공적인가의 여부는 스타일 이라는 애매한 단어에 어떤 걸 포함시키느냐에 따라 해석이 다를 것 같다.<br />
+얼굴형, 머리스타일을 ‘스타일’이라고 한다면, 성공에 가깝다고 볼 수 있겠다!<br />
+다만 원하는 스타일(머리스타일, 얼굴형 중 하나를 택하고 싶은 경우)을 적용하는데에는 실험적인 시도가 필요해 보인다.</p>
+
+<h2 id="레포지토리-링크">레포지토리 링크</h2>
+<p><a href="https://github.com/chan9480/Style_image_GAN">https://github.com/chan9480/Style_image_GAN</a></p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="pj" /><category term="styleGAN2" /><category term="PSP" /><summary type="html"><![CDATA[목표 임의의 초상권 없는 얼굴을 특정 스타일을 입혀 만들기.]]></summary></entry><entry><title type="html">데이터 인코딩(encoding)</title><link href="http://localhost:4000/ds/encoding/" rel="alternate" type="text/html" title="데이터 인코딩(encoding)" /><published>2022-03-06T00:00:00+09:00</published><updated>2022-03-06T00:00:00+09:00</updated><id>http://localhost:4000/ds/encoding</id><content type="html" xml:base="http://localhost:4000/ds/encoding/"><![CDATA[<h2 id="인코딩은-왜-하는거">인코딩은 왜 하는거?</h2>
 <p>데이터에는 연속적인 숫자만 있는게 아니다.<br />
 문자열의 카테고리형 feature일 수도,<br />
 숫자라 하더라도 비연속적인 카테고리형 feature도 있다.<br />
@@ -10,9 +93,12 @@
 <ol>
   <li>
     <p>One Hot Encoding<br />
-하나의 feature가 갖는 범주 전체에 대하여 ‘이다’, ‘아니다’로 분류하여 0, 1을 갖는 feature를 생성.</p>
+하나의 feature가 갖는 범주 전체에 대하여 ‘이다’, ‘아니다’로 분류하여 0, 1을 갖는 feature를 생성.<br />
+(사는지역의 종류가 “수유동”, “인수동” 등 16개의 동이 있다면, 16개의 feature (사는지역_수유동… 등)</p>
   </li>
-  <li>Label Encoding</li>
+  <li>
+    <p>Label Encoding</p>
+  </li>
   <li>Ordinal Encoding</li>
   <li>Helmert Encoding</li>
   <li>Binary Encoding</li>
@@ -1199,109 +1285,4 @@ extracted_df = pd.DataFrame(pca.fit_transform(features), columns=['PC1', 'PC2'])
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[정규화와 표준화 정규화 (normalization)]]></summary></entry><entry><title type="html">데이터 다루기</title><link href="http://localhost:4000/ds/Data/" rel="alternate" type="text/html" title="데이터 다루기" /><published>2022-02-12T00:00:00+09:00</published><updated>2022-02-25T00:00:00+09:00</updated><id>http://localhost:4000/ds/Data</id><content type="html" xml:base="http://localhost:4000/ds/Data/"><![CDATA[<h2 id="pandas-document">pandas document</h2>
-
-<p>pandas 의 모든것이 들어있는 공식문서<br />
-https://pandas.pydata.org/docs/reference/index.html</p>
-
-<h2 id="dataframe-">DataFrame ?</h2>
-
-<p>데이터프레임을 먼저 알아야 하는데, 열(특성)과 행(단일데이터) 들로 이루어진 2차원 표라고 생각하면 된다.</p>
-
-<h2 id="데이터-불러오기">데이터 불러오기</h2>
-<blockquote>
-  <p>csv 불러오기</p>
-</blockquote>
-
-<p>정확히는 csv 파일을 dataFrame의 객체타입으로 변환하는 것</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
-path = #csv의 경로
-df = pd.read_csv(path)
-#tsv 파일이라면 comma(',')로 구분되는 것이 아닌 tab('\t')으로 구분되기때문에 sep을 설정해줘야함.
-df = pd.read_csv(path, sep='\t')
-
-#csv 파일의 첫번째 줄은 feature의 이름인 경우가 많다. 그땐 index_col=0 으로 하면 0번째 행을 설정하는것
-df = pd.read_csv(path, index_col=0)
-
-# 내가 딱 필요한 feature를 정해서 불러온다. 아주 애용한다.
-df = pd.read_csv(path, usecols=['A', 'B'])  
-
-# skiprows를 이용하면 1,2번째 행은 제외할 수 있다.
-df = pd.read_csv(path, skiprows = [1, 2])
-
-# nrows를 5로 하면 위에서 5개 데이터만 불러온다.
-df = pd.read_csv(path, nrows = 5)
-
-#na_values를 이용해서 결측값을 제외하고 부를 수 있지만 dataframe의 내장함수를 사용하는 걸 개인적으로 선호한다.
-df = pd.read_csv(path, na_values = [0, '?', 'N/A', 'NA', 'nan', 'NaN', 'null'])
-</code></pre></div></div>
-
-<h2 id="데이터-프레임-객체의-기본-내장함수">데이터 프레임 객체의 기본 내장함수</h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
-df = pd.dataFrame(data)
-
-# 데이터프레임 모양확인
-df.shape
-
-# 데이터 타입 확인
-df.dtypes
-
-# 인덱스 객체 반환 (인덱스는 각 행들의 이름)
-df.index
-
-# features 의 인덱스 객체 반환
-df.columns
-
-# 전치형태의 데이터프레임객체 반환 (전치는 행열 반전)
-df.T
-
-# 결측치 처리
-df.fillna(0, inplace=True)  # 이 예시에서 결측치는 0으로 처리 및, inplace (default=false) 가 True이면 df원본을 손실하고 바로 변경된다. (false이면 결측치 처리된 df 수정본을 return할 뿐.)
-
-# 컬럼 별 결측치 확인
-df.isnull().sum()
-
-# 요약통계량 확인
-# count : 데이터의 수, mean/std : 평균/표준편차,  min/max : 최소/최대, 25%등 : 백분위수
-df.describe()
-
-# 각 feature들이 어떻게 분포되어있는지 한번에 확인가능!! *****
-from pandas_profiling import ProfileReport
-df.profile_report()
-</code></pre></div></div>
-<h2 id="데이터-프레임의-데이터-슬라이싱">데이터 프레임의 데이터 슬라이싱</h2>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 열접근
-df.NAME
-df['NAME'] # 둘은 같은 결과를 도출한다.
-
-# loc 사용
-# feature의 '이름' 으로 추출
-df.loc[:,['NAME','GENDER']]
-
-# iloc 사용
-# 행과 열의 번호(순서)로 추출
-df.iloc[2:4, 0:3]     # 이 예시에서 2이상 4미만 행, 0이상 3미만의 열을 추출
-
-# 조건부 슬라이싱
-df[df.GENDER == 'M']  # 이 예시에서 'GENDER' 라는 features 가 'M'인 행들을 추출
-</code></pre></div></div>
-
-<h2 id="feature-engineering">feature engineering</h2>
-<p>데이터들을 변형시키거나 특성들간 함수처리를 통해 내가 원하는 특성을 만들어내보자</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># apply (중요!)
-df.apply(함수)              # 여기서 함수는 파이썬 내장함수일 수도, 사용자 정의함수일 수도 있다. lambda도 사용 가능
-df.apply(lambda x: x+1)                     #lambda사용 예시 모든 데이터에 1을 더하겠다.
-df['AGE'] = df['AGE'].apply(lambda x:x+1)   # 모든 AGE에 1을더한걸 원본df에도 적용하겠다.
-
-# 특성간 계산
-df['GENDER_AGE'] = df['GENDER'] + df['AGE'].apply(str)  # GENDER가 'M'이고 나이가 23 이면 GENDER_AGE라는 feature는 'M23'을 가짐.
-</code></pre></div></div>
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[pandas document]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[정규화와 표준화 정규화 (normalization)]]></summary></entry></feed>
