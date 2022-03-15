@@ -1,0 +1,47 @@
+I"R<h2 id="인코딩은-왜-하는거">인코딩은 왜 하는거?</h2>
+<p>데이터에는 연속적인 숫자만 있는게 아니다.<br />
+문자열의 카테고리형 feature일 수도,<br />
+숫자라 하더라도 비연속적인 카테고리형 feature도 있다.<br />
+(예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))</p>
+
+<p>인코딩은 이러한 카테고리형 feature들에 대하여 ‘데이터’로써 유의미하도록 숫자로 바꿔주는 역할을 한다.</p>
+
+<h2 id="인코딩의-종류와-간단-정리">인코딩의 종류와 간단 정리</h2>
+<ol>
+  <li>One Hot Encoding<br />
+하나의 feature가 갖는 범주 전체에 대하여 ‘이다’, ‘아니다’로 분류하여 0, 1을 갖는 feature를 생성.<br />
+(사는지역의 종류가 “수유동”, “쌍문동” 등 16개의 동이 있다면, 16개의 feature (사는지역_수유동, 사는지역_쌍문동… 등)
+~~~
+pd.get_dummies(df, prefix=[“지역”], columns=[“사는지역”])</li>
+</ol>
+
+<h1 id="또는-아래처럼-sklernpreprocessing의-함수-사용">또는 아래처럼 sklern.preprocessing의 함수 사용</h1>
+
+<p>from sklearn.preprocessing import OneHotEncoder
+~~~</p>
+
+<ol>
+  <li>Ordinal Encoding
+categorical_feature의 값들이 어떤 <strong>‘순서’</strong>를 갖고있을 때 사용한다.<br />
+(‘매우 그렇다’, ‘그렇다’, ‘보통’, ‘아니다’, ‘매우 아니다’) 같은거!</li>
+</ol>
+
+<p>3.</p>
+
+<ol>
+  <li>Helmert Encoding</li>
+  <li>Binary Encoding</li>
+  <li>Frequency Encoding</li>
+  <li>Mean Encoding</li>
+  <li>Weight of Evidence Encoding</li>
+  <li>Probability Ratio Encoding</li>
+</ol>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

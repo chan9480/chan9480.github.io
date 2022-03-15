@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-15T01:36:29+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">사람얼굴에 스타일 바꿔보기</title><link href="http://localhost:4000/pj/stylegan/" rel="alternate" type="text/html" title="사람얼굴에 스타일 바꿔보기" /><published>2022-03-10T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/pj/stylegan</id><content type="html" xml:base="http://localhost:4000/pj/stylegan/"><![CDATA[<h2 id="목표">목표</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-16T04:12:02+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">사람얼굴에 스타일 바꿔보기</title><link href="http://localhost:4000/pj/stylegan/" rel="alternate" type="text/html" title="사람얼굴에 스타일 바꿔보기" /><published>2022-03-10T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/pj/stylegan</id><content type="html" xml:base="http://localhost:4000/pj/stylegan/"><![CDATA[<h2 id="목표">목표</h2>
 <p>임의의 초상권 없는 얼굴을 특정 스타일을 입혀 만들기.</p>
 
 <h2 id="방법">방법</h2>
@@ -90,22 +90,88 @@ styleGAN (latent vector를 style 별로 생성된 여러 w-vector로 만들어 �
 <p>인코딩은 이러한 카테고리형 feature들에 대하여 ‘데이터’로써 유의미하도록 숫자로 바꿔주는 역할을 한다.</p>
 
 <h2 id="인코딩의-종류와-간단-정리">인코딩의 종류와 간단 정리</h2>
+<p>본래 데이터<br />
+<img src="/assets/images/source_27.png" width="30%" height="60%" title="제목" alt="아무거나" /></p>
+
 <ol>
-  <li>
-    <p>One Hot Encoding<br />
+  <li>One Hot Encoding<br />
 하나의 feature가 갖는 범주 전체에 대하여 ‘이다’, ‘아니다’로 분류하여 0, 1을 갖는 feature를 생성.<br />
-(사는지역의 종류가 “수유동”, “인수동” 등 16개의 동이 있다면, 16개의 feature (사는지역_수유동… 등)</p>
+(사는지역의 종류가 “수유동”, “쌍문동” 등 16개의 동이 있다면, 16개의 feature (사는지역_수유동, 사는지역_쌍문동… 등)
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pd.get_dummies(df, prefix=["지  "], columns=["사는지역"])
+#또는 아래처럼 sklern.preprocessing의 함수 사용
+from sklearn.preprocessing import OneHotEncoder
+</code></pre></div>    </div>
+    <p><img src="/assets/images/source_28.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
+  </li>
+  <li>Ordinal Encoding
+categorical_feature의 값들이 어떤 <strong>‘순서’</strong>를 갖고있을 때 사용한다.<br />
+(‘매우 그렇다’, ‘그렇다’, ‘보통’, ‘아니다’, ‘매우 아니다’) 같은거!
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.preprocessing import OrdinalEncoder
+enc = OrdinalEncoder(categories = [['불만족', '보통', '만족']])
+df['선호도_enc']=enc.fit_transform(df[['선호도']])
+</code></pre></div>    </div>
+    <p><img src="/assets/images/source_29.png" width="20%" height="60%" title="제목" alt="아무거나" /></p>
+  </li>
+  <li>Binary Encoding
+OneHotEncoding의 이진수 버전이라고 이해했다.<br />
+사는지역의 종류가 16개의 동이 있다면. 4자리 이진수로 표현이 가능하므로 <strong>4개의 feature를 생성</strong> 한다.(cardinality가 너무 큰 특성에 대해서 사용하면 장점일 듯!)<br />
+‘수유동은’ 4개의 feature에 0이나 1이 채워져 0000부터 1111중 하나의 형태를 가질 것!
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import category_encoders as ce
+encoder = ce.BinaryEncoder(cols=['사는지역'])
+dfbin = encoder.fit_transform(df['사는지역'])
+df = pd.concat([df, dfbin], axis=1)
+df.drop(['선호도','성별(1남, 0여)'], axis=1)
+</code></pre></div>    </div>
+    <p><img src="/assets/images/source_30.png" width="30%" height="60%" title="제목" alt="아무거나" /></p>
+  </li>
+  <li>Frequency Encoding
+빈도로써 표현하는 방법<br />
+‘수유동’이 10개 데이터중 2번있다면 0.2로 매핑됨.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Frequency Encoding
+fe = df.groupby("사는지역").size()/len(df)
+df.loc[:, "사는지역_freq_encode"] = df["사는지역"].map(fe)
+df
+</code></pre></div>    </div>
+    <p><img src="/assets/images/source_31.png" width="30%" height="60%" title="제목" alt="아무거나" /></p>
   </li>
   <li>
-    <p>Label Encoding</p>
+    <p>Mean Encoding<br />
+여기부터는 지도학습에만 해당하는 내용이라고 생각한다. <strong>‘target’</strong> 이 존재할 때만 가능하기 때문!<br />
+어떻게 인코딩을 시킬 지를 ‘타겟의 평균값’에 따라 결정한다.</p>
+
+    <p>먼저, 단순하게 target의 평균자체로 매핑을 하는 방법이 있는데,<br />
+(target을 gender라 하면, 수유동에사는 사람들의 target평균을 수유동의 인코딩 매핑값으로 삼는다.)<br />
+과적합이 되기 쉽다.<br />
+————————————————————————————–</p>
+
+    <p>두번째로, smoothing mean target encoding은 과적합을 좀더 방지한다.<br />
+(수유동 사람들의 target평균 / weight) + (전체 target평균 / 수유동의 갯수)<br />
+ 의미 : weight로 개별평균을 분산시켜주고, 수유동의 갯수가 클수록 수유동평균에 힘을, 수유동 갯수가 적다면 전체평균의 힘을 실어준다.<br />
+weight가 클수록 편차가 작아진다!</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> # smoothing target encoding
+ # 1. 평균을 계산
+ mean = df['성별(1남, 0여)'].mean()
+ # 2. 각 그룹에 대한 값들의 빈도와 평균을 계산
+ Agg = df.groupby('사는지역')['성별(1남, 0여)'].agg(['count', 'mean'])
+ counts = Agg['count']
+ means = Agg['mean']
+ weight = 10
+ # 3. “smooth”한 평균을 계산
+ smooth = (counts * means + weight * mean) / (counts + weight)
+ # smooth한 평균에 따라 각 값을 대체하는 것
+ print(smooth)
+ df.loc[:, '사는지역_smean_enc'] = df['사는지역'].map(smooth)
+ df
+</code></pre></div>    </div>
+    <p><img src="/assets/images/source_32.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
   </li>
-  <li>Ordinal Encoding</li>
-  <li>Helmert Encoding</li>
-  <li>Binary Encoding</li>
-  <li>Frequency Encoding</li>
-  <li>Mean Encoding</li>
-  <li>Weight of Evidence Encoding</li>
-  <li>Probability Ratio Encoding</li>
+  <li>Probability Ratio Encoding (확률비율 인코딩)<br />
+(target이 1인 확률 / target이 0인 확률) 의 비율로 매핑을 하는 방법이다.<br />
+주의할 점은 0으로나뉘는걸 꼭 방지하자!  <br />
+(예 : ‘수유동’들 중에 target이 1인갯수는 3개, 0인갯수는 1개라면, ‘수유동’은 3으로 매핑됨.)</li>
+  <li>Weight of Evidence Encoding<br />
+위 PRE의 비율에 log_2를 취하고 weight을 곱해준 것으로 인코딩하는 방법.<br />
+(6번 인코딩 예시에서 ‘수유동’은 w*ln(3)의 값으로 매핑 될 것.)</li>
 </ol>
 
 <p><br /></p>

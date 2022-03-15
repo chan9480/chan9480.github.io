@@ -1,0 +1,65 @@
+I"<h2 id="인코딩은-왜-하는거">인코딩은 왜 하는거?</h2>
+<p>데이터에는 연속적인 숫자만 있는게 아니다.<br />
+문자열의 카테고리형 feature일 수도,<br />
+숫자라 하더라도 비연속적인 카테고리형 feature도 있다.<br />
+(예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))</p>
+
+<p>인코딩은 이러한 카테고리형 feature들에 대하여 ‘데이터’로써 유의미하도록 숫자로 바꿔주는 역할을 한다.</p>
+
+<h2 id="인코딩의-종류와-간단-정리">인코딩의 종류와 간단 정리</h2>
+<ol>
+  <li>One Hot Encoding<br />
+하나의 feature가 갖는 범주 전체에 대하여 ‘이다’, ‘아니다’로 분류하여 0, 1을 갖는 feature를 생성.<br />
+(사는지역의 종류가 “수유동”, “쌍문동” 등 16개의 동이 있다면, 16개의 feature (사는지역_수유동, 사는지역_쌍문동… 등)
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pd.get_dummies(df, prefix=["지  "], columns=["사는지역"])
+#또는 아래처럼 sklern.preprocessing의 함수 사용
+from sklearn.preprocessing import OneHotEncoder
+</code></pre></div>    </div>
+  </li>
+  <li>Ordinal Encoding
+categorical_feature의 값들이 어떤 <strong>‘순서’</strong>를 갖고있을 때 사용한다.<br />
+(‘매우 그렇다’, ‘그렇다’, ‘보통’, ‘아니다’, ‘매우 아니다’) 같은거!
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.preprocessing import OrdinalEncoder
+enc = OrdinalEncoder(categories = [['불만족', '보통', '만족']])
+df['선호도']=enc.fit_transform(df[['선호도']])
+</code></pre></div>    </div>
+  </li>
+  <li>Binary Encoding
+OneHotEncoding의 이진수 버전이라고 이해했다.<br />
+사는지역의 종류가 16개의 동이 있다면. 4자리 이진수로 표현이 가능하므로 <strong>4개의 feature를 생성</strong> 한다.(cardinality가 너무 큰 특성에 대해서 사용하면 장점일 듯!)<br />
+‘수유동은’ 4개의 feature에 0이나 1이 채워져 0000부터 1111중 하나의 형태를 가질 것!
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import category_encoders as ce
+encoder = ce.BinaryEncoder(cols=['사는지역'])
+dfbin = encoder.fit_transform(df['사는지역'])
+df = pd.concat([df, dfbin], axis=1)
+df.drop(['선호도','성별(1남, 0여)'], axis=1)
+</code></pre></div>    </div>
+  </li>
+  <li>Frequency Encoding
+빈도로써 표현하는 방법<br />
+‘수유동’이 10개 데이터중 2번있다면 0.2로 매핑됨.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Frequency Encoding
+fe = df.groupby("사는지역").size()/len(df)
+df.loc[:, "사는지역_freq_encode"] = df["사는지역"].map(fe)
+df
+</code></pre></div>    </div>
+  </li>
+  <li>Mean Encoding<br />
+여기부터는 지도학습에만 해당하는 내용이라고 생각한다. <strong>‘target’</strong> 이 존재할 때만 가능하기 때문!<br />
+어떻게 인코딩을 시킬 지를 ‘타겟의 평균값’에 따라 결정한다.<br />
+ 먼저, 단순하게 target의 평균자체로 매핑을 하는 방법이 있는데,<br />
+(target을 gender라 하면, 수유동에사는 사람들의 target평균을 수유동의 인코딩 매핑값으로 삼는다.)<br />
+과적합이 되기 쉽다.<br />
+ 두번째로,</li>
+  <li>Weight of Evidence Encoding</li>
+  <li>Probability Ratio Encoding</li>
+</ol>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET
