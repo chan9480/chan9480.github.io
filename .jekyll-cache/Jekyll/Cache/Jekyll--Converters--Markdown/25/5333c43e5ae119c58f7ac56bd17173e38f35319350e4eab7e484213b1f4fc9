@@ -1,9 +1,0 @@
-I"4<ul class="toc__menu">
-  <li><a href="#특성-선택-feature-selection">특성 선택 (feature selection)</a></li>
-  <li><a href="#1-filter-method-전처리-과정에서-통계값으로-선택">1. filter method (전처리 과정에서 통계값으로 선택.)</a></li>
-  <li><a href="#2-wrapper-method-모델학습과-검정validation을-반복하면서-특성을-선택">2. wrapper method (모델학습과 검정(validation)을 반복하면서 특성을 선택)</a></li>
-  <li><a href="#3-embedded-method-학습과-동시에-">3. Embedded method (학습과 동시에 )</a></li>
-  <li><a href="#특성-추출-feature-extraction">특성 추출 (feature extraction)</a></li>
-  <li><a href="#그래서-차원축소-선택할거야-추출할거야">그래서 차원축소… 선택할거야, 추출할거야?</a></li>
-</ul>
-:ET

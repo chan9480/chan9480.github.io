@@ -1,4 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-16T19:30:48+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">사람얼굴에 스타일 바꿔보기</title><link href="http://localhost:4000/pj/stylegan/" rel="alternate" type="text/html" title="사람얼굴에 스타일 바꿔보기" /><published>2022-03-10T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/pj/stylegan</id><content type="html" xml:base="http://localhost:4000/pj/stylegan/"><![CDATA[<h2 id="목표">목표</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-21T15:22:53+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">CNN 구조 이해</title><link href="http://localhost:4000/ds/CNN/" rel="alternate" type="text/html" title="CNN 구조 이해" /><published>2022-03-19T00:00:00+09:00</published><updated>2020-03-19T00:00:00+09:00</updated><id>http://localhost:4000/ds/CNN</id><content type="html" xml:base="http://localhost:4000/ds/CNN/"><![CDATA[<h2 id="cnn-의-목적">CNN 의 목적</h2>
+<p>컴퓨터에 이미지를 이해시키는 방법을 생각해보자.<br />
+이미지는 RGB, BGR의 3자리 숫자가 모든 점들을 구성한다.<br />
+그렇다면 강아지 사진 1의 모든 RGB 숫자들을 그대로 컴퓨터에게 알려준다면,<br />
+컴퓨터는 구도만 살짝 바뀐 강아지 사진 2는 전혀 다른 사진이라고 생각할 것이다.</p>
+
+<p>이를 위해 CNN에서는 ‘필터’라는 개념을 이용하여 ‘특징’을 추출한다.</p>
+
+<h2 id="이것만-이해하자-no1">이것만 이해하자. No.1</h2>
+<p><img src="/assets/images/ds/source_0.png" width="60%" height="60%" /><br />
+필터는 위와같이 적용된다. 필터 하나하나가 가중치의 역할을 하며, 필터의 모양에 따라 이미지의 어떤 특징들을 추출하는지 결정된다.</p>
+
+<h2 id="이것만-이해하자-no2">이것만 이해하자. No.2</h2>
+<p><img src="/assets/images/ds/source_1.png" width="60%" height="60%" /><br />
+—————————————————————————-<br />
+CNN의 Layer를 하나씩 쌓고 있다.<br />
+첫번째 Conv2D 코드를 보자,  (32,32) 사이즈의 3겹(rgb, bgr) 이미지를 3by3 필터 가중치를 이용하여 32개의 feature map을 만들겠다고 되어있다.<br />
+그 결과, (30,30) 사이즈의 32겹 피쳐맵을 만들었고, param수는 896개이다.<br />
+가중치의 갯수는 신경망의 원리에서 각 가중치를 필터로 갖는다고 생각하면 쉽다.<br />
+3 (=input) x 32(=output) x 9(=3*3필터) + 32(퍼셉트론 신경망 node와 같이 각 feature맵 가중치)<br />
+=895</p>
+
+<h2 id="이것만-이해하자-no3">이것만 이해하자. No.3</h2>
+<p><img src="/assets/images/ds/source_2.png" width="40%" height="40%" /><br />
+No.2의 예시에서 (32,32)가 (30,30)으로 되는 건 3*3필터를 대입해보면 얼추 바로 알 수 있는데,<br />
+stride나 padding이 들어가면 헷갈릴 수 있다. 위 식에 대입해서 정확히 구할 수 있다.</p>
+
+<h2 id="키워드-정리">키워드 정리</h2>
+<ol>
+  <li>필터 (kernel, filter)</li>
+  <li>피쳐맵 (feature map)</li>
+  <li>패딩 (padding, zero padding) : 가장자리에서 필터때문에 소실되는 데이터를 막기 위해 사용, 이미지를 한번 0으로 감싸는 것.
+    <ul>
+      <li>사이즈에 따라 분류 : valid padding(패딩안함),<br />
+ full padding (필터사이즈-1 만큼두께로 모두 감싸는 것, edge의 데이터 손실을 막는다는 의의를 가진다),<br />
+ same padding(input이미지와 output이미지 사이즈가 같도록 패딩, 사이즈가 점점 작아지는 현상을 막는 다는 의미가 있음.)</li>
+    </ul>
+  </li>
+  <li>스트라이드 (stride) : 커널을 대입할 때, 이동하는 칸 수를 말한다. (1이면 한칸씩 이동)</li>
+</ol>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[CNN 의 목적 컴퓨터에 이미지를 이해시키는 방법을 생각해보자. 이미지는 RGB, BGR의 3자리 숫자가 모든 점들을 구성한다. 그렇다면 강아지 사진 1의 모든 RGB 숫자들을 그대로 컴퓨터에게 알려준다면, 컴퓨터는 구도만 살짝 바뀐 강아지 사진 2는 전혀 다른 사진이라고 생각할 것이다.]]></summary></entry><entry><title type="html">사람얼굴에 스타일 바꿔보기</title><link href="http://localhost:4000/pj/stylegan/" rel="alternate" type="text/html" title="사람얼굴에 스타일 바꿔보기" /><published>2022-03-10T00:00:00+09:00</published><updated>2022-03-13T00:00:00+09:00</updated><id>http://localhost:4000/pj/stylegan</id><content type="html" xml:base="http://localhost:4000/pj/stylegan/"><![CDATA[<h2 id="목표">목표</h2>
 <p>임의의 초상권 없는 얼굴을 특정 스타일을 입혀 만들기.</p>
 
 <h2 id="방법">방법</h2>
@@ -1318,110 +1365,4 @@ dtype: object
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="pj" /><category term="cluster" /><category term="pca" /><summary type="html"><![CDATA[데이터 선정 : kaggle credit customer dataset (https://www.kaggle.com/arjunbhasin2013/ccdata)]]></summary></entry><entry><title type="html">정규화, 표준화 그리고 PCA</title><link href="http://localhost:4000/ds/pca/" rel="alternate" type="text/html" title="정규화, 표준화 그리고 PCA" /><published>2022-02-20T00:00:00+09:00</published><updated>2022-02-21T00:00:00+09:00</updated><id>http://localhost:4000/ds/pca</id><content type="html" xml:base="http://localhost:4000/ds/pca/"><![CDATA[<h2 id="정규화와-표준화">정규화와 표준화</h2>
-<blockquote>
-  <p>정규화 (normalization)</p>
-</blockquote>
-
-<p>정규화는 모든 값들을 0과 1사이의 값으로 단순하게 축소한다.<br />
-예를 들어 0~100까지의 값중 35 는 0.35가 될 뿐이다. <br />
-식 : x = (원래값 - 최댓값) / (최댓값 - 최솟값)</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-
-df_scaled = scaler.fit_transform(df)
-</code></pre></div></div>
-
-<blockquote>
-  <p>표준화 (standardization)</p>
-</blockquote>
-
-<p>표준화는 데이터를 0을 중심으로 양쪽으로 데이터를 분포시킨다.<br />
-정확히는 0의 평균을 갖고, 1의 표준편차를 갖도록 변환하는 것.</p>
-
-<p>식 : x = (원래값 - 평균) / 표준편차</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.preprocessing import StandardScaler
-sclaer = StandardScaler()
-
-df_scaled = scaler.fit_transform(df)
-</code></pre></div></div>
-
-<blockquote>
-  <p>fit 과 fit transform 의 차이</p>
-</blockquote>
-
-<p>fit은 해당 데이터에 맞춤으로 모델(객체)을 설정해주는 것.<br />
-fit_transform 은 fit함과 동시에 해당 데이터를 모델을 사용해서 변형해주어 return함.</p>
-
-<h2 id="분산과-공분산">분산과 공분산</h2>
-
-<blockquote>
-  <p>분산 (variance)</p>
-</blockquote>
-
-<p>하나의 feature가 갖는 ‘평균으로 부터 퍼져있는 정도’ 이다.<br />
-식 : Var(x) = E [(X-X평균)^2]</p>
-
-<p>분산의 양의 제곱근이 표준편차(Standard Deviation)</p>
-
-<blockquote>
-  <p>공분산 (Covariance)</p>
-</blockquote>
-
-<p>두 feature가 갖는 공동 변화량이다. 직관적으로는 이해하기 힘들더라.. 그 의미를 파악하자면<br />
-<strong>0보다크면 X가 증가할때 Y도 증가한다.(양의 상관관계)</strong><br />
-<strong>0보 작으면 서로 음의 상관관계</strong><br />
-식 : Cov(X,Y) = E[(X-X평균)(Y-Y평균)]</p>
-
-<blockquote>
-  <p>상관계수 (Correlation coefficient)</p>
-</blockquote>
-
-<p>공분산과 자연스럽게 이어지는데, 상관계수는 <strong>얼만큼</strong> 상관관계를 갖는지도 알려준다.</p>
-
-<p>식 : Corr(X,Y) = Cov(X,Y) / (sd(X)*sd(Y))  (sd는 표준편차)</p>
-
-<h2 id="pca">PCA</h2>
-<p><strong>표준화or정규화 필수!!!!</strong><br />
-PCA는 고 차원(feature 종류가 많을 때)의 데이터셋을 차원축소 하고자 할 때 사용한다.<br />
-여기서 중요한건 PCA는 특정한 feature를 선택(selection)하는 것이 아니라<br />
-모든 feature의 특징을 담아내는 feature로 추출(Extraction) 한다는 것이다.</p>
-
-<p>어떻게 Extraction할 것이냐 !!
-바로 <strong>축을 고르는 것</strong> 이다.</p>
-
-<p>어떠한 축에 모든 feature들을 projection시켰을 때, ‘가장 그 정보들을 많이 담는다’면 그 축은 모든 feature의 특징을<br />
-잘 담고 있는 축이 될 것이다.<br />
-‘정보를 많이 담는다’는 것은 공분산이 가장 큰 것이다라고 이해했으며,<br />
-그 축에 projection시킨 값들의 집합하나가 하나의 차원이 될 것이다.<br />
-그리고 그 다음 축은 첫번째 축과 직교인 축으로 고르게 될 것이다.<br />
-<img src="/assets/images/source_10.png" width="60%" height="60%" title="제목" alt="아무거나" /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>features = df.loc[:,'bill_length_mm':'body_mass_g']
-species = df['species']
-</code></pre></div></div>
-<p>↪️ df에서 ‘bill_length_mm’부터 ‘body_mass_g’ 까지의 feature의 데이터만 가져오고, ‘species’만 가져온다.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
-scaler = StandardScaler()
-features = pd.DataFrame(scaler.fit_transform(features), columns=['bill_length_mm','bill_depth_mm','flipper_length_mm','body_mass_g'])
-</code></pre></div></div>
-<p>↪️ 표준화를 진행한다. (<strong>필수!!!!!</strong>)</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import numpy as np
-from sklearn.decomposition import PCA
-
-pca = PCA(n_components=2)
-extracted_df = pd.DataFrame(pca.fit_transform(features), columns=['PC1', 'PC2'])
-</code></pre></div></div>
-<p>↪️ pca를 실행한 후 ‘PC1’, ‘PC2’로 저장된(자동으로 이름 이렇게 지음) 두 차원만 불러온다.<br />
-두 차원으로 차원축소 성공 !
-<br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[정규화와 표준화 정규화 (normalization)]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="pj" /><category term="cluster" /><category term="pca" /><summary type="html"><![CDATA[데이터 선정 : kaggle credit customer dataset (https://www.kaggle.com/arjunbhasin2013/ccdata)]]></summary></entry></feed>

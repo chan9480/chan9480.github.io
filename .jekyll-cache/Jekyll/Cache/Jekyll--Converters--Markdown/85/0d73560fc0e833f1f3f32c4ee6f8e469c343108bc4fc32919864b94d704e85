@@ -1,0 +1,172 @@
+I""<h2 id="서론">서론</h2>
+<blockquote>
+  <p>옛날에 RTOS관련 대학원에 진학해보려 했다가 받은 질문중에 하나가 스택과 큐의 차이점과 예시를 설명하라는 내용이었다.<br />
+스택은 쌓아놓은 책을 위에서 부터 다시꺼낸다면 큐는 만화책 반납통같이 위에서 넣으면 밑에서 꺼내는 개념이라고 말씀드렸다.
+물론 틀린건 아니지만 지금 생각해보면 그냥 얘는 개념만 알고 실사용은 해보지 않은 친구라고 생각하셨을 것 같다.
+오늘 각각을 구현해보면서 이해해보는 시간을 가졌다.</p>
+</blockquote>
+
+<h2 id="큐queue-를-연결리스트로-구현">큐(queue) 를 연결리스트로 구현</h2>
+<blockquote>
+  <p>연결리스트<br />
+<img src="https://user-images.githubusercontent.com/84547813/143422364-4784b7ad-46c9-48d0-9420-3a1d24d85e37.png" alt="image" /></p>
+</blockquote>
+
+<blockquote>
+  <p>큐  <br />
+<img src="https://user-images.githubusercontent.com/84547813/143422687-a1fd91a0-2fe0-495a-a014-63f2b08096d8.png" alt="image" /></p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node():
+    def __init__(self, data):
+        self._data = data
+        self._next = None
+</code></pre></div></div>
+<blockquote>
+  <p>node 들을 선언했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Queue():
+    def __init__(self):
+        self._front = None
+        self._rear = None
+</code></pre></div>  </div>
+  <p>‘맨앞’ (꺼내는곳) 와 ‘맨뒤’ (넣는곳) 자리를 마련했다. 큐를 들여다볼수 있는 창문 두개라고 비유하여 이해했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def enqueue(self,item):
+        new_node = Node(item)
+        if self._front == None: # 빈 큐 라면 '맨앞' '맨뒤'에 모두 같은 노드를 넣어준당.
+            self._front = new_node
+            self._rear = self._front
+        else: # 뭔가 있는 큐라면 뒤의 노드에 대해서만 새로운 노드를 연결해주면 된다.
+            self._rear._next = new_node           #기존 '맨뒤노드'의 next에 새로운 노드를 넣어준당. (연결!)
+            self._rear = self._rear._next         #큐의 '맨뒤' 에 새로운 노드를 위치시킨당. (맨뒤 업데이트!)
+</code></pre></div>  </div>
+  <p>값 item을 큐에 추가하는 함수를 정의했다. (내부에서는 item을 value로 갖는 node를 연결해준것)</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def dequeue(self):
+        if self._front == None: # 빈큐라면 None을 리턴
+            return None
+        else : #뭔가 있는 큐라면 맨앞에서 뽑은 값 리턴 + '맨앞' 업데이트
+            temp = self._front._data       # '맨앞'노드의 데이터를 잠깐 빼두자.
+            self._front = self._front._next  #'맨앞' 노드의 next 에 있는 노드를 큐의 '맨앞'으로 둔다.
+        if self._front ==None:
+            # 이렇게 되는 경우는 1개짜리의 큐에서 dequeue를 진행한 후가 될거다.
+            self._rear = None           #그러면 '맨뒤'도 비워주자 (이거 안하면 '맨뒤'에 꺼낸 노드가 아직 남아있음)
+        return temp
+</code></pre></div>  </div>
+  <p>빈큐라면 None을 리턴, 빈큐가 아니라면 제일 먼저 넣은 하나를 큐에서 제거하는 함수를 정의했다.</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def return_queue(self):
+        result = []
+        temp = self._front      # 초기값은 '맨앞' node!
+        while temp!= None:      # temp에 None이 들어가버리면 다 끝난거다!
+            result.append(temp._data)
+            temp = temp._next   # temp에는 그 다음 node 넣장. (None이 들어갈수도 있음 그러면 loop끝)
+        return result
+</code></pre></div>  </div>
+  <p>현재 큐를 list로 리턴하는 함수를 정의했다.</p>
+</blockquote>
+
+<h2 id="스택stack을-list로-구현">스택(stack)을 list로 구현</h2>
+<blockquote>
+  <p>스택의 경우 넣는곳과 빼는곳이 같은 자료구조이다.<br />
+그런데 파이썬에서는 list의경우 list.append(x) 와 list.pop() 으로 구현이 가능하다.<br />
+(물론 큐도 가능하다. 그러나 pop(0)를 사용하여야 하는데, 그렇게 되면 리스트 끝에서부터 index 0 의 방향으로 탐색을 하기때문에, 비효율적이다.)  <br />
+<img src="https://user-images.githubusercontent.com/84547813/143422784-8eec4149-9d71-46b8-b76e-47da8dac1d63.png" alt="image" /></p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Stack():
+    def __init__(self):
+        self._data = []
+
+    def push(self, item):
+        self._data.append(item)
+
+
+    def pop(self):
+        return self._data.pop() if self._data else None
+
+
+    def return_stack(self):
+        return self._data
+</code></pre></div></div>
+<blockquote>
+  <p>간단해서 코드 리뷰는 생략했다.</p>
+  <h2 id="데크-구현">데크 구현</h2>
+  <p>동작은 하는데, pop에서 비효율적으로 탐색하는 부분이 있다.(top에써 꺼낼라해도 bottom부터 탐색을 해야하는 부분)
+양방향 연결리스트로 수정을 해서 업데이트를 해야겠다<br />
+https://user-images.githubusercontent.com/84547813/143423521-f8877649-559d-4a49-aa82-c6f69335bd04.png</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Node:
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
+
+class Deque:
+    def __init__(self):
+        self.top = None
+        self.bottom = None
+
+
+    def append(self, item):
+        if self.top == None:        # self.top이 비어있다면
+            self.top = Node(item)   # self.top 에도 bottom에도 뉴 노드를 넣어준다.
+            self.bottom = self.top
+        else :
+            node = Node(item)
+            self.top.next = node    # 현재 top의 next에 뉴 노드를 넣어주고
+            self.top = node         # 이제 top은 뉴 노드로 한다.
+
+
+    def appendleft(self, item):
+        node = Node(item)
+        if self.bottom == None :        # bottom이 비었다면 top, bottom에 둘다 넣어줘
+            self.top = node
+            self.bottom = node
+        else :
+            node.next = self.bottom     # 뉴 노드의 next 를 bottom으로 설정 후, 앞으로 bottom은 뉴노드다!
+            self.bottom = node
+
+</code></pre></div></div>
+<blockquote>
+  <p>top 방향과 bottom방향에 값을 추가할 수 있는 함수 두개를 정의했다.
+````
+    def pop(self):
+        # top 추출
+        if self.top == None:        # top이 None 이면 return None
+            return None
+        elif self.top == self.bottom:   # top과 bottom이 같다면(None은 아님)
+            result = self.top.value     # value를 리턴하고, top bottom을 비우자 (None)
+            self.top =None
+            self.bottom = None
+            return result
+        else :                          # 이제 정상적으로 길이 1이상의 데크라면
+            node = self.bottom          # 초기값 bottom부터 next가 top인 곳까지 node를 찾아서
+            result = self.top.value     # (리턴값은 어쨋든 top value)
+            while node !=None:          # top을 업데이트해주자.
+                if node.next == self.top:
+                    self.top = node
+                node = node.next
+            return result</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def popleft(self):
+    # bottom 추출
+    if self.bottom == None:
+        return None
+    elif self.top == self.bottom:
+        self.top = None
+        result = self.bottom.value
+        self.bottom = None
+        return result
+    else :
+        result = self.bottom.value
+        self.bottom = self.bottom.next
+        return result ```` &gt; top에서 추출하는 pop과 bottom에서 추출하는 popleft를 정의했다. ````
+
+def ord_desc(self):
+    node = self.bottom      # 초기값은 bottom 부터
+    result = []
+    while node != None :    # 노드에 None이 들어있다면 종료
+        result.append(node.value)
+        node = node.next
+    return result ```` &gt; 현재 데크를 리스트로 리턴하는 함수를 정의했다.
+</code></pre></div></div>
+:ET
