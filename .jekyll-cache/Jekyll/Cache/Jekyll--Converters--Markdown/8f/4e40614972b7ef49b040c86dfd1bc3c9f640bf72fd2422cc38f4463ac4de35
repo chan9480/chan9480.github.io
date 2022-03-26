@@ -1,0 +1,12 @@
+I"`<ul class="toc__menu">
+  <li><a href="#판다스-프로파일링-코랩에서-작동하도록-버전지정-설치">판다스 프로파일링 코랩에서 작동하도록 버전지정 설치</a></li>
+  <li><a href="#데이터-불러오기">데이터 불러오기</a></li>
+  <li><a href="#데이터-엔지니어">데이터 엔지니어</a></li>
+  <li><a href="#인코딩-one-hot-encoding-사용">인코딩 (one hot encoding 사용)</a></li>
+  <li><a href="#특성-선택-selectkbest사용">특성 선택 (SelectKBest사용)</a></li>
+  <li><a href="#스케일링-및-모델-구성-fit">스케일링 및 모델 구성, fit</a></li>
+  <li><a href="#loss-변동-그래프로-확인">loss 변동 그래프로 확인</a></li>
+  <li><a href="#어떤-예측값을-갖지">어떤 예측값을 갖지…?</a></li>
+  <li><a href="#소잡는칼">소잡는칼…!</a></li>
+</ul>
+:ET

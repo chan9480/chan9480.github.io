@@ -1,0 +1,1487 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ko" class="no-js">
+  <head>
+    <!--폰트 : "Nanum Gothic Coding", "Coming Soon"-->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Nanum+Gothic+Coding&display=swap">
+    
+    <!--폰트 : "Iropke Batang"-->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+
+    <!--폰트 : "Cafe24Oneprettynight"-->
+    
+    <!--main.scss 조금이라도 빨리 로드 되길.. preload-->
+    <link rel="preload" as="style" href="/assets/css/main.css">
+
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>비행기 푯값 예측 MLP(Multi Layer Perceptron) - 배우자 그리고 써먹자</title>
+<meta name="description" content="판다스 프로파일링 코랩에서 작동하도록 버전지정 설치 ">
+
+
+  <meta name="author" content="옹달샘👱🏼‍♂️">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="배우자 그리고 써먹자">
+<meta property="og:title" content="비행기 푯값 예측 MLP(Multi Layer Perceptron)">
+<meta property="og:url" content="http://localhost:4000/pj/airplane_price/">
+
+
+  <meta property="og:description" content="판다스 프로파일링 코랩에서 작동하도록 버전지정 설치 ">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/my-cat.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-03-26T00:00:00+09:00">
+
+
+
+  <meta property="article:modified_time" content="2022-03-26T00:00:00+09:00">
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/pj/airplane_price/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "옹달샘🙉",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="배우자 그리고 써먹자 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffdf24">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+    <!-- 스크롤바 커스터마이징 -->
+    <style> 
+      ::-webkit-scrollbar{width: 16px;}
+      ::-webkit-scrollbar-track {background-color:#4b4f52; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb {background-color:#5e6265; border-radius: 16px;}
+      ::-webkit-scrollbar-thumb:hover {background: #ffd24c;}
+      ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+      {
+          width:12px;height:12px;background:transparent;}
+      }  
+
+      
+    </style>
+  </head>
+
+  <body class="layout--single wide">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          배우자 그리고 써먹자
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/index.html">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">카테고리 Click</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/#pj" itemprop="item"><span itemprop="name">Pj</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">비행기 푯값 예측 MLP(Multi Layer Perceptron)</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/my-cat.jpg" alt="옹달샘👱🏼‍♂️" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">옹달샘👱🏼‍♂️</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>반갑습니다 :)</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="mailto:chan9480@hanyang.ac.kr" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+
+  
+    
+
+<nav class="nav__list">
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">카테고리 Click</label>
+  <ul class="nav__items" id="category_tag_menu">
+      <li>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">23</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+      </li>
+      <li>
+        <span class="nav__sub-title">Data</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/ds" class="">Data_science (8)</a></li>
+                    
+                
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/de" class="">Data_engineering (2)</a></li>
+                    
+                
+            </ul>
+            <ul>
+                
+                    
+                
+                    
+                        <li><a href="/categories/Something_else" class="">Something_else (7)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">Mini_Projects</span>
+            <ul>
+                
+                    
+                
+                    
+                
+                    
+                        <li><a href="/categories/pj" class="">미니프로젝트 (5)</a></li>
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        <span class="nav__sub-title">example</span>
+            <ul>
+                
+                    
+                        <li><a href="/categories/example_sub" class="">Example_sub (1)</a></li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+      </li>
+      <li>
+            <br>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fansohxxn.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+      </li>
+  </ul>
+</nav>
+
+  
+
+  </div>
+
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="비행기 푯값 예측 MLP(Multi Layer Perceptron)">
+    <meta itemprop="description" content="판다스 프로파일링 코랩에서 작동하도록 버전지정 설치">
+    <meta itemprop="datePublished" content="2022-03-26T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2022-03-26T00:00:00+09:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">비행기 푯값 예측 MLP(Multi Layer Perceptron)
+</h1>
+          
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2022-03-26T00:00:00+09:00">2022.03.26</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-26">2022.03.26</time></p>
+          
+          
+            
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 카테고리: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+    
+    </span>
+  </p>
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#mlp" class="page__taxonomy-item-tag" rel="tag">MLP</a>
+    
+    </span>
+  </p>
+
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-align-left"></i> 목차</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#판다스-프로파일링-코랩에서-작동하도록-버전지정-설치">판다스 프로파일링 코랩에서 작동하도록 버전지정 설치</a></li>
+  <li><a href="#데이터-불러오기">데이터 불러오기</a></li>
+  <li><a href="#데이터-엔지니어">데이터 엔지니어</a></li>
+  <li><a href="#인코딩-one-hot-encoding-사용">인코딩 (one hot encoding 사용)</a></li>
+  <li><a href="#특성-선택-selectkbest사용">특성 선택 (SelectKBest사용)</a></li>
+  <li><a href="#스케일링-및-모델-구성-fit">스케일링 및 모델 구성, fit</a></li>
+  <li><a href="#loss-변동-그래프로-확인">loss 변동 그래프로 확인</a></li>
+  <li><a href="#어떤-예측값을-갖지">어떤 예측값을 갖지…?</a></li>
+  <li><a href="#소잡는칼">소잡는칼…!</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <h1 id="판다스-프로파일링-코랩에서-작동하도록-버전지정-설치">판다스 프로파일링 코랩에서 작동하도록 버전지정 설치</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pandas</span><span class="o">==</span><span class="mf">1.2</span><span class="p">.</span><span class="mi">1</span>
+<span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pandas_profiling</span><span class="o">==</span><span class="mf">2.8</span><span class="p">.</span><span class="mi">0</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Collecting pandas==1.2.1
+  Downloading pandas-1.2.1-cp37-cp37m-manylinux1_x86_64.whl (9.9 MB)
+[K     |████████████████████████████████| 9.9 MB 9.8 MB/s
+[?25hRequirement already satisfied: pytz&gt;=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas==1.2.1) (2018.9)
+Requirement already satisfied: python-dateutil&gt;=2.7.3 in /usr/local/lib/python3.7/dist-packages (from pandas==1.2.1) (2.8.2)
+Requirement already satisfied: numpy&gt;=1.16.5 in /usr/local/lib/python3.7/dist-packages (from pandas==1.2.1) (1.21.5)
+Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil&gt;=2.7.3-&gt;pandas==1.2.1) (1.15.0)
+Installing collected packages: pandas
+  Attempting uninstall: pandas
+    Found existing installation: pandas 1.3.5
+    Uninstalling pandas-1.3.5:
+      Successfully uninstalled pandas-1.3.5
+[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+google-colab 1.0.0 requires requests~=2.23.0, but you have requests 2.27.1 which is incompatible.[0m
+Successfully installed pandas-1.2.1
+
+
+
+
+Requirement already satisfied: pandas_profiling==2.8.0 in /usr/local/lib/python3.7/dist-packages (2.8.0)
+Requirement already satisfied: jinja2&gt;=2.11.1 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (2.11.3)
+Requirement already satisfied: missingno&gt;=0.4.2 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (0.5.1)
+Requirement already satisfied: numpy&gt;=1.16.0 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (1.21.5)
+Requirement already satisfied: htmlmin&gt;=0.1.12 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (0.1.12)
+Requirement already satisfied: visions[type_image_path]==0.4.4 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (0.4.4)
+Requirement already satisfied: joblib in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (1.0.1)
+Requirement already satisfied: pandas!=1.0.0,!=1.0.1,!=1.0.2,&gt;=0.25.3 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (1.2.1)
+Requirement already satisfied: scipy&gt;=1.4.1 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (1.7.3)
+Requirement already satisfied: phik&gt;=0.9.10 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (0.12.2)
+Requirement already satisfied: tangled-up-in-unicode&gt;=0.0.6 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (0.1.0)
+Requirement already satisfied: matplotlib&gt;=3.2.0 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (3.2.2)
+Requirement already satisfied: requests&gt;=2.23.0 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (2.27.1)
+Requirement already satisfied: tqdm&gt;=4.43.0 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (4.63.0)
+Requirement already satisfied: confuse&gt;=1.0.0 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (1.7.0)
+Requirement already satisfied: astropy&gt;=4.0 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (4.3.1)
+Requirement already satisfied: ipywidgets&gt;=7.5.1 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling==2.8.0) (7.7.0)
+Requirement already satisfied: attrs&gt;=19.3.0 in /usr/local/lib/python3.7/dist-packages (from visions[type_image_path]==0.4.4-&gt;pandas_profiling==2.8.0) (21.4.0)
+Requirement already satisfied: networkx&gt;=2.4 in /usr/local/lib/python3.7/dist-packages (from visions[type_image_path]==0.4.4-&gt;pandas_profiling==2.8.0) (2.6.3)
+Requirement already satisfied: imagehash in /usr/local/lib/python3.7/dist-packages (from visions[type_image_path]==0.4.4-&gt;pandas_profiling==2.8.0) (4.2.1)
+Requirement already satisfied: Pillow in /usr/local/lib/python3.7/dist-packages (from visions[type_image_path]==0.4.4-&gt;pandas_profiling==2.8.0) (7.1.2)
+Requirement already satisfied: importlib-metadata in /usr/local/lib/python3.7/dist-packages (from astropy&gt;=4.0-&gt;pandas_profiling==2.8.0) (4.11.3)
+Requirement already satisfied: pyerfa&gt;=1.7.3 in /usr/local/lib/python3.7/dist-packages (from astropy&gt;=4.0-&gt;pandas_profiling==2.8.0) (2.0.0.1)
+Requirement already satisfied: pyyaml in /usr/local/lib/python3.7/dist-packages (from confuse&gt;=1.0.0-&gt;pandas_profiling==2.8.0) (6.0)
+Requirement already satisfied: ipython&gt;=4.0.0 in /usr/local/lib/python3.7/dist-packages (from ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.5.0)
+Requirement already satisfied: widgetsnbextension~=3.6.0 in /usr/local/lib/python3.7/dist-packages (from ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (3.6.0)
+Requirement already satisfied: nbformat&gt;=4.2.0 in /usr/local/lib/python3.7/dist-packages (from ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.2.0)
+Requirement already satisfied: ipykernel&gt;=4.5.1 in /usr/local/lib/python3.7/dist-packages (from ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (4.10.1)
+Requirement already satisfied: traitlets&gt;=4.3.1 in /usr/local/lib/python3.7/dist-packages (from ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.1.1)
+Requirement already satisfied: ipython-genutils~=0.2.0 in /usr/local/lib/python3.7/dist-packages (from ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.2.0)
+Requirement already satisfied: jupyterlab-widgets&gt;=1.0.0 in /usr/local/lib/python3.7/dist-packages (from ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (1.1.0)
+Requirement already satisfied: tornado&gt;=4.0 in /usr/local/lib/python3.7/dist-packages (from ipykernel&gt;=4.5.1-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.1.1)
+Requirement already satisfied: jupyter-client in /usr/local/lib/python3.7/dist-packages (from ipykernel&gt;=4.5.1-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.3.5)
+Requirement already satisfied: decorator in /usr/local/lib/python3.7/dist-packages (from ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (4.4.2)
+Requirement already satisfied: pygments in /usr/local/lib/python3.7/dist-packages (from ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (2.6.1)
+Requirement already satisfied: prompt-toolkit&lt;2.0.0,&gt;=1.0.4 in /usr/local/lib/python3.7/dist-packages (from ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (1.0.18)
+Requirement already satisfied: simplegeneric&gt;0.8 in /usr/local/lib/python3.7/dist-packages (from ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.8.1)
+Requirement already satisfied: setuptools&gt;=18.5 in /usr/local/lib/python3.7/dist-packages (from ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (57.4.0)
+Requirement already satisfied: pickleshare in /usr/local/lib/python3.7/dist-packages (from ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.7.5)
+Requirement already satisfied: pexpect in /usr/local/lib/python3.7/dist-packages (from ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (4.8.0)
+Requirement already satisfied: MarkupSafe&gt;=0.23 in /usr/local/lib/python3.7/dist-packages (from jinja2&gt;=2.11.1-&gt;pandas_profiling==2.8.0) (2.0.1)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib&gt;=3.2.0-&gt;pandas_profiling==2.8.0) (1.4.0)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib&gt;=3.2.0-&gt;pandas_profiling==2.8.0) (3.0.7)
+Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib&gt;=3.2.0-&gt;pandas_profiling==2.8.0) (0.11.0)
+Requirement already satisfied: python-dateutil&gt;=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib&gt;=3.2.0-&gt;pandas_profiling==2.8.0) (2.8.2)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from kiwisolver&gt;=1.0.1-&gt;matplotlib&gt;=3.2.0-&gt;pandas_profiling==2.8.0) (3.10.0.2)
+Requirement already satisfied: seaborn in /usr/local/lib/python3.7/dist-packages (from missingno&gt;=0.4.2-&gt;pandas_profiling==2.8.0) (0.11.2)
+Requirement already satisfied: jsonschema!=2.5.0,&gt;=2.4 in /usr/local/lib/python3.7/dist-packages (from nbformat&gt;=4.2.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (4.3.3)
+Requirement already satisfied: jupyter-core in /usr/local/lib/python3.7/dist-packages (from nbformat&gt;=4.2.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (4.9.2)
+Requirement already satisfied: importlib-resources&gt;=1.4.0 in /usr/local/lib/python3.7/dist-packages (from jsonschema!=2.5.0,&gt;=2.4-&gt;nbformat&gt;=4.2.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.4.0)
+Requirement already satisfied: pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,&gt;=0.14.0 in /usr/local/lib/python3.7/dist-packages (from jsonschema!=2.5.0,&gt;=2.4-&gt;nbformat&gt;=4.2.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.18.1)
+Requirement already satisfied: zipp&gt;=3.1.0 in /usr/local/lib/python3.7/dist-packages (from importlib-resources&gt;=1.4.0-&gt;jsonschema!=2.5.0,&gt;=2.4-&gt;nbformat&gt;=4.2.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (3.7.0)
+Requirement already satisfied: pytz&gt;=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas!=1.0.0,!=1.0.1,!=1.0.2,&gt;=0.25.3-&gt;pandas_profiling==2.8.0) (2018.9)
+Requirement already satisfied: wcwidth in /usr/local/lib/python3.7/dist-packages (from prompt-toolkit&lt;2.0.0,&gt;=1.0.4-&gt;ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.2.5)
+Requirement already satisfied: six&gt;=1.9.0 in /usr/local/lib/python3.7/dist-packages (from prompt-toolkit&lt;2.0.0,&gt;=1.0.4-&gt;ipython&gt;=4.0.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (1.15.0)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from requests&gt;=2.23.0-&gt;pandas_profiling==2.8.0) (2021.10.8)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /usr/local/lib/python3.7/dist-packages (from requests&gt;=2.23.0-&gt;pandas_profiling==2.8.0) (2.10)
+Requirement already satisfied: urllib3&lt;1.27,&gt;=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests&gt;=2.23.0-&gt;pandas_profiling==2.8.0) (1.24.3)
+Requirement already satisfied: charset-normalizer~=2.0.0 in /usr/local/lib/python3.7/dist-packages (from requests&gt;=2.23.0-&gt;pandas_profiling==2.8.0) (2.0.12)
+Requirement already satisfied: notebook&gt;=4.4.1 in /usr/local/lib/python3.7/dist-packages (from widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.3.1)
+Requirement already satisfied: terminado&gt;=0.8.1 in /usr/local/lib/python3.7/dist-packages (from notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.13.3)
+Requirement already satisfied: nbconvert in /usr/local/lib/python3.7/dist-packages (from notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (5.6.1)
+Requirement already satisfied: Send2Trash in /usr/local/lib/python3.7/dist-packages (from notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (1.8.0)
+Requirement already satisfied: pyzmq&gt;=13 in /usr/local/lib/python3.7/dist-packages (from jupyter-client-&gt;ipykernel&gt;=4.5.1-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (22.3.0)
+Requirement already satisfied: ptyprocess in /usr/local/lib/python3.7/dist-packages (from terminado&gt;=0.8.1-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.7.0)
+Requirement already satisfied: PyWavelets in /usr/local/lib/python3.7/dist-packages (from imagehash-&gt;visions[type_image_path]==0.4.4-&gt;pandas_profiling==2.8.0) (1.3.0)
+Requirement already satisfied: pandocfilters&gt;=1.4.1 in /usr/local/lib/python3.7/dist-packages (from nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (1.5.0)
+Requirement already satisfied: defusedxml in /usr/local/lib/python3.7/dist-packages (from nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.7.1)
+Requirement already satisfied: entrypoints&gt;=0.2.2 in /usr/local/lib/python3.7/dist-packages (from nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.4)
+Requirement already satisfied: bleach in /usr/local/lib/python3.7/dist-packages (from nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (4.1.0)
+Requirement already satisfied: testpath in /usr/local/lib/python3.7/dist-packages (from nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.6.0)
+Requirement already satisfied: mistune&lt;2,&gt;=0.8.1 in /usr/local/lib/python3.7/dist-packages (from nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.8.4)
+Requirement already satisfied: packaging in /usr/local/lib/python3.7/dist-packages (from bleach-&gt;nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (21.3)
+Requirement already satisfied: webencodings in /usr/local/lib/python3.7/dist-packages (from bleach-&gt;nbconvert-&gt;notebook&gt;=4.4.1-&gt;widgetsnbextension~=3.6.0-&gt;ipywidgets&gt;=7.5.1-&gt;pandas_profiling==2.8.0) (0.5.1)
+</code></pre></div></div>
+
+<h1 id="데이터-불러오기">데이터 불러오기</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 데이터 불러오기
+</span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">from</span> <span class="nn">pandas_profiling</span> <span class="kn">import</span> <span class="n">ProfileReport</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="n">CSV_PATH_1</span> <span class="o">=</span> <span class="s">'/content/drive/MyDrive/dataset/airplane/Data_Train.csv'</span>
+<span class="n">CSV_PATH_2</span> <span class="o">=</span> <span class="s">'/content/drive/MyDrive/dataset/airplane/Test_set.csv'</span>
+<span class="n">CSV_PATH_3</span> <span class="o">=</span> <span class="s">'/content/drive/MyDrive/dataset/airplane/Sample_submission.csv'</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s">'Price'</span>
+</code></pre></div></div>
+
+<h1 id="데이터-엔지니어">데이터 엔지니어</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c1"># feature 수 10개.
+</span><span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CSV_PATH_1</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CSV_PATH_2</span><span class="p">)</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CSV_PATH_3</span><span class="p">)</span>
+<span class="s">"""
+전처리
+1. Airline : one-hot encoding
+2. Date_of_Journey : 삭제
+3. Source : one-hot encoding
+4. Destination : one-hot encoding
+5. Route : 삭제하자
+6. Dep_Time : h*60 + min 으로 치환
+7. Arrival_Time : 위와 동
+8. Duration : 위와동
+9. Total_Stops : 숫자만 남기자 non-stop은 0
+10. Additional_Info : one-hot encoding
+"""</span>
+
+<span class="c1"># Route  Date_of_journey 삭제
+</span><span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date_of_Journey'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date_of_Journey'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Route'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Route'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 탑승, 도착 시간계산
+</span><span class="k">def</span> <span class="nf">hour_cal</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s">'(\d+):'</span><span class="p">,</span> <span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="n">minute</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s">':(\d+)'</span><span class="p">,</span> <span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hour</span><span class="o">*</span><span class="mi">60</span><span class="o">+</span><span class="n">minute</span>
+<span class="n">X_train</span><span class="p">[</span><span class="s">'Dep_Time'</span><span class="p">]</span><span class="o">=</span><span class="n">X_train</span><span class="p">[</span><span class="s">'Dep_Time'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">hour_cal</span><span class="p">)</span>
+<span class="n">X_test</span><span class="p">[</span><span class="s">'Dep_Time'</span><span class="p">]</span><span class="o">=</span><span class="n">X_test</span><span class="p">[</span><span class="s">'Dep_Time'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">hour_cal</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">[</span><span class="s">'Arrival_Time'</span><span class="p">]</span><span class="o">=</span><span class="n">X_train</span><span class="p">[</span><span class="s">'Arrival_Time'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">hour_cal</span><span class="p">)</span>
+<span class="n">X_test</span><span class="p">[</span><span class="s">'Arrival_Time'</span><span class="p">]</span><span class="o">=</span><span class="n">X_test</span><span class="p">[</span><span class="s">'Arrival_Time'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">hour_cal</span><span class="p">)</span>
+
+<span class="c1"># 소요시간 계산
+</span><span class="k">def</span> <span class="nf">hour_cal2</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s">'(\d+)h'</span><span class="p">,</span> <span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">hour</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">minute</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s">'(\d+)m'</span><span class="p">,</span> <span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">hour</span><span class="o">*</span><span class="mi">60</span><span class="o">+</span><span class="n">minute</span>
+<span class="n">X_train</span><span class="p">[</span><span class="s">'Duration'</span><span class="p">]</span><span class="o">=</span><span class="n">X_train</span><span class="p">[</span><span class="s">'Duration'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">hour_cal2</span><span class="p">)</span>
+<span class="n">X_test</span><span class="p">[</span><span class="s">'Duration'</span><span class="p">]</span><span class="o">=</span><span class="n">X_test</span><span class="p">[</span><span class="s">'Duration'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="n">hour_cal2</span><span class="p">)</span>
+
+<span class="c1"># stop에서 숫자만 남기자
+</span><span class="n">X_train</span><span class="p">[</span><span class="s">'Total_Stops'</span><span class="p">]</span><span class="o">=</span><span class="n">X_train</span><span class="p">[</span><span class="s">'Total_Stops'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">'n'</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">X_test</span><span class="p">[</span><span class="s">'Total_Stops'</span><span class="p">]</span><span class="o">=</span><span class="n">X_train</span><span class="p">[</span><span class="s">'Total_Stops'</span><span class="p">].</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">'n'</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">X_train</span><span class="p">.</span><span class="n">info</span><span class="p">())</span>
+
+<span class="n">X_train</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 10683 entries, 0 to 10682
+Data columns (total 8 columns):
+ #   Column           Non-Null Count  Dtype
+---  ------           --------------  -----
+ 0   Airline          10683 non-null  object
+ 1   Source           10683 non-null  object
+ 2   Destination      10683 non-null  object
+ 3   Dep_Time         10683 non-null  int64
+ 4   Arrival_Time     10683 non-null  int64
+ 5   Duration         10683 non-null  int64
+ 6   Total_Stops      10683 non-null  int64
+ 7   Additional_Info  10683 non-null  object
+dtypes: int64(4), object(4)
+memory usage: 667.8+ KB
+None
+</code></pre></div></div>
+
+<div id="df-5e346ee7-84fc-40d0-874c-f1a960b92b39">
+    <div class="colab-df-container">
+      <div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Airline</th>
+      <th>Source</th>
+      <th>Destination</th>
+      <th>Dep_Time</th>
+      <th>Arrival_Time</th>
+      <th>Duration</th>
+      <th>Total_Stops</th>
+      <th>Additional_Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>IndiGo</td>
+      <td>Banglore</td>
+      <td>New Delhi</td>
+      <td>1340</td>
+      <td>70</td>
+      <td>170</td>
+      <td>0</td>
+      <td>No info</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Air India</td>
+      <td>Kolkata</td>
+      <td>Banglore</td>
+      <td>350</td>
+      <td>795</td>
+      <td>445</td>
+      <td>2</td>
+      <td>No info</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Jet Airways</td>
+      <td>Delhi</td>
+      <td>Cochin</td>
+      <td>565</td>
+      <td>265</td>
+      <td>1140</td>
+      <td>2</td>
+      <td>No info</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>IndiGo</td>
+      <td>Kolkata</td>
+      <td>Banglore</td>
+      <td>1085</td>
+      <td>1410</td>
+      <td>325</td>
+      <td>1</td>
+      <td>No info</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>IndiGo</td>
+      <td>Banglore</td>
+      <td>New Delhi</td>
+      <td>1010</td>
+      <td>1295</td>
+      <td>285</td>
+      <td>1</td>
+      <td>No info</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-5e346ee7-84fc-40d0-874c-f1a960b92b39')" title="Convert this dataframe to an interactive table." style="display:none;">
+
+  &lt;svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px"&gt;
+    <path d="M0 0h24v24H0V0z" fill="none" />
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z" /><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z" />
+  &lt;/svg&gt;
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-5e346ee7-84fc-40d0-874c-f1a960b92b39 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-5e346ee7-84fc-40d0-874c-f1a960b92b39');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df_train</span> <span class="o">=</span> <span class="n">X_train</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s">'price'</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_train</span>
+<span class="n">df_train</span><span class="p">.</span><span class="n">profile_report</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Output hidden; open in https://colab.research.google.com to view.
+</code></pre></div></div>
+
+<h1 id="인코딩-one-hot-encoding-사용">인코딩 (one hot encoding 사용)</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 원핫 인코딩
+</span>
+<span class="c1">#X_train=pd.get_dummies(data = X_train, columns = ['Airline', 'Source', 'Destination', 'Total_Stops',  'Additional_Info'])
+#X_test=pd.get_dummies(data = X_test, columns = ['Airline', 'Source', 'Destination', 'Total_Stops',  'Additional_Info'])
+</span>
+
+<span class="n">temp</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">])</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">temp</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Airline'</span><span class="p">,</span> <span class="s">'Source'</span><span class="p">,</span> <span class="s">'Destination'</span><span class="p">,</span> <span class="s">'Total_Stops'</span><span class="p">,</span>  <span class="s">'Additional_Info'</span><span class="p">])</span>
+<span class="n">X_train_encoded</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)]</span>
+<span class="n">X_test_encoded</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">):]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">X_train_encoded</span><span class="p">.</span><span class="n">info</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">X_test_encoded</span><span class="p">.</span><span class="n">info</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 10683 entries, 0 to 10682
+Data columns (total 42 columns):
+ #   Column                                        Non-Null Count  Dtype  
+---  ------                                        --------------  -----  
+ 0   Dep_Time                                      10683 non-null  int64  
+ 1   Arrival_Time                                  10683 non-null  int64  
+ 2   Duration                                      10683 non-null  int64  
+ 3   price                                         10683 non-null  float64
+ 4   Airline_Air Asia                              10683 non-null  uint8  
+ 5   Airline_Air India                             10683 non-null  uint8  
+ 6   Airline_GoAir                                 10683 non-null  uint8  
+ 7   Airline_IndiGo                                10683 non-null  uint8  
+ 8   Airline_Jet Airways                           10683 non-null  uint8  
+ 9   Airline_Jet Airways Business                  10683 non-null  uint8  
+ 10  Airline_Multiple carriers                     10683 non-null  uint8  
+ 11  Airline_Multiple carriers Premium economy     10683 non-null  uint8  
+ 12  Airline_SpiceJet                              10683 non-null  uint8  
+ 13  Airline_Trujet                                10683 non-null  uint8  
+ 14  Airline_Vistara                               10683 non-null  uint8  
+ 15  Airline_Vistara Premium economy               10683 non-null  uint8  
+ 16  Source_Banglore                               10683 non-null  uint8  
+ 17  Source_Chennai                                10683 non-null  uint8  
+ 18  Source_Delhi                                  10683 non-null  uint8  
+ 19  Source_Kolkata                                10683 non-null  uint8  
+ 20  Source_Mumbai                                 10683 non-null  uint8  
+ 21  Destination_Banglore                          10683 non-null  uint8  
+ 22  Destination_Cochin                            10683 non-null  uint8  
+ 23  Destination_Delhi                             10683 non-null  uint8  
+ 24  Destination_Hyderabad                         10683 non-null  uint8  
+ 25  Destination_Kolkata                           10683 non-null  uint8  
+ 26  Destination_New Delhi                         10683 non-null  uint8  
+ 27  Total_Stops_0                                 10683 non-null  uint8  
+ 28  Total_Stops_1                                 10683 non-null  uint8  
+ 29  Total_Stops_2                                 10683 non-null  uint8  
+ 30  Total_Stops_3                                 10683 non-null  uint8  
+ 31  Total_Stops_4                                 10683 non-null  uint8  
+ 32  Additional_Info_1 Long layover                10683 non-null  uint8  
+ 33  Additional_Info_1 Short layover               10683 non-null  uint8  
+ 34  Additional_Info_2 Long layover                10683 non-null  uint8  
+ 35  Additional_Info_Business class                10683 non-null  uint8  
+ 36  Additional_Info_Change airports               10683 non-null  uint8  
+ 37  Additional_Info_In-flight meal not included   10683 non-null  uint8  
+ 38  Additional_Info_No Info                       10683 non-null  uint8  
+ 39  Additional_Info_No check-in baggage included  10683 non-null  uint8  
+ 40  Additional_Info_No info                       10683 non-null  uint8  
+ 41  Additional_Info_Red-eye flight                10683 non-null  uint8  
+dtypes: float64(1), int64(3), uint8(38)
+memory usage: 813.7 KB
+None
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 2671 entries, 0 to 2670
+Data columns (total 42 columns):
+ #   Column                                        Non-Null Count  Dtype  
+---  ------                                        --------------  -----  
+ 0   Dep_Time                                      2671 non-null   int64  
+ 1   Arrival_Time                                  2671 non-null   int64  
+ 2   Duration                                      2671 non-null   int64  
+ 3   price                                         0 non-null      float64
+ 4   Airline_Air Asia                              2671 non-null   uint8  
+ 5   Airline_Air India                             2671 non-null   uint8  
+ 6   Airline_GoAir                                 2671 non-null   uint8  
+ 7   Airline_IndiGo                                2671 non-null   uint8  
+ 8   Airline_Jet Airways                           2671 non-null   uint8  
+ 9   Airline_Jet Airways Business                  2671 non-null   uint8  
+ 10  Airline_Multiple carriers                     2671 non-null   uint8  
+ 11  Airline_Multiple carriers Premium economy     2671 non-null   uint8  
+ 12  Airline_SpiceJet                              2671 non-null   uint8  
+ 13  Airline_Trujet                                2671 non-null   uint8  
+ 14  Airline_Vistara                               2671 non-null   uint8  
+ 15  Airline_Vistara Premium economy               2671 non-null   uint8  
+ 16  Source_Banglore                               2671 non-null   uint8  
+ 17  Source_Chennai                                2671 non-null   uint8  
+ 18  Source_Delhi                                  2671 non-null   uint8  
+ 19  Source_Kolkata                                2671 non-null   uint8  
+ 20  Source_Mumbai                                 2671 non-null   uint8  
+ 21  Destination_Banglore                          2671 non-null   uint8  
+ 22  Destination_Cochin                            2671 non-null   uint8  
+ 23  Destination_Delhi                             2671 non-null   uint8  
+ 24  Destination_Hyderabad                         2671 non-null   uint8  
+ 25  Destination_Kolkata                           2671 non-null   uint8  
+ 26  Destination_New Delhi                         2671 non-null   uint8  
+ 27  Total_Stops_0                                 2671 non-null   uint8  
+ 28  Total_Stops_1                                 2671 non-null   uint8  
+ 29  Total_Stops_2                                 2671 non-null   uint8  
+ 30  Total_Stops_3                                 2671 non-null   uint8  
+ 31  Total_Stops_4                                 2671 non-null   uint8  
+ 32  Additional_Info_1 Long layover                2671 non-null   uint8  
+ 33  Additional_Info_1 Short layover               2671 non-null   uint8  
+ 34  Additional_Info_2 Long layover                2671 non-null   uint8  
+ 35  Additional_Info_Business class                2671 non-null   uint8  
+ 36  Additional_Info_Change airports               2671 non-null   uint8  
+ 37  Additional_Info_In-flight meal not included   2671 non-null   uint8  
+ 38  Additional_Info_No Info                       2671 non-null   uint8  
+ 39  Additional_Info_No check-in baggage included  2671 non-null   uint8  
+ 40  Additional_Info_No info                       2671 non-null   uint8  
+ 41  Additional_Info_Red-eye flight                2671 non-null   uint8  
+dtypes: float64(1), int64(3), uint8(38)
+memory usage: 203.5 KB
+None
+</code></pre></div></div>
+
+<h1 id="특성-선택-selectkbest사용">특성 선택 (SelectKBest사용)</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">SelectKBest</span>
+<span class="n">selector1</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">chi2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">X_train1</span> <span class="o">=</span> <span class="n">selector1</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_encoded</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="n">X_train_encoded</span><span class="p">.</span><span class="n">columns</span>
+<span class="n">X_train_encoded</span> <span class="o">=</span> <span class="n">X_train_encoded</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="n">selector1</span><span class="p">.</span><span class="n">get_support</span><span class="p">()]]</span>
+<span class="n">X_test_encoded</span> <span class="o">=</span> <span class="n">X_test_encoded</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="n">selector1</span><span class="p">.</span><span class="n">get_support</span><span class="p">()]]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-33-6ef92159fc82&gt; in &lt;module&gt;()
+      1 from sklearn.feature_selection import chi2, SelectKBest
+      2 selector1 = SelectKBest(chi2, k=5)
+----&gt; 3 X_train1 = selector1.fit_transform(X_train_encoded, y_train)
+      4 columns = X_train_encoded.columns
+      5 X_train_encoded = X_train_encoded[columns[selector1.get_support()]]
+
+
+/usr/local/lib/python3.7/dist-packages/sklearn/base.py in fit_transform(self, X, y, **fit_params)
+    853         else:
+    854             # fit method of arity 2 (supervised transformation)
+--&gt; 855             return self.fit(X, y, **fit_params).transform(X)
+    856
+    857
+
+
+/usr/local/lib/python3.7/dist-packages/sklearn/feature_selection/_univariate_selection.py in fit(self, X, y)
+    405             )
+    406
+--&gt; 407         self._check_params(X, y)
+    408         score_func_ret = self.score_func(X, y)
+    409         if isinstance(score_func_ret, (list, tuple)):
+
+
+/usr/local/lib/python3.7/dist-packages/sklearn/feature_selection/_univariate_selection.py in _check_params(self, X, y)
+    604             raise ValueError(
+    605                 "k should be &gt;=0, &lt;= n_features = %d; got %r. "
+--&gt; 606                 "Use k='all' to return all features." % (X.shape[1], self.k)
+    607             )
+    608
+
+
+ValueError: k should be &gt;=0, &lt;= n_features = 4; got 5. Use k='all' to return all features.
+</code></pre></div></div>
+
+<h1 id="스케일링-및-모델-구성-fit">스케일링 및 모델 구성, fit</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="c1"># StandardScaler
+</span><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_train_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_encoded</span><span class="p">)</span>
+<span class="n">X_train_scaled</span><span class="o">=</span><span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_train_scaled</span><span class="p">)</span>
+
+<span class="n">X_test_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_test_encoded</span><span class="p">)</span>
+<span class="n">X_test_scaled</span><span class="o">=</span><span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_test_scaled</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># modeling MLP
+</span><span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Dropout</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span><span class="p">,</span> <span class="n">SGD</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">regularizers</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_normal'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_normal'</span><span class="p">,</span>
+                <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">regularizers</span><span class="p">.</span><span class="n">l1</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>   
+                <span class="n">activity_regularizer</span><span class="o">=</span><span class="n">regularizers</span><span class="p">.</span><span class="n">l2</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+         <span class="p">)</span>
+<span class="n">Dropout</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'sigmoid'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_normal'</span><span class="p">))</span>
+<span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">))</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'Adam'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">'mse'</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mae'</span><span class="p">])</span>
+
+<span class="c1"># model fit
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h1 id="loss-변동-그래프로-확인">loss 변동 그래프로 확인</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">val_loss</span> <span class="o">=</span> <span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_loss'</span><span class="p">]</span>
+<span class="n">val_mae</span> <span class="o">=</span> <span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_mae'</span><span class="p">]</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_loss</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="s">'b'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'val loss'</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/project/source_1.png" width="90%" height="90%" /></p>
+
+<blockquote>
+  <p>..? 너무 모양 완벽한 그래프를 갖는다.. 왜지</p>
+</blockquote>
+
+<h1 id="어떤-예측값을-갖지">어떤 예측값을 갖지…?</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_encoded</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[9079.562],
+       [9079.562],
+       [9079.562],
+       [9079.562],
+       [9079.562],
+       [9079.562],
+       [9079.562],
+       [9079.562],
+       [9079.562],
+       [9079.562]], dtype=float32)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># mae가 최소로하는 하나의 값으로 수렴해버림..
+# 딥러닝까지 필요없는 데이터에 딥러닝을 써버리면..
+# 복잡도만 올라가고 성능은 나오지 않는 것 같다.
+</span></code></pre></div></div>
+
+<h1 id="소잡는칼">소잡는칼…!</h1>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <p></p>
+        <h4 class="page__meta-title"><span style="font-family:'Coming Soon'; color:#fcd14f;">pj</span> <span style="font-family:'Cafe24Oneprettynight';">카테고리 내 다른 글 보러가기</span></h4>
+        <!--
+
+  <nav class="pagination">
+    
+      <a href="/de/docker/" class="pagination--pager" title="도커(docker)로 리눅스환경을 만들고 py파일을 실행해보자.
+">이전</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">다음</a>
+    
+  </nav>
+
+-->
+
+
+
+
+  
+  	
+  	
+  	
+  	
+  	
+
+
+  <nav class="pagination_prev_next">
+    
+      <a href="/pj/stylegan/" class="pagination_prev_next--pager"><span class="prev_next">이전 글  &nbsp</span>사람얼굴에 스타일 바꿔보기</a>
+    
+    
+      <a href="#" class="pagination_prev_next--pager disabled-last-child ">가장 최근 글입니다</a>
+    
+  </nav>
+
+
+<!--
+
+
+
+-->
+
+
+
+        <p></p>
+
+        <!-- archive 중간 광고 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+            data-ad-client="ca-pub-6111782407607310"
+            data-ad-slot="5458515780"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </section>
+      <footer class="page__meta">
+        
+        <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%EB%B9%84%ED%96%89%EA%B8%B0+%ED%91%AF%EA%B0%92+%EC%98%88%EC%B8%A1+MLP%28Multi+Layer+Perceptron%29%20http%3A%2F%2Flocalhost%3A4000%2Fpj%2Fairplane_price%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fpj%2Fairplane_price%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fpj%2Fairplane_price%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      </footer>
+    </div>
+
+    
+
+  </article>
+
+  
+  
+    <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
+      <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/de/docker/">도커(docker)로 리눅스환경을 만들고 py파일을 실행해보자.</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/CNN/">CNN 구조 이해</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.19
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/stylegan/">사람얼굴에 스타일 바꿔보기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.10
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#psp" class="page__taxonomy-item-tag" rel="tag">PSP</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stylegan2" class="page__taxonomy-item-tag" rel="tag">styleGAN2</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/encoding/">데이터 인코딩(encoding)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.06
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/de/crawling/">크롤링(Crawling)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.05
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/_classfication_metrics/">이진분류의 평가지표</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.02
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/random_forest/">랜덤포레스트(Random Forest)와 ...</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.28
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/decision_tree/">파이프라인(PipeLine)과 결정트리모델(Decision Tree)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.26
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/something_else/feature_Selection_Extraction/">특성 선택과 특성 추출</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/ridge_logistic/">Ridge 회귀와 로지스틱 회귀</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ansohxxn.github.io -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6111782407607310"
+     data-ad-slot="5978510098"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/chan9480" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 옹달샘🙉. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <aside class="sidebar__top">
+      <a href="#site-nav"> <i class="fas fa-angle-double-up fa-2x"></i></a>
+    </aside>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'chan9480/chan9480.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'photon-dark');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+  </body>
+</html>
