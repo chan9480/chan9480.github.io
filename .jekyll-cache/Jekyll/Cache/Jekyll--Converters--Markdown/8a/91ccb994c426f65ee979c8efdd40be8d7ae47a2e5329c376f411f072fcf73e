@@ -1,0 +1,172 @@
+I"w<!-- 공백이 포함되어 있는 카테고리 이름의 경우 site.categories['a b c'] 이런식으로! -->
+
+<hr />
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/airplane_price/">비행기 푯값 예측 MLP(Multi Layer Perceptron)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.26
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#mlp" class="page__taxonomy-item-tag" rel="tag">MLP</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/stylegan/">사람얼굴에 스타일 바꿔보기</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.10
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#psp" class="page__taxonomy-item-tag" rel="tag">PSP</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#stylegan2" class="page__taxonomy-item-tag" rel="tag">styleGAN2</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/Credit_Card_Cluster/">신용카드 데이터로 k-means-cluster, pca 연습 </a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.21
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#cluster" class="page__taxonomy-item-tag" rel="tag">cluster</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#pca" class="page__taxonomy-item-tag" rel="tag">pca</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/image_captioning/">wiki데이터를 이용한 이미지 캡셔닝</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#attention" class="page__taxonomy-item-tag" rel="tag">attention</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#rnn" class="page__taxonomy-item-tag" rel="tag">RNN</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/section_2/">대출 승인 시스템의 승인 기준 머신러닝 예측</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.08.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#gridsearch" class="page__taxonomy-item-tag" rel="tag">GridSearch</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#xgboost" class="page__taxonomy-item-tag" rel="tag">XGboost</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/pj/section_1/">게임 데이터 분석 기초</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2021.07.29
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#pandas" class="page__taxonomy-item-tag" rel="tag">pandas</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EA%B0%80%EC%84%A4%EA%B2%80%EC%A0%95" class="page__taxonomy-item-tag" rel="tag">가설검정</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#%EC%8B%9C%EA%B0%81%ED%99%94" class="page__taxonomy-item-tag" rel="tag">시각화</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+:ET

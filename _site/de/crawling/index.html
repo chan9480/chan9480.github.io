@@ -50,7 +50,7 @@
 
 
 
-  <meta property="article:modified_time" content="2022-03-05T00:00:00+09:00">
+  <meta property="article:modified_time" content="2022-03-20T00:00:00+09:00">
 
 
 
@@ -345,7 +345,7 @@
   <label for="ac-toc">카테고리 Click</label>
   <ul class="nav__items" id="category_tag_menu">
       <li>
-            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">23</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">24</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
       </li>
       <li>
         <span class="nav__sub-title">Data</span>
@@ -402,7 +402,7 @@
                     
                 
                     
-                        <li><a href="/categories/pj" class="">미니프로젝트 (5)</a></li>
+                        <li><a href="/categories/pj" class="">미니프로젝트 (6)</a></li>
                     
                 
                     
@@ -445,7 +445,7 @@
     <meta itemprop="headline" content="크롤링(Crawling)">
     <meta itemprop="description" content="크롤링이란 ?web에 있는 데이터들을 긁어모으는 것을 말한다.크게 두 종류로 먼저 나눌 수 있다.  정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링.  동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 상태에서 데이터들을 크롤링.">
     <meta itemprop="datePublished" content="2022-03-05T00:00:00+09:00">
-    <meta itemprop="dateModified" content="2022-03-05T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2022-03-20T00:00:00+09:00">
 
     <div class="page__inner-wrap">
       
@@ -453,7 +453,7 @@
           <h1 id="page-title" class="page__title" itemprop="headline">크롤링(Crawling)
 </h1>
           
-            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2022-03-05T00:00:00+09:00">2022.03.05</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-05">2022.03.05</time></p>
+            <p class="page__meta"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Date:</strong> <time datetime="2022-03-05T00:00:00+09:00">2022.03.05</time>&nbsp&nbsp&nbsp<strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-03-20">2022.03.20</time></p>
           
           
             
@@ -512,6 +512,7 @@
 <h2 id="크롤링-예시">크롤링 예시</h2>
 <p>먼저 아래 함수 두개를 지정하겠다.</p>
 <ol>
+  <li>diScrollDown : 특정 시간동안 스크롤을 내리는 함수.</li>
   <li>createDirectory : 입력값으로 받은 문자열(경로)에 해당하는 폴더를 생성한다.</li>
   <li>crawling_img : 입력값으로 받은 문자열을 크롬에서 검색해서 함수내에 지정되어 있는(직접변경) 경로로 이미지를 저장. (이름은 번호순으로 증가)</li>
 </ol>
@@ -522,6 +523,14 @@ import time
 import urllib.request
 import os
 
+def doScrollDown(driver, whileSeconds):
+    start = datetime.datetime.now()
+    end = start + datetime.timedelta(seconds=whileSeconds)
+    while True:
+        driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+        time.sleep(1)
+        if datetime.datetime.now() &gt; end:
+            break
 
 def createDirectory(directory):
     try:
@@ -535,10 +544,12 @@ def crawling_img(name):
     ## 저장하는 경로는 함수 내에서 별도로 지정해야함.
 
     # 크롬을 드라이버로 채택. 버전오류가 날 수 있다.
+    # 사파리는 webdriver.Safari()를 사용하면 된다.
     driver = webdriver.Chrome()
     driver.get("https://www.google.co.kr/imghp?hl=ko&amp;tab=wi&amp;authuser=0&amp;ogbl")
 
     # q로 태그되어 있는 곳이 구글홈페이지의 검색창이다.
+    # driver.set_window_size(a,b) 로 창 크기 지정 가능
     elem = driver.find_element_by_name("q")
     elem.send_keys(name)
     elem.send_keys(Keys.RETURN)
@@ -716,6 +727,34 @@ for keyword in searching_keyword:
     <article class="archive-item">
         <div>
             <span>
+              <a href="/pj/image_captioning/">wiki데이터를 이용한 이미지 캡셔닝</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.28
+              <!--Archive page 용-: (post -> page)-->
+<!--page__taxonomy.html에서 가져 옴-->
+        
+        <span class="page__taxonomy">
+            <span itemprop="keywords"><a href="/categories/#pj" class="page__taxonomy-item-category" rel="tag">pj</a>
+                    
+                    
+                    <a href="/tags/#attention" class="page__taxonomy-item-tag" rel="tag">attention</a><span class="sep"> </span>
+                
+                    
+                    
+                    <a href="/tags/#rnn" class="page__taxonomy-item-tag" rel="tag">RNN</a>
+                
+            </span>
+        </span>
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
               <a href="/pj/airplane_price/">비행기 푯값 예측 MLP(Multi Layer Perceptron)</a>
             </span>
             <small> 
@@ -853,20 +892,6 @@ for keyword in searching_keyword:
         <div>
             <span>
               <a href="/something_else/feature_Selection_Extraction/">특성 선택과 특성 추출</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
-              
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/ds/ridge_logistic/">Ridge 회귀와 로지스틱 회귀</a>
             </span>
             <small> 
               <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.25
