@@ -1,0 +1,53 @@
+I"�	<h1 id="클라우드-데이터베이스">클라우드 데이터베이스</h1>
+<p>말 그대로 온라인으로 접근할 수 있는 데이터베이스를 말한다.</p>
+<ol>
+  <li>관계형 데이터베이스  (oracle DB, mySQL, PostgreSQL 등)</li>
+  <li>NoSQL  (MongoDB, Redis, Hbase Neo4j등)</li>
+</ol>
+
+<h2 id="관계형-데이터베이스-rdb--relational-database">관계형 데이터베이스 (RDB : Relational DataBase)</h2>
+<p>스키마의 형태로 데이터들의 연관성을 고려해서 데이터를 저장한다.<br />
+데이터를 관리하기 위해 SQL언어를 사용해야한다.</p>
+
+<blockquote>
+  <p>스키마 이미지<br />
+<img src="/assets/images/source_33.png" width="70%" /></p>
+</blockquote>
+
+<h2 id="nosql">NoSQL</h2>
+<p>말그대로 SQL에 한정되지 않겠다는 의지를 담은 데이터베이스</p>
+
+<p>형식의 자유로운 데이터들을 딕셔너리와 같이 Key와 값의 관계로 저장해서,<br />
+Key로 하여금 데이터를 불러올 수 있는 구조를 말한다.</p>
+
+<p>그 형태에 따라 Key-value(key하나의 value에 여러 column값들을 가짐), document(하나의 doc은 여러 key:value 세트를 갖는 dict형), wide-column(key-value와 비슷한데 좀 더 형식이 더해져, 덜 유연한 구조), graph 등의 종류가 있다.</p>
+
+<h2 id="데이타-베이스-구조의-유연함의-의미">데이타 베이스 구조의 유연함의 의미</h2>
+<p>유연 up &lt;-&gt; 확장성 up , 무결성, 안정성, 관리용이성 down</p>
+
+<p>확장성에 대해서는 수평적으로 용이한지, 수직적으로 용이한지 애매할 수 있다.</p>
+
+<p>RDB의 경우 상대적으로 덜 유연하더라도 수직적 확장으로는 더 강점이 있다고 할 수 있다.</p>
+
+<h1 id="sql-문법-이모저모">SQL 문법 이모저모</h1>
+
+<p>FROM
+WHERE
+GROUP BY
+HAVING
+SELECT
+ORDER BY</p>
+
+<h1 id="python에서-클라우드-데이터베이-사용">python에서 클라우드 데이터베이 사용</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

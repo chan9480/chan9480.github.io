@@ -1,0 +1,7 @@
+I"3<h1 id="클라우드-데이터베이스">클라우드 데이터베이스</h1>
+<p>말 그대로 온라인으로 접근할 수 있는 데이터베이스를 말한다.</p>
+<ol>
+  <li>관계형 데이터베이스  (oracle DB, mySQL, PostgreSQL 등)</li>
+  <li>NoSQL  (MongoDB, Redis, Hbase Neo4j등)</li>
+</ol>
+:ET

@@ -1,0 +1,46 @@
+I"�<!-- 공백이 포함되어 있는 카테고리 이름의 경우 site.categories['a b c'] 이런식으로! -->
+
+<hr />
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/de/CloudDB/">클라우드 데이터베이스, SQL</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.04.02
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/de/docker/">도커(docker)로 리눅스환경을 만들고 py파일을 실행해보자.</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.25
+              
+            </small>
+        </div>
+      </article>
+</div>
+
+<div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/de/crawling/">크롤링(Crawling)</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.05
+              
+            </small>
+        </div>
+      </article>
+</div>
+:ET

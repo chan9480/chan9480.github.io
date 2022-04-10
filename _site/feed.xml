@@ -1,4 +1,165 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-30T06:50:11+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">wiki데이터를 이용한 이미지 캡셔닝</title><link href="http://localhost:4000/pj/image_captioning/" rel="alternate" type="text/html" title="wiki데이터를 이용한 이미지 캡셔닝" /><published>2022-03-28T00:00:00+09:00</published><updated>2022-03-28T00:00:00+09:00</updated><id>http://localhost:4000/pj/image_captioning</id><content type="html" xml:base="http://localhost:4000/pj/image_captioning/"><![CDATA[<h3 id="mac-gpu-사용가능확인-1이면-사용가능">mac gpu 사용가능확인 (1이면 사용가능)</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-04-10T21:59:19+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">1x1 conv, 그리고 conv2d conv3d의 이해</title><link href="http://localhost:4000/ds/1by1conv/" rel="alternate" type="text/html" title="1x1 conv, 그리고 conv2d conv3d의 이해" /><published>2022-04-09T00:00:00+09:00</published><updated>2022-04-09T00:00:00+09:00</updated><id>http://localhost:4000/ds/1by1conv</id><content type="html" xml:base="http://localhost:4000/ds/1by1conv/"><![CDATA[<h2 id="1by1-conv는-어떻게-생긴거냐">1by1 conv는 어떻게 생긴거냐</h2>
+<p>처음엔 1by1 사이즈의 필터가 CNN에서 의미가 있나 생각했다.<br />
+근데 그게 아니라 1by1byN 모양의 필터였던 것!<br />
+피쳐맵의 길이를 줄일 수 있고, 이를 포함하는 CNN구조들은 비교적 더 이후에 나온 구조이기도 하고,<br />
+연산량을 줄이고 속도를 높이는 역할을 할까?</p>
+
+<h2 id="2차원-필터는-conv2d-3차원-필터는-conv3d">2차원 필터는 conv2d, 3차원 필터는 conv3d</h2>
+<p>내가 이해한게 맞다면 conv2d는 피쳐맵길이는 같거나, 증가할 수 밖에 없고<br />
+conv3d는 감소, 동일, 증가 모두 가능하다.</p>
+
+<h2 id="1by1-conv의-예시">1by1 conv의 예시</h2>
+<p>3by3 필터를 사용하는<br />
+input이 (7,7,32), output 사이즈가 (7,7,64)라고 해보자(same padding)<br />
+conv2d를 사용하면 파라미터는  (3x3)x32x64+64 = 18496.<br />
+conv3d를 사용해도 식의 의미는 다르지만 (3x3x32)x64+64 = 18496.</p>
+
+<p>1x1 conv를 사용하여 (7,7,16) 으로 변환 후 (7,7,64) 로 바꾼다면<br />
+(1x1x32x16+16) + (3x3x16x64+64) = 528 + 9280 = 9808.</p>
+
+<p>파라미터의 수를 상당히 줄일 수 있다</p>
+
+<p>VGGnet에서 Resnet은 VGGnet 대비 기울기 소실을 막음으로써 모델을 더 깊게 쌓을 수 있었다면,<br />
+1by1 conv의 경우에는 파라미터의 수를 줄임으로써 모델을 더 깊게 쌓을 수 있을 것.</p>
+
+<h2 id="fire-module">fire module</h2>
+
+<p>1x1 conv를 사용하는 대표적인 예시가 fire module인데,  3x3 convㄹ</p>
+
+<p>미완 참고중 :<br />
+https://hoya012.github.io/blog/deeplearning-classification-guidebook-3/</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[1by1 conv는 어떻게 생긴거냐 처음엔 1by1 사이즈의 필터가 CNN에서 의미가 있나 생각했다. 근데 그게 아니라 1by1byN 모양의 필터였던 것! 피쳐맵의 길이를 줄일 수 있고, 이를 포함하는 CNN구조들은 비교적 더 이후에 나온 구조이기도 하고, 연산량을 줄이고 속도를 높이는 역할을 할까?]]></summary></entry><entry><title type="html">YOLO를 이해하기 위한 CNN 객체인식 모델</title><link href="http://localhost:4000/ds/YOLO/" rel="alternate" type="text/html" title="YOLO를 이해하기 위한 CNN 객체인식 모델" /><published>2022-04-07T00:00:00+09:00</published><updated>2022-04-07T00:00:00+09:00</updated><id>http://localhost:4000/ds/YOLO</id><content type="html" xml:base="http://localhost:4000/ds/YOLO/"><![CDATA[<h2 id="유명-이미지-데이터">유명 이미지 데이터</h2>
+<p>cifar10, 100 : 클래스 10, 100개의 갖는 사물 이미지(32,32) 데이터 셋 (학습용 50000개)<br />
+imagenet :  클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음.</p>
+
+<h2 id="객체-인식-모델의-전반적인-생김새">객체 인식 모델의 전반적인 생김새</h2>
+<p><img src="/assets/images/source_34.png" height="100%" />
+&lt; 2stage와 1stage 구조 그림&gt;</p>
+
+<ol>
+  <li>
+    <p>2-stage detector : region proposal network를 포함한다. 이는 자주 탐지되는 부분을 학습한다는 의미. + localization과 classification을 ‘각각’ 진행한다는 의미.</p>
+  </li>
+  <li>
+    <p>single(1-stage) detector : localization과 classification을 동시에 진행.</p>
+  </li>
+</ol>
+
+<h2 id="객체-분류-backbone">객체 분류 (Backbone)</h2>
+<ul>
+  <li>
+    <p>VGGnet : 3x3 conv만 사용하여 구조가 단순한데 비해 기능은 준수함.</p>
+  </li>
+  <li>
+    <p>Resnet : 3x3 conv를 포함하며 conv를 무시 후 지나가는 shortcut을 갖는 residual block 으로 구성됨. (Resnet152에서는 1x1 conv를 포함하는 residual block을 사용함) 기울기 손실 방지를 통해 깊이를 깊게 쌓을 수 있게 됨.</p>
+  </li>
+</ul>
+
+<p><img src="/assets/images/source_35.png" width="50%" /></p>
+
+<ul>
+  <li>Dense net : Resnet같이 relu가 아닌, concat으로 이전 정보를 가져간다는 차이가 있음.</li>
+</ul>
+
+<p><img src="/assets/images/source_36.png" height="100%" /></p>
+
+<ul>
+  <li>CSP-Darknet : Densenet을 기초로 CSP를 적용시킴</li>
+  <li>CSP 방법 : 분리된 feature map을 다시 병합해주다?</li>
+</ul>
+
+<h2 id="neck">Neck</h2>
+<p><img src="/assets/images/source_38.png" width="50%" />
+<img src="/assets/images/source_39.png" height="70%" /></p>
+<ol>
+  <li>
+    <p>additional blocks : 다양한 크기의 피쳐맵들을 만들어 정보를 수집 SPP : 아하<br />
+(사진 예시(좌) : SPP, 모든 피쳐맵들을 몇가지 경우의 grid로 나누어 flatten한 후 평균을 냄 )</p>
+  </li>
+  <li>
+    <p>path-aggregation blocks : bottom-up path 와 top-down path에서 정보를 수집<br />
+(사진 예시(우) : PAN, 기존 FPN 네트워크에서 빨간선, 초록선과 같이 low-level-feature를 high-level-feature에 전달하여 성능을 향상시킴.)</p>
+  </li>
+</ol>
+
+<h2 id="head">Head</h2>
+<ol>
+  <li>영역 제한 faster R-CNN<br />
+자주 생성되는 위치를 학습한다. region proposal net</li>
+  <li>사이즈 제한 YOLO  <br />
+정해진 그리드로 나누어 CNN으로 처리한다.</li>
+</ol>
+
+<p>미완, 참고중 :<br />
+https://herbwood.tistory.com/24<br />
+https://deep-learning-study.tistory.com/528<br />
+https://ganghee-lee.tistory.com/34</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[유명 이미지 데이터 cifar10, 100 : 클래스 10, 100개의 갖는 사물 이미지(32,32) 데이터 셋 (학습용 50000개) imagenet : 클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음.]]></summary></entry><entry><title type="html">클라우드 데이터베이스, SQL</title><link href="http://localhost:4000/de/CloudDB/" rel="alternate" type="text/html" title="클라우드 데이터베이스, SQL" /><published>2022-04-02T00:00:00+09:00</published><updated>2022-04-02T00:00:00+09:00</updated><id>http://localhost:4000/de/CloudDB</id><content type="html" xml:base="http://localhost:4000/de/CloudDB/"><![CDATA[<h1 id="클라우드-데이터베이스">클라우드 데이터베이스</h1>
+<p>말 그대로 온라인으로 접근할 수 있는 데이터베이스를 말한다.</p>
+<ol>
+  <li>관계형 데이터베이스  (oracle DB, mySQL, PostgreSQL 등)</li>
+  <li>NoSQL  (MongoDB, Redis, Hbase Neo4j등)</li>
+</ol>
+
+<h2 id="관계형-데이터베이스-rdb--relational-database">관계형 데이터베이스 (RDB : Relational DataBase)</h2>
+<p>스키마의 형태로 데이터들의 연관성을 고려해서 데이터를 저장한다.<br />
+데이터를 관리하기 위해 SQL언어를 사용해야한다.</p>
+
+<blockquote>
+  <p>스키마 이미지<br />
+<img src="/assets/images/source_33.png" width="70%" /></p>
+</blockquote>
+
+<h2 id="nosql">NoSQL</h2>
+<p>말그대로 SQL에 한정되지 않겠다는 의지를 담은 데이터베이스</p>
+
+<p>형식의 자유로운 데이터들을 딕셔너리와 같이 Key와 값의 관계로 저장해서,<br />
+Key로 하여금 데이터를 불러올 수 있는 구조를 말한다.</p>
+
+<p>그 형태에 따라 Key-value(key하나의 value에 여러 column값들을 가짐), document(하나의 doc은 여러 key:value 세트를 갖는 dict형), wide-column(key-value와 비슷한데 좀 더 형식이 더해져, 덜 유연한 구조), graph 등의 종류가 있다.</p>
+
+<h2 id="데이타-베이스-구조의-유연함의-의미">데이타 베이스 구조의 유연함의 의미</h2>
+<p>유연 up &lt;-&gt; 확장성 up , 무결성, 안정성, 관리용이성 down</p>
+
+<p>확장성에 대해서는 수평적으로 용이한지, 수직적으로 용이한지 애매할 수 있다.</p>
+
+<p>RDB의 경우 상대적으로 덜 유연하더라도 수직적 확장으로는 더 강점이 있다고 할 수 있다.</p>
+
+<h1 id="sql-문법-이모저모">SQL 문법 이모저모</h1>
+
+<p>FROM
+WHERE
+GROUP BY
+HAVING
+SELECT
+ORDER BY</p>
+
+<h1 id="python에서-클라우드-데이터베이-사용">python에서 클라우드 데이터베이 사용</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="de" /><summary type="html"><![CDATA[클라우드 데이터베이스 말 그대로 온라인으로 접근할 수 있는 데이터베이스를 말한다. 관계형 데이터베이스 (oracle DB, mySQL, PostgreSQL 등) NoSQL (MongoDB, Redis, Hbase Neo4j등)]]></summary></entry><entry><title type="html">wiki데이터를 이용한 이미지 캡셔닝</title><link href="http://localhost:4000/pj/image_captioning/" rel="alternate" type="text/html" title="wiki데이터를 이용한 이미지 캡셔닝" /><published>2022-03-28T00:00:00+09:00</published><updated>2022-03-28T00:00:00+09:00</updated><id>http://localhost:4000/pj/image_captioning</id><content type="html" xml:base="http://localhost:4000/pj/image_captioning/"><![CDATA[<h3 id="mac-gpu-사용가능확인-1이면-사용가능">mac gpu 사용가능확인 (1이면 사용가능)</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
 </code></pre></div></div>
@@ -1401,7 +1562,7 @@ CNN의 Layer를 하나씩 쌓고 있다.<br />
 그 결과, (30,30) 사이즈의 32겹 피쳐맵을 만들었고, param수는 896개이다.<br />
 가중치의 갯수는 신경망의 원리에서 각 가중치를 필터로 갖는다고 생각하면 쉽다.<br />
 3 (=input) x 32(=output) x 9(=3*3필터) + 32(퍼셉트론 신경망 node와 같이 각 feature맵 가중치)<br />
-=895</p>
+=896</p>
 
 <h2 id="이것만-이해하자-no3">이것만 이해하자. No.3</h2>
 <p><img src="/assets/images/ds/source_2.png" width="40%" height="40%" /><br />
@@ -1420,6 +1581,7 @@ stride나 padding이 들어가면 헷갈릴 수 있다. 위 식에 대입해서 
     </ul>
   </li>
   <li>스트라이드 (stride) : 커널을 대입할 때, 이동하는 칸 수를 말한다. (1이면 한칸씩 이동)</li>
+  <li>풀링(pulling) :  이미지, 피쳐맵의 사이즈를 줄임. 내부의 정보 등을 줄이기 때문에 오버피팅 효과 및 메모리 절약</li>
 </ol>
 
 <p><br /></p>
@@ -1750,229 +1912,4 @@ for keyword in searching_keyword:
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="de" /><summary type="html"><![CDATA[크롤링이란 ? web에 있는 데이터들을 긁어모으는 것을 말한다. 크게 두 종류로 먼저 나눌 수 있다. 정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링. 동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 상태에서 데이터들을 크롤링.]]></summary></entry><entry><title type="html">이진분류의 평가지표</title><link href="http://localhost:4000/something_else/_classfication_metrics/" rel="alternate" type="text/html" title="이진분류의 평가지표" /><published>2022-03-02T00:00:00+09:00</published><updated>2022-03-02T00:00:00+09:00</updated><id>http://localhost:4000/something_else/_classfication_metrics</id><content type="html" xml:base="http://localhost:4000/something_else/_classfication_metrics/"><![CDATA[<h2 id="이진분류-모델의-종류">이진분류 모델의 종류</h2>
-<p>로지스틱 회귀,<br />
-Decision_Tree(base model),<br />
-RandomForest,<br />
-Gradient_boost,<br />
-KNN(K-Nearest-Neighbors),<br />
-그외 딥러닝 모델도 될 수 있겠다.</p>
-
-<h2 id="평가지표의-종류">평가지표의 종류</h2>
-<p>위와 같은 이진분류 모델 (군집x, 지도학습의 분류o) 의 평가지표는 어떤 게 있을까.<br />
-(회귀에서는 MSE, MAE, RMS, R-score 등이 있었쥬!)</p>
-
-<p>가장 단순하게 볼 수 있는 것은 validation 데이터에 대해서 얼마나 많이 맞춘 비율(0~1)이 있을 것이다.<br />
-바로 정확도(Accuracy)!  <br />
-그러나 모델을 하나의 값으로 평가하면 안될 것이다.</p>
-
-<blockquote>
-  <p>정확도 (Accuracy)<br />
-먼저 정확도를 체크할 때에도 베이스 모델은 반드시 필요하다.<br />
-그 이유를 예로 들어보자면,  암을 예측하는 모델의 학습데이터에서 암에 걸린 데이터(1)가 5%, 나머지 95%가 건강(0)하다면,<br />
-입력에 상관없이 항상 출력을 ‘0’으로만 한다면 그 모델은<br />
-CV나 hold-out 으로 비슷한 비율로 생성된 validation 데이터에서도 정확도를 대략 0.95로 가질 것이다..!<br />
-이러한 모델은 정확도 검증에 있어서 0.95는 최소한 넘는 것으로 고려해야 할 것이다.</p>
-</blockquote>
-
-<blockquote>
-  <p>TP, TN, FP, FN<br />
-(T,F는 True, False,   P,N은 Positive, Negative,)<br />
-True는 맞춘거, False는 못맞춘거.<br />
-P와 N은 예측한 거 기준. (FP는 실제 Negative인데 모델이 Positive로 예측한거야)</p>
-</blockquote>
-
-<blockquote>
-  <p>정밀도(precision)와 재현율(recall, sensitivity), specificity(TN-rate), Fall-out<br />
-precision = TP/(TP+FP) = Positive로 예측한 것들중 맞춘비율<br />
-recall = TP/(TP+FN) = 실제 Positive 중 맞춘비율  (TPRate)
-specificity = TN/(TN+FP) = 실제 Negative 중 맞춘비율 (TNR)
-Fall-out = FP/(FP+TN) = 실제 Negative 중 틀린비율 (FPR)</p>
-</blockquote>
-
-<blockquote>
-  <p>confusion Metrics<br />
-TP, TN, FP, FN 을 한번에 나타낸 행렬<br />
-아래 사진을 참고하면 한번에 이해될것.ㅎㅎ</p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.metrics import plot_confusion_matrix
-import matplotlib.pyplot as plt
-
-# pipe는 파이프라인
-fig, ax = plt.subplots()
-matrix = plot_confusion_matrix(pipe, X_val_cleaned, y_val,
-                            cmap = plt.cm.Blues,
-                            ax = ax);
-</code></pre></div></div>
-<p><img src="/assets/images/source_23.png" width="30%" height="30%" title="제목" alt="아무거나" /></p>
-
-<blockquote>
-  <p>AUC, ROC 와 임계값(Threshold)<br />
-ROC 커브는 임계값에 따른 FPR과 TPR 값이 그리는 커브인데. 모두 일대일 관계이다. <br />
-AOC수치는 ROC curve의 아래 면적을 뜻한다.<br />
-AOC는 클수록 좋은 모델인 것은 사실이다.<br />
-이유 : FPR (틀린비율, 낮을수록 좋음) 이 낮음에도 TPR(맞춘비율, 높을수록 좋음)은 높아야 AOC가 높은 것이기 때문.<br />
-결과적으로 tpr-fpr이 최대가 되는 점의 임계점을 고르는게 최선이라고 할 수 있다.</p>
-</blockquote>
-
-<p><img src="/assets/images/source_24.png" width="30%" height="30%" title="제목" alt="아무거나" /><br />
-<img src="/assets/images/source_25.png" width="30%" height="30%" title="제목" alt="아무거나" /></p>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[이진분류 모델의 종류 로지스틱 회귀, Decision_Tree(base model), RandomForest, Gradient_boost, KNN(K-Nearest-Neighbors), 그외 딥러닝 모델도 될 수 있겠다.]]></summary></entry><entry><title type="html">랜덤포레스트(Random Forest)와 …</title><link href="http://localhost:4000/ds/random_forest/" rel="alternate" type="text/html" title="랜덤포레스트(Random Forest)와 …" /><published>2022-02-28T00:00:00+09:00</published><updated>2022-02-28T00:00:00+09:00</updated><id>http://localhost:4000/ds/random_forest</id><content type="html" xml:base="http://localhost:4000/ds/random_forest/"><![CDATA[<h2 id="랜덤-포레스트-모델">랜덤 포레스트 모델</h2>
-<p>단순 선형회귀와 릿지(Ridge) 회귀가 있었다면,<br />
-결정트리와 랜덤포레스트가 있다.</p>
-
-<p>릿지 회귀에서 과적합을 방지하는 장치가 있었다.<br />
-랜덤포레스트 또한 결정트리에서 더 일반화시켜주는 장치가 있다.</p>
-
-<p>결정트리를 여러개 만들어 모두의 의견을 합산하여 판단을 내린다.</p>
-
-<blockquote>
-  <p>숲(포레스트)이 만들어지는 과정</p>
-</blockquote>
-
-<ol>
-  <li>많은 feature중에서 n개 (pram: max_features) 를 ‘랜덤’으로 고른다.</li>
-  <li>n개의 feature중 가장 영향도가 큰 feature를 골라 첫번째 node를 생성하고, 나머지 feature 중 랜덤하게 골라 트리를 완성한다.</li>
-  <li>위와같은 트리를 m개(pram: n_estimators)만든다.</li>
-  <li>트리들의 분류 결과로 투표를 해서 최종 결정을 한다.</li>
-</ol>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-
-# bootstrap을 False로 하고 max_features 수정가능.
-classifier = RandomForestClassifier(n_estimators = 50, bootstrap = False, max_features = 5)
-
-# 모델 fit
-classifier.fit(X_train, y_train)
-
-# 결과값 예측
-y_pred = classifier.predict(X_test)
-
-# 같은지 다른지 확인.
-print("정확도 : {}".format(accuracy_score(y_test, y_pred))
-</code></pre></div></div>
-
-<blockquote>
-  <p>CV(cross validation)은 GridsearchCV, RandomizedSearchCV 등을 이용.</p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># CV(cross validation)은 gridsearch 등을 이용.
-from sklearn.model_selection import GridSearchCV
-
-grid = {
-    'n_estimators' : [100,200],
-    'max_depth' : [6,8,10,12],
-    'min_samples_leaf' : [3,5,7,10],
-    'min_samples_split' : [2,3,5,10]
-}
-
-classifier_grid = GridSearchCV(classifier, param_grid = grid, scoring="accuracy", n_jobs=-1, verbose =1)
-
-classifier_grid.fit(X_train, y_train)
-
-print("최고 평균 정확도 : {}".format(classifier_grid.best_score_))
-print("최고의 파라미터 :", classifier_grid.best_params_)
-</code></pre></div></div>
-<blockquote>
-  <p>feature_importances 내부변수로 확인가능</p>
-</blockquote>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import matplotlib.pyplot as plt
-import seaborn as sns
-%matplotlib inline
-
-feature_importances = model.feature_importances_
-
-ft_importances = pd.Series(feature_importances, index = X_train.columns)
-ft_importances = ft_importances.sort_values(ascending=False)
-
-plt.figure(fig.size(12,10))
-sns.barplot(x=ft_importances, y= X_train.columns)
-plt.show()
-</code></pre></div></div>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[랜덤 포레스트 모델 단순 선형회귀와 릿지(Ridge) 회귀가 있었다면, 결정트리와 랜덤포레스트가 있다.]]></summary></entry><entry><title type="html">파이프라인(PipeLine)과 결정트리모델(Decision Tree)</title><link href="http://localhost:4000/ds/decision_tree/" rel="alternate" type="text/html" title="파이프라인(PipeLine)과 결정트리모델(Decision Tree)" /><published>2022-02-26T00:00:00+09:00</published><updated>2022-02-26T00:00:00+09:00</updated><id>http://localhost:4000/ds/decision_tree</id><content type="html" xml:base="http://localhost:4000/ds/decision_tree/"><![CDATA[<h2 id="사이킷런sklearn-파이프라인-pipeline">사이킷런(sklearn) 파이프라인 (PipeLine)</h2>
-<p>사이킷런에서 제공하는 파이프라인은 각 기능을 하는 모델들을 한번에 묶는 기능과<br />
-하이퍼 파라미터를 연결시키는 기능이 있다.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sklearn.pipeline import make_pipeline
-from category_encoders import OneHotEncoder
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
-from sklearn.tree import DecisionTreeClassifier
-
-pipe = make_pipeline(
-    OneHotEncoder(use_cat_names=True),  
-    SimpleImputer(),
-    StandardScaler(),
-    DecisionTreeClassifier(random_state=1, criterion='entropy', min_samples_leaf=10, max_depth=6)
-
-    # min_samples_leaf는 말단 노드에 최소 존재해야할 데이터 수.
-    # max_depth 는 최대 깊이를 제한하여 복잡도를 개선.
-)
-
-# pipe fit
-pipe.fit(x_train, y_train)
-print('검증세트 정확도', pipe.score(X_val, y_val))
-
-# 테스트 셋
-y_pred = pipe.predict(X_test)
-
-# feature_importance 띄우기
-## 먼저 파이프 내의 학습된 모델들 떼어서 가져온다.
-model_dt = pipe.named_steps['decisiontreeclassifier']
-enc = pipe.named_steps['onehotencoder']
-
-encoded_columns = enc.transform(X_val).columns
-
-importances = pd.Series(model_dt.feature_importances_, encoded_columns)
-</code></pre></div></div>
-
-<h2 id="결정트리-decision_tree">결정트리 (Decision_Tree)</h2>
-<p>결정트리는 ‘분류’에 있어서 마치 ‘회귀’의 선형회귀 와 같은 느낌이다.<br />
-데이터들을 계속해서 두가지씩 분류하여 결과적으로 모든 데이터들을 정해진 갯수의 class들로 분류하게 된다.</p>
-
-<p><img src="/assets/images/source_22.png" width="60%" height="60%" title="제목" alt="아무거나" /><br />
-결정트리를 발전시킨<br />
-‘랜덤포레스트 (Random_Forest)’,<br />
-‘그래디언트 부스트 트리 (Gradient Boosted Tree)’<br />
-같은 모델들을 더 많이 사용할 것이다.<br />
-그러나 그 기초는 결정트리에 있다.</p>
-
-<blockquote>
-  <p>트리학습에서의 비용함수</p>
-</blockquote>
-
-<ol>
-  <li>지니지수 (Gini Impurity</li>
-  <li>엔트로피 (Entropy)</li>
-</ol>
-
-<p>두가지 모두 불순도를 나타내는 척도 이며<br />
-클수록 골고루 섞여 있다는 뜻.(10개의 공들 중에 5개씩 빨간공, 파란공이라면 0.5)
-즉, 0에 가까울수록 치우쳐져 있다는 뜻. (전부 특정공만 10개 있다면 0)</p>
-
-<p>즉 지니지수, 엔트로피가 작아지는 방향으로 트리 노드를 생성한다.</p>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[사이킷런(sklearn) 파이프라인 (PipeLine) 사이킷런에서 제공하는 파이프라인은 각 기능을 하는 모델들을 한번에 묶는 기능과 하이퍼 파라미터를 연결시키는 기능이 있다.]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="de" /><summary type="html"><![CDATA[크롤링이란 ? web에 있는 데이터들을 긁어모으는 것을 말한다. 크게 두 종류로 먼저 나눌 수 있다. 정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링. 동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 상태에서 데이터들을 크롤링.]]></summary></entry></feed>

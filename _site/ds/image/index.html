@@ -23,7 +23,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>openCV 이미지 읽기 - 배우자 그리고 써먹자</title>
-<meta name="description" content="OpenCV vs pillow(PIL) vs scikit-image    https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.   openCV 설치 conda install -c anaconda opencv   local 경로로 이미지열기 import cv2 cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.     flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)   링크이미지(.jpeg) 열기    크롤링의 개념을 가져와서 사용한다. ```` import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request   def url_to_image(url):   ‘’’   jpg, png 이미지링크에서 numpy ndarray로 return   ‘’’   resp = urllib.request.urlopen(url)   image = np.asarray(bytearray(resp.read()), dtype=’uint8’)   image = cv2.imdecode(image, cv2.IMREAD_COLOR)  return image  &gt; requests.urlopen : url 에서 request(응답) 객체르 리턴   &gt; -&gt; .read()로써 호출할 수 있음.   &gt; numpy.asarray : 배열로써 이미지르 읽음 &gt; image를 cv2로 다시 읽어 리턴한다.(3차원)    ## svg 파일 열기 &gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원     &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중 ## 이미지 확인하기    img = 이미지의 ndarray형식 cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름 ````    위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴     🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
+<meta name="description" content="OpenCV vs pillow(PIL) vs scikit-image    https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.   openCV 설치 conda install -c anaconda opencv   local 경로로 이미지열기 import cv2 cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.     flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)   링크이미지(.jpeg) 열기    크롤링의 개념을 가져와서 사용한다.   import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request  def url_to_image(url):   &#39;&#39;&#39;   jpg, png 이미지링크에서 numpy ndarray로 return   &#39;&#39;&#39;   resp = urllib.request.urlopen(url)   image = np.asarray(bytearray(resp.read()), dtype=&#39;uint8&#39;)   image = cv2.imdecode(image, cv2.IMREAD_COLOR)    return image       requests.urlopen : url 에서 request(응답) 객체르 리턴 -&gt; .read()로써 호출할 수 있음. numpy.asarray : 배열로써 이미지르 읽음 image를 cv2로 다시 읽어 리턴한다.(3차원)   svg 파일 열기    cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원   m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중   이미지 확인하기   img = 이미지의 ndarray형식 cv2.imshow(&#39;name&#39;, img)   # name은 이미지르 띄운 window 이름      위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴     🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
 
 
   <meta name="author" content="옹달샘👱🏼‍♂️">
@@ -36,7 +36,7 @@
 <meta property="og:url" content="http://localhost:4000/ds/image/">
 
 
-  <meta property="og:description" content="OpenCV vs pillow(PIL) vs scikit-image    https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.   openCV 설치 conda install -c anaconda opencv   local 경로로 이미지열기 import cv2 cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.     flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)   링크이미지(.jpeg) 열기    크롤링의 개념을 가져와서 사용한다. ```` import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request   def url_to_image(url):   ‘’’   jpg, png 이미지링크에서 numpy ndarray로 return   ‘’’   resp = urllib.request.urlopen(url)   image = np.asarray(bytearray(resp.read()), dtype=’uint8’)   image = cv2.imdecode(image, cv2.IMREAD_COLOR)  return image  &gt; requests.urlopen : url 에서 request(응답) 객체르 리턴   &gt; -&gt; .read()로써 호출할 수 있음.   &gt; numpy.asarray : 배열로써 이미지르 읽음 &gt; image를 cv2로 다시 읽어 리턴한다.(3차원)    ## svg 파일 열기 &gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원     &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중 ## 이미지 확인하기    img = 이미지의 ndarray형식 cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름 ````    위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴     🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
+  <meta property="og:description" content="OpenCV vs pillow(PIL) vs scikit-image    https://github.com/ethereon/lycon 위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데, 속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다. 만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.   openCV 설치 conda install -c anaconda opencv   local 경로로 이미지열기 import cv2 cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.     flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)   링크이미지(.jpeg) 열기    크롤링의 개념을 가져와서 사용한다.   import cv2 from google.colab.patches import cv2_imshow import numpy as np import urllib.request  def url_to_image(url):   &#39;&#39;&#39;   jpg, png 이미지링크에서 numpy ndarray로 return   &#39;&#39;&#39;   resp = urllib.request.urlopen(url)   image = np.asarray(bytearray(resp.read()), dtype=&#39;uint8&#39;)   image = cv2.imdecode(image, cv2.IMREAD_COLOR)    return image       requests.urlopen : url 에서 request(응답) 객체르 리턴 -&gt; .read()로써 호출할 수 있음. numpy.asarray : 배열로써 이미지르 읽음 image를 cv2로 다시 읽어 리턴한다.(3차원)   svg 파일 열기    cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원   m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중   이미지 확인하기   img = 이미지의 ndarray형식 cv2.imshow(&#39;name&#39;, img)   # name은 이미지르 띄운 window 이름      위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다! cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴     🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄   맨 위로 이동하기 ">
 
 
 
@@ -345,7 +345,7 @@
   <label for="ac-toc">카테고리 Click</label>
   <ul class="nav__items" id="category_tag_menu">
       <li>
-            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">24</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
+            📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'Coming Soon';">27</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
       </li>
       <li>
         <span class="nav__sub-title">Data</span>
@@ -358,7 +358,7 @@
                     
                 
                     
-                        <li><a href="/categories/ds" class="">Data_science (8)</a></li>
+                        <li><a href="/categories/ds" class="">Data_science (10)</a></li>
                     
                 
                     
@@ -375,7 +375,7 @@
                     
                 
                     
-                        <li><a href="/categories/de" class="">Data_engineering (2)</a></li>
+                        <li><a href="/categories/de" class="">Data_engineering (3)</a></li>
                     
                 
             </ul>
@@ -443,7 +443,7 @@
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="openCV 이미지 읽기">
-    <meta itemprop="description" content="OpenCV vs pillow(PIL) vs scikit-image  https://github.com/ethereon/lycon위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데,속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다.만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.openCV 설치conda install -c anaconda opencvlocal 경로로 이미지열기import cv2cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.  flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)링크이미지(.jpeg) 열기  크롤링의 개념을 가져와서 사용한다.````import cv2from google.colab.patches import cv2_imshowimport numpy as npimport urllib.requestdef url_to_image(url):  ‘’’  jpg, png 이미지링크에서 numpy ndarray로 return  ‘’’  resp = urllib.request.urlopen(url)  image = np.asarray(bytearray(resp.read()), dtype=’uint8’)  image = cv2.imdecode(image, cv2.IMREAD_COLOR)return image&gt; requests.urlopen : url 에서 request(응답) 객체르 리턴  &gt; -&gt; .read()로써 호출할 수 있음.  &gt; numpy.asarray : 배열로써 이미지르 읽음&gt; image를 cv2로 다시 읽어 리턴한다.(3차원)  ## svg 파일 열기&gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원    &gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중## 이미지 확인하기  img = 이미지의 ndarray형식cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름````  위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다!cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄맨 위로 이동하기">
+    <meta itemprop="description" content="OpenCV vs pillow(PIL) vs scikit-image  https://github.com/ethereon/lycon위 링크에서는 세 라이브러리의 속도비교를 해 놓았는데,속도측이나 기능측이나 빠르 openCV를 사용한 이미지 읽기를 정리해보려한다.만약 다른 라이블리르 이용할 일이 생길때마다 업데이트를 해야겠다.openCV 설치conda install -c anaconda opencvlocal 경로로 이미지열기import cv2cv2.imread(&#39;파일경로&#39;, flags) # ndarray형식으로 리턴.  flags 는 컬러 (3차원)가 default, 숫자 0 을 넣으면 흑백(1차원)링크이미지(.jpeg) 열기  크롤링의 개념을 가져와서 사용한다.import cv2from google.colab.patches import cv2_imshowimport numpy as npimport urllib.requestdef url_to_image(url):  &#39;&#39;&#39;  jpg, png 이미지링크에서 numpy ndarray로 return  &#39;&#39;&#39;  resp = urllib.request.urlopen(url)  image = np.asarray(bytearray(resp.read()), dtype=&#39;uint8&#39;)  image = cv2.imdecode(image, cv2.IMREAD_COLOR)  return image  requests.urlopen : url 에서 request(응답) 객체르 리턴-&gt; .read()로써 호출할 수 있음.numpy.asarray : 배열로써 이미지르 읽음image를 cv2로 다시 읽어 리턴한다.(3차원)svg 파일 열기  cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원  m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중  이미지 확인하기  img = 이미지의 ndarray형식cv2.imshow(&#39;name&#39;, img)   # name은 이미지르 띄운 window 이름    위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다!cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄맨 위로 이동하기">
     <meta itemprop="datePublished" content="2021-11-18T00:00:00+09:00">
     <meta itemprop="dateModified" content="2022-02-03T00:00:00+09:00">
 
@@ -488,6 +488,8 @@
   <li><a href="#opencv-설치">openCV 설치</a></li>
   <li><a href="#local-경로로-이미지열기">local 경로로 이미지열기</a></li>
   <li><a href="#링크이미지jpeg-열기">링크이미지(.jpeg) 열기</a></li>
+  <li><a href="#svg-파일-열기">svg 파일 열기</a></li>
+  <li><a href="#이미지-확인하기">이미지 확인하기</a></li>
 </ul>
 
             </nav>
@@ -515,38 +517,41 @@ cv2.imread('파일경로', flags) # ndarray형식으로 리턴.
 
 <h2 id="링크이미지jpeg-열기">링크이미지(.jpeg) 열기</h2>
 <blockquote>
-  <p>크롤링의 개념을 가져와서 사용한다.
-````
-import cv2
-from google.colab.patches import cv2_imshow
-import numpy as np
-import urllib.request</p>
+  <p>크롤링의 개념을 가져와서 사용한다.</p>
 </blockquote>
 
-<p>def url_to_image(url):
-  ‘’’
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import cv2
+from google.colab.patches import cv2_imshow
+import numpy as np
+import urllib.request
+
+def url_to_image(url):
+  '''
   jpg, png 이미지링크에서 numpy ndarray로 return
-  ‘’’
+  '''
   resp = urllib.request.urlopen(url)
-  image = np.asarray(bytearray(resp.read()), dtype=’uint8’)
-  image = cv2.imdecode(image, cv2.IMREAD_COLOR)</p>
+  image = np.asarray(bytearray(resp.read()), dtype='uint8')
+  image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
-<p>return image</p>
+  return image
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; requests.urlopen : url 에서 request(응답) 객체르 리턴  
-&gt; -&gt; .read()로써 호출할 수 있음.  
-&gt; numpy.asarray : 배열로써 이미지르 읽음
-&gt; image를 cv2로 다시 읽어 리턴한다.(3차원)  
-
-## svg 파일 열기
-&gt; cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원    
-&gt; m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중
-## 이미지 확인하기  
 </code></pre></div></div>
-<p>img = 이미지의 ndarray형식
-cv2.imshow(‘name’, img)   # name은 이미지르 띄운 window 이름
-````</p>
+
 <blockquote>
+  <p>requests.urlopen : url 에서 request(응답) 객체르 리턴<br />
+-&gt; .read()로써 호출할 수 있음.<br />
+numpy.asarray : 배열로써 이미지르 읽음
+image를 cv2로 다시 읽어 리턴한다.(3차원)</p>
+</blockquote>
+
+<h2 id="svg-파일-열기">svg 파일 열기</h2>
+<blockquote>
+  <p>cairosvg 라이브러리 내 함수, svg2png, svg2pdf, svg2svg, svg2ps 등 지원  <br />
+m1 mac에서는 어떻게 설치하는 업데이트 할 예정 아직공부중</p>
+  <h2 id="이미지-확인하기">이미지 확인하기</h2>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>img = 이미지의 ndarray형식
+cv2.imshow('name', img)   # name은 이미지르 띄운 window 이름
+</code></pre></div>  </div>
   <p>위는 주피터노트북에서 쓰면 되느 방식이고 .py르 터미널에서 실행할때는<br />
 cv2.waitKey(0) 을 이용해서 키보드입력이 있을때까지 띄워놓아야 한다!<br />
 cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴</p>
@@ -582,6 +587,10 @@ cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴</p>
 
 
 
+
+  
+
+  
 
   
 
@@ -661,6 +670,48 @@ cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴</p>
   
     <div class="page__related"> <!--site.data.ui-text[site.locale].related_label-->
       <h4 class="page__related-title">최근 글 10 개 :)</h4>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/1by1conv/">1x1 conv, 그리고 conv2d conv3d의 이해</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.04.09
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/ds/YOLO/">YOLO를 이해하기 위한 CNN 객체인식 모델</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.04.07
+              
+            </small>
+        </div>
+      </article>
+</div>
+        
+          <div class="list__item">
+    <article class="archive-item">
+        <div>
+            <span>
+              <a href="/de/CloudDB/">클라우드 데이터베이스, SQL</a>
+            </span>
+            <small> 
+              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.04.02
+              
+            </small>
+        </div>
+      </article>
+</div>
         
           <div class="list__item">
     <article class="archive-item">
@@ -792,48 +843,6 @@ cv2.destroyAllWindows() 또한 띄워놓으 윈도우르 전부 파괴</p>
             </span>
             <small> 
               <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.05
-              
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/something_else/_classfication_metrics/">이진분류의 평가지표</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.03.02
-              
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/ds/random_forest/">랜덤포레스트(Random Forest)와 ...</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.28
-              
-            </small>
-        </div>
-      </article>
-</div>
-        
-          <div class="list__item">
-    <article class="archive-item">
-        <div>
-            <span>
-              <a href="/ds/decision_tree/">파이프라인(PipeLine)과 결정트리모델(Decision Tree)</a>
-            </span>
-            <small> 
-              <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i> 2022.02.26
               
             </small>
         </div>

@@ -1,7 +1,0 @@
-I"d<ul class="toc__menu">
-  <li><a href="#opencv-vs-pillowpil-vs-scikit-image">OpenCV vs pillow(PIL) vs scikit-image</a></li>
-  <li><a href="#opencv-설치">openCV 설치</a></li>
-  <li><a href="#local-경로로-이미지열기">local 경로로 이미지열기</a></li>
-  <li><a href="#링크이미지jpeg-열기">링크이미지(.jpeg) 열기</a></li>
-</ul>
-:ET

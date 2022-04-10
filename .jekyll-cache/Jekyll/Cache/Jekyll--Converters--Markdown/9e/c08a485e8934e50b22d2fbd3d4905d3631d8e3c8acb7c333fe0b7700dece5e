@@ -1,0 +1,12 @@
+I"�<ul class="toc__menu">
+  <li><a href="#클라우드-데이터베이스">클라우드 데이터베이스</a>
+    <ul>
+      <li><a href="#관계형-데이터베이스-rdb--relational-database">관계형 데이터베이스 (RDB : Relational DataBase)</a></li>
+      <li><a href="#nosql">NoSQL</a></li>
+      <li><a href="#데이타-베이스-구조의-유연함의-의미">데이타 베이스 구조의 유연함의 의미</a></li>
+    </ul>
+  </li>
+  <li><a href="#sql-문법-이모저모">SQL 문법 이모저모</a></li>
+  <li><a href="#python에서-클라우드-데이터베이-사용">python에서 클라우드 데이터베이 사용</a></li>
+</ul>
+:ET
