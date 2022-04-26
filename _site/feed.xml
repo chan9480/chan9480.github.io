@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-04-10T21:59:19+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">1x1 conv, 그리고 conv2d conv3d의 이해</title><link href="http://localhost:4000/ds/1by1conv/" rel="alternate" type="text/html" title="1x1 conv, 그리고 conv2d conv3d의 이해" /><published>2022-04-09T00:00:00+09:00</published><updated>2022-04-09T00:00:00+09:00</updated><id>http://localhost:4000/ds/1by1conv</id><content type="html" xml:base="http://localhost:4000/ds/1by1conv/"><![CDATA[<h2 id="1by1-conv는-어떻게-생긴거냐">1by1 conv는 어떻게 생긴거냐</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-04-26T18:20:14+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">1x1 conv, 그리고 conv2d conv3d의 이해</title><link href="http://localhost:4000/ds/1by1conv/" rel="alternate" type="text/html" title="1x1 conv, 그리고 conv2d conv3d의 이해" /><published>2022-04-09T00:00:00+09:00</published><updated>2022-04-26T00:00:00+09:00</updated><id>http://localhost:4000/ds/1by1conv</id><content type="html" xml:base="http://localhost:4000/ds/1by1conv/"><![CDATA[<h2 id="1by1-conv는-어떻게-생긴거냐">1by1 conv는 어떻게 생긴거냐</h2>
 <p>처음엔 1by1 사이즈의 필터가 CNN에서 의미가 있나 생각했다.<br />
 근데 그게 아니라 1by1byN 모양의 필터였던 것!<br />
 피쳐맵의 길이를 줄일 수 있고, 이를 포함하는 CNN구조들은 비교적 더 이후에 나온 구조이기도 하고,<br />
-연산량을 줄이고 속도를 높이는 역할을 할까?</p>
+연산량을 줄이고 속도를 높이는 역할을 할까?<br />
+<img src="/assets/images/source_42.png" width="50%" /></p>
 
 <h2 id="2차원-필터는-conv2d-3차원-필터는-conv3d">2차원 필터는 conv2d, 3차원 필터는 conv3d</h2>
 <p>내가 이해한게 맞다면 conv2d는 피쳐맵길이는 같거나, 증가할 수 밖에 없고<br />
@@ -23,11 +24,12 @@ conv3d를 사용해도 식의 의미는 다르지만 (3x3x32)x64+64 = 18496.</p>
 1by1 conv의 경우에는 파라미터의 수를 줄임으로써 모델을 더 깊게 쌓을 수 있을 것.</p>
 
 <h2 id="fire-module">fire module</h2>
+<p>squeezeNET 이라는 모델에서 사용하는 모듈(단위 레이어) 이다.</p>
 
-<p>1x1 conv를 사용하는 대표적인 예시가 fire module인데,  3x3 convㄹ</p>
+<p>1x1 conv를 사용하는 대표적인 예시라고 볼 수 있는다.</p>
 
-<p>미완 참고중 :<br />
-https://hoya012.github.io/blog/deeplearning-classification-guidebook-3/</p>
+<p><img src="/assets/images/source_41.png" width="50%" /><br />
+squeeze에서 피쳐맵의 길이를 줄이고, expand의 인풋으로 넣는 아이디어!</p>
 
 <p><br /></p>
 
@@ -35,9 +37,10 @@ https://hoya012.github.io/blog/deeplearning-classification-guidebook-3/</p>
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[1by1 conv는 어떻게 생긴거냐 처음엔 1by1 사이즈의 필터가 CNN에서 의미가 있나 생각했다. 근데 그게 아니라 1by1byN 모양의 필터였던 것! 피쳐맵의 길이를 줄일 수 있고, 이를 포함하는 CNN구조들은 비교적 더 이후에 나온 구조이기도 하고, 연산량을 줄이고 속도를 높이는 역할을 할까?]]></summary></entry><entry><title type="html">YOLO를 이해하기 위한 CNN 객체인식 모델</title><link href="http://localhost:4000/ds/YOLO/" rel="alternate" type="text/html" title="YOLO를 이해하기 위한 CNN 객체인식 모델" /><published>2022-04-07T00:00:00+09:00</published><updated>2022-04-07T00:00:00+09:00</updated><id>http://localhost:4000/ds/YOLO</id><content type="html" xml:base="http://localhost:4000/ds/YOLO/"><![CDATA[<h2 id="유명-이미지-데이터">유명 이미지 데이터</h2>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[1by1 conv는 어떻게 생긴거냐 처음엔 1by1 사이즈의 필터가 CNN에서 의미가 있나 생각했다. 근데 그게 아니라 1by1byN 모양의 필터였던 것! 피쳐맵의 길이를 줄일 수 있고, 이를 포함하는 CNN구조들은 비교적 더 이후에 나온 구조이기도 하고, 연산량을 줄이고 속도를 높이는 역할을 할까?]]></summary></entry><entry><title type="html">CNN 객체인식 모델, 구조, 종류</title><link href="http://localhost:4000/ds/YOLO/" rel="alternate" type="text/html" title="CNN 객체인식 모델, 구조, 종류" /><published>2022-04-07T00:00:00+09:00</published><updated>2022-04-26T00:00:00+09:00</updated><id>http://localhost:4000/ds/YOLO</id><content type="html" xml:base="http://localhost:4000/ds/YOLO/"><![CDATA[<h2 id="유명-이미지-데이터">유명 이미지 데이터</h2>
 <p>cifar10, 100 : 클래스 10, 100개의 갖는 사물 이미지(32,32) 데이터 셋 (학습용 50000개)<br />
-imagenet :  클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음.</p>
+imagenet :  클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음.<br />
+MS COCO : 객체탐지를 목적으로 하는 이미지셋, 클래스와 위치(bbox)등의 정보가 함께있다. 15만장 이상 (train, val, test 포함)</p>
 
 <h2 id="객체-인식-모델의-전반적인-생김새">객체 인식 모델의 전반적인 생김새</h2>
 <p><img src="/assets/images/source_34.png" height="100%" />
@@ -60,47 +63,74 @@ imagenet :  클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음.</p>
   <li>
     <p>Resnet : 3x3 conv를 포함하며 conv를 무시 후 지나가는 shortcut을 갖는 residual block 으로 구성됨. (Resnet152에서는 1x1 conv를 포함하는 residual block을 사용함) 기울기 손실 방지를 통해 깊이를 깊게 쌓을 수 있게 됨.</p>
   </li>
-</ul>
-
-<p><img src="/assets/images/source_35.png" width="50%" /></p>
-
-<ul>
-  <li>Dense net : Resnet같이 relu가 아닌, concat으로 이전 정보를 가져간다는 차이가 있음.</li>
-</ul>
-
-<p><img src="/assets/images/source_36.png" height="100%" /></p>
-
-<ul>
-  <li>CSP-Darknet : Densenet을 기초로 CSP를 적용시킴</li>
-  <li>CSP 방법 : 분리된 feature map을 다시 병합해주다?</li>
+  <li>
+    <p>Dense net : Resnet같이 relu가 아닌, concat으로 이전 정보를 가져간다는 차이가 있음.<br />
+기울기 소실을 무시하는 수준, 모든 레이어가 연산없이 이어져 붙여버림을 의미.<br />
+단, 계속 이어붙이면 채널이 늘어나니까, 각 레이어에서 사용하는 채널은 상대적으로 적게 사용하므로써,<br />
+연산량이 줄어든다. (결과에 의한 효과라기보단 채널을 줄였으니 당연한것.)
+<img src="/assets/images/source_35.png" width="50%" /></p>
+  </li>
+  <li>CSP-Darknet : Densenet을 기초로 CSP를 적용시킴 <br />
+<img src="/assets/images/source_36.png" height="100%" /></li>
+  <li>CSP : 채널의 일부만 레이어를 통과시키는 방법. 병목현상을 크게 완화하겠쥬?</li>
 </ul>
 
 <h2 id="neck">Neck</h2>
-<p><img src="/assets/images/source_38.png" width="50%" />
-<img src="/assets/images/source_39.png" height="70%" /></p>
-<ol>
+<ul>
   <li>
-    <p>additional blocks : 다양한 크기의 피쳐맵들을 만들어 정보를 수집 SPP : 아하<br />
-(사진 예시(좌) : SPP, 모든 피쳐맵들을 몇가지 경우의 grid로 나누어 flatten한 후 평균을 냄 )</p>
+    <p>additional blocks : 다양한 크기의 피쳐맵들을 만들어 정보를 수집<br />
+(사진 예시 : SPP, 모든 피쳐맵들을 몇가지 경우의 grid로 나누어 풀링시킨 후 flatten)<br />
+<img src="/assets/images/source_38.png" width="50%" /></p>
   </li>
   <li>
     <p>path-aggregation blocks : bottom-up path 와 top-down path에서 정보를 수집<br />
-(사진 예시(우) : PAN, 기존 FPN 네트워크에서 빨간선, 초록선과 같이 low-level-feature를 high-level-feature에 전달하여 성능을 향상시킴.)</p>
+(사진 예시 : PAN, 기존 FPN 네트워크에서 빨간선, 초록선과 같이 low-level-feature를 high-level-feature에 전달하여 성능을 향상시킴.) <br />
+<img src="/assets/images/source_39.png" height="70%" /></p>
   </li>
-</ol>
+</ul>
 
 <h2 id="head">Head</h2>
+<p>1-stage, 2stage 외에도 anchor free인지, anchor-based인지로 나뉠 수 있다.(2x2총 4개 종)<br />
+anchor의 크기를 고정, 지정하는 방식이 anchor-based, anchor-free는 앵커의 크기를 지정할 필요가 없다.<br />
+따라서 anchor-based방식은 앵커의 크기, 종횡비를 파라미터로 필요로 하며, 이는 정확도에 민감하게 영향을 끼치고,<br />
+그만큼 메모리와 학습 및 테스트 시간이 더 소요된다.</p>
+
+<p><img src="/assets/images/source_40.png" width="50%" /></p>
+
 <ol>
-  <li>영역 제한 faster R-CNN<br />
+  <li>faster R-CNN (2-stage, anchor-based에 해당)<br />
 자주 생성되는 위치를 학습한다. region proposal net</li>
-  <li>사이즈 제한 YOLO  <br />
-정해진 그리드로 나누어 CNN으로 처리한다.</li>
+  <li>
+    <p>사이즈 제한 YOLO_v3(1-stage, anchor-based에 해당)
+정해진 그리드로 나누어 CNN으로 처리한다.</p>
+  </li>
+  <li>그외 RepPoints(2-stage, anchor-free), FCOS(1-stage, anchor-free) 등의 모델도 있다.</li>
 </ol>
 
-<p>미완, 참고중 :<br />
+<h2 id="yolo-v4">YOLO v4</h2>
+<p>그래서 YOLO_v4 무슨 구성인데.</p>
+
+<ul>
+  <li>Backbone : CSPDarknet53</li>
+  <li>Neck : SPP, PAN</li>
+  <li>Head : YOLOv3</li>
+  <li>그외 Bag of Specials, Bag of Freebies 의 영역에서 backbone과 detector에 각종 아이디어를<br />
+추가하여 완성된다.</li>
+</ul>
+
+<h2 id="마무리">마무리</h2>
+<p>완성 전에 제목을 수정했다.(전 제목 : YOLO 이해를 위한 … )<br />
+이 포스팅을 작성하는 중에 여러 일정들이 생기면서 완성하는 데 까지 시간이 오래 걸렸는데,<br />
+작성을 하다보니 ‘YOLO’모델을 이해하기 보다는<br />
+이 모델이 CNN 기반 객체인식 모델들 가운데 어떤 포지션에 위치하는 정도를<br />
+파악하는 포스팅이 되어버린 듯한 느낌이 들었기 때문이다.<br />
+구덩이 하나를 파고들기 전에 그 구덩이가 어디쯤에 위치하고 있는지 파악하는 단계랄까..</p>
+<blockquote>
+  <p>참고 포스팅<br />
 https://herbwood.tistory.com/24<br />
 https://deep-learning-study.tistory.com/528<br />
-https://ganghee-lee.tistory.com/34</p>
+https://hoya012.github.io/blog/deeplearning-classification-guidebook-4/</p>
+</blockquote>
 
 <p><br /></p>
 
@@ -108,7 +138,7 @@ https://ganghee-lee.tistory.com/34</p>
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[유명 이미지 데이터 cifar10, 100 : 클래스 10, 100개의 갖는 사물 이미지(32,32) 데이터 셋 (학습용 50000개) imagenet : 클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음.]]></summary></entry><entry><title type="html">클라우드 데이터베이스, SQL</title><link href="http://localhost:4000/de/CloudDB/" rel="alternate" type="text/html" title="클라우드 데이터베이스, SQL" /><published>2022-04-02T00:00:00+09:00</published><updated>2022-04-02T00:00:00+09:00</updated><id>http://localhost:4000/de/CloudDB</id><content type="html" xml:base="http://localhost:4000/de/CloudDB/"><![CDATA[<h1 id="클라우드-데이터베이스">클라우드 데이터베이스</h1>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[유명 이미지 데이터 cifar10, 100 : 클래스 10, 100개의 갖는 사물 이미지(32,32) 데이터 셋 (학습용 50000개) imagenet : 클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음. MS COCO : 객체탐지를 목적으로 하는 이미지셋, 클래스와 위치(bbox)등의 정보가 함께있다. 15만장 이상 (train, val, test 포함)]]></summary></entry><entry><title type="html">클라우드 데이터베이스, SQL</title><link href="http://localhost:4000/de/CloudDB/" rel="alternate" type="text/html" title="클라우드 데이터베이스, SQL" /><published>2022-04-02T00:00:00+09:00</published><updated>2022-04-02T00:00:00+09:00</updated><id>http://localhost:4000/de/CloudDB</id><content type="html" xml:base="http://localhost:4000/de/CloudDB/"><![CDATA[<h1 id="클라우드-데이터베이스">클라우드 데이터베이스</h1>
 <p>말 그대로 온라인으로 접근할 수 있는 데이터베이스를 말한다.</p>
 <ol>
   <li>관계형 데이터베이스  (oracle DB, mySQL, PostgreSQL 등)</li>
