@@ -1,0 +1,65 @@
+I"�	<h1 id="파이썬-내장-함수">파이썬 내장 함수</h1>
+<p>python 3.x 기준으로<br />
+유용하게 사용했던 ~ 유용해보이는 내장함수, 기본모듈, 클래스 등을 기록하려 한다.</p>
+
+<p>위에서의 유용함의 의미는<br />
+‘메모리의 효율적이되, 코드가 간결해지는 사용할 수 있음’ 혹은<br />
+‘정확한 표현을 간결하게 작성’ 정도가 되겠다.</p>
+
+<h2 id="copy-모듈">copy 모듈</h2>
+<h3 id="copycopy">copy.copy()</h3>
+<p>얕은 복사 (주소를 대입하는 것) 를 한다.</p>
+
+<h3 id="copydeepcopy">copy.deepcopy()</h3>
+<p>깊은 복사 (새롭게 주소를 생성) 를 한다.</p>
+
+<h2 id="enum">enum</h2>
+<p>열거형 데이터형을 만들어 쓸 수 있다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from enum import Enum
+class Color(Enum):
+  RED = 1,
+  YELLOW = 2,
+  BLUE = 3
+
+member = Color.RED
+print(member.name)
+# 'RED'
+print(member.value)
+# 1
+</code></pre></div></div>
+
+<h2 id="itertools-모듈">itertools 모듈</h2>
+
+<h3 id="count">count()</h3>
+<p>count(10)은 10, 11, 12 ….를,<br />
+count(10,2)는 10, 12, 14 … 를 무한으로 리턴함</p>
+
+<h3 id="cycle">cycle()</h3>
+<p>cycle(‘asdf’)는 a,s,d,f,a,s,d,f 를 무한으로 리턴함.</p>
+
+<h3 id="pairwise">pairwise()</h3>
+<p>pairwise(‘abcdefg’)는 ab,bc,cd,de,ef,fg 를 리턴함.</p>
+
+<h3 id="product">product()</h3>
+<p>product(‘abcd’, 3)은 for i in ‘abcd’ 를 3중으로 붙인 값을 리턴함.<br />
+aaa,aab,aac, … ddd</p>
+
+<h3 id="permutations">permutations()</h3>
+<p>순서를 고려한 모든 조합을 고른다.<br />
+permutations(‘abc’, 2) 는 ab, ac, ba, bc, ca, cb 를 리턴</p>
+
+<h3 id="combinations-combinations_with_replacement">combinations(), combinations_with_replacement()</h3>
+<p>순서를 고려하지 않는 모든 조합을 만든다.<br />
+combinations(‘abc’, 2) 는 ab, ac, bc 를 리턴<br />
+combinations_with_replacement 는 중복을 허용한다.<br />
+위 예시와 같이 넣으면, aa, ab, ac, bb, bc, cc 를 리턴</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET

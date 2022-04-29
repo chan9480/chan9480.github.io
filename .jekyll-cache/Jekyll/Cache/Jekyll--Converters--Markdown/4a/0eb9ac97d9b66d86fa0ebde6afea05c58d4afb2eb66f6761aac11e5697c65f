@@ -1,0 +1,25 @@
+I"�<ul class="toc__menu">
+  <li><a href="#답은-document에-있다">답은 document에 있다..!</a></li>
+  <li><a href="#파이썬-내장-함수">파이썬 내장 함수</a>
+    <ul>
+      <li><a href="#copy-모듈">copy 모듈</a>
+        <ul>
+          <li><a href="#copycopy">copy.copy()</a></li>
+          <li><a href="#copydeepcopy">copy.deepcopy()</a></li>
+        </ul>
+      </li>
+      <li><a href="#enum">enum</a></li>
+      <li><a href="#itertools-모듈">itertools 모듈</a>
+        <ul>
+          <li><a href="#count">count()</a></li>
+          <li><a href="#cycle">cycle()</a></li>
+          <li><a href="#pairwise">pairwise()</a></li>
+          <li><a href="#product">product()</a></li>
+          <li><a href="#permutations">permutations()</a></li>
+          <li><a href="#combinations-combinations_with_replacement">combinations(), combinations_with_replacement()</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+:ET

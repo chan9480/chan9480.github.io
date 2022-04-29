@@ -1,4 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-04-26T18:20:14+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">1x1 conv, 그리고 conv2d conv3d의 이해</title><link href="http://localhost:4000/ds/1by1conv/" rel="alternate" type="text/html" title="1x1 conv, 그리고 conv2d conv3d의 이해" /><published>2022-04-09T00:00:00+09:00</published><updated>2022-04-26T00:00:00+09:00</updated><id>http://localhost:4000/ds/1by1conv</id><content type="html" xml:base="http://localhost:4000/ds/1by1conv/"><![CDATA[<h2 id="1by1-conv는-어떻게-생긴거냐">1by1 conv는 어떻게 생긴거냐</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-04-29T15:16:51+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">배우자 그리고 써먹자</title><subtitle>포트폴리오</subtitle><author><name>옹달샘👱🏼‍♂️</name></author><entry><title type="html">파이썬 내장함수</title><link href="http://localhost:4000/something_else/python_built_in/" rel="alternate" type="text/html" title="파이썬 내장함수" /><published>2022-04-29T00:00:00+09:00</published><updated>2022-04-29T00:00:00+09:00</updated><id>http://localhost:4000/something_else/python_built_in</id><content type="html" xml:base="http://localhost:4000/something_else/python_built_in/"><![CDATA[<h1 id="답은-document에-있다">답은 document에 있다..!</h1>
+<p><a href="https://docs.python.org/ko/3/library/index.html">https://docs.python.org/ko/3/library/index.html</a></p>
+<h1 id="파이썬-내장-함수">파이썬 내장 함수</h1>
+<p>python 3.x 기준으로<br />
+유용하게 사용했던 ~ 유용해보이는 내장함수, 기본모듈, 클래스 등을 기록하려 한다.</p>
+
+<p>위에서의 유용함의 의미는<br />
+‘메모리의 효율적이되, 코드가 간결해지는 사용할 수 있음’ 혹은<br />
+‘정확한 표현을 간결하게 작성’ 정도가 되겠다.</p>
+
+<h2 id="copy-모듈">copy 모듈</h2>
+<h3 id="copycopy">copy.copy()</h3>
+<p>얕은 복사 (주소를 대입하는 것) 를 한다.</p>
+
+<h3 id="copydeepcopy">copy.deepcopy()</h3>
+<p>깊은 복사 (새롭게 주소를 생성) 를 한다.</p>
+
+<h2 id="enum">enum</h2>
+<p>열거형 데이터형을 만들어 쓸 수 있다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from enum import Enum
+class Color(Enum):
+  RED = 1,
+  YELLOW = 2,
+  BLUE = 3
+
+member = Color.RED
+print(member.name)
+# 'RED'
+print(member.value)
+# 1
+</code></pre></div></div>
+
+<h2 id="itertools-모듈">itertools 모듈</h2>
+
+<h3 id="count">count()</h3>
+<p>count(10)은 10, 11, 12 ….를,<br />
+count(10,2)는 10, 12, 14 … 를 무한으로 리턴함</p>
+
+<h3 id="cycle">cycle()</h3>
+<p>cycle(‘asdf’)는 a,s,d,f,a,s,d,f 를 무한으로 리턴함.</p>
+
+<h3 id="pairwise">pairwise()</h3>
+<p>pairwise(‘abcdefg’)는 ab,bc,cd,de,ef,fg 를 리턴함.</p>
+
+<h3 id="product">product()</h3>
+<p>product(‘abcd’, 3)은 for i in ‘abcd’ 를 3중으로 붙인 값을 리턴함.<br />
+aaa,aab,aac, … ddd</p>
+
+<h3 id="permutations">permutations()</h3>
+<p>순서를 고려한 모든 조합을 고른다.<br />
+permutations(‘abc’, 2) 는 ab, ac, ba, bc, ca, cb 를 리턴</p>
+
+<h3 id="combinations-combinations_with_replacement">combinations(), combinations_with_replacement()</h3>
+<p>순서를 고려하지 않는 모든 조합을 만든다.<br />
+combinations(‘abc’, 2) 는 ab, ac, bc 를 리턴<br />
+combinations_with_replacement 는 중복을 허용한다.<br />
+위 예시와 같이 넣으면, aa, ab, ac, bb, bc, cc 를 리턴</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="Something_else" /><summary type="html"><![CDATA[답은 document에 있다..! https://docs.python.org/ko/3/library/index.html 파이썬 내장 함수 python 3.x 기준으로 유용하게 사용했던 ~ 유용해보이는 내장함수, 기본모듈, 클래스 등을 기록하려 한다.]]></summary></entry><entry><title type="html">1x1 conv, 그리고 conv2d conv3d의 이해</title><link href="http://localhost:4000/ds/1by1conv/" rel="alternate" type="text/html" title="1x1 conv, 그리고 conv2d conv3d의 이해" /><published>2022-04-09T00:00:00+09:00</published><updated>2022-04-26T00:00:00+09:00</updated><id>http://localhost:4000/ds/1by1conv</id><content type="html" xml:base="http://localhost:4000/ds/1by1conv/"><![CDATA[<h2 id="1by1-conv는-어떻게-생긴거냐">1by1 conv는 어떻게 생긴거냐</h2>
 <p>처음엔 1by1 사이즈의 필터가 CNN에서 의미가 있나 생각했다.<br />
 근데 그게 아니라 1by1byN 모양의 필터였던 것!<br />
 피쳐맵의 길이를 줄일 수 있고, 이를 포함하는 CNN구조들은 비교적 더 이후에 나온 구조이기도 하고,<br />
@@ -138,8 +203,9 @@ https://hoya012.github.io/blog/deeplearning-classification-guidebook-4/</p>
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[유명 이미지 데이터 cifar10, 100 : 클래스 10, 100개의 갖는 사물 이미지(32,32) 데이터 셋 (학습용 50000개) imagenet : 클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음. MS COCO : 객체탐지를 목적으로 하는 이미지셋, 클래스와 위치(bbox)등의 정보가 함께있다. 15만장 이상 (train, val, test 포함)]]></summary></entry><entry><title type="html">클라우드 데이터베이스, SQL</title><link href="http://localhost:4000/de/CloudDB/" rel="alternate" type="text/html" title="클라우드 데이터베이스, SQL" /><published>2022-04-02T00:00:00+09:00</published><updated>2022-04-02T00:00:00+09:00</updated><id>http://localhost:4000/de/CloudDB</id><content type="html" xml:base="http://localhost:4000/de/CloudDB/"><![CDATA[<h1 id="클라우드-데이터베이스">클라우드 데이터베이스</h1>
-<p>말 그대로 온라인으로 접근할 수 있는 데이터베이스를 말한다.</p>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[유명 이미지 데이터 cifar10, 100 : 클래스 10, 100개의 갖는 사물 이미지(32,32) 데이터 셋 (학습용 50000개) imagenet : 클래스 훨씬 다양(몇천, 몇만), 백만개가 넘음. MS COCO : 객체탐지를 목적으로 하는 이미지셋, 클래스와 위치(bbox)등의 정보가 함께있다. 15만장 이상 (train, val, test 포함)]]></summary></entry><entry><title type="html">클라우드 데이터베이스, SQL</title><link href="http://localhost:4000/de/CloudDB/" rel="alternate" type="text/html" title="클라우드 데이터베이스, SQL" /><published>2022-04-02T00:00:00+09:00</published><updated>2022-04-29T00:00:00+09:00</updated><id>http://localhost:4000/de/CloudDB</id><content type="html" xml:base="http://localhost:4000/de/CloudDB/"><![CDATA[<h1 id="클라우드-데이터베이스">클라우드 데이터베이스</h1>
+<p>말 그대로 온라인으로 접근할 수 있는 데이터베이스를 말한다.<br />
+<img src="/assets/images/de/source_1.png" width="70%" /></p>
 <ol>
   <li>관계형 데이터베이스  (oracle DB, mySQL, PostgreSQL 등)</li>
   <li>NoSQL  (MongoDB, Redis, Hbase Neo4j등)</li>
@@ -160,27 +226,161 @@ https://hoya012.github.io/blog/deeplearning-classification-guidebook-4/</p>
 <p>형식의 자유로운 데이터들을 딕셔너리와 같이 Key와 값의 관계로 저장해서,<br />
 Key로 하여금 데이터를 불러올 수 있는 구조를 말한다.</p>
 
-<p>그 형태에 따라 Key-value(key하나의 value에 여러 column값들을 가짐), document(하나의 doc은 여러 key:value 세트를 갖는 dict형), wide-column(key-value와 비슷한데 좀 더 형식이 더해져, 덜 유연한 구조), graph 등의 종류가 있다.</p>
+<p><img src="/assets/images/de/source_2.png" width="70%" /><br />
+그 형태에 따라 Key-value(key하나의 value에 여러 column값들을 가짐), document(하나의 doc은 여러 key:value 세트를 갖는 dict형), wide-column(key-value와 비슷한데 좀 더 형식이 더해져, 덜 유연한 구조), graph 등의 종류가 있다.</p>
 
 <h2 id="데이타-베이스-구조의-유연함의-의미">데이타 베이스 구조의 유연함의 의미</h2>
-<p>유연 up &lt;-&gt; 확장성 up , 무결성, 안정성, 관리용이성 down</p>
+<p>유연 up &lt;-&gt; (확장성) up , (무결성, 안정성, 관리용이성) down</p>
 
 <p>확장성에 대해서는 수평적으로 용이한지, 수직적으로 용이한지 애매할 수 있다.</p>
 
 <p>RDB의 경우 상대적으로 덜 유연하더라도 수직적 확장으로는 더 강점이 있다고 할 수 있다.</p>
 
 <h1 id="sql-문법-이모저모">SQL 문법 이모저모</h1>
+<p>불러오는 목적에서 자주 쓰이는 문법을 정리!</p>
 
-<p>FROM
-WHERE
-GROUP BY
-HAVING
-SELECT
-ORDER BY</p>
+<ul>
+  <li>연산자 종류(조건문에 사용) : BETWEEN a AND b, LIKE, NOT, IN, OR</li>
+</ul>
 
-<h1 id="python에서-클라우드-데이터베이-사용">python에서 클라우드 데이터베이 사용</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 특정 기간을 조건문으로
+BETWEEN '2022-01-01' AND '2022-02-01'
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+# 특정 문자로 시작하는 조건(정규표현식 역할)
+LIKE "M%"
+
+# NOT은 부정
+NOT gender = 'M'
+
+# IN은 말그대로 포함되어있는가
+gender IN ('M', 'W')
+
+# OR도 말그대로 또는 (위 IN과 같은 결과예시)
+gender = 'M' OR gender = 'W'
+</code></pre></div></div>
+
+<ul>
+  <li>SELECT, FROM</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 테이블 전체를 불러올거
+SELECT * FROM 테이블명;
+
+# 테이블에서 컬럼을 골라서 불러올거
+SELECT 컬럼명1, 컬럼명2 FROM 테이블명;
+</code></pre></div></div>
+
+<ul>
+  <li>WHERE</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 뒤에 조건문을 붙임.
+# 테이블에서 전체를 불러올건데, id라는 컬럼이 10이상인것만 불러올거
+SELECT * FROM 테이블명 WHERE id &gt;= 10;
+</code></pre></div></div>
+
+<ul>
+  <li>(INNER, LEFT, RIGHT) JOIN, ON</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 테이블1과 테이블2를 붙여서 불러올건데, 그 관계는 테이블1의 컬럼1과 테이블2의 컬럼2를 일치시킬거.  
+# 단 INNER기 떄문에 찾을 수 없는 값을 하나라도 갖는 데이터는 제외할거.  
+# OUTER(LEFT, RIGHT)에서는 찾을 수 없는 값을 NULL로 표기해서 다 가져옴
+SELECT * FROM 테이블1 INNER JOIN 테이블2 ON 테이블1.컬럼1 = 테이블2.컬럼2;
+</code></pre></div></div>
+
+<ul>
+  <li>GROUP BY, HAVING<br />
+그룹화하여 그 그룹의 지표들을 알려줌<br />
+그래서 지표 COUNT(), AVG(), MIN(), MAX(), SUM() 등의 표현과 함께 사용<br />
+HAVING으로 조건을 추가할 수 있다.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 성별별로 몇개의 데이터가 있는 지 조회할거
+SELECT COUNT(*) FROM 테이블명 GROUP BY gender;
+
+# 성별별로 나이의 평균을 조회할거
+SELECT AVG(age) FROM 테이블명 GROUP BY gender;
+
+# 성별별로 몇개의 데이터가 있는지 조회할 건데, 나이가 30이상인것만 셀거.
+SELECT COUNT(*) FROM 테이블명 GROUP BY gender HAVING age&gt;=30;
+</code></pre></div></div>
+
+<ul>
+  <li>ORDER BY (DESC) <br />
+조회할 때, 어떤 열의 오름차순, 내림차순으로 정렬한다.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 모든데이터를 조회할건데, DESC를 추가해서 나이로 내림차순으로 정렬할 거.  
+SELECT * FROM 테이블명 ORDER BY age DESC;
+</code></pre></div></div>
+
+<ul>
+  <li>DISTINCT<br />
+뒤에 오는 컬럼의 중복을 제외하고 보여준다.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># job과 company의 조합이 어떤게 있나 볼건데 중복은 없애고 보자이.(두개를 넣으면 job은 같은데 company가 다른건 다르다고 봄.)
+SELECT DISTINCT job, company FROM 테이블명;
+</code></pre></div></div>
+
+<h1 id="python에서-클라우드-데이터베이스-사용">python에서 클라우드 데이터베이스 사용</h1>
+<p>특정 라이브러리를 이용하여 내부의 connect역할의 함수를 사용하는 것이 기본이다.<br />
+RDB의 경우 psycopg2(별도설치), sqlite3(파이썬 2.x 에서는 기본 모듈) 라이브러리가 있고,<br />
+mongoDB (document식 NoSQL) 에는 pymongo 라이브러리가 있다.</p>
+
+<ul>
+  <li>PostgreSQL (RDB)
+URL을 만들면 다음과 같은 형식이다.<br />
+<strong>서비스://유저_이름:유저_비밀번호@호스트:포트번호/경로</strong></li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import psycopg2
+
+# sqlite3 는 로컬에서 작동하는 라이브러리
+# sqlite3.connect로 데이터베이스파일 위치를 변수로 넣으면 됨.  
+import sqlite3
+
+# 원격 연결
+conn = psycopg2.connect(
+    host="서버 호스트 주소",
+    database="데이터베이스 이름(경로)",
+    user="유저 이름",
+    password="유저 비밀번호")
+# 커서정의
+cur = conn.cursor()
+
+# 쿼리 전송
+cur.execute('쿼리')
+
+# 전송했던 쿼리문들 실행
+conn.commit()
+
+# 조회한 데이터들을 가져옴
+cur.fetchall()  #전부 리턴
+cur.fetchone()  #첫번째 리턴
+</code></pre></div></div>
+
+<ul>
+  <li>MongoDB(NoSQL)</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from pymongo import MongoClient
+
+# 원격 연결
+client = MongoClient({URI})
+
+# 데이터베이스 생성
+db_1 = client["db_1"]
+
+# 콜렉션 생성(테이블같은느낌)
+collection_1 = db_1["new_collection"]
+
+# 값 입력
+collection_1.insert_one({"a":"hi", "b":[1, 2, {"c":"bye"}]})
+
+# 조회
+doc_1 = collection_1.find_one()
 </code></pre></div></div>
 
 <p><br /></p>
@@ -1802,144 +2002,4 @@ weight가 클수록 편차가 작아진다!</p>
 언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
 </code></pre></div></div>
 
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[인코딩은 왜 하는거? 데이터에는 연속적인 숫자만 있는게 아니다. 문자열의 카테고리형 feature일 수도, 숫자라 하더라도 비연속적인 카테고리형 feature도 있다. (예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))]]></summary></entry><entry><title type="html">크롤링(Crawling)</title><link href="http://localhost:4000/de/crawling/" rel="alternate" type="text/html" title="크롤링(Crawling)" /><published>2022-03-05T00:00:00+09:00</published><updated>2022-03-20T00:00:00+09:00</updated><id>http://localhost:4000/de/crawling</id><content type="html" xml:base="http://localhost:4000/de/crawling/"><![CDATA[<h2 id="크롤링이란-">크롤링이란 ?</h2>
-<p>web에 있는 데이터들을 긁어모으는 것을 말한다.<br />
-크게 두 종류로 먼저 나눌 수 있다.</p>
-<ol>
-  <li>정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링.</li>
-  <li>동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 상태에서 데이터들을 크롤링.</li>
-</ol>
-
-<p>정적크롤링은 멈춰있는 페이지에서 정보를 찾아 긁어모은다면,<br />
-동적크롤링은 검색, 스크롤, 페이지 클릭 등을 해서 나오는 정보를 긁어모을 수 있다.</p>
-
-<p>대표적으로 정적크롤링 관련 라이브러리로 beautifulsoup(bs4)가 있다.<br />
-그리고 동적크롤링의 방법에도 여러 종류가 있는데 그 중 2가지를 적어보자면 다음과 같다.</p>
-<ol>
-  <li>openAPI를 이용하여 명령 후, response된 정보로부터 크롤링.</li>
-  <li>selenium을 통해 webdriver (크롬, 사파리 등)를 제어한 후 나온 페이지(HTML)로부터 크롤링.</li>
-</ol>
-
-<h2 id="크롤링-예시">크롤링 예시</h2>
-<p>먼저 아래 함수 두개를 지정하겠다.</p>
-<ol>
-  <li>diScrollDown : 특정 시간동안 스크롤을 내리는 함수.</li>
-  <li>createDirectory : 입력값으로 받은 문자열(경로)에 해당하는 폴더를 생성한다.</li>
-  <li>crawling_img : 입력값으로 받은 문자열을 크롬에서 검색해서 함수내에 지정되어 있는(직접변경) 경로로 이미지를 저장. (이름은 번호순으로 증가)</li>
-</ol>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import time
-import urllib.request
-import os
-
-def doScrollDown(driver, whileSeconds):
-    start = datetime.datetime.now()
-    end = start + datetime.timedelta(seconds=whileSeconds)
-    while True:
-        driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-        time.sleep(1)
-        if datetime.datetime.now() &gt; end:
-            break
-
-def createDirectory(directory):
-    try:
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-    except OSError:
-        print("Error: Failed to create the directory.")
-
-def crawling_img(name):
-    ## 입력값 name 문자열을 검색하여 나오는 이미지를 저장하는 함수.
-    ## 저장하는 경로는 함수 내에서 별도로 지정해야함.
-
-    # 크롬을 드라이버로 채택. 버전오류가 날 수 있다.
-    # 사파리는 webdriver.Safari()를 사용하면 된다.
-    driver = webdriver.Chrome()
-    driver.get("https://www.google.co.kr/imghp?hl=ko&amp;tab=wi&amp;authuser=0&amp;ogbl")
-
-    # q로 태그되어 있는 곳이 구글홈페이지의 검색창이다.
-    # driver.set_window_size(a,b) 로 창 크기 지정 가능
-    elem = driver.find_element_by_name("q")
-    elem.send_keys(name)
-    elem.send_keys(Keys.RETURN)
-
-
-    SCROLL_PAUSE_TIME = 1   # 1초씩 기다렸다가 내렸다를 반복할거임.  
-    # Get scroll height
-    last_height = driver.execute_script("return document.body.scrollHeight")  # 브라우저의 높이를 자바스크립트로 찾음
-    while True:
-        # Scroll down to bottom
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")  # 브라우저 끝까지 스크롤을 내림
-        # Wait to load page
-        time.sleep(SCROLL_PAUSE_TIME)
-        # Calculate new scroll height and compare with last scroll height
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
-            try:
-                # 더보기 버튼을 클릭할 거임.
-                driver.find_element_by_css_selector(".mye4qd").click()
-            except:
-                # 더보기 버튼이 없어서 클릭을 못하면 끝.
-                break
-        last_height = new_height
-
-    imgs = driver.find_elements_by_css_selector(".rg_i.Q4LuWd")
-
-    # 경로와 폴더 명 지정.
-    dir = ".\tree_flower_dog_cat" + "\\" + name
-
-    createDirectory(dir) #폴더 생성
-    count = 1
-    for img in imgs:
-        try:
-            img.click()
-            time.sleep(3)
-            imgUrl = driver.find_element_by_xpath(
-                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[2]/div/a/img').get_attribute(
-                "src")
-            path = ".\idols\\" + name + "\\"
-            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + ".jpg")
-
-            # 이 아래는 관련이미지 저장
-            imgUrl = driver.find_element_by_xpath(
-                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[1]/a[1]/div[1]/img').get_attribute(
-                "src")
-            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_1" + ".jpg")
-            imgUrl = driver.find_element_by_xpath(
-                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[2]/a[1]/div[1]/img').get_attribute(
-                "src")
-            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_2" + ".jpg")
-
-            imgUrl = driver.find_element_by_xpath(
-                '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[3]/c-wiz/div/div/div/div[3]/div[1]/div[3]/a[1]/div[1]/img').get_attribute(
-                "src")
-            urllib.request.urlretrieve(imgUrl, path + name + "_"+ str(count) + "_3" + ".jpg")
-
-            count = count + 1
-            if count &gt;= 500:
-                break
-        except:
-            pass
-    driver.close()
-</code></pre></div></div>
-
-<p>이제 위 함수를 사용하여 for문을통해 검색 및 저장을 동시에 해주면 된다.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>searching_keyword = ["나무", "꽃", "강아지얼굴", "고양이얼굴"]
-
-for i in range(len(searching_keyword)) :
-    searching_keyword[i] += '_사진' # 사진을 뒤에 붙이면 검색이 잘될 것 같아!
-
-for keyword in searching_keyword:
-    crawling_img(keyword)
-</code></pre></div></div>
-
-<p><br /></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
-언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
-</code></pre></div></div>
-
-<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="de" /><summary type="html"><![CDATA[크롤링이란 ? web에 있는 데이터들을 긁어모으는 것을 말한다. 크게 두 종류로 먼저 나눌 수 있다. 정적크롤링 : 항상 같은 값을 주는 HTML로 부터 파싱을 해서 크롤링. 동적크롤링 : 같은 HTML이라도 동작, 명령을 통해 변화된 상태에서 데이터들을 크롤링.]]></summary></entry></feed>
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>]]></content><author><name>옹달샘👱🏼‍♂️</name></author><category term="ds" /><summary type="html"><![CDATA[인코딩은 왜 하는거? 데이터에는 연속적인 숫자만 있는게 아니다. 문자열의 카테고리형 feature일 수도, 숫자라 하더라도 비연속적인 카테고리형 feature도 있다. (예: 사는지역(“수유동”, “인수동” …), 평점(“매우별로”,”별로”, … , “매우좋음”))]]></summary></entry></feed>

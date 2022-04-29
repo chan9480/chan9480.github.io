@@ -1,0 +1,19 @@
+I"�<h1 id="파이썬-내장-함수">파이썬 내장 함수</h1>
+<p>python 3.x 기준으로 (사실 내가 사용하는 함수들이 2.x에서도 똑같이 있을 것 같지만..;)<br />
+유용하게 사용했던 ~ 유용해보이는 내장함수, 기본모듈, 클래스 등을 정리해보려고 한다.</p>
+
+<p>위에서의 유용함의 의미는<br />
+‘메모리의 효율적으로 씀과 동시에 코드가 간결해지는 사용할 수 있음’ 정도가 되겠다.</p>
+
+<h1 id="itertools-모듈">itertools 모듈</h1>
+
+<p>##</p>
+
+<p><br /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌜 개인 공부 기록용 블로그입니다. 오류나 틀린 부분이 있을 경우
+언제든지 댓글 혹은 메일로 지적해주시면 감사하겠습니다! 😄
+</code></pre></div></div>
+
+<p><a href="#" class="btn btn--primary align-right">맨 위로 이동하기</a></p>
+:ET
